@@ -1,6 +1,4 @@
-import { Property } from "@/types/property";
-
-export const properties: Property[] = [
+export const properties: any[] = [
   {
     id: "1",
     title: "Modern Apartment with City View",
