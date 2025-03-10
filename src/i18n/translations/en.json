@@ -1,0 +1,445 @@
+{
+  "title": {
+    "loginCompanyTitle": "Welcome to PropertyHub",
+    "registerCompanyTitle": "Welcome to Property",
+    "loginCustomerTitle": "Welcome to PropertyHub",
+    "registerCustomerTitle": "Welcome to PropertyHub",
+    "forgotPasswordTitle": "Forgot Password?",
+    "createNewPassword": "Create New Password"
+  },
+  "button": {
+    "next": "Next",
+    "login": "Login",
+    "registerNow": "Register Now",
+    "loginAsCompany": "Login as a Company →",
+    "loginAsCustomer": "Login as a Customer →",
+    "forgotPassword": "Forgot Password?",
+    "registerCompanyNow": "Register Your Company"
+  },
+  "text": {
+    "registerCompanyText": "Enter your details to register",
+    "loginCompanyText": "Enter your email & password to continue as a Company",
+    "loginCustomerText": "Enter your email & password to continue as a Customer",
+    "noAccount": "Don't have an account?",
+    "noCompanyAccount": "Don't have a company account?",
+    "registerCompanyNow": "Register Your Company",
+    "orContinueWith": "or continue with",
+    "rememberMe": "Remember me",
+    "forgotPasswordText": "Enter your email address to reset your password",
+    "enterNewPassword": "Enter your new password"
+  },
+  "table": {
+    "notFound": "No Record found"
+  },
+  "form": {
+    "required": "This field is required",
+    "firstName": {
+      "label": "First Name",
+      "placeholder": "First Name",
+      "errors": {
+        "required": "First Name is required.",
+        "min": "First Name should be at least 2 characters long.",
+        "max": "First Name should be at most 50 characters long."
+      }
+    },
+    "lastName": {
+      "label": "Last Name",
+      "placeholder": "Last Name",
+      "errors": {
+        "required": "Last Name is required.",
+        "min": "Last Name should be at least 2 characters long.",
+        "max": "Last Name should be at most 50 characters long."
+      }
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "example@xyz.com",
+      "errors": {
+        "required": "Email is required.",
+        "invalid": "Enter a valid email."
+      }
+    },
+    "personalEmail": {
+      "label": "Personal Email",
+      "placeholder": "example@xyz.com",
+      "errors": {
+        "required": "Email is required.",
+        "invalid": "Enter a valid email."
+      }
+    },
+    "companyEmail": {
+      "label": "Company Email",
+      "placeholder": "company@example.com",
+      "errors": {
+        "required": "Company Email is required.",
+        "invalid": "Enter a valid email."
+      }
+    },
+    "companyName": {
+      "label": "Company Name",
+      "placeholder": "",
+      "errors": {
+        "required": "Company Name is required."
+      }
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Password",
+      "errors": {
+        "required": "Password is required.",
+        "invalid": "Password must be at least 8 characters long.",
+        "min": "Password must be at least 8 characters long.",
+        "uppercase": "Password must contain at least one uppercase letter.",
+        "lowercase": "Password must contain at least one lowercase letter.",
+        "number": "Password must contain at least one number."
+      }
+    },
+    "confirmPassword": {
+      "label": "Confirm Password",
+      "placeholder": "Confirm Password",
+      "errors": {
+        "required": "Confirm Password is required.",
+        "invalid": "Password must be at least 8 characters long.",
+        "mismatch": "Confirm Password does not match with Password."
+      }
+    },
+    "phoneNumber": {
+      "label": "Phone Number",
+      "placeholder": "",
+      "errors": {
+        "required": "Mobile Number is required.",
+        "invalid": "Enter a valid Mobile Number (e.g. 03XXXXXXXXX)."
+      }
+    }
+  },
+  "seo": {
+    "title": "PropertyHub - Find Your Dream Property",
+    "description": "Discover the best properties for sale and rent on PropertyHub.",
+    "ogTitle": "PropertyHub - Your Property Search Starts Here",
+    "ogDescription": "Explore a wide range of properties on PropertyHub.",
+    "twitterTitle": "PropertyHub",
+    "twitterDescription": "Find your dream property on PropertyHub."
+  },
+
+  "welcome": "Welcome to Property",
+  "welcomeCompany": "Welcome to Property Busin ss",
+  "loginSubtitle": "Enter your email & password to continue as Customer",
+  "loginSubtitleCompany": "Enter your email & password to continue as Company",
+  "email": "Email Address",
+  "password": "Password",
+  "showPassword": "Show Password",
+  "hidePassword": "Hide Password",
+  "rememberMe": "Remember me",
+  "forgotPassword": "Forgot Password?",
+  "login": "Login",
+  "loggingIn": "Logging in...",
+  "loginSuccess": "Login successful",
+  "loginSuccessMessage": "You have successfully logged in. Redirecting...",
+  "loginFailed": "Invalid email or password",
+  "loginError": "Something went wrong. Please try again.",
+  "noAccount": "Don't have an account?",
+  "registerNow": "Register Now",
+  "loginAsCompany": "Login as a Company →",
+  "loginAsCustomer": "Login as a Customer →",
+  "noCompanyAccount": "Don't have a company account?",
+  "registerCompanyNow": "Register Your Company",
+  "orContinueWith": "or continue with",
+  "continueWithGoogle": "Continue with Google",
+  "continueWithFacebook": "Continue with Facebook",
+  "googleLoginFailed": "Google login failed. Please try again.",
+  "facebookLoginFailed": "Facebook login failed. Please try again.",
+  "invalidEmail": "Please enter a valid email address",
+  "invalidPassword": "Password must be at least 8 characters",
+  "termsAndConditions": "I acknowledge and accept the Terms & Conditions",
+  "redirecting": "Redirecting...",
+  "errorOccurred": "An error occurred. Please try again.",
+  "tooManyAttempts": "Too many login attempts. Please try again later.",
+  "registerSubtitle": "Enter your details to register",
+  "registerSubtitleCompany": "Enter your company details to register",
+  "fullName": "Full Name",
+  "fullNamePlaceholder": "Enter your full name",
+  "companyName": "Company Name",
+
+  "emailPlaceholder": "Enter your email address",
+  "phone": "Phone Number",
+  "phonePlaceholder": "Enter your phone number",
+
+  "passwordPlaceholder": "Enter your password",
+  "confirmPassword": "Confirm Password",
+  "confirmPasswordPlaceholder": "Confirm your password",
+  "next": "Next",
+  "back": "Back",
+  "alreadyHaveAccount": "Already have an account?",
+  "loginHere": "Login here",
+  "registerAsCompany": "Register as a Company →",
+  "registerAsCustomer": "Register as a Customer →",
+  "privacyPolicy": "Privacy Policy",
+  "and": "and",
+  "allRightsReserved": "All Rights Reserved",
+  "passwordRequirements": "Password must contain at least 8 characters",
+  "passwordMismatch": "Passwords do not match",
+  "invalidPhone": "Please enter a valid phone number",
+  "registrationSuccess": "Registration successful",
+  "registrationError": "Registration failed. Please try again",
+  "submitting": "Submitting...",
+  "verificationPage": {
+    "verifyAccount": "Verify Your Account",
+    "enterOtpSent": "Enter the OTP sent to your email",
+    "codeSentTo": "The verification code has been sent to",
+    "invalidOtpLength": "OTP must be 6 digits",
+    "emailRequired": "Email is required",
+    "verificationFailed": "Verification failed. Please try again.",
+    "verifying": "Verifying...",
+    "verify": "Verify",
+    "didntReceiveCode": "Didn’t receive the code?",
+    "resendCode": "Resend Code",
+    "otpResent": "OTP resent successfully",
+    "resendIn": "Resend in",
+    "resending": "Resending...",
+    "resendFailed": "Failed to resend OTP. Please try again.",
+    "otpDisclaimer": "For security reasons, do not share your OTP with anyone.",
+    "verified": "Verified"
+  },
+
+  "common": {
+    "required": "This field is required",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "submit": "Submit",
+    "tryAgain": "Try Again"
+  },
+  "propertyHub": {
+    "brandName": "Property Hub",
+    "nav": {
+      "home": "Home",
+      "properties": "Properties",
+      "agents": "Agents",
+      "about": "About",
+      "contact": "Contact",
+      "getStarted": "Get Started"
+    },
+    "hero": {
+      "title": "Find Your Dream Property",
+      "subtitle": "Discover the perfect property that matches your lifestyle and preferences with our extensive listings."
+    },
+    "search": {
+      "location": "Location",
+      "locationPlaceholder": "Where do you want to live?",
+      "propertyType": "Property Type",
+      "allTypes": "All Types",
+      "house": "House",
+      "apartment": "Apartment",
+      "villa": "Villa",
+      "button": "Search"
+    },
+    "featured": {
+      "title": "Featured Properties",
+      "subtitle": "Explore our handpicked selection of premium properties available for sale and rent.",
+      "viewAll": "View All Properties"
+    },
+    "categories": {
+      "all": "All Properties",
+      "house": "Houses",
+      "apartment": "Apartments",
+      "villa": "Villas",
+      "office": "Offices",
+      "commercial": "Commercial"
+    },
+    "property": {
+      "beds": "Beds",
+      "baths": "Baths",
+      "sqft": "sq ft",
+      "perMonth": "/month",
+      "viewDetails": "View Details"
+    },
+    "showcase": {
+      "title": "Experience Properties in 3D",
+      "description": "Take virtual tours of our properties from the comfort of your home with our cutting-edge 3D visualization technology.",
+      "button": "Try Virtual Tour",
+      "feature1": {
+        "title": "Immersive 3D Tours",
+        "description": "Explore every corner of the property as if you were there in person."
+      },
+      "feature2": {
+        "title": "Interactive Floor Plans",
+        "description": "Navigate through detailed floor plans and understand the layout better."
+      },
+      "feature3": {
+        "title": "AR Furniture Placement",
+        "description": "Visualize how your furniture would look in the space before moving in."
+      }
+    },
+    "testimonials": {
+      "title": "What Our Clients Say",
+      "subtitle": "Hear from our satisfied clients about their experience with Property Hub.",
+      "client1": {
+        "name": "Emma Thompson",
+        "location": "New York",
+        "quote": "Property Hub made finding my dream apartment so easy. Their 3D tours saved me so much time!"
+      },
+      "client2": {
+        "name": "James Wilson",
+        "location": "Los Angeles",
+        "quote": "The team at Property Hub went above and beyond to help me sell my house at the best price."
+      },
+      "client3": {
+        "name": "Sophia Garcia",
+        "location": "Miami",
+        "quote": "I was impressed by the quality of properties and the professional service from the agents."
+      }
+    },
+    "cta": {
+      "title": "Ready to Find Your Perfect Property?",
+      "description": "Join thousands of satisfied customers who found their dream homes with Property Hub.",
+      "primaryButton": "Browse Properties",
+      "secondaryButton": "Contact an Agent"
+    },
+    "footer": {
+      "description": "Property Hub is your trusted partner in finding the perfect property for your needs.",
+      "quickLinks": "Quick Links",
+      "propertyTypes": "Property Types",
+      "contact": "Contact Us",
+      "address": "123 Real Estate Ave, New York, NY 10001",
+      "rights": "All rights reserved."
+    }
+  },
+  "landingPage": {
+    "hero": {
+      "title": "Find your next dream home",
+      "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae."
+    },
+    "search": {
+      "propertyType": "Property Type",
+      "allProperties": "All Properties",
+      "house": "House",
+      "apartment": "Apartment",
+      "villa": "Villa",
+      "placeholder": "Search by location or property ID....",
+      "button": "Search",
+      "rent": "Rent",
+      "buy": "Buy"
+    },
+    "latestProjects": {
+      "title": "Discover the latest projects",
+      "exploreAll": "Explore All"
+    },
+    "property": {
+      "imageAlt": "Property image",
+      "newYork": "New York",
+      "sqft": "sq ft",
+      "viewDetails": "View Details",
+      "contactNow": "Contact Now"
+    },
+    "cta": {
+      "title": "Looking to advertise a property? Contact us.",
+      "button": "Let's Talk"
+    },
+    "appraisal": {
+      "ourValue": "OUR VALUE",
+      "title": "Unlocking Real Appraisal",
+      "services": "Services",
+      "description": "Our experts can provide valuable insights and assist you in identifying properties.",
+      "button": "Get Started Free",
+      "imageAlt1": "Modern house exterior",
+      "imageAlt2": "Luxury property interior"
+    },
+    "footer": {
+      "tagline": "Our experts can provide valuable insights and assist you in identifying properties.",
+      "product": "Product",
+      "features": "Features",
+      "pricing": "Pricing",
+      "listings": "Listings",
+      "customers": "Customers",
+      "brand": "Brand",
+      "company": "Company",
+      "aboutUs": "About us",
+      "blog": "Blog",
+      "careers": "Careers",
+      "contact": "Contact",
+      "resources": "Resources",
+      "community": "Community",
+      "help": "Help Center",
+      "faq": "FAQ",
+      "dpa": "DPA",
+      "terms": "Terms of services",
+      "allRightsReserved": "All rights reserved.",
+      "termsAndConditions": "Term & Condition"
+    }
+  },
+  "header": {
+    "buy": "Buy",
+    "rent": "Rent",
+    "explore": "Explore Properties",
+    "properties": "Properties",
+    "propertiesDescription": "Browse our exclusive collection of luxury properties.",
+    "agents": "Agents",
+    "agentsDescription": "Connect with our professional real estate agents.",
+    "language": "Language",
+    "contactUs": "Contact Us",
+    "loginRegister": "Login/Register"
+  },
+  "customerDashboard": {
+    "header": {
+      "title": "PropertyFinder",
+      "navigation": {
+        "home": "Home",
+        "buy": "Buy",
+        "rent": "Rent",
+        "sell": "Sell",
+        "agents": "Agents"
+      }
+    },
+    "userMenu": {
+      "myAccount": "My Account",
+      "profile": "Profile",
+      "savedProperties": "Saved Properties",
+      "savedSearches": "Saved Searches",
+      "messages": "Messages",
+      "settings": "Settings",
+      "logout": "Log out"
+    },
+    "sidebar": {
+      "viewProfile": "View Profile",
+      "dashboard": "Dashboard",
+      "savedProperties": "Saved Properties",
+      "savedSearches": "Saved Searches",
+      "messages": "Messages",
+      "myProperties": "My Properties",
+      "settings": "Settings"
+    },
+    "dashboard": {
+      "title": "My Dashboard",
+      "tabs": {
+        "savedProperties": "Saved Properties",
+        "savedSearches": "Saved Searches"
+      }
+    },
+    "savedProperties": {
+      "title": "Your Saved Properties",
+      "propertiesCount": "Properties",
+      "property": {
+        "beds": "Beds",
+        "baths": "Baths",
+        "sqft": "sqft",
+        "viewDetails": "View Details",
+        "contactAgent": "Contact Agent"
+      }
+    },
+    "savedSearches": {
+      "title": "Your Saved Searches",
+      "searchesCount": "Searches",
+      "search": {
+        "matches": "matches",
+        "editSearch": "Edit Search",
+        "viewResults": "View Results"
+      }
+    }
+  }
+}
