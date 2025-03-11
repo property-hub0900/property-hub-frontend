@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthContainer } from "@/components/auth/auth-container";
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -16,18 +17,16 @@ import { getErrorMessage } from "@/lib/utils";
 import { userAuthStaffLoginSchema } from "@/schema/auth";
 import { authService } from "@/services/auth";
 import { useAuthStore } from "@/store/auth-store";
-import { SocialLoginPayload, TUserAuthStaffLoginSchema } from "@/types/auth";
+import { TUserAuthStaffLoginSchema } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GoogleLogin } from "@react-oauth/google";
 import { useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import { useMemo, useState } from "react";
+
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -54,11 +53,6 @@ export default function CompanyLoginPage() {
     mutationFn: authService.userAuthStaffLogin,
   });
 
-  const staffSocialLoginMutation = useMutation({
-    mutationKey: ["staffSocialLogin"],
-    mutationFn: authService.staffSocialLogin,
-  });
-
   const onSubmit = async (values: TUserAuthStaffLoginSchema) => {
     try {
       const response = await userAuthStaffLoginMutation.mutateAsync(values);
@@ -75,143 +69,12 @@ export default function CompanyLoginPage() {
     setShowPassword(!showPassword);
   };
 
-  const handleGoogleSuccess = useCallback(
-    async (credentialResponse: any) => {
-      if (!credentialResponse?.credential) return;
-
-      try {
-        const response = await fetch("/api/auth/google/verify", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ credential: credentialResponse.credential }),
-        });
-
-        if (!response.ok) {
-          toast.error(getErrorMessage(response.status));
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (data.success && data.user) {
-          const { email, name, googleUserId } = data.user;
-
-          const nameParts = name.split(" ");
-          const firstName = nameParts[0] || "";
-          const lastName = nameParts.slice(1).join(" ") || "";
-
-          const loginResponse = await staffSocialLoginMutation.mutateAsync({
-            googleId: googleUserId,
-            email,
-            firstName,
-            lastName,
-          });
-
-          useAuthStore.getState().login(loginResponse.data);
-
-          toast.success(t("loginSuccess"));
-          router.push(`/${locale}/`);
-        }
-      } catch (error: any) {
-        toast.error(getErrorMessage(error));
-      }
-    },
-    [locale, router, staffSocialLoginMutation, t]
-  );
-
-  const handleFacebookSuccess = useCallback(
-    async (response: any) => {
-      if (!response.accessToken) return;
-
-      try {
-        const { email, name, id: facebookId } = response;
-
-        const nameParts = name.split(" ");
-        const firstName = nameParts[0] || "";
-        const lastName = nameParts.slice(1).join(" ") || "";
-
-        const socialLoginPayload: SocialLoginPayload = {
-          facebookId,
-          email,
-          firstName,
-          lastName,
-        };
-
-        const loginResponse = await staffSocialLoginMutation.mutateAsync(
-          socialLoginPayload
-        );
-
-        localStorage.setItem("user", JSON.stringify(loginResponse.data));
-
-        toast.success(t("loginSuccess"));
-
-        router.push(`/${locale}/`);
-      } catch (error: any) {
-        console.error("Error during Facebook login:", error);
-        toast.error(getErrorMessage(error));
-      } finally {
-        // setIsFacebookLoading(false)
-      }
-    },
-    [staffSocialLoginMutation, t, router, locale]
-  );
-
   return (
     <AuthContainer
       title={t("title.loginCompanyTitle")}
       subtitle={t("text.loginCompanyText")}
     >
-      <div className="social-buttons space-y-3 w-full">
-        <div className="flex gap-2">
-          <div className="relative flex-1">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              shape="pill"
-              width="100%"
-              useOneTap={false}
-              theme="outline"
-              text="signin"
-              logo_alignment="center"
-            />
-          </div>
-
-          {/* Facebook Login - Professional Implementation */}
-          <div className="facebook-auth-container relative w-full flex-1">
-            <FacebookLogin
-              appId="610106238490107"
-              fields="name,email,picture"
-              callback={handleFacebookSuccess}
-              render={(renderProps: any) => (
-                <Button
-                  variant="outline"
-                  onClick={renderProps.onClick}
-                  className="w-full relative rounded-full"
-                  aria-label="Sign in with Facebook"
-                >
-                  <Image
-                    src="/facebook-login-icon.svg"
-                    alt="Facebook"
-                    width={20}
-                    height={20}
-                    className="mr-2"
-                  />
-                  Sign in
-                </Button>
-              )}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="relative flex items-center justify-center my-4">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <span className="relative bg-background px-3 text-sm text-muted-foreground">
-          {t("text.orContinueWith")}
-        </span>
-      </div>
+      <Loader isLoading={userAuthStaffLoginMutation.isPending}></Loader>
 
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -316,12 +179,12 @@ export default function CompanyLoginPage() {
       </motion.div>
 
       <div className="text-center text-sm text-gray-500 mt-6">
-        {t("text.noCompanyAccount")}{" "}
+        {t("text.noAgentAccount")}{" "}
         <Link
           href={`/${locale}/company/register`}
           className="text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded px-1"
         >
-          {t("button.registerCompanyNow")}
+          {t("button.registerAsAgent")}
         </Link>
       </div>
 

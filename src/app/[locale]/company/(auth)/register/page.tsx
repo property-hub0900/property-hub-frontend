@@ -28,6 +28,7 @@ import { getErrorMessage } from "@/lib/utils";
 import { TUserAuthStaffRegisterSchema } from "@/types/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useMemo } from "react";
+import { Loader } from "@/components/loader";
 
 export default function CompanyRegisterPage() {
   const t = useTranslations();
@@ -71,6 +72,7 @@ export default function CompanyRegisterPage() {
       subtitle={t("text.registerCompanyText")}
       size="lg"
     >
+      <Loader isLoading={userAuthStaffRegisterMutation.isPending}></Loader>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
