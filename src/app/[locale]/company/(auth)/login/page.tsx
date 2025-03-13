@@ -35,6 +35,7 @@ export default function CompanyLoginPage() {
   const { locale } = useParams();
   const t = useTranslations();
   const router = useRouter();
+  const pushUserAfterLogin = `/${locale}/company/dashboard`;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -65,7 +66,7 @@ export default function CompanyLoginPage() {
 
       useAuthStore.getState().login(response.data);
 
-      router.push(`/${locale}/company/dashboard`);
+      router.push(pushUserAfterLogin);
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
@@ -111,13 +112,13 @@ export default function CompanyLoginPage() {
           useAuthStore.getState().login(loginResponse.data);
 
           toast.success(t("loginSuccess"));
-          router.push(`/${locale}/`);
+          router.push(pushUserAfterLogin);
         }
       } catch (error: any) {
         toast.error(getErrorMessage(error));
       }
     },
-    [locale, router, staffSocialLoginMutation, t]
+    [pushUserAfterLogin, router, staffSocialLoginMutation, t]
   );
 
   const handleFacebookSuccess = useCallback(
@@ -146,7 +147,7 @@ export default function CompanyLoginPage() {
 
         toast.success(t("loginSuccess"));
 
-        router.push(`/${locale}/`);
+        router.push(pushUserAfterLogin);
       } catch (error: any) {
         console.error("Error during Facebook login:", error);
         toast.error(getErrorMessage(error));
@@ -154,7 +155,7 @@ export default function CompanyLoginPage() {
         // setIsFacebookLoading(false)
       }
     },
-    [staffSocialLoginMutation, t, router, locale]
+    [staffSocialLoginMutation, t, router, pushUserAfterLogin]
   );
 
   return (
