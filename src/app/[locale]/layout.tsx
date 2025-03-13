@@ -1,6 +1,6 @@
 import Footer from "@/components/footer";
 import Header from "@/components/header";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
@@ -55,25 +55,9 @@ export default async function RootLayout({
           <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID || ""}>
             <ReactQueryProvider>
               <Header />
-              <Toaster
-                position="top-right"
-                toastOptions={{
-                  style: {
-                    background: "var(--card)",
-                    color: "var(--card-foreground)",
-                    border: "1px solid var(--border)",
-                    borderRadius: "var(--radius)",
-                    fontSize: "14px",
-                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
-                  },
-                  className: "sonner-toast",
-                }}
-                closeButton
-                className="toaster-container"
-              />
+              <Toaster closeButton richColors />
               {children}
               <Footer />
-
             </ReactQueryProvider>
           </GoogleOAuthProvider>
         </NextIntlClientProvider>

@@ -24,7 +24,6 @@ import { useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
