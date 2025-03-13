@@ -112,7 +112,7 @@ export default function DashboardLayout({
       <div className="flex h-screen overflow-hidden bg-gray-50 w-full">
         {/* Sidebar */}
         <Sidebar className="border-r border-gray-200">
-          <SidebarHeader className="border-b border-gray-200 p-4">
+          <SidebarHeader className="pb-6" >
             <Link
               href={`/${locale}`}
               className="flex items-center gap-2 font-semibold text-xl"
