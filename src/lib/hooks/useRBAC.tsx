@@ -7,7 +7,7 @@ import { type Permission, ROLE_PERMISSIONS, type UserRole } from "@/types/rbac"
  */
 export const useRBAC = () => {
     const { user, isAuthenticated } = useAuthStore()
-    debugger;
+
 
     // Convert scope array to UserRole array
     const roles: UserRole[] =

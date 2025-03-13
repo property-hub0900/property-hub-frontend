@@ -24,8 +24,6 @@ export const RoleGate = ({
 }: RoleGateProps) => {
     const { hasAnyRole, hasAllRoles, hasPermission, isAuthenticated } = useRBAC()
 
-    debugger;
-
     // Not authenticated, show fallback
     if (!isAuthenticated) {
         return <>{fallback}</>

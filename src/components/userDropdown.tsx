@@ -12,9 +12,11 @@ import {
 
 import { useAuth } from "@/lib/hooks/useAuth";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useRouter } from "next/navigation";
 
 export const UserDropdown = () => {
   const { user, logOut } = useAuth();
+  const router = useRouter();
 
   const getUserName = () => {
     if (user) {
@@ -22,22 +24,28 @@ export const UserDropdown = () => {
     }
   }
 
+
+
   return (
     <div className="">
-      <DropdownMenu>
+      <DropdownMenu >
         <DropdownMenuTrigger asChild>
-          <div className="flex gap-2 items-center">
-            <span className="capitalize">{getUserName()}</span>
+          <div className="flex gap-2 items-center cursor-pointer">
             <Avatar className="cursor-pointer">
-              <AvatarImage src={""} alt={getUserName()} />
+              <AvatarImage src={user?.imageUrl} alt={getUserName()} />
               <AvatarFallback>
                 {getUserName()?.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
+            <span className="capitalize">{getUserName()}</span>
+
+
+
+
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel onClick={() => { router.push(`${user?.role === 'staff' ? '/company' : '/customer'}/dashboard`) }}>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
 
           <DropdownMenuItem onClick={logOut}>
