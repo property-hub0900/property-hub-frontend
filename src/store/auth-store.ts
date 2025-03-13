@@ -15,6 +15,7 @@ interface UserData {
   tokenExpiry?: number;
   scope?: string[];
   loginMethod: string;
+  imageUrl?: string;
 }
 
 // Define the auth store state
@@ -97,6 +98,7 @@ export const useAuthStore = create<AuthState>()(
               tokenExpiry: decoded.exp,
               scope: userData.scope || [],
               loginMethod: decoded.loginWith,
+              imageUrl: userData.imageUrl,
             };
 
             console.log("Setting user state:", user);
