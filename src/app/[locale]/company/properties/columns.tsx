@@ -8,10 +8,12 @@ export const columns: ColumnDef<IProperty>[] = [
   {
     accessorKey: "title",
     header: "Title",
+    enableSorting: true,
   },
   {
     accessorKey: "propertyType",
     header: "Type",
+    enableSorting: true,
     // header: ({ column }) => (
     //   <DataTableColumnHeader column={column} title="Email" />
     // ),
@@ -19,14 +21,17 @@ export const columns: ColumnDef<IProperty>[] = [
   {
     accessorKey: "price",
     header: "Price",
+    enableSorting: true,
   },
   {
     accessorKey: "lastUpdated",
     header: "Last Updated",
+    enableSorting: true,
   },
   {
     accessorKey: "status",
     header: "Status",
+    enableSorting: true,
   },
   {
     accessorKey: "propertyId",

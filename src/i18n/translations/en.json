@@ -28,7 +28,9 @@
     "enterNewPassword": "Enter your new password"
   },
   "table": {
-    "notFound": "No Record found"
+    "notFound": "No Record found...",
+    "page": "Page",
+    "of": "of"
   },
   "form": {
     "required": "This field is required",

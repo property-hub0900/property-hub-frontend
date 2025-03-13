@@ -99,7 +99,7 @@ export function DataTable<TData, TValue>({
                             <Button
                               variant="link"
                               size="sm"
-                              className="-ms-3 h-8 data-[state=open]:bg-accent text-primary-foreground hover:no-underline"
+                              className="-ms-3 h-8 data-[state=open]:bg-accent text-foreground hover:no-underline"
                               onClick={() => header.column.toggleSorting()}
                             >
                               {flexRender(
@@ -155,7 +155,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      {data.length > 10 && <DataTablePagination table={table} />}
+      {data.length > 1 && <DataTablePagination table={table} />}
     </div>
   );
 }
