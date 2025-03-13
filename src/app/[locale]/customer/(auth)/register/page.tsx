@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthContainer } from "@/components/auth/auth-container";
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -23,9 +24,6 @@ import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
-
-
 
 export default function CustomerRegisterPage() {
   const t = useTranslations("");
@@ -72,6 +70,7 @@ export default function CustomerRegisterPage() {
       subtitle={t("registerSubtitle")}
       size="lg"
     >
+      <Loader isLoading={userAuthCustomerRegisterMutation.isPending}></Loader>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -125,7 +124,9 @@ export default function CustomerRegisterPage() {
                   <FormControl>
                     <Input
                       type="email"
-                      placeholder={t("form.email.placeholder") || "example@xyz.com"}
+                      placeholder={
+                        t("form.email.placeholder") || "example@xyz.com"
+                      }
                       {...field}
                     />
                   </FormControl>
@@ -143,7 +144,9 @@ export default function CustomerRegisterPage() {
                   <FormControl>
                     <Input
                       type="tel"
-                      placeholder={t("form.phoneNumber.placeholder") || "+1 (555) 123-4567"}
+                      placeholder={
+                        t("form.phoneNumber.placeholder") || "+1 (555) 123-4567"
+                      }
                       {...field}
                     />
                   </FormControl>
@@ -159,7 +162,9 @@ export default function CustomerRegisterPage() {
                 <FormItem>
                   <FormLabel>{t("form.password.label")}</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field}
+                    <Input
+                      type="password"
+                      {...field}
                       placeholder={t("form.password.placeholder")}
                     />
                   </FormControl>
@@ -175,7 +180,9 @@ export default function CustomerRegisterPage() {
                 <FormItem>
                   <FormLabel>{t("form.confirmPassword.label")}</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field}
+                    <Input
+                      type="password"
+                      {...field}
                       placeholder={t("form.confirmPassword.placeholder")}
                     />
                   </FormControl>

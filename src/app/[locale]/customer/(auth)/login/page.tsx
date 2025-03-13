@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthContainer } from "@/components/auth/auth-container";
+import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -27,7 +28,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+// import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -159,6 +160,12 @@ export default function CustomerLoginPage() {
       title={t("title.loginCustomerTitle")}
       subtitle={t("text.loginCustomerText")}
     >
+      <Loader
+        isLoading={
+          customerSocialLoginMutation.isPending ||
+          userAuthCustomerLoginMutation.isPending
+        }
+      ></Loader>
       <div className="social-buttons space-y-3 w-full">
         <div className="flex gap-2">
           <div className="relative flex-1">
@@ -179,7 +186,7 @@ export default function CustomerLoginPage() {
           </div>
 
           <div className="facebook-auth-container relative w-full flex-1">
-            <FacebookLogin
+            {/* <FacebookLogin
               appId="610106238490107"
               fields="name,email,picture"
               callback={handleFacebookSuccess}
@@ -201,7 +208,7 @@ export default function CustomerLoginPage() {
                   Sign in
                 </Button>
               )}
-            />
+            /> */}
           </div>
         </div>
       </div>
@@ -343,7 +350,7 @@ export default function CustomerLoginPage() {
         className="w-full border border-primary text-primary mt-4"
         onClick={() => router.push(`/${locale}/company/login`)}
       >
-        {t("button.loginAsCompany")}
+        {t("button.loginAsAgent")}
       </Button>
     </AuthContainer>
   );
