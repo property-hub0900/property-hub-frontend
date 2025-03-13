@@ -10,6 +10,7 @@
   "button": {
     "next": "Next",
     "login": "Login",
+    "submit": "Submit",
     "registerNow": "Register Now",
     "loginAsAgent": "Login as a Agent →",
     "loginAsCustomer": "Login as a Customer →",
@@ -110,6 +111,77 @@
       "errors": {
         "required": "Mobile Number is required.",
         "invalid": "Enter a valid Mobile Number (e.g. 03XXXXXXXXX)."
+      }
+    },
+    "featured": {
+      "label": "Featured",
+      "placeholder": ""
+    },
+    "title": {
+      "label": "Title",
+      "placeholder": "",
+      "errors": {
+        "required": "Title is required."
+      }
+    },
+    "propertyCategory": {
+      "label": "Property Category",
+      "placeholder": "Select Property Category",
+      "options": {
+        "Residential": "Residential",
+        "Commercial": "Commercial"
+      },
+      "errors": {
+        "required": "Property category is required."
+      }
+    },
+    "propertyPurpose": {
+      "label": "Purpose",
+      "placeholder": "Select Purpose",
+      "options": {
+        "For Sale": "For Sale",
+        "For Rent": "For Rent"
+      },
+      "errors": {
+        "required": "Purpose is required."
+      }
+    },
+    "propertyType": {
+      "label": "Property Type",
+      "placeholder": "Select Property Type",
+      "options": {
+        "Apartment": "Apartment",
+        "Villa": "Villa",
+        "Townhouse": "Townhouse",
+        "Penthouse": "Penthouse",
+        "Office": "Office",
+        "Shop": "Shop",
+        "Warehouse": "Warehouse",
+        "Land": "Land"
+      },
+      "errors": {
+        "required": "Property type is required."
+      }
+    },
+    "bedrooms": {
+      "label": "No of bedrooms",
+      "placeholder": "",
+      "errors": {
+        "required": "No of bedrooms is required."
+      }
+    },
+    "bathrooms": {
+      "label": "No of bathrooms",
+      "placeholder": "",
+      "errors": {
+        "required": "No of bathrooms is required."
+      }
+    },
+    "propertySize": {
+      "label": "Property Size",
+      "placeholder": "Property Size Sqft",
+      "errors": {
+        "required": "Property size is required."
       }
     }
   },

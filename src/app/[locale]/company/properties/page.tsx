@@ -8,6 +8,7 @@ import { IProperty } from "@/types/dashboard/properties";
 import { Loader } from "@/components/loader";
 import { useState } from "react";
 import { SortingState } from "@tanstack/react-table";
+import { RoleGate } from "@/components/rbac/role-gate";
 
 export default function PropertiesListing() {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -22,12 +23,14 @@ export default function PropertiesListing() {
       <div className="relative">
         <Loader variant="inline" isLoading={isLoadingProperties}></Loader>
         <div className="mx-auto container py-5">
-          <DataTable
-            columns={columns}
-            data={dataProperties?.results || []}
-            sorting={sorting}
-            onSortingChange={setSorting}
-          />
+          <RoleGate allowedRoles={["customer", "admin", "owner"]}>
+            <DataTable
+              columns={columns}
+              data={dataProperties?.results || []}
+              sorting={sorting}
+              onSortingChange={setSorting}
+            />
+          </RoleGate>
         </div>
       </div>
     </>
