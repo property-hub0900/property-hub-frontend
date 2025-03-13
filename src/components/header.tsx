@@ -19,7 +19,7 @@ export default function Header() {
 
   const { isAuthenticated } = useAuth();
 
-  if (pathName.includes('/dashboard')) {
+  if (pathName.includes('/dashboard') || pathName.includes('/company') || pathName.includes('/customer')) {
     return null
   }
 
