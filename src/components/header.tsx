@@ -4,15 +4,24 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { UserDropdown } from "./userDropdown";
 
 export default function Header() {
+  const pathName = usePathname();
+
+
+
+
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const { isAuthenticated } = useAuth();
+
+  if (pathName.includes('/dashboard') || pathName.includes('/company') || pathName.includes('/customer')) {
+    return null
+  }
 
   return (
     <header className="bg-background border-b border-border w-full">

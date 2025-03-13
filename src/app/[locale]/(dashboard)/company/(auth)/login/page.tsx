@@ -34,6 +34,7 @@ export default function CompanyLoginPage() {
   const { locale } = useParams();
   const t = useTranslations();
   const router = useRouter();
+  const pushUserAfterLogin = `/${locale}/company/dashboard`;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -59,7 +60,7 @@ export default function CompanyLoginPage() {
 
       useAuthStore.getState().login(response.data);
 
-      router.push(`/${locale}/company/dashboard`);
+      router.push(pushUserAfterLogin);
     } catch (error) {
       toast.error(getErrorMessage(error));
     }

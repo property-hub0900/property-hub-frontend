@@ -35,6 +35,7 @@ export default function CustomerLoginPage() {
   const { locale } = useParams();
   const t = useTranslations();
   const router = useRouter();
+  const pushUserAfterLogin = `/${locale}/customer/dashboard`;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -63,7 +64,7 @@ export default function CustomerLoginPage() {
     try {
       const response = await userAuthCustomerLoginMutation.mutateAsync(values);
       useAuthStore.getState().login(response.data);
-      router.push(`/${locale}/customer/dashboard`);
+      router.push(pushUserAfterLogin);
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
@@ -112,14 +113,14 @@ export default function CustomerLoginPage() {
 
           toast.success(t("loginSuccess"));
 
-          router.push(`/${locale}/customer/dashboard`);
+          router.push(pushUserAfterLogin);
         }
       } catch (error: any) {
         console.error("Error verifying Google token:", error);
         toast.error(getErrorMessage(error));
       }
     },
-    [customerSocialLoginMutation, locale, router, t]
+    [customerSocialLoginMutation, pushUserAfterLogin, router, t]
   );
 
   const handleFacebookSuccess = useCallback(
@@ -144,13 +145,13 @@ export default function CustomerLoginPage() {
 
         toast.success(t("loginSuccess"));
 
-        router.push(`/${locale}/customer/dashboard`);
+        router.push(pushUserAfterLogin);
       } catch (error: any) {
         console.error("Error during Facebook login:", error);
         toast.error(getErrorMessage(error));
       }
     },
-    [customerSocialLoginMutation, t, router, locale]
+    [customerSocialLoginMutation, t, router, pushUserAfterLogin]
   );
 
   return (

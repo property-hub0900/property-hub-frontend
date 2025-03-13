@@ -47,6 +47,7 @@ export interface userAuthCustomerLoginResponse {
   isExpireToken: boolean;
   createdAt: string;
   updatedAt: string;
+  avatar?: string;
   scope: string[];
   token: string;
 }

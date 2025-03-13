@@ -1,9 +1,17 @@
+"use client";
+
 import type React from "react";
 import { Facebook, Twitter, Youtube } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
   const t = useTranslations("landingPage");
+
+  const pathName = usePathname();
+  if (pathName.includes('/dashboard')) {
+    return null
+  }
 
   return (
     <footer className="bg-primary text-primary-foreground pt-16 pb-8 w-full">
