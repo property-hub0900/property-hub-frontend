@@ -22,20 +22,7 @@ export default function AccessManagementPage() {
             joinedDate: "12-Feb-25",
             status: "Active",
         },
-        {
-            id: "2",
-            fullName: "Mohammad Ali",
-            type: "Admin",
-            joinedDate: "14-Feb-25",
-            status: "Active",
-        },
-        {
-            id: "3",
-            fullName: "Ali Rehman",
-            type: "Agent",
-            joinedDate: "20-Feb-25",
-            status: "In-active",
-        },
+
     ])
 
     return (
