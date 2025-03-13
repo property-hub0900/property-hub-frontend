@@ -24,7 +24,6 @@ import { useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
@@ -95,6 +94,7 @@ export default function CustomerLoginPage() {
         }
 
         const data = await response.json();
+        debugger;
 
         if (data.success && data.user) {
           const { email, name, googleUserId } = data.user;
@@ -103,14 +103,14 @@ export default function CustomerLoginPage() {
           const firstName = nameParts[0] || "";
           const lastName = nameParts.slice(1).join(" ") || "";
 
-          const loginResponse = await customerSocialLoginMutation.mutateAsync({
+          const loginResponse: Record<string, any> = await customerSocialLoginMutation.mutateAsync({
             googleId: googleUserId,
             email,
             firstName,
             lastName,
           });
 
-          useAuthStore.getState().login(loginResponse.data);
+          useAuthStore.getState().login({ ...loginResponse.data, imageUrl: data.user.picture });
 
           toast.success(t("loginSuccess"));
 

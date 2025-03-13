@@ -1,146 +1,173 @@
-"use client";
+"use client"
+import { useAuth } from "@/lib/hooks/useAuth"
+import { Menu, X } from "lucide-react"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { UserDropdown } from "./userDropdown"
+import { Switch } from "@/components/ui/switch"
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/hooks/useAuth";
-import { UserDropdown } from "./userDropdown";
+export default function Header({ calledBy = "home" }) {
+  const router = useRouter()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { isAuthenticated } = useAuth()
+  const pathName = usePathname()
+  const [isArabic, setIsArabic] = useState(false)
 
-export default function Header() {
-  const router = useRouter();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  // Determine current language from URL
+  useEffect(() => {
+    if (pathName.includes("/ar/")) {
+      setIsArabic(true)
+    } else {
+      setIsArabic(false)
+    }
+  }, [pathName])
 
-  const { isAuthenticated } = useAuth();
+  // Toggle language function
+  const toggleLanguage = () => {
+    const newLanguage = isArabic ? "en" : "ar"
 
+    // Replace the language segment in the URL
+    let newPath = pathName
+    if (pathName.includes("/en/")) {
+      newPath = pathName.replace("/en/", `/${newLanguage}/`)
+    } else if (pathName.includes("/ar/")) {
+      newPath = pathName.replace("/ar/", `/${newLanguage}/`)
+    } else {
+      // If no language segment exists, add it after the domain
+      newPath = `/${newLanguage}${pathName}`
+    }
+
+    router.push(newPath)
+  }
+
+
+  if (pathName.includes("/dashboard")) {
+    return null
+  }
   return (
-    <header className="bg-background border-b border-border w-full">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <Link href="/" className="text-xl font-bold text-foreground">
-              PropertyHub
-            </Link>
-          </div>
+    <>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/buy"
-              className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
-            >
-              Buy
-            </Link>
-            <Link
-              href="/rent"
-              className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
-            >
-              Rent
-            </Link>
-            <Link
-              href="/sell"
-              className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
-            >
-              Sell
-            </Link>
-            <Link
-              href="/about"
-              className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
-            >
-              About Us
-            </Link>
-            <Link
-              href="/contact"
-              className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
-            >
-              Contact
-            </Link>
-          </nav>
 
-          {isAuthenticated ? (
-            <>
-              <UserDropdown></UserDropdown>
-            </>
-          ) : (
-            <>
-              <div className="hidden md:flex items-center space-x-4">
-                <Button
-                  variant="outline"
-                  className="text-primary border-primary hover:bg-primary/10"
-                  onClick={() => router.push("/customer/login")}
-                >
-                  Sign In
-                </Button>
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-                  Get Started
-                </Button>
-              </div>
-            </>
-          )}
+      {/* Main Header */}
+      <header className="bg-white border-b border-gray-200 w-full">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <div className="flex items-center">
+              <Link href="/" className="flex items-center">
+                <div className="flex items-center">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="w-8 h-8 fill-current text-black"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M12 2L1 12h3v9h16v-9h3L12 2zm0 2.8L19.2 11H4.8L12 4.8z" />
+                  </svg>
+                  <div className="ml-2">
+                    <div className="text-xl font-bold text-black">Property</div>
+                    <div className="text-xl font-bold text-black -mt-1">Hub</div>
+                  </div>
+                </div>
+              </Link>
+            </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-foreground p-2"
-              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-background border-t border-border">
-          <div className="px-4 py-2 space-y-1">
-            <Link
-              href="/buy"
-              className="block py-2 text-muted-foreground hover:text-primary"
-            >
-              Buy
-            </Link>
-            <Link
-              href="/rent"
-              className="block py-2 text-muted-foreground hover:text-primary"
-            >
-              Rent
-            </Link>
-            <Link
-              href="/sell"
-              className="block py-2 text-muted-foreground hover:text-primary"
-            >
-              Sell
-            </Link>
-            <Link
-              href="/about"
-              className="block py-2 text-muted-foreground hover:text-primary"
-            >
-              About Us
-            </Link>
-            <Link
-              href="/contact"
-              className="block py-2 text-muted-foreground hover:text-primary"
-            >
-              Contact
-            </Link>
-            <div className="pt-4 pb-2 space-y-2">
-              <Button
-                variant="outline"
-                className="w-full text-primary border-primary hover:bg-primary/10"
-                onClick={() => router.push("/customer/login")}
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <Link href="#" className="text-gray-700 hover:text-primary transition-colors text-sm font-medium" >
+                Buy
+              </Link>
+              <Link href="#" className="text-gray-700 hover:text-primary transition-colors text-sm font-medium">
+                Rent
+              </Link>
+              <Link
+                href="#"
+                className="text-gray-700 hover:text-primary transition-colors text-sm font-medium"
               >
-                Sign In
-              </Button>
-              <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
-                Get Started
-              </Button>
+                Explore Properties
+              </Link>
+            </nav>
+
+            {/* Auth Buttons / User Menu */}
+            <div className="hidden md:flex items-center space-x-6">
+              {isAuthenticated ? (
+                <UserDropdown />
+              ) : (
+                <Link
+                  href="/customer/login"
+                  className="text-gray-700 hover:text-primary transition-colors text-sm font-medium flex items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Login/Register
+                </Link>
+              )}
+
+              <Link href="#" className="text-gray-700 hover:text-primary transition-colors text-sm font-medium">
+                Contact Us
+              </Link>
+
+              <div className="flex items-center space-x-2">
+                <span className="text-sm font-medium">{isArabic ? "AR" : "ENG"}</span>
+                <Switch checked={isArabic} onCheckedChange={toggleLanguage} disabled />
+              </div>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="text-gray-700 p-2"
+                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
             </div>
           </div>
         </div>
-      )}
-    </header>
-  );
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-200">
+            <div className="px-4 py-2 space-y-1">
+              <Link href="#" className="block py-2 text-gray-700 hover:text-primary">
+                Buy
+              </Link>
+              <Link href="#" className="block py-2 text-gray-700 hover:text-primary">
+                Rent
+              </Link>
+              <Link href="#" className="block py-2 text-gray-700 hover:text-primary">
+                Explore Properties
+              </Link>
+              <Link href="/contact" className="block py-2 text-gray-700 hover:text-primary">
+                Contact Us
+              </Link>
+
+              {!isAuthenticated && (
+                <Link href="/customer/login" className="block py-2 text-gray-700 hover:text-primary">
+                  Login/Register
+                </Link>
+              )}
+
+              <div className="py-2 flex items-center justify-between">
+                <span className="text-sm font-medium">{isArabic ? "AR" : "ENG"}</span>
+                <Switch checked={isArabic} onCheckedChange={toggleLanguage} />
+              </div>
+            </div>
+          </div>
+        )}
+      </header>
+    </>
+  )
 }
+

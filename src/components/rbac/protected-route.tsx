@@ -29,16 +29,9 @@ export const ProtectedRoute = ({
     const router = useRouter()
 
     useEffect(() => {
-        // If not authenticated, redirect
-        if (!isAuthenticated) {
-            router.push(redirectTo)
-            return
-        }
-
         // Check roles if specified
         if (allowedRoles && allowedRoles.length > 0) {
             const hasRoles = requireAll ? hasAllRoles(allowedRoles) : hasAnyRole(allowedRoles)
-
             if (!hasRoles) {
                 router.push(redirectTo)
                 return
