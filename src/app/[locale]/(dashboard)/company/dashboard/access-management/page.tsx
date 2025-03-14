@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { PlusCircle, Pencil, Trash2 } from "lucide-react"
+import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -16,26 +16,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import { DataTable } from "@/components/dataTable/data-table"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
+import type * as z from "zod"
 import { toast } from "sonner"
-import { companyService, type StaffMember, type StaffRole } from "@/services/company"
-
-// Form schema updated to match API requirements
-const staffFormSchema = z.object({
-    firstName: z.string().min(2, { message: "First name must be at least 2 characters" }),
-    lastName: z.string().min(2, { message: "Last name must be at least 2 characters" }),
-    email: z.string().email({ message: "Please enter a valid email address" }),
-    role: z.enum(["agent", "admin"] as const),
-    phoneNumber: z.string().min(10, { message: "Please enter a valid phone number" }),
-    languages: z.string().optional(),
-    status: z.enum(["active", "inactive"]),
-    canAddProperty: z.boolean().default(true),
-    canPublishProperty: z.boolean().default(true),
-    canFeatureProperty: z.boolean().default(false),
-})
+import { companyService, type StaffMember } from "@/services/company"
+import { staffFormSchema } from "@/schema/company"
+import { StaffTable } from "@/components/staffTable"
 
 export default function AccessManagementPage() {
     const [staff, setStaff] = useState<StaffMember[]>([])
@@ -45,7 +32,6 @@ export default function AccessManagementPage() {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
     const [selectedStaff, setSelectedStaff] = useState<StaffMember | null>(null)
 
-    // Form for adding/editing staff
     const form = useForm<z.infer<typeof staffFormSchema>>({
         resolver: zodResolver(staffFormSchema),
         defaultValues: {
@@ -62,14 +48,13 @@ export default function AccessManagementPage() {
         },
     })
 
-    // Fetch staff on component mount
     useEffect(() => {
         const fetchStaff = async () => {
             setIsLoading(true)
             try {
-                const response = await companyService.getAllStaff()
-                if (response.success) {
-                    setStaff(response.data)
+                const response: any = await companyService.getAllStaff()
+                if (response.results) {
+                    setStaff(response.results)
                 } else {
                     toast.error(response.message || "Failed to fetch staff members")
                 }
@@ -84,7 +69,6 @@ export default function AccessManagementPage() {
         fetchStaff()
     }, [])
 
-    // Reset form when dialog closes
     const resetForm = () => {
         form.reset({
             firstName: "",
@@ -100,7 +84,6 @@ export default function AccessManagementPage() {
         })
     }
 
-    // Open edit dialog with staff data
     const handleEditClick = (staffMember: StaffMember) => {
         setSelectedStaff(staffMember)
         form.reset({
@@ -118,13 +101,11 @@ export default function AccessManagementPage() {
         setIsEditDialogOpen(true)
     }
 
-    // Open delete dialog
     const handleDeleteClick = (staffMember: StaffMember) => {
         setSelectedStaff(staffMember)
         setIsDeleteDialogOpen(true)
     }
 
-    // Add new staff member
     const handleAddStaff = async (data: z.infer<typeof staffFormSchema>) => {
         setIsLoading(true)
         try {
@@ -140,7 +121,6 @@ export default function AccessManagementPage() {
             })
 
             if (response.success) {
-                // Add the new staff member to the local state
                 setStaff([
                     ...staff,
                     {
@@ -163,7 +143,6 @@ export default function AccessManagementPage() {
         }
     }
 
-    // Update existing staff
     const handleUpdateStaff = async (data: z.infer<typeof staffFormSchema>) => {
         if (!selectedStaff) return
 
@@ -183,7 +162,6 @@ export default function AccessManagementPage() {
             })
 
             if (response.success) {
-                // Update the staff member in the local state
                 const updatedStaffList = staff.map((s) =>
                     s.id === selectedStaff.id
                         ? {
@@ -207,7 +185,6 @@ export default function AccessManagementPage() {
         }
     }
 
-    // Delete staff
     const handleDeleteStaff = async () => {
         if (!selectedStaff) return
 
@@ -216,7 +193,6 @@ export default function AccessManagementPage() {
             const response = await companyService.deleteStaff(selectedStaff.id)
 
             if (response.success) {
-                // Remove from local state
                 const updatedStaff = staff.filter((s) => s.id !== selectedStaff.id)
                 setStaff(updatedStaff)
                 toast.success(response.message || "Staff member deleted successfully")
@@ -231,71 +207,6 @@ export default function AccessManagementPage() {
             setIsDeleteDialogOpen(false)
         }
     }
-
-    // Table columns
-    const columns = [
-        {
-            accessorFn: (row: StaffMember) => `${row.firstName} ${row.lastName}`,
-            header: "Full Name",
-            id: "fullName",
-        },
-        {
-            accessorKey: "role",
-            header: "Role",
-            cell: ({ row }: { row: any }) => {
-                const role = row.getValue("role") as StaffRole
-                return <span className="capitalize">{role}</span>
-            },
-        },
-        {
-            accessorKey: "email",
-            header: "Email",
-        },
-        {
-            accessorKey: "joinedDate",
-            header: "Joined Date",
-        },
-        {
-            accessorKey: "status",
-            header: "Status",
-            cell: ({ row }: { row: any }) => {
-                const status = row.getValue("status")
-                return (
-                    <div className="flex items-center">
-                        <div className={`w-2 h-2 rounded-full mr-2 ${status === "active" ? "bg-green-500" : "bg-gray-400"}`}></div>
-                        <span className="capitalize">{status}</span>
-                    </div>
-                )
-            },
-        },
-        {
-            id: "actions",
-            header: "Actions",
-            cell: ({ row }: { row: any }) => {
-                const staffMember = row.original
-                return (
-                    <div className="flex space-x-2">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleEditClick(staffMember)}
-                            className="h-8 w-8 p-0 text-blue-500"
-                        >
-                            <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleDeleteClick(staffMember)}
-                            className="h-8 w-8 p-0 text-red-500"
-                        >
-                            <Trash2 className="h-4 w-4" />
-                        </Button>
-                    </div>
-                )
-            },
-        },
-    ]
 
     return (
         <div className="space-y-6">
@@ -527,7 +438,7 @@ export default function AccessManagementPage() {
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(handleUpdateStaff)} className="space-y-6">
                             <div className="space-y-4">
-                                <h3 className="text-sm font-medium">User Details</h3>
+                                <h3 className="text-sm font-medium">Edit User</h3>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <FormField
@@ -757,7 +668,7 @@ export default function AccessManagementPage() {
                     {isLoading && staff.length === 0 ? (
                         <p>Loading staff members...</p>
                     ) : (
-                        <DataTable columns={columns} data={staff} />
+                        <StaffTable staff={staff} onEdit={handleEditClick} onDelete={handleDeleteClick} />
                     )}
                 </div>
             </div>

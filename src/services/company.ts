@@ -45,7 +45,7 @@ export interface IResponse<T> {
 export const companyService = {
   // Get all staff members
   getAllStaff: async (): Promise<IResponse<StaffMember[]>> => {
-    return apiClient.get("/staff");
+    return apiClient.get("companies/staff");
   },
 
   // Get a specific staff member by ID
