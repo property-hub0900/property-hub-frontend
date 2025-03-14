@@ -12,7 +12,7 @@ export const createPropertySchema = (t: (key: string) => string) =>
     propertySize: commonValidations.stringRequired(t("form.required")),
     bedrooms: commonValidations.numberRequired(t("form.required")),
     bathrooms: commonValidations.numberRequired(t("form.required")),
-    furnishedType: commonValidations.numberRequired(t("form.required")),
+    furnishedType: commonValidations.stringRequired(t("form.required")),
     price: commonValidations.numberRequired(t("form.required")),
     buildYear: commonValidations.stringRequired(t("form.required")),
     location: commonValidations.stringRequired(t("form.required")),

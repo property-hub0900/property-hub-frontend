@@ -16,3 +16,10 @@ export const PROPERTY_TYPES = [
 ] as const;
 
 export type TPropertyType = (typeof PROPERTY_TYPES)[number];
+
+export const PROPERTY_FURNISHED_TYPE = [
+  "Furnished",
+  "Semi-Furnished",
+  "Unfurnished",
+] as const;
+export type TPropertyFurnishedType = (typeof PROPERTY_FURNISHED_TYPE)[number];

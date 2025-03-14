@@ -119,10 +119,7 @@
     },
     "title": {
       "label": "Title",
-      "placeholder": "",
-      "errors": {
-        "required": "Title is required."
-      }
+      "placeholder": ""
     },
     "propertyCategory": {
       "label": "Property Category",
@@ -130,9 +127,6 @@
       "options": {
         "Residential": "Residential",
         "Commercial": "Commercial"
-      },
-      "errors": {
-        "required": "Property category is required."
       }
     },
     "propertyPurpose": {
@@ -141,9 +135,6 @@
       "options": {
         "For Sale": "For Sale",
         "For Rent": "For Rent"
-      },
-      "errors": {
-        "required": "Purpose is required."
       }
     },
     "propertyType": {
@@ -158,30 +149,27 @@
         "Shop": "Shop",
         "Warehouse": "Warehouse",
         "Land": "Land"
-      },
-      "errors": {
-        "required": "Property type is required."
       }
     },
     "bedrooms": {
       "label": "No of bedrooms",
-      "placeholder": "",
-      "errors": {
-        "required": "No of bedrooms is required."
-      }
+      "placeholder": ""
     },
     "bathrooms": {
       "label": "No of bathrooms",
-      "placeholder": "",
-      "errors": {
-        "required": "No of bathrooms is required."
-      }
+      "placeholder": ""
     },
     "propertySize": {
       "label": "Property Size",
-      "placeholder": "Property Size Sqft",
-      "errors": {
-        "required": "Property size is required."
+      "placeholder": "Property Size Sqft"
+    },
+    "furnishedType": {
+      "label": "Furnished Type",
+      "placeholder": "Select Furnished Type",
+      "options": {
+        "Furnished": "Furnished",
+        "Semi-Furnished": "Semi-Furnished",
+        "Unfurnished": "Unfurnished"
       }
     }
   },

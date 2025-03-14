@@ -34,6 +34,7 @@ import { TCreatePropertySchema } from "@/types/dashboard/properties";
 import { SimpleMultiSelect } from "@/components/multiSelect";
 import {
   PROPERTY_CATEGORIES,
+  PROPERTY_FURNISHED_TYPE,
   PROPERTY_PURPOSE,
   PROPERTY_TYPES,
 } from "@/constants/constants";
@@ -251,7 +252,7 @@ export default function CreatePropertyPage() {
                   <FormLabel>{t("form.furnishedType.label")}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value.toString()}
+                    defaultValue={field.value}
                   >
                     <SelectTrigger>
                       <SelectValue
@@ -259,8 +260,11 @@ export default function CreatePropertyPage() {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="2000">2000</SelectItem>
-                      <SelectItem value="2001">2001</SelectItem>
+                      {PROPERTY_FURNISHED_TYPE.map((item, index) => (
+                        <SelectItem key={index} value={item}>
+                          {t(`form.furnishedType.options.${item}`)}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
