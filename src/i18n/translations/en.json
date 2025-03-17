@@ -43,7 +43,8 @@
     "forgotPasswordText": "Enter your email address to reset your password",
     "enterNewPassword": "Enter your new password",
     "loadingStaff": "Loading staff members...",
-    "deleteConfirmation": "Are you sure you want to delete this agent? This action cannot be undone."
+    "deleteConfirmation": "Are you sure you want to delete this agent? This action cannot be undone.",
+    "loadStaffFailed": "Failed to load staff members"
   },
   "table": {
     "notFound": "No Record found"
