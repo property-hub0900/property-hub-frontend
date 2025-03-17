@@ -47,8 +47,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={`${inter.variable}`} suppressHydrationWarning>
-        {children}
-        {/* <NextIntlClientProvider
+        <NextIntlClientProvider
           locale={locale}
           messages={messages}
           timeZone="UTC"
@@ -61,7 +60,7 @@ export default async function RootLayout({
               <Footer />
             </ReactQueryProvider>
           </GoogleOAuthProvider>
-        </NextIntlClientProvider> */}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

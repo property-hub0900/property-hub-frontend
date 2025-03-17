@@ -1,36 +1,58 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { columns } from "./columns";
-import { DataTable } from "@/components/dataTable/data-table";
-import { properties } from "@/services/dashboard/properties";
-import { IProperty } from "@/types/dashboard/properties";
-import { Loader } from "@/components/loader";
+import Link from "next/link";
 import { useState } from "react";
-import { SortingState } from "@tanstack/react-table";
+
+import { DataTable } from "@/components/dataTable/data-table";
+import { Loader } from "@/components/loader";
 import { RoleGate } from "@/components/rbac/role-gate";
+import { Button } from "@/components/ui/button";
+import { COMPANY_PATHS } from "@/constants/paths";
+import { companiesProperties } from "@/services/dashboard/properties";
+import { useQuery } from "@tanstack/react-query";
+import { SortingState } from "@tanstack/react-table";
+
+import { columns } from "./columns";
 
 export default function PropertiesListing() {
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const { data: dataProperties, isLoading: isLoadingProperties } = useQuery({
-    queryKey: ["properties"],
-    queryFn: properties,
-  });
+  //const dataCompaniesProperties = [];
+
+  const { data: dataCompaniesProperties, isLoading: isLoadingProperties } =
+    useQuery({
+      queryKey: ["companiesProperties"],
+      queryFn: companiesProperties,
+    });
 
   return (
     <>
-      <div className="relative">
-        <Loader variant="inline" isLoading={isLoadingProperties}></Loader>
-        <div className="mx-auto container py-5">
-          <RoleGate allowedRoles={["customer", "admin", "owner"]}>
-            <DataTable
-              columns={columns}
-              data={dataProperties?.results || []}
-              sorting={sorting}
-              onSortingChange={setSorting}
-            />
-          </RoleGate>
+      <div className="flex justify-between items-center mb-5">
+        <h2>Property Data</h2>
+        <Link href={COMPANY_PATHS.addNewProperty}>
+          <Button>+Add New Property</Button>
+        </Link>
+      </div>
+      <div className="bg-white rounded-md shadow">
+        <div className="p-6">
+          <div className="flex justify-between items-center">
+            <h2>My Properties</h2>
+            <Button>Filters</Button>
+          </div>
+          <div className="relative">
+            {/* <Loader variant="inline" isLoading={isLoadingProperties}></Loader> */}
+
+            <div className="mx-auto container py-5">
+              <RoleGate allowedRoles={["customer", "admin", "owner"]}>
+                <DataTable
+                  columns={columns}
+                  data={dataCompaniesProperties?.results || []}
+                  sorting={sorting}
+                  onSortingChange={setSorting}
+                />
+              </RoleGate>
+            </div>
+          </div>
         </div>
       </div>
     </>
