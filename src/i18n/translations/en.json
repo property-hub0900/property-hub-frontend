@@ -15,7 +15,10 @@
     "loginAsAgent": "Login as a Agent →",
     "loginAsCustomer": "Login as a Customer →",
     "forgotPassword": "Forgot Password?",
-    "registerAsAgent": "Register As Agent"
+    "registerAsAgent": "Register As Agent",
+    "save": "Save",
+    "cancel": "Cancel",
+    "requestForApproval": "Request For Approval"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -163,6 +166,35 @@
       "label": "Property Size",
       "placeholder": "Property Size Sqft"
     },
+    "tenureOfProperty": {
+      "label": "Tenure Of Property",
+      "placeholder": ""
+    },
+    "ownershipStatus": {
+      "label": "Ownership Status",
+      "placeholder": "Select Ownership Status",
+      "options": {
+        "FreeHold": "FreeHold",
+        "Non-FreeHold": "Non-FreeHold"
+      }
+    },
+    "buildingFloors": {
+      "label": "Building's Floor",
+      "placeholder": ""
+    },
+    "floorNumber": {
+      "label": "Floor Number",
+      "placeholder": ""
+    },
+    "occupancy": {
+      "label": "Occupancy",
+      "placeholder": "Occupancy",
+      "options": {
+        "Vacant": "Vacant",
+        "Occupied": "Occupied",
+        "Will be vacated soon": "Will be vacated soon"
+      }
+    },
     "furnishedType": {
       "label": "Furnished Type",
       "placeholder": "Select Furnished Type",
@@ -171,6 +203,45 @@
         "Semi-Furnished": "Semi-Furnished",
         "Unfurnished": "Unfurnished"
       }
+    },
+    "views": {
+      "label": "Views",
+      "placeholder": "Views",
+      "options": {
+        "Sea View": "Sea View",
+        "City View": "City View",
+        "Park View": "Park View",
+        "Other": "Other"
+      }
+    },
+    "price": {
+      "label": "Price",
+      "placeholder": ""
+    },
+    "priceVisibilityFlag": {
+      "label": "Price Visibility Flag",
+      "placeholder": ""
+    },
+    "serviceCharges": {
+      "label": "Service Charges",
+      "placeholder": ""
+    },
+
+    "location": {
+      "label": "Location",
+      "placeholder": ""
+    },
+    "amenities": {
+      "label": "Amenities",
+      "placeholder": ""
+    },
+    "description": {
+      "label": "description",
+      "placeholder": ""
+    },
+    "descriptionAr": {
+      "label": "descriptionAr",
+      "placeholder": ""
     }
   },
   "seo": {

@@ -37,20 +37,24 @@ export interface IProperty {
   PropertyImages: IPropertyImage[];
 }
 
-interface IPropertyLocation {
-  crs: string;
-  type: string;
-  coordinates: [number, number];
-}
-
-interface IPropertyCRS {
-  type: string;
-  properties: { name: string };
-}
-
 interface IPropertyImage {
   imageId: number;
   propertyId: number;
   url: string;
   isPrimary: boolean;
+}
+
+export interface IAmenity {
+  amenityId: number;
+  name: string;
+  icon: string;
+  amenityLabel: string;
+}
+
+export interface IAmenitiesResponse {
+  results: IAmenity[];
+  total: number;
+  page: number;
+  pageSize: number;
+  isError: boolean;
 }

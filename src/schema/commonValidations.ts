@@ -7,9 +7,18 @@ export const commonValidations = {
       .trim()
       .min(1, { message: requiredErrorMessage }),
   numberRequired: (requiredErrorMessage: string) =>
-    z
+    z.coerce
       .number({ required_error: requiredErrorMessage })
       .min(1, { message: requiredErrorMessage }),
+  numberOptional: (requiredErrorMessage: string) =>
+    z.coerce
+      .number({ required_error: requiredErrorMessage })
+      .min(0, { message: requiredErrorMessage }),
+  // numberRequired: (requiredErrorMessage: string) =>
+  //   z
+  //     .number({ required_error: requiredErrorMessage })
+  //     .min(1, { message: requiredErrorMessage }),
+
   email: (requiredErrorMessage: string, invalidErrorMessage: string) =>
     z
       .string({ required_error: requiredErrorMessage })

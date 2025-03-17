@@ -17,9 +17,28 @@ export const PROPERTY_TYPES = [
 
 export type TPropertyType = (typeof PROPERTY_TYPES)[number];
 
+export const PROPERTY_OWNERSHIP_STATUS = ["FreeHold", "Non-FreeHold"] as const;
+export type TPropertyOwnershipStatus =
+  (typeof PROPERTY_OWNERSHIP_STATUS)[number];
+
+export const PROPERTY_OCCUPANCY = [
+  "Vacant",
+  "Occupied",
+  "Will be vacated soon",
+] as const;
+export type TPropertyOccupancy = (typeof PROPERTY_OCCUPANCY)[number];
+
 export const PROPERTY_FURNISHED_TYPE = [
   "Furnished",
   "Semi-Furnished",
   "Unfurnished",
 ] as const;
 export type TPropertyFurnishedType = (typeof PROPERTY_FURNISHED_TYPE)[number];
+
+export const PROPERTY_VIEWS = [
+  "Sea View",
+  "City View",
+  "Park View",
+  "Other",
+] as const;
+export type TPropertyViews = (typeof PROPERTY_VIEWS)[number];

@@ -4,20 +4,32 @@ import { PROPERTY_CATEGORIES, PROPERTY_PURPOSE } from "@/constants/constants";
 
 export const createPropertySchema = (t: (key: string) => string) =>
   z.object({
-    featured: z.boolean(),
     title: commonValidations.stringRequired(t("form.required")),
-    propertyCategory: z.enum(PROPERTY_CATEGORIES),
-    purpose: z.enum(PROPERTY_PURPOSE),
+    titleAr: commonValidations.stringRequired(t("form.required")),
+    category: z.enum(PROPERTY_CATEGORIES, {
+      required_error: t("form.required"),
+    }),
+    purpose: commonValidations.stringRequired(t("form.required")),
     propertyType: commonValidations.stringRequired(t("form.required")),
     propertySize: commonValidations.stringRequired(t("form.required")),
-    bedrooms: commonValidations.numberRequired(t("form.required")),
-    bathrooms: commonValidations.numberRequired(t("form.required")),
+    bedrooms: commonValidations.numberOptional(t("form.required")),
+    bathrooms: commonValidations.numberOptional(t("form.required")),
+    tenure: commonValidations.stringRequired(t("form.required")),
+    ownershipStatus: commonValidations.stringRequired(t("form.required")),
+    buildingFloors: commonValidations.numberOptional(t("form.required")),
+    floor: commonValidations.numberOptional(t("form.required")),
+    occupancy: commonValidations.stringRequired(t("form.required")),
     furnishedType: commonValidations.stringRequired(t("form.required")),
+    views: commonValidations.stringRequired(t("form.required")),
+    serviceCharges: commonValidations.stringRequired(t("form.required")),
     price: commonValidations.numberRequired(t("form.required")),
-    buildYear: commonValidations.stringRequired(t("form.required")),
-    location: commonValidations.stringRequired(t("form.required")),
-    description: commonValidations.stringRequired(t("form.required")),
+    priceVisibilityFlag: z.boolean(),
+    //location: commonValidations.stringRequired(t("form.required")),
     amenities: z.array(z.number()).optional(),
+    description: commonValidations.stringRequired(t("form.required")),
+    descriptionAr: commonValidations.stringRequired(t("form.required")),
+    featured: z.boolean(),
+
     // images: z.array(
     //   z.object({
     //     isPrimary: z.boolean(),

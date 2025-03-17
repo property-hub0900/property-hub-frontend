@@ -19,28 +19,34 @@ export default function PropertiesListing() {
 
   //const dataCompaniesProperties = [];
 
-  const { data: dataCompaniesProperties, isLoading: isLoadingProperties } =
-    useQuery({
-      queryKey: ["companiesProperties"],
-      queryFn: companiesProperties,
-    });
+  const {
+    data: dataCompaniesProperties,
+    isLoading: isLoadingProperties,
+    isFetching: isFetchingProperties,
+  } = useQuery({
+    queryKey: ["companiesProperties"],
+    queryFn: companiesProperties,
+  });
 
   return (
     <>
       <div className="flex justify-between items-center mb-5">
-        <h2>Property Data</h2>
-        <Link href={COMPANY_PATHS.addNewProperty}>
+        <h3>Property Data</h3>
+        <Link className="cursor-pointer" href={COMPANY_PATHS.addNewProperty}>
           <Button>+Add New Property</Button>
         </Link>
       </div>
       <div className="bg-white rounded-md shadow">
         <div className="p-6">
           <div className="flex justify-between items-center">
-            <h2>My Properties</h2>
+            <h4>My Properties</h4>
             <Button>Filters</Button>
           </div>
           <div className="relative">
-            {/* <Loader variant="inline" isLoading={isLoadingProperties}></Loader> */}
+            <Loader
+              variant="inline"
+              isLoading={isLoadingProperties || isFetchingProperties}
+            ></Loader>
 
             <div className="mx-auto container py-5">
               <RoleGate allowedRoles={["customer", "admin", "owner"]}>
