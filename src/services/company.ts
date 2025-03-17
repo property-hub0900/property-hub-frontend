@@ -4,6 +4,7 @@ import { apiClient } from "@/lib/api-client";
 export type StaffRole = "agent" | "admin";
 
 export interface StaffMember {
+  staffId: string;
   id: string;
   firstName: string;
   lastName: string;

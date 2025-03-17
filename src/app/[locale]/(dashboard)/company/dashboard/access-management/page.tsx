@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { PlusCircle } from "lucide-react"
+import { PlusCircle } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -10,7 +10,6 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -23,14 +22,18 @@ import { toast } from "sonner"
 import { companyService, type StaffMember } from "@/services/company"
 import { staffFormSchema } from "@/schema/company"
 import { StaffTable } from "@/components/staffTable"
+import { useTranslations } from "next-intl"
 
 export default function AccessManagementPage() {
     const [staff, setStaff] = useState<StaffMember[]>([])
     const [isLoading, setIsLoading] = useState(false)
-    const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
     const [selectedStaff, setSelectedStaff] = useState<StaffMember | null>(null)
+    const [showAddForm, setShowAddForm] = useState(false)
+    const [showPermissionsSection, setShowPermissionsSection] = useState(true)
+
+    const t = useTranslations();
 
     const form = useForm<z.infer<typeof staffFormSchema>>({
         resolver: zodResolver(staffFormSchema),
@@ -48,6 +51,12 @@ export default function AccessManagementPage() {
         },
     })
 
+    const role = form.watch("role");
+    useEffect(() => {
+        console.log("Role changed to:", role)
+        setShowPermissionsSection(role !== "admin")
+    }, [role])
+
     useEffect(() => {
         const fetchStaff = async () => {
             setIsLoading(true)
@@ -56,18 +65,18 @@ export default function AccessManagementPage() {
                 if (response.results) {
                     setStaff(response.results)
                 } else {
-                    toast.error(response.message || "Failed to fetch staff members")
+                    toast.error(response.message || t("toast.fetchStaffFailed") || "Failed to fetch staff members")
                 }
             } catch (error) {
                 console.error("Failed to fetch staff:", error)
-                toast.error("Failed to load staff members")
+                toast.error(t("toast.loadStaffFailed") || "Failed to load staff members")
             } finally {
                 setIsLoading(false)
             }
         }
 
         fetchStaff()
-    }, [])
+    }, [t, showAddForm])
 
     const resetForm = () => {
         form.reset({
@@ -82,6 +91,7 @@ export default function AccessManagementPage() {
             canPublishProperty: true,
             canFeatureProperty: false,
         })
+        setShowPermissionsSection(true)
     }
 
     const handleEditClick = (staffMember: StaffMember) => {
@@ -129,16 +139,16 @@ export default function AccessManagementPage() {
                         status: data.status,
                     },
                 ])
-                toast.success(response.message || "Staff member invited successfully")
+                toast.success(response.message || t("toast.staffInvited") || "Staff member invited successfully")
+                setShowAddForm(false) // Hide form after successful submission
             } else {
-                toast.error(response.message || "Failed to invite staff member")
+                toast.error(response.message || t("toast.inviteFailed") || "Failed to invite staff member")
             }
         } catch (error: any) {
             console.error("Failed to add staff:", error)
-            toast.error(error?.message || "Failed to invite staff member")
+            toast.error(error?.message || t("toast.inviteFailed") || "Failed to invite staff member")
         } finally {
             setIsLoading(false)
-            setIsAddDialogOpen(false)
             resetForm()
         }
     }
@@ -149,7 +159,7 @@ export default function AccessManagementPage() {
         setIsLoading(true)
         try {
             const response = await companyService.updateStaff({
-                id: selectedStaff.id,
+                id: selectedStaff.staffId,
                 firstName: data.firstName,
                 lastName: data.lastName,
                 email: data.email,
@@ -171,13 +181,13 @@ export default function AccessManagementPage() {
                         : s,
                 )
                 setStaff(updatedStaffList)
-                toast.success(response.message || "Staff member updated successfully")
+                toast.success(response.message || t("toast.staffUpdated") || "Staff member updated successfully")
             } else {
-                toast.error(response.message || "Failed to update staff member")
+                toast.error(response.message || t("toast.updateFailed") || "Failed to update staff member")
             }
         } catch (error: any) {
             console.error("Failed to update staff:", error)
-            toast.error(error?.message || "Failed to update staff member")
+            toast.error(error?.message || t("toast.updateFailed") || "Failed to update staff member")
         } finally {
             setIsLoading(false)
             setIsEditDialogOpen(false)
@@ -190,18 +200,18 @@ export default function AccessManagementPage() {
 
         setIsLoading(true)
         try {
-            const response = await companyService.deleteStaff(selectedStaff.id)
+            const response = await companyService.deleteStaff(selectedStaff.staffId)
 
             if (response.success) {
                 const updatedStaff = staff.filter((s) => s.id !== selectedStaff.id)
                 setStaff(updatedStaff)
-                toast.success(response.message || "Staff member deleted successfully")
+                toast.success(response.message || t("toast.staffDeleted") || "Staff member deleted successfully")
             } else {
-                toast.error(response.message || "Failed to delete staff member")
+                toast.error(response.message || t("toast.deleteFailed") || "Failed to delete staff member")
             }
         } catch (error: any) {
             console.error("Failed to delete staff:", error)
-            toast.error(error?.message || "Failed to delete staff member")
+            toast.error(error?.message || t("toast.deleteFailed") || "Failed to delete staff member")
         } finally {
             setIsLoading(false)
             setIsDeleteDialogOpen(false)
@@ -211,21 +221,34 @@ export default function AccessManagementPage() {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold">Access Management</h1>
-                <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-                    <DialogTrigger asChild>
-                        <Button className="bg-blue-500 hover:bg-blue-600">
-                            <PlusCircle className="mr-2 h-4 w-4" /> Add New Agent
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-md">
-                        <DialogHeader>
-                            <DialogTitle>New Agent</DialogTitle>
-                        </DialogHeader>
+                <h1 className="text-2xl font-bold">{t("title.accessManagement") || "Access Management"}</h1>
+                <Button
+                    className="bg-blue-500 hover:bg-blue-600"
+                    onClick={() => {
+                        setShowAddForm(!showAddForm);
+                        if (!showAddForm) resetForm();
+                    }}
+                >
+                    {showAddForm ? (
+                        t("button.cancel") || "Cancel"
+                    ) : (
+                        <>
+                            <PlusCircle className="mr-2 h-4 w-4" /> {t("button.addNewAgent") || "Add New Agent"}
+                        </>
+                    )}
+                </Button>
+            </div>
+
+            {/* Company Agents Section */}
+            <div className="bg-white rounded-md shadow">
+                <div className="p-6">
+                    <h2 className="text-lg font-semibold mb-4">{t("title.companyAgents") || "Company Agents"}</h2>
+
+                    {showAddForm ? (
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(handleAddStaff)} className="space-y-6">
                                 <div className="space-y-4">
-                                    <h3 className="text-sm font-medium">Invite User</h3>
+                                    <h3 className="text-sm font-medium">{t("title.inviteUser") || "Invite User"}</h3>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <FormField
@@ -233,9 +256,9 @@ export default function AccessManagementPage() {
                                             name="firstName"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>First Name</FormLabel>
+                                                    <FormLabel>{t("form.firstName.label") || "First Name"}</FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="Enter first name" {...field} />
+                                                        <Input placeholder={t("form.firstName.placeholder") || "Enter first name"} {...field} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -247,9 +270,9 @@ export default function AccessManagementPage() {
                                             name="lastName"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>Last Name</FormLabel>
+                                                    <FormLabel>{t("form.lastName.label") || "Last Name"}</FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="Enter last name" {...field} />
+                                                        <Input placeholder={t("form.lastName.placeholder") || "Enter last name"} {...field} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -261,9 +284,13 @@ export default function AccessManagementPage() {
                                             name="email"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>Email Address</FormLabel>
+                                                    <FormLabel>{t("form.email.label") || "Email Address"}</FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="email@example.com" type="email" {...field} />
+                                                        <Input
+                                                            placeholder={t("form.email.placeholder") || "email@example.com"}
+                                                            type="email"
+                                                            {...field}
+                                                        />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -275,16 +302,16 @@ export default function AccessManagementPage() {
                                             name="role"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>Role</FormLabel>
+                                                    <FormLabel>{t("form.role.label") || "Role"}</FormLabel>
                                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                         <FormControl>
                                                             <SelectTrigger>
-                                                                <SelectValue placeholder="Select role" />
+                                                                <SelectValue placeholder={t("form.role.placeholder") || "Select role"} />
                                                             </SelectTrigger>
                                                         </FormControl>
                                                         <SelectContent>
-                                                            <SelectItem value="agent">Agent</SelectItem>
-                                                            <SelectItem value="admin">Admin</SelectItem>
+                                                            <SelectItem value="agent">{t("form.role.options.agent") || "Agent"}</SelectItem>
+                                                            <SelectItem value="admin">{t("form.role.options.admin") || "Admin"}</SelectItem>
                                                         </SelectContent>
                                                     </Select>
                                                     <FormMessage />
@@ -297,9 +324,9 @@ export default function AccessManagementPage() {
                                             name="phoneNumber"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>Phone Number</FormLabel>
+                                                    <FormLabel>{t("form.phoneNumber.label") || "Phone Number"}</FormLabel>
                                                     <FormControl>
-                                                        <Input placeholder="+972 0000 0000" {...field} />
+                                                        <Input placeholder={t("form.phoneNumber.placeholder") || "+972 0000 0000"} {...field} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -311,16 +338,18 @@ export default function AccessManagementPage() {
                                             name="status"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>Status</FormLabel>
+                                                    <FormLabel>{t("form.status.label") || "Status"}</FormLabel>
                                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                         <FormControl>
                                                             <SelectTrigger>
-                                                                <SelectValue placeholder="Select status" />
+                                                                <SelectValue placeholder={t("form.status.placeholder") || "Select status"} />
                                                             </SelectTrigger>
                                                         </FormControl>
                                                         <SelectContent>
-                                                            <SelectItem value="active">Active</SelectItem>
-                                                            <SelectItem value="inactive">Inactive</SelectItem>
+                                                            <SelectItem value="active">{t("form.status.options.active") || "Active"}</SelectItem>
+                                                            <SelectItem value="inactive">
+                                                                {t("form.status.options.inactive") || "Inactive"}
+                                                            </SelectItem>
                                                         </SelectContent>
                                                     </Select>
                                                     <FormMessage />
@@ -333,17 +362,21 @@ export default function AccessManagementPage() {
                                             name="languages"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>Languages Spoken</FormLabel>
+                                                    <FormLabel>{t("form.languages.label") || "Languages Spoken"}</FormLabel>
                                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                         <FormControl>
                                                             <SelectTrigger>
-                                                                <SelectValue placeholder="Select languages" />
+                                                                <SelectValue placeholder={t("form.languages.placeholder") || "Select languages"} />
                                                             </SelectTrigger>
                                                         </FormControl>
                                                         <SelectContent>
-                                                            <SelectItem value="English">English</SelectItem>
-                                                            <SelectItem value="Arabic">Arabic</SelectItem>
-                                                            <SelectItem value="English & Arabic">English & Arabic</SelectItem>
+                                                            <SelectItem value="English">
+                                                                {t("form.languages.options.english") || "English"}
+                                                            </SelectItem>
+                                                            <SelectItem value="Arabic">{t("form.languages.options.arabic") || "Arabic"}</SelectItem>
+                                                            <SelectItem value="English & Arabic">
+                                                                {t("form.languages.options.both") || "English & Arabic"}
+                                                            </SelectItem>
                                                         </SelectContent>
                                                     </Select>
                                                     <FormMessage />
@@ -353,92 +386,100 @@ export default function AccessManagementPage() {
                                     </div>
                                 </div>
 
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center">
-                                        <h3 className="text-sm font-medium">Permissions & Access</h3>
-                                        <span className="text-xs text-right">Permissions</span>
+                                {showPermissionsSection && (
+                                    <div className="space-y-4">
+                                        <div className="flex justify-between items-center">
+                                            <h3 className="text-sm font-medium">{t("title.permissionsAccess") || "Permissions & Access"}</h3>
+                                            <span className="text-xs text-right">{t("title.permissions") || "Permissions"}</span>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <FormField
+                                                control={form.control}
+                                                name="canAddProperty"
+                                                render={({ field }) => (
+                                                    <div className="flex justify-between items-center">
+                                                        <label htmlFor="canAddProperty" className="text-sm">
+                                                            {t("form.permissions.canPostListings") || "Can Post Listings"}
+                                                        </label>
+                                                        <FormControl>
+                                                            <Switch id="canAddProperty" checked={field.value} onCheckedChange={field.onChange} />
+                                                        </FormControl>
+                                                    </div>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={form.control}
+                                                name="canPublishProperty"
+                                                render={({ field }) => (
+                                                    <div className="flex justify-between items-center">
+                                                        <label htmlFor="canPublishProperty" className="text-sm">
+                                                            {t("form.permissions.requiresApproval") || "Requires Approval for Listings"}
+                                                        </label>
+                                                        <FormControl>
+                                                            <Switch id="canPublishProperty" checked={field.value} onCheckedChange={field.onChange} />
+                                                        </FormControl>
+                                                    </div>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={form.control}
+                                                name="canFeatureProperty"
+                                                render={({ field }) => (
+                                                    <div className="flex justify-between items-center">
+                                                        <label htmlFor="canFeatureProperty" className="text-sm">
+                                                            {t("form.permissions.canFeatureProperty") || "Can Feature Property"}
+                                                        </label>
+                                                        <FormControl>
+                                                            <Switch id="canFeatureProperty" checked={field.value} onCheckedChange={field.onChange} />
+                                                        </FormControl>
+                                                    </div>
+                                                )}
+                                            />
+                                        </div>
                                     </div>
+                                )}
 
-                                    <div className="space-y-2">
-                                        <FormField
-                                            control={form.control}
-                                            name="canAddProperty"
-                                            render={({ field }) => (
-                                                <div className="flex justify-between items-center">
-                                                    <label htmlFor="canAddProperty" className="text-sm">
-                                                        Can Post Listings
-                                                    </label>
-                                                    <FormControl>
-                                                        <Switch id="canAddProperty" checked={field.value} onCheckedChange={field.onChange} />
-                                                    </FormControl>
-                                                </div>
-                                            )}
-                                        />
-
-                                        <FormField
-                                            control={form.control}
-                                            name="canPublishProperty"
-                                            render={({ field }) => (
-                                                <div className="flex justify-between items-center">
-                                                    <label htmlFor="canPublishProperty" className="text-sm">
-                                                        Requires Approval for Listings
-                                                    </label>
-                                                    <FormControl>
-                                                        <Switch id="canPublishProperty" checked={field.value} onCheckedChange={field.onChange} />
-                                                    </FormControl>
-                                                </div>
-                                            )}
-                                        />
-
-                                        <FormField
-                                            control={form.control}
-                                            name="canFeatureProperty"
-                                            render={({ field }) => (
-                                                <div className="flex justify-between items-center">
-                                                    <label htmlFor="canFeatureProperty" className="text-sm">
-                                                        Can Feature Property
-                                                    </label>
-                                                    <FormControl>
-                                                        <Switch id="canFeatureProperty" checked={field.value} onCheckedChange={field.onChange} />
-                                                    </FormControl>
-                                                </div>
-                                            )}
-                                        />
-                                    </div>
-                                </div>
-
-                                <DialogFooter>
+                                <div className="flex justify-end space-x-4 mt-6">
                                     <Button
                                         type="button"
                                         variant="outline"
                                         onClick={() => {
-                                            setIsAddDialogOpen(false)
+                                            setShowAddForm(false)
                                             resetForm()
                                         }}
                                         disabled={isLoading}
                                     >
-                                        Cancel
+                                        {t("button.cancel") || "Cancel"}
                                     </Button>
                                     <Button type="submit" className="bg-blue-500 hover:bg-blue-600" disabled={isLoading}>
-                                        {isLoading ? "Inviting..." : "Invite"}
+                                        {isLoading ? t("button.inviting") || "Inviting..." : t("button.invite") || "Invite"}
                                     </Button>
-                                </DialogFooter>
+                                </div>
                             </form>
                         </Form>
-                    </DialogContent>
-                </Dialog>
+                    ) : (
+                        isLoading && staff.length === 0 ? (
+                            <p>{t("text.loadingStaff") || "Loading staff members..."}</p>
+                        ) : (
+                            <StaffTable staff={staff} onEdit={handleEditClick} onDelete={handleDeleteClick} />
+                        )
+                    )}
+                </div>
             </div>
 
             {/* Edit Agent Dialog */}
             <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                 <DialogContent className="max-w-md">
                     <DialogHeader>
-                        <DialogTitle>Edit Agent</DialogTitle>
+                        <DialogTitle>{t("title.editAgent") || "Edit Agent"}</DialogTitle>
                     </DialogHeader>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(handleUpdateStaff)} className="space-y-6">
                             <div className="space-y-4">
-                                <h3 className="text-sm font-medium">Edit User</h3>
+                                <h3 className="text-sm font-medium">{t("title.editUser") || "Edit User"}</h3>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <FormField
@@ -446,9 +487,9 @@ export default function AccessManagementPage() {
                                         name="firstName"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>First Name</FormLabel>
+                                                <FormLabel>{t("form.firstName.label") || "First Name"}</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Enter first name" {...field} />
+                                                    <Input placeholder={t("form.firstName.placeholder") || "Enter first name"} {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -460,9 +501,9 @@ export default function AccessManagementPage() {
                                         name="lastName"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Last Name</FormLabel>
+                                                <FormLabel>{t("form.lastName.label") || "Last Name"}</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Enter last name" {...field} />
+                                                    <Input placeholder={t("form.lastName.placeholder") || "Enter last name"} {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -474,30 +515,31 @@ export default function AccessManagementPage() {
                                         name="email"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Email Address</FormLabel>
+                                                <FormLabel>{t("form.email.label") || "Email Address"}</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="email@example.com" type="email" {...field} />
+                                                    <Input placeholder={t("form.email.placeholder") || "email@example.com"} type="email" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
 
+
                                     <FormField
                                         control={form.control}
                                         name="role"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Role</FormLabel>
+                                                <FormLabel>{t("form.role.label") || "Role"}</FormLabel>
                                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                     <FormControl>
                                                         <SelectTrigger>
-                                                            <SelectValue placeholder="Select role" />
+                                                            <SelectValue placeholder={t("form.role.placeholder") || "Select role"} />
                                                         </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent>
-                                                        <SelectItem value="agent">Agent</SelectItem>
-                                                        <SelectItem value="admin">Admin</SelectItem>
+                                                        <SelectItem value="agent">{t("form.role.options.agent") || "Agent"}</SelectItem>
+                                                        <SelectItem value="admin">{t("form.role.options.admin") || "Admin"}</SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                                 <FormMessage />
@@ -510,9 +552,9 @@ export default function AccessManagementPage() {
                                         name="phoneNumber"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Phone Number</FormLabel>
+                                                <FormLabel>{t("form.phoneNumber.label") || "Phone Number"}</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="+972 0000 0000" {...field} />
+                                                    <Input placeholder={t("form.phoneNumber.placeholder") || "+972 0000 0000"} {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -524,16 +566,16 @@ export default function AccessManagementPage() {
                                         name="status"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Status</FormLabel>
+                                                <FormLabel>{t("form.status.label") || "Status"}</FormLabel>
                                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                     <FormControl>
                                                         <SelectTrigger>
-                                                            <SelectValue placeholder="Select status" />
+                                                            <SelectValue placeholder={t("form.status.placeholder") || "Select status"} />
                                                         </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent>
-                                                        <SelectItem value="active">Active</SelectItem>
-                                                        <SelectItem value="inactive">Inactive</SelectItem>
+                                                        <SelectItem value="active">{t("form.status.options.active") || "Active"}</SelectItem>
+                                                        <SelectItem value="inactive">{t("form.status.options.inactive") || "Inactive"}</SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                                 <FormMessage />
@@ -546,17 +588,17 @@ export default function AccessManagementPage() {
                                         name="languages"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Languages Spoken</FormLabel>
+                                                <FormLabel>{t("form.languages.label") || "Languages Spoken"}</FormLabel>
                                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                                     <FormControl>
                                                         <SelectTrigger>
-                                                            <SelectValue placeholder="Select languages" />
+                                                            <SelectValue placeholder={t("form.languages.placeholder") || "Select languages"} />
                                                         </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent>
-                                                        <SelectItem value="English">English</SelectItem>
-                                                        <SelectItem value="Arabic">Arabic</SelectItem>
-                                                        <SelectItem value="English & Arabic">English & Arabic</SelectItem>
+                                                        <SelectItem value="English">{t("form.languages.options.english") || "English"}</SelectItem>
+                                                        <SelectItem value="Arabic">{t("form.languages.options.arabic") || "Arabic"}</SelectItem>
+                                                        <SelectItem value="English & Arabic">{t("form.languages.options.both") || "English & Arabic"}</SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                                 <FormMessage />
@@ -566,10 +608,10 @@ export default function AccessManagementPage() {
                                 </div>
                             </div>
 
-                            <div className="space-y-4">
+                            {showPermissionsSection && (<div className="space-y-4">
                                 <div className="flex justify-between items-center">
-                                    <h3 className="text-sm font-medium">Permissions & Access</h3>
-                                    <span className="text-xs text-right">Permissions</span>
+                                    <h3 className="text-sm font-medium">{t("title.permissionsAccess") || "Permissions & Access"}</h3>
+                                    <span className="text-xs text-right">{t("title.permissions") || "Permissions"}</span>
                                 </div>
 
                                 <div className="space-y-2">
@@ -579,7 +621,7 @@ export default function AccessManagementPage() {
                                         render={({ field }) => (
                                             <div className="flex justify-between items-center">
                                                 <label htmlFor="edit-canAddProperty" className="text-sm">
-                                                    Can Post Listings
+                                                    {t("form.permissions.canPostListings") || "Can Post Listings"}
                                                 </label>
                                                 <FormControl>
                                                     <Switch id="edit-canAddProperty" checked={field.value} onCheckedChange={field.onChange} />
@@ -594,7 +636,7 @@ export default function AccessManagementPage() {
                                         render={({ field }) => (
                                             <div className="flex justify-between items-center">
                                                 <label htmlFor="edit-canPublishProperty" className="text-sm">
-                                                    Requires Approval for Listings
+                                                    {t("form.permissions.requiresApproval") || "Requires Approval for Listings"}
                                                 </label>
                                                 <FormControl>
                                                     <Switch id="edit-canPublishProperty" checked={field.value} onCheckedChange={field.onChange} />
@@ -609,7 +651,7 @@ export default function AccessManagementPage() {
                                         render={({ field }) => (
                                             <div className="flex justify-between items-center">
                                                 <label htmlFor="edit-canFeatureProperty" className="text-sm">
-                                                    Can Feature Property
+                                                    {t("form.permissions.canFeatureProperty") || "Can Feature Property"}
                                                 </label>
                                                 <FormControl>
                                                     <Switch id="edit-canFeatureProperty" checked={field.value} onCheckedChange={field.onChange} />
@@ -618,7 +660,7 @@ export default function AccessManagementPage() {
                                         )}
                                     />
                                 </div>
-                            </div>
+                            </div>)}
 
                             <DialogFooter>
                                 <Button
@@ -630,10 +672,10 @@ export default function AccessManagementPage() {
                                     }}
                                     disabled={isLoading}
                                 >
-                                    Cancel
+                                    {t("button.cancel") || "Cancel"}
                                 </Button>
                                 <Button type="submit" className="bg-blue-500 hover:bg-blue-600" disabled={isLoading}>
-                                    {isLoading ? "Updating..." : "Update"}
+                                    {isLoading ? (t("button.updating") || "Updating...") : (t("button.update") || "Update")}
                                 </Button>
                             </DialogFooter>
                         </form>
@@ -645,34 +687,21 @@ export default function AccessManagementPage() {
             <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Delete Agent</DialogTitle>
+                        <DialogTitle>{t("title.deleteAgent") || "Delete Agent"}</DialogTitle>
                         <DialogDescription>
-                            Are you sure you want to delete this agent? This action cannot be undone.
+                            {t("text.deleteConfirmation") || "Are you sure you want to delete this agent? This action cannot be undone."}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={() => setIsDeleteDialogOpen(false)} disabled={isLoading}>
-                            Cancel
+                            {t("button.cancel") || "Cancel"}
                         </Button>
                         <Button type="button" variant="destructive" onClick={handleDeleteStaff} disabled={isLoading}>
-                            {isLoading ? "Deleting..." : "Delete"}
+                            {isLoading ? (t("button.deleting") || "Deleting...") : (t("button.delete") || "Delete")}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-
-            {/* Company Agents Section */}
-            <div className="bg-white rounded-md shadow">
-                <div className="p-6">
-                    <h2 className="text-lg font-semibold mb-4">Company Agents</h2>
-                    {isLoading && staff.length === 0 ? (
-                        <p>Loading staff members...</p>
-                    ) : (
-                        <StaffTable staff={staff} onEdit={handleEditClick} onDelete={handleDeleteClick} />
-                    )}
-                </div>
-            </div>
         </div>
     )
 }
-

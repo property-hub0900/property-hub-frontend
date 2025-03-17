@@ -40,14 +40,16 @@ export function StaffTable({
         {
             accessorKey: "status",
             header: "Status",
-            cell: ({ row }: { row: any }) => (
-                <span
-                    className={`capitalize px-2 py-1 rounded-full text-xs ${row.original.status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                        }`}
-                >
-                    {row.original.status}
-                </span>
-            ),
+            cell: ({ row }: { row: any }) => {
+                return (
+                    <span
+                        className={`capitalize px-2 py-1 rounded-full text-xs ${row.original.active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                            }`}
+                    >
+                        {row.original.active ? "Active" : "In-active"}
+                    </span>
+                )
+            },
         },
         {
             id: "actions",

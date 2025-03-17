@@ -94,7 +94,7 @@ export default function CustomerLoginPage() {
         }
 
         const data = await response.json();
-        debugger;
+
 
         if (data.success && data.user) {
           const { email, name, googleUserId } = data.user;
