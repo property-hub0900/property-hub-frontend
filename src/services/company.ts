@@ -4,6 +4,7 @@ import { apiClient } from "@/lib/api-client";
 export type StaffRole = "agent" | "admin";
 
 export interface StaffMember {
+  staffId: string;
   id: string;
   firstName: string;
   lastName: string;
@@ -45,7 +46,7 @@ export interface IResponse<T> {
 export const companyService = {
   // Get all staff members
   getAllStaff: async (): Promise<IResponse<StaffMember[]>> => {
-    return apiClient.get("/staff");
+    return apiClient.get("companies/staff");
   },
 
   // Get a specific staff member by ID

@@ -5,7 +5,15 @@
     "loginCustomerTitle": "Welcome to PropertyHub",
     "registerCustomerTitle": "Welcome to PropertyHub",
     "forgotPasswordTitle": "Forgot Password?",
-    "createNewPassword": "Create New Password"
+    "createNewPassword": "Create New Password",
+    "accessManagement": "Access Management",
+    "companyAgents": "Company Agents",
+    "inviteUser": "Invite User",
+    "editUser": "Edit User",
+    "editAgent": "Edit Agent",
+    "deleteAgent": "Delete Agent",
+    "permissionsAccess": "Permissions & Access",
+    "permissions": "Permissions"
   },
   "button": {
     "next": "Next",
@@ -14,7 +22,15 @@
     "loginAsAgent": "Login as a Agent →",
     "loginAsCustomer": "Login as a Customer →",
     "forgotPassword": "Forgot Password?",
-    "registerAsAgent": "Register As Agent"
+    "registerAsAgent": "Register As Agent",
+    "addNewAgent": "Add New Agent",
+    "cancel": "Cancel",
+    "invite": "Invite",
+    "inviting": "Inviting...",
+    "update": "Update",
+    "updating": "Updating...",
+    "delete": "Delete",
+    "deleting": "Deleting..."
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -25,7 +41,10 @@
     "orContinueWith": "or continue with",
     "rememberMe": "Remember me",
     "forgotPasswordText": "Enter your email address to reset your password",
-    "enterNewPassword": "Enter your new password"
+    "enterNewPassword": "Enter your new password",
+    "loadingStaff": "Loading staff members...",
+    "deleteConfirmation": "Are you sure you want to delete this agent? This action cannot be undone.",
+    "loadStaffFailed": "Failed to load staff members"
   },
   "table": {
     "notFound": "No Record found"
@@ -109,6 +128,36 @@
         "required": "Mobile Number is required.",
         "invalid": "Enter a valid Mobile Number (e.g. 03XXXXXXXXX)."
       }
+    },
+    "status": {
+      "label": "Status",
+      "placeholder": "Select status",
+      "options": {
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    },
+    "role": {
+      "label": "Role",
+      "placeholder": "Select role",
+      "options": {
+        "agent": "Agent",
+        "admin": "Admin"
+      }
+    },
+    "languages": {
+      "label": "Languages Spoken",
+      "placeholder": "Select languages",
+      "options": {
+        "english": "English",
+        "arabic": "Arabic",
+        "both": "English & Arabic"
+      }
+    },
+    "permissions": {
+      "canPostListings": "Can Post Listings",
+      "requiresApproval": "Requires Approval for Listings",
+      "canFeatureProperty": "Can Feature Property"
     }
   },
   "seo": {
