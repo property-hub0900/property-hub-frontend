@@ -37,13 +37,18 @@ import {
   PROPERTY_OCCUPANCY,
   PROPERTY_OWNERSHIP_STATUS,
   PROPERTY_PURPOSE,
+  PROPERTY_STATUSES,
   PROPERTY_TYPES,
   PROPERTY_VIEWS,
+  TPropertyStatuses,
 } from "@/constants/constants";
 import { amenities } from "@/services/dashboard/properties";
 import { Switch } from "@/components/ui/switch";
 import { IFilesUrlPayload, UploadImages } from "./uploadImages";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/lib/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { COMPANY_PATHS } from "@/constants/paths";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
@@ -56,9 +61,19 @@ export default function PropertyForm(
 ) {
   const { mode, onSubmit, defaultValues } = props;
 
-  console.log("defaultValues", defaultValues);
-
   const t = useTranslations();
+
+  const router = useRouter();
+
+  const { user } = useAuth();
+
+  console.log("user", user?.scope[0]);
+
+  const isOwner = user?.scope[0] === "owner";
+  // const isAdmin = user?.scope[0] === "admin";
+  // const isAgent = user?.scope[0] === "agent";
+
+  console.log("defaultValues", defaultValues);
 
   const { data: amenitiesData, isLoading: isLoadingAmenities } = useQuery({
     queryKey: ["amenities"],
@@ -102,17 +117,23 @@ export default function PropertyForm(
           },
   });
 
-  console.log("form Errors", form.formState.errors);
-
-  // useEffect(() => {
-  //   if (mode === "edit" && props.defaultValues) {
-  //     Object.entries(props.defaultValues).forEach(([key, value]) => {
-  //       form.setValue(key, value);
-  //     });
-  //   }
-  // }, [props.defaultValues]);
+  const category = form.watch("category");
+  const propertyType = form.watch("propertyType");
 
   const [filesUrls, setFilesUrls] = useState<IFilesUrlPayload>({ images: [] });
+
+  const handleCancel = () => {
+    router.push(COMPANY_PATHS.properties);
+  };
+
+  const handleSubmitWithStatus = (status: TPropertyStatuses) => {
+    const statusValue = PROPERTY_STATUSES[status];
+
+    form.setValue("status", statusValue);
+    //form.handleSubmit(onSubmit)();
+
+    form.handleSubmit(onSubmit)();
+  };
 
   return (
     <>
@@ -121,6 +142,7 @@ export default function PropertyForm(
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
+            // onSubmit={(event) => event.preventDefault()}
             className="grid grid-cols-2 gap-6"
           >
             <div className="col-span-2">
@@ -223,11 +245,15 @@ export default function PropertyForm(
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {PROPERTY_TYPES.map((item, index) => (
-                        <SelectItem key={index} value={item}>
-                          {t(`form.propertyType.options.${item}`)}
-                        </SelectItem>
-                      ))}
+                      {category && (
+                        <>
+                          {PROPERTY_TYPES?.[category]?.map((item, index) => (
+                            <SelectItem key={index} value={item}>
+                              {t(`form.propertyType.options.${item}`)}
+                            </SelectItem>
+                          ))}
+                        </>
+                      )}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -250,19 +276,22 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="bedrooms"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("form.bedrooms.label")}</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {category === "Residential" && (
+              <FormField
+                control={form.control}
+                name="bedrooms"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("form.bedrooms.label")}</FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
             <FormField
               control={form.control}
               name="bathrooms"
@@ -316,32 +345,36 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="buildingFloors"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("form.buildingFloors.label")}</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="floor"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("form.floorNumber.label")}</FormLabel>
-                  <FormControl>
-                    <Input type="number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {propertyType === "Apartment" && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="buildingFloors"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("form.buildingFloors.label")}</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="floor"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("form.floorNumber.label")}</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
 
             <FormField
               control={form.control}
@@ -370,33 +403,35 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="furnishedType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("form.furnishedType.label")}</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger>
-                      <SelectValue
-                        placeholder={t("form.furnishedType.placeholder")}
-                      />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {PROPERTY_FURNISHED_TYPE.map((item, index) => (
-                        <SelectItem key={index} value={item}>
-                          {t(`form.furnishedType.options.${item}`)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {category === "Residential" && (
+              <FormField
+                control={form.control}
+                name="furnishedType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("form.furnishedType.label")}</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={t("form.furnishedType.placeholder")}
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {PROPERTY_FURNISHED_TYPE.map((item, index) => (
+                          <SelectItem key={index} value={item}>
+                            {t(`form.furnishedType.options.${item}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <FormField
               control={form.control}
               name="views"
@@ -546,18 +581,33 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-
-            <div className="col-span-2 flex justify-end">
-              <Button
-                type="submit"
-                // onClick={() => handleSubmitWithStatus()}
-                className=""
-              >
-                {t("button.save")}
-              </Button>
-            </div>
           </form>
         </Form>
+      </div>
+      <div className="col-span-2 gap-2 flex justify-end mt-6">
+        <Button
+          variant={"outline"}
+          type="button"
+          onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
+          className=""
+        >
+          {t("button.saveDraft")}
+        </Button>
+        <Button
+          type="button"
+          onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.published)}
+          className=""
+        >
+          {t("button.publish")}
+        </Button>
+        <Button
+          variant={"secondary"}
+          type="button"
+          onClick={handleCancel}
+          className=""
+        >
+          {t("button.cancel")}
+        </Button>
       </div>
     </>
   );

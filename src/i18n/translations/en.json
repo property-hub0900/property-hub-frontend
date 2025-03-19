@@ -33,7 +33,9 @@
     "update": "Update",
     "updating": "Updating...",
     "delete": "Delete",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "saveDraft": "Save Draft",
+    "publish": "Publish"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",

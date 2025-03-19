@@ -6,6 +6,7 @@ export const commonValidations = {
       .string({ required_error: requiredErrorMessage })
       .trim()
       .min(1, { message: requiredErrorMessage }),
+  stringOptional: () => z.string().trim(),
   numberRequired: (requiredErrorMessage: string) =>
     z.coerce
       .number({ required_error: requiredErrorMessage })
@@ -14,10 +15,6 @@ export const commonValidations = {
     z.coerce
       .number({ required_error: requiredErrorMessage })
       .min(0, { message: requiredErrorMessage }),
-  // numberRequired: (requiredErrorMessage: string) =>
-  //   z
-  //     .number({ required_error: requiredErrorMessage })
-  //     .min(1, { message: requiredErrorMessage }),
 
   email: (requiredErrorMessage: string, invalidErrorMessage: string) =>
     z
@@ -30,4 +27,9 @@ export const commonValidations = {
       .email({ message: invalidErrorMessage })
       .optional()
       .or(z.literal("")),
+  enumRequired: (enums, invalidErrorMessage: string) =>
+    z.enum(enums, {
+      required_error: invalidErrorMessage,
+    }),
+  enumOptional: (enums) => z.enum(enums).optional(),
 };

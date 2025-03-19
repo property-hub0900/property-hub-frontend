@@ -4,18 +4,26 @@ export type TPropertyCategory = (typeof PROPERTY_CATEGORIES)[number];
 export const PROPERTY_PURPOSE = ["For Sale", "For Rent"] as const;
 export type TPropertyPurpose = (typeof PROPERTY_PURPOSE)[number];
 
-export const PROPERTY_TYPES = [
-  "Apartment",
-  "Villa",
-  "Townhouse",
-  "Penthouse",
-  "Office",
-  "Shop",
-  "Warehouse",
-  "Land",
-] as const;
+// export const PROPERTY_TYPES = [
+//   "Apartment",
+//   "Villa",
+//   "Townhouse",
+//   "Penthouse",
+//   "Office",
+//   "Shop",
+//   "Warehouse",
+//   "Land",
+// ] as const;
 
-export type TPropertyType = (typeof PROPERTY_TYPES)[number];
+// export type TPropertyType = (typeof PROPERTY_TYPES)[number];
+
+export const PROPERTY_TYPES = {
+  Residential: ["Apartment", "Villa", "Townhouse", "Penthouse"],
+  Commercial: ["Office", "Shop", "Warehouse", "Land"],
+} as const;
+
+export type TPropertyType =
+  (typeof PROPERTY_TYPES)[keyof typeof PROPERTY_TYPES][number];
 
 export const PROPERTY_OWNERSHIP_STATUS = ["FreeHold", "Non-FreeHold"] as const;
 export type TPropertyOwnershipStatus =
@@ -43,11 +51,22 @@ export const PROPERTY_VIEWS = [
 ] as const;
 export type TPropertyViews = (typeof PROPERTY_VIEWS)[number];
 
-export const PROPERTY_STATUSES = [
-  "draft",
-  "published",
-  "pending",
-  "closed",
-  "archived",
-] as const;
-export type TPropertyStatuses = (typeof PROPERTY_STATUSES)[number];
+export const PROPERTY_STATUSES = {
+  draft: "draft",
+  published: "published",
+  pending: "pending",
+  closed: "closed",
+  archived: "archived",
+} as const;
+// export type TPropertyStatuses =
+//   (typeof PROPERTY_STATUSES)[keyof typeof PROPERTY_STATUSES][number];
+export type TPropertyStatuses = keyof typeof PROPERTY_STATUSES;
+
+// export const PROPERTY_STATUSES = [
+//   "draft",
+//   "published",
+//   "pending",
+//   "closed",
+//   "archived",
+// ] as const;
+// export type TPropertyStatuses = (typeof PROPERTY_STATUSES)[number];
