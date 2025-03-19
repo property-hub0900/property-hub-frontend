@@ -10,6 +10,7 @@ interface AuthContainerProps {
   title: string;
   subtitle: string;
   size?: "sm" | "lg";
+
 }
 
 export function AuthContainer({
