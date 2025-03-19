@@ -213,7 +213,7 @@ export default function AccessManagementPage() {
 
         try {
             await companyService.deleteStaff(selectedStaff.staffId)
-            debugger;
+
             const updatedStaff = staff.filter((s) => s.staffId !== selectedStaff.staffId);
             setStaff(updatedStaff)
             toast.success(t("text.staffDeleted") || "Staff member deleted successfully")

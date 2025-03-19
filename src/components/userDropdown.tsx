@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 
 export const UserDropdown = () => {
   const { user, logOut } = useAuth();
-  debugger;
+
   const router = useRouter();
 
   const getUserName = () => {
