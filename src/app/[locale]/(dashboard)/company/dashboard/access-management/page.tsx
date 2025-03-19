@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { PlusCircle } from 'lucide-react'
+import { PlusCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -23,17 +23,24 @@ import { companyService, type StaffMember } from "@/services/company"
 import { staffFormSchema } from "@/schema/company"
 import { StaffTable } from "@/components/staffTable"
 import { useTranslations } from "next-intl"
+import { getErrorMessage } from "@/lib/utils"
+
+// Define a type that extends StaffMember to handle response data
+type ExtendedStaffMember = StaffMember & {
+    languages?: string
+}
 
 export default function AccessManagementPage() {
-    const [staff, setStaff] = useState<StaffMember[]>([])
+    const [staff, setStaff] = useState<ExtendedStaffMember[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-    const [selectedStaff, setSelectedStaff] = useState<StaffMember | null>(null)
+    const [selectedStaff, setSelectedStaff] = useState<ExtendedStaffMember | null>(null)
     const [showAddForm, setShowAddForm] = useState(false)
     const [showPermissionsSection, setShowPermissionsSection] = useState(true)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const t = useTranslations();
+    const t = useTranslations()
 
     const form = useForm<z.infer<typeof staffFormSchema>>({
         resolver: zodResolver(staffFormSchema),
@@ -51,32 +58,33 @@ export default function AccessManagementPage() {
         },
     })
 
-    const role = form.watch("role");
+    const role = form.watch("role")
     useEffect(() => {
-        console.log("Role changed to:", role)
         setShowPermissionsSection(role !== "admin")
     }, [role])
 
     useEffect(() => {
-        const fetchStaff = async () => {
-            setIsLoading(true)
-            try {
-                const response: any = await companyService.getAllStaff()
-                if (response.results) {
-                    setStaff(response.results)
-                } else {
-                    toast.error(response.message || t("toast.fetchStaffFailed") || "Failed to fetch staff members")
-                }
-            } catch (error) {
-                console.error("Failed to fetch staff:", error)
-                toast.error(t("toast.loadStaffFailed") || "Failed to load staff members")
-            } finally {
-                setIsLoading(false)
-            }
-        }
-
         fetchStaff()
     }, [t, showAddForm])
+
+    const fetchStaff = async () => {
+        setIsLoading(true)
+        try {
+            const response: any = await companyService.getAllStaff()
+
+            // Handle different response formats
+            if (response.data) {
+                setStaff(response.data as ExtendedStaffMember[])
+            } else if (response.results) {
+                setStaff(response.results as ExtendedStaffMember[])
+            }
+        } catch (error: any) {
+            console.log("Failed to fetch staff:", error)
+            toast.error(getErrorMessage(error))
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     const resetForm = () => {
         form.reset({
@@ -94,7 +102,9 @@ export default function AccessManagementPage() {
         setShowPermissionsSection(true)
     }
 
-    const handleEditClick = (staffMember: StaffMember) => {
+    const handleEditClick = (staffMember: ExtendedStaffMember) => {
+        if (isSubmitting) return
+
         setSelectedStaff(staffMember)
         form.reset({
             firstName: staffMember.firstName,
@@ -111,13 +121,17 @@ export default function AccessManagementPage() {
         setIsEditDialogOpen(true)
     }
 
-    const handleDeleteClick = (staffMember: StaffMember) => {
+    const handleDeleteClick = (staffMember: ExtendedStaffMember) => {
+        if (isSubmitting) return
+
         setSelectedStaff(staffMember)
         setIsDeleteDialogOpen(true)
     }
 
     const handleAddStaff = async (data: z.infer<typeof staffFormSchema>) => {
+        setIsSubmitting(true)
         setIsLoading(true)
+
         try {
             const response = await companyService.inviteStaff({
                 firstName: data.firstName,
@@ -130,33 +144,32 @@ export default function AccessManagementPage() {
                 canFeatureProperty: data.canFeatureProperty,
             })
 
-            if (response.success) {
-                setStaff([
-                    ...staff,
-                    {
-                        ...response.data,
-                        languages: data.languages,
-                        status: data.status,
-                    },
-                ])
-                toast.success(response.message || t("toast.staffInvited") || "Staff member invited successfully")
-                setShowAddForm(false) // Hide form after successful submission
-            } else {
-                toast.error(response.message || t("toast.inviteFailed") || "Failed to invite staff member")
+            // Create a properly typed staff member
+            const newStaffMember: ExtendedStaffMember = {
+                ...(response.data as StaffMember),
+                languages: data.languages,
+                status: data.status,
             }
+
+            setStaff([...staff, newStaffMember])
+            toast.success(response.message || t("toast.staffInvited") || "Staff member invited successfully")
+            setShowAddForm(false)
+            resetForm()
         } catch (error: any) {
-            console.error("Failed to add staff:", error)
-            toast.error(error?.message || t("toast.inviteFailed") || "Failed to invite staff member")
+            console.log("Failed to add staff:", error)
+            toast.error(getErrorMessage(error))
         } finally {
             setIsLoading(false)
-            resetForm()
+            setIsSubmitting(false)
         }
     }
 
     const handleUpdateStaff = async (data: z.infer<typeof staffFormSchema>) => {
         if (!selectedStaff) return
 
+        setIsSubmitting(true)
         setIsLoading(true)
+
         try {
             const response = await companyService.updateStaff({
                 id: selectedStaff.staffId,
@@ -171,50 +184,70 @@ export default function AccessManagementPage() {
                 canFeatureProperty: data.canFeatureProperty,
             })
 
-            if (response.success) {
-                const updatedStaffList = staff.map((s) =>
-                    s.id === selectedStaff.id
-                        ? {
-                            ...response.data,
-                            languages: data.languages,
-                        }
-                        : s,
-                )
-                setStaff(updatedStaffList)
-                toast.success(response.message || t("toast.staffUpdated") || "Staff member updated successfully")
-            } else {
-                toast.error(response.message || t("toast.updateFailed") || "Failed to update staff member")
+            // Create a properly typed updated staff member
+            const updatedStaffMember: ExtendedStaffMember = {
+                ...(response.data as StaffMember),
+                languages: data.languages,
             }
+
+            const updatedStaffList = staff.map((s) => (s.id === selectedStaff.id ? updatedStaffMember : s))
+
+            setStaff(updatedStaffList)
+            toast.success(response.message || t("toast.staffUpdated") || "Staff member updated successfully")
+            setIsEditDialogOpen(false)
+            resetForm()
         } catch (error: any) {
-            console.error("Failed to update staff:", error)
+            console.log("Failed to update staff:", error)
             toast.error(error?.message || t("toast.updateFailed") || "Failed to update staff member")
         } finally {
             setIsLoading(false)
-            setIsEditDialogOpen(false)
-            resetForm()
+            setIsSubmitting(false)
         }
     }
 
     const handleDeleteStaff = async () => {
         if (!selectedStaff) return
 
+        setIsSubmitting(true)
         setIsLoading(true)
-        try {
-            const response = await companyService.deleteStaff(selectedStaff.staffId)
 
-            if (response.success) {
-                const updatedStaff = staff.filter((s) => s.id !== selectedStaff.id)
-                setStaff(updatedStaff)
-                toast.success(response.message || t("toast.staffDeleted") || "Staff member deleted successfully")
-            } else {
-                toast.error(response.message || t("toast.deleteFailed") || "Failed to delete staff member")
-            }
+        try {
+            await companyService.deleteStaff(selectedStaff.staffId)
+            debugger;
+            const updatedStaff = staff.filter((s) => s.staffId !== selectedStaff.staffId);
+            setStaff(updatedStaff)
+            toast.success(t("text.staffDeleted") || "Staff member deleted successfully")
+            setIsDeleteDialogOpen(false)
         } catch (error: any) {
-            console.error("Failed to delete staff:", error)
-            toast.error(error?.message || t("toast.deleteFailed") || "Failed to delete staff member")
+            console.log("Failed to delete staff:", error)
+            toast.error(error?.message || t("text.deleteFailed") || "Failed to delete staff member")
         } finally {
             setIsLoading(false)
-            setIsDeleteDialogOpen(false)
+            setIsSubmitting(false)
+        }
+    }
+
+    const handleCloseEditDialog = (open: boolean) => {
+        if (!isSubmitting) {
+            setIsEditDialogOpen(open)
+            if (!open) {
+                resetForm()
+            }
+        }
+    }
+
+    const handleCloseDeleteDialog = (open: boolean) => {
+        if (!isSubmitting) {
+            setIsDeleteDialogOpen(open)
+        }
+    }
+
+    const handleToggleAddForm = () => {
+        if (isSubmitting) return
+
+        setShowAddForm(!showAddForm)
+        if (!showAddForm) {
+            resetForm()
         }
     }
 
@@ -222,13 +255,7 @@ export default function AccessManagementPage() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold">{t("title.accessManagement") || "Access Management"}</h1>
-                <Button
-                    className="bg-blue-500 hover:bg-blue-600"
-                    onClick={() => {
-                        setShowAddForm(!showAddForm);
-                        if (!showAddForm) resetForm();
-                    }}
-                >
+                <Button className="bg-blue-500 hover:bg-blue-600" onClick={handleToggleAddForm} disabled={isSubmitting}>
                     {showAddForm ? (
                         t("button.cancel") || "Cancel"
                     ) : (
@@ -446,32 +473,27 @@ export default function AccessManagementPage() {
                                     <Button
                                         type="button"
                                         variant="outline"
-                                        onClick={() => {
-                                            setShowAddForm(false)
-                                            resetForm()
-                                        }}
-                                        disabled={isLoading}
+                                        onClick={handleToggleAddForm}
+                                        disabled={isLoading || isSubmitting}
                                     >
                                         {t("button.cancel") || "Cancel"}
                                     </Button>
-                                    <Button type="submit" className="bg-blue-500 hover:bg-blue-600" disabled={isLoading}>
-                                        {isLoading ? t("button.inviting") || "Inviting..." : t("button.invite") || "Invite"}
+                                    <Button type="submit" className="bg-blue-500 hover:bg-blue-600" disabled={isLoading || isSubmitting}>
+                                        {isLoading || isSubmitting ? t("button.inviting") || "Inviting..." : t("button.invite") || "Invite"}
                                     </Button>
                                 </div>
                             </form>
                         </Form>
+                    ) : isLoading && staff.length === 0 ? (
+                        <p>{t("text.loadingStaff") || "Loading staff members..."}</p>
                     ) : (
-                        isLoading && staff.length === 0 ? (
-                            <p>{t("text.loadingStaff") || "Loading staff members..."}</p>
-                        ) : (
-                            <StaffTable staff={staff} onEdit={handleEditClick} onDelete={handleDeleteClick} />
-                        )
+                        <StaffTable staff={staff} onEdit={handleEditClick} onDelete={handleDeleteClick} />
                     )}
                 </div>
             </div>
 
             {/* Edit Agent Dialog */}
-            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+            <Dialog open={isEditDialogOpen} onOpenChange={handleCloseEditDialog}>
                 <DialogContent className="max-w-md">
                     <DialogHeader>
                         <DialogTitle>{t("title.editAgent") || "Edit Agent"}</DialogTitle>
@@ -517,13 +539,16 @@ export default function AccessManagementPage() {
                                             <FormItem>
                                                 <FormLabel>{t("form.email.label") || "Email Address"}</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder={t("form.email.placeholder") || "email@example.com"} type="email" {...field} />
+                                                    <Input
+                                                        placeholder={t("form.email.placeholder") || "email@example.com"}
+                                                        type="email"
+                                                        {...field}
+                                                    />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
-
 
                                     <FormField
                                         control={form.control}
@@ -598,7 +623,9 @@ export default function AccessManagementPage() {
                                                     <SelectContent>
                                                         <SelectItem value="English">{t("form.languages.options.english") || "English"}</SelectItem>
                                                         <SelectItem value="Arabic">{t("form.languages.options.arabic") || "Arabic"}</SelectItem>
-                                                        <SelectItem value="English & Arabic">{t("form.languages.options.both") || "English & Arabic"}</SelectItem>
+                                                        <SelectItem value="English & Arabic">
+                                                            {t("form.languages.options.both") || "English & Arabic"}
+                                                        </SelectItem>
                                                     </SelectContent>
                                                 </Select>
                                                 <FormMessage />
@@ -608,74 +635,81 @@ export default function AccessManagementPage() {
                                 </div>
                             </div>
 
-                            {showPermissionsSection && (<div className="space-y-4">
-                                <div className="flex justify-between items-center">
-                                    <h3 className="text-sm font-medium">{t("title.permissionsAccess") || "Permissions & Access"}</h3>
-                                    <span className="text-xs text-right">{t("title.permissions") || "Permissions"}</span>
+                            {showPermissionsSection && (
+                                <div className="space-y-4">
+                                    <div className="flex justify-between items-center">
+                                        <h3 className="text-sm font-medium">{t("title.permissionsAccess") || "Permissions & Access"}</h3>
+                                        <span className="text-xs text-right">{t("title.permissions") || "Permissions"}</span>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <FormField
+                                            control={form.control}
+                                            name="canAddProperty"
+                                            render={({ field }) => (
+                                                <div className="flex justify-between items-center">
+                                                    <label htmlFor="edit-canAddProperty" className="text-sm">
+                                                        {t("form.permissions.canPostListings") || "Can Post Listings"}
+                                                    </label>
+                                                    <FormControl>
+                                                        <Switch id="edit-canAddProperty" checked={field.value} onCheckedChange={field.onChange} />
+                                                    </FormControl>
+                                                </div>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="canPublishProperty"
+                                            render={({ field }) => (
+                                                <div className="flex justify-between items-center">
+                                                    <label htmlFor="edit-canPublishProperty" className="text-sm">
+                                                        {t("form.permissions.requiresApproval") || "Requires Approval for Listings"}
+                                                    </label>
+                                                    <FormControl>
+                                                        <Switch
+                                                            id="edit-canPublishProperty"
+                                                            checked={field.value}
+                                                            onCheckedChange={field.onChange}
+                                                        />
+                                                    </FormControl>
+                                                </div>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="canFeatureProperty"
+                                            render={({ field }) => (
+                                                <div className="flex justify-between items-center">
+                                                    <label htmlFor="edit-canFeatureProperty" className="text-sm">
+                                                        {t("form.permissions.canFeatureProperty") || "Can Feature Property"}
+                                                    </label>
+                                                    <FormControl>
+                                                        <Switch
+                                                            id="edit-canFeatureProperty"
+                                                            checked={field.value}
+                                                            onCheckedChange={field.onChange}
+                                                        />
+                                                    </FormControl>
+                                                </div>
+                                            )}
+                                        />
+                                    </div>
                                 </div>
-
-                                <div className="space-y-2">
-                                    <FormField
-                                        control={form.control}
-                                        name="canAddProperty"
-                                        render={({ field }) => (
-                                            <div className="flex justify-between items-center">
-                                                <label htmlFor="edit-canAddProperty" className="text-sm">
-                                                    {t("form.permissions.canPostListings") || "Can Post Listings"}
-                                                </label>
-                                                <FormControl>
-                                                    <Switch id="edit-canAddProperty" checked={field.value} onCheckedChange={field.onChange} />
-                                                </FormControl>
-                                            </div>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="canPublishProperty"
-                                        render={({ field }) => (
-                                            <div className="flex justify-between items-center">
-                                                <label htmlFor="edit-canPublishProperty" className="text-sm">
-                                                    {t("form.permissions.requiresApproval") || "Requires Approval for Listings"}
-                                                </label>
-                                                <FormControl>
-                                                    <Switch id="edit-canPublishProperty" checked={field.value} onCheckedChange={field.onChange} />
-                                                </FormControl>
-                                            </div>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="canFeatureProperty"
-                                        render={({ field }) => (
-                                            <div className="flex justify-between items-center">
-                                                <label htmlFor="edit-canFeatureProperty" className="text-sm">
-                                                    {t("form.permissions.canFeatureProperty") || "Can Feature Property"}
-                                                </label>
-                                                <FormControl>
-                                                    <Switch id="edit-canFeatureProperty" checked={field.value} onCheckedChange={field.onChange} />
-                                                </FormControl>
-                                            </div>
-                                        )}
-                                    />
-                                </div>
-                            </div>)}
+                            )}
 
                             <DialogFooter>
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    onClick={() => {
-                                        setIsEditDialogOpen(false)
-                                        resetForm()
-                                    }}
-                                    disabled={isLoading}
+                                    onClick={() => handleCloseEditDialog(false)}
+                                    disabled={isLoading || isSubmitting}
                                 >
                                     {t("button.cancel") || "Cancel"}
                                 </Button>
-                                <Button type="submit" className="bg-blue-500 hover:bg-blue-600" disabled={isLoading}>
-                                    {isLoading ? (t("button.updating") || "Updating...") : (t("button.update") || "Update")}
+                                <Button type="submit" className="bg-blue-500 hover:bg-blue-600" disabled={isLoading || isSubmitting}>
+                                    {isLoading || isSubmitting ? t("button.updating") || "Updating..." : t("button.update") || "Update"}
                                 </Button>
                             </DialogFooter>
                         </form>
@@ -684,20 +718,31 @@ export default function AccessManagementPage() {
             </Dialog>
 
             {/* Delete Agent Dialog */}
-            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <Dialog open={isDeleteDialogOpen} onOpenChange={handleCloseDeleteDialog}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>{t("title.deleteAgent") || "Delete Agent"}</DialogTitle>
                         <DialogDescription>
-                            {t("text.deleteConfirmation") || "Are you sure you want to delete this agent? This action cannot be undone."}
+                            {t("text.deleteConfirmation") ||
+                                "Are you sure you want to delete this agent? This action cannot be undone."}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
-                        <Button type="button" variant="outline" onClick={() => setIsDeleteDialogOpen(false)} disabled={isLoading}>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => handleCloseDeleteDialog(false)}
+                            disabled={isLoading || isSubmitting}
+                        >
                             {t("button.cancel") || "Cancel"}
                         </Button>
-                        <Button type="button" variant="destructive" onClick={handleDeleteStaff} disabled={isLoading}>
-                            {isLoading ? (t("button.deleting") || "Deleting...") : (t("button.delete") || "Delete")}
+                        <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={handleDeleteStaff}
+                            disabled={isLoading || isSubmitting}
+                        >
+                            {isLoading || isSubmitting ? t("button.deleting") || "Deleting..." : t("button.delete") || "Delete"}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -705,3 +750,4 @@ export default function AccessManagementPage() {
         </div>
     )
 }
+

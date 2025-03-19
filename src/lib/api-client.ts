@@ -123,7 +123,7 @@ apiClient.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.error("Request error:", error);
+    console.log("Request error:", error);
     return Promise.reject(error);
   }
 );
@@ -131,7 +131,7 @@ apiClient.interceptors.request.use(
 // Response interceptor for handling errors
 apiClient.interceptors.response.use(
   (response) => response.data,
-  (error: AxiosError) => {
+  (error: AxiosError | any) => {
     // Only proceed with redirect logic if we're in the browser
     if (isClient()) {
       // Get the request URL path
@@ -141,7 +141,7 @@ apiClient.interceptors.response.use(
       // Handle authentication errors (401 Unauthorized, 403 Forbidden)
       if (status === 401 || status === 403) {
         if (process.env.NODE_ENV === "development") {
-          console.error(`Authentication error (${status}):`, error.message);
+          console.log(`Authentication error (${status}):`, error.message);
         }
 
         // Check if the current request is for an auth endpoint
@@ -153,7 +153,7 @@ apiClient.interceptors.response.use(
         // For 401 (Unauthorized), clear tokens and redirect to login
         if (status === 401 && !isAuthApiEndpoint && !onAuthPage) {
           if (process.env.NODE_ENV === "development") {
-            console.error(`Authentication error (${status}):`, error.message);
+            console.log(`Authentication error (${status}):`, error.message);
           }
 
           // Clear tokens before redirecting
@@ -172,17 +172,39 @@ apiClient.interceptors.response.use(
         }
       } else if (error.code === "ECONNABORTED") {
         // Handle timeout errors
-        console.error("Request timeout:", error.message);
+        console.log("Request timeout:", error.message);
       } else if (!error.response) {
         // Handle network errors (no response from server)
-        console.error("Network error:", error.message);
+        console.log("Network error:", error.message);
       } else {
         // Handle other errors
-        console.error(`API error (${status}):`, error.message);
+        console.log(`API error (${status}):`, error.message);
       }
     }
 
-    return Promise.reject(error);
+    // Instead of rejecting the promise, return a standardized error response
+    // This prevents the red screen by not throwing an exception
+    // For API errors (400, 500, etc.), we should still reject the promise
+    // so that catch blocks can handle them properly
+    if (error.response) {
+      // If the error has a response, format it in a standardized way before rejecting
+      return Promise.reject({
+        data: error.response.data?.data || null,
+        message:
+          error.response.data?.message || error.message || "An error occurred",
+        success: false,
+        status: error.response.status,
+        originalError: error,
+      });
+    } else {
+      // For network errors, timeouts, etc.
+      return Promise.reject({
+        data: null,
+        message: error.message || "Network error occurred",
+        success: false,
+        originalError: error,
+      });
+    }
   }
 );
 

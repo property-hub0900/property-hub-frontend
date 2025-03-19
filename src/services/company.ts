@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api-client";
+import apiClient from "@/lib/api-client";
 
 // Define types for the API requests and responses
 export type StaffRole = "agent" | "admin";
@@ -37,7 +37,7 @@ export interface UpdateStaffRequest extends Partial<InviteStaffRequest> {
 
 // Generic response interface to match the auth service pattern
 export interface IResponse<T> {
-  data: T;
+  data: T | null;
   message: string;
   success: boolean;
 }
@@ -58,7 +58,12 @@ export const companyService = {
   inviteStaff: async (
     payload: InviteStaffRequest
   ): Promise<IResponse<StaffMember>> => {
-    return apiClient.post("/staff/invite", payload);
+    try {
+      return apiClient.post("/staff/invite", payload);
+    } catch (error: any) {
+      console.error("Failed to invite staff:", error);
+      throw error;
+    }
   },
 
   // Update an existing staff member

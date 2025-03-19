@@ -66,6 +66,7 @@ export default function CustomerLoginPage() {
       useAuthStore.getState().login(response.data);
       router.push(pushUserAfterLogin);
     } catch (error) {
+      debugger;
       toast.error(getErrorMessage(error));
     }
   };

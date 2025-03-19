@@ -28,6 +28,7 @@ import {
     SidebarMenuItem,
     SidebarMenuButton,
     SidebarFooter,
+    SidebarRail,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/lib/hooks/useAuth"
 
@@ -138,7 +139,7 @@ export function DashboardSidebar({ userType = "company" }: DashboardSidebarProps
     const dashboardBasePath = userType === "company" ? "/company/dashboard" : "/customer/dashboard"
 
     return (
-        <Sidebar className="border-r bg-white w-[240px]">
+        <Sidebar className="border-r bg-white" collapsible="offcanvas">
             <SidebarHeader className="py-4 border-b">
                 <Link href={dashboardBasePath} className="flex items-center gap-2 px-4">
                     <div className="flex items-center">
@@ -162,6 +163,7 @@ export function DashboardSidebar({ userType = "company" }: DashboardSidebarProps
                                     "gap-3 h-10 px-4",
                                     pathname === item.href ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-600",
                                 )}
+                                tooltip={item.title}
                             >
                                 <Link href={item.href}>
                                     <item.icon className="h-5 w-5 cursor-pointer" />
@@ -188,11 +190,13 @@ export function DashboardSidebar({ userType = "company" }: DashboardSidebarProps
                                     item.className,
                                     item.title === "Log out" ? "text-red-500" : "text-gray-600",
                                 )}
+                                tooltip={item.title}
                             >
                                 <Link
                                     href={item.title === "Log out" ? "#" : item.href}
-                                    onClick={() => {
+                                    onClick={(e) => {
                                         if (item.title === "Log out") {
+                                            e.preventDefault()
                                             logOut()
                                         }
                                     }}
@@ -205,6 +209,7 @@ export function DashboardSidebar({ userType = "company" }: DashboardSidebarProps
                     ))}
                 </SidebarMenu>
             </SidebarFooter>
+            <SidebarRail />
         </Sidebar>
     )
 }
