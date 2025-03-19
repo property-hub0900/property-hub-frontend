@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import {
+import type {
   SocialLoginPayload,
   TCustomerLoginSchema,
   TUseAuthCustomerRegisterSchema,
@@ -7,7 +7,7 @@ import {
   TUserAuthStaffRegisterSchema,
 } from "@/types/auth";
 
-import { IResponse } from "@/types/common";
+import type { IResponse } from "@/types/common";
 
 // Types for the API requests and responses
 export interface RegisterRequest {

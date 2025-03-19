@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { UserDropdown } from "./userDropdown";
 import { Switch } from "@/components/ui/switch";
+import Image from "next/image";
 
 export default function Header({ calledBy = "home" }) {
   const router = useRouter();
@@ -54,13 +55,13 @@ export default function Header({ calledBy = "home" }) {
             <div className="flex items-center">
               <Link href="/" className="flex items-center">
                 <div className="flex items-center">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="w-8 h-8 fill-current text-black"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M12 2L1 12h3v9h16v-9h3L12 2zm0 2.8L19.2 11H4.8L12 4.8z" />
-                  </svg>
+                  <Image
+                    src="/logo.svg"
+                    alt="PropertyHub"
+                    width={48}
+                    height={48}
+                  />
+
                   <div className="ml-2">
                     <div className="text-xl font-bold text-black">Property</div>
                     <div className="text-xl font-bold text-black -mt-1">

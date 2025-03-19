@@ -11,6 +11,7 @@ export const properties: any[] = [
     bathrooms: 2,
     area: 1200,
     category: "apartment",
+
     agent: "John Smith",
     featured: true,
   },
