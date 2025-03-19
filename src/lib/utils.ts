@@ -16,10 +16,19 @@ export const getErrorMessage = (e: unknown): string => {
     typeof e.response.data === "object" &&
     e.response.data &&
     "message" in e.response.data &&
-    e.response.data.message &&
     typeof e.response.data.message === "string"
   ) {
-    return e.response.data.message;
+    return e.response.data.message; // Extracts "Invalid credentials"
   }
+
+  if (
+    typeof e === "object" &&
+    e &&
+    "message" in e &&
+    typeof e.message === "string"
+  ) {
+    return e.message; // Handles cases where message is in AxiosError itself
+  }
+
   return "Something went wrong";
 };

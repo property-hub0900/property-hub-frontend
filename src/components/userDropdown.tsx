@@ -16,11 +16,14 @@ import { useRouter } from "next/navigation";
 
 export const UserDropdown = () => {
   const { user, logOut } = useAuth();
+
   const router = useRouter();
 
   const getUserName = () => {
     if (user) {
       return user.loginMethod == "google" ? `${user.email}` : user.username as string;
+    } else {
+      return ""
     }
   }
 
@@ -37,7 +40,9 @@ export const UserDropdown = () => {
                 {getUserName()?.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <span className="capitalize">{getUserName()}</span>
+            <span className="capitalize">
+              {getUserName().length > 6 ? `${getUserName().slice(0, 6)}...` : getUserName()}
+            </span>
 
 
 

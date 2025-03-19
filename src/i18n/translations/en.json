@@ -13,7 +13,8 @@
     "editAgent": "Edit Agent",
     "deleteAgent": "Delete Agent",
     "permissionsAccess": "Permissions & Access",
-    "permissions": "Permissions"
+    "permissions": "Permissions",
+    "userDetails": "User Details"
   },
   "button": {
     "next": "Next",
@@ -30,7 +31,9 @@
     "update": "Update",
     "updating": "Updating...",
     "delete": "Delete",
-    "deleting": "Deleting..."
+    "deleting": "Deleting...",
+    "uploadPhoto": "Upload Photo",
+    "save": "Save"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -44,12 +47,32 @@
     "enterNewPassword": "Enter your new password",
     "loadingStaff": "Loading staff members...",
     "deleteConfirmation": "Are you sure you want to delete this agent? This action cannot be undone.",
-    "loadStaffFailed": "Failed to load staff members"
+    "loadStaffFailed": "Failed to load staff members",
+    "staffDeleted": "Staff member deleted successfully",
+    "deleteFailed": "Failed to delete staff member"
   },
   "table": {
     "notFound": "No Record found"
   },
   "form": {
+    "fullName": {
+      "label": "Full Name",
+      "placeholder": "Enter your full name",
+      "errors": {
+        "required": "Full Name is required.",
+        "min": "Full Name should be at least 2 characters long.",
+        "max": "Full Name should be at most 50 characters long."
+      }
+    },
+    "bio": {
+      "label": "Bio",
+      "placeholder": "Enter your bio",
+      "errors": {
+        "required": "Bio is required.",
+        "min": "Bio should be at least 2 characters long.",
+        "max": "Bio should be at most 50 characters long."
+      }
+    },
     "required": "This field is required",
     "firstName": {
       "label": "First Name",
