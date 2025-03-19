@@ -31,6 +31,7 @@ import {
     SidebarRail,
 } from "@/components/ui/sidebar"
 import { useAuth } from "@/lib/hooks/useAuth"
+import Image from "next/image"
 
 // Company navigation items
 const companyNavItems = [
@@ -140,15 +141,24 @@ export function DashboardSidebar({ userType = "company" }: DashboardSidebarProps
 
     return (
         <Sidebar className="border-r bg-white" collapsible="offcanvas">
-            <SidebarHeader className="py-4 border-b">
+            <SidebarHeader className="py-1.5 border-b">
                 <Link href={dashboardBasePath} className="flex items-center gap-2 px-4">
                     <div className="flex items-center">
-                        <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current text-black" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L1 12h3v9h16v-9h3L12 2zm0 2.8L19.2 11H4.8L12 4.8z" />
-                        </svg>
-                        <div className="ml-2">
-                            <span className="text-base font-bold text-black">Property Hub</span>
+
+                        <div className="flex items-center">
+                            <Image
+                                src="/logo.svg"
+                                alt="PropertyHub"
+                                width={48}
+                                height={48}
+                            />
+
+                            <div className="ml-2">
+                                <div className="text-xl font-bold text-black">Property</div>
+                                <div className="text-xl font-bold text-black -mt-1">Hub</div>
+                            </div>
                         </div>
+
                     </div>
                 </Link>
             </SidebarHeader>

@@ -11,15 +11,22 @@ export interface StaffMember {
   phoneNumber: string;
   email: string;
   role: StaffRole;
-  languages?: string;
+  languagesSpoken: string;
   joinedDate: string;
   status: "active" | "inactive";
   canAddProperty: boolean;
   canPublishProperty: boolean;
   canFeatureProperty: boolean;
+  biography: string;
+  profilePhoto?: string;
+  user?: Record<string, any>;
+  staffPermissions?: Record<string, any>;
+  active?: boolean;
 }
 
 export interface InviteStaffRequest {
+  status: string;
+  languagesSpoken: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -28,6 +35,7 @@ export interface InviteStaffRequest {
   canAddProperty: boolean;
   canPublishProperty: boolean;
   canFeatureProperty: boolean;
+  biography?: string;
 }
 
 export interface UpdateStaffRequest extends Partial<InviteStaffRequest> {

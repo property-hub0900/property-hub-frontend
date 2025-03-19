@@ -24,21 +24,21 @@ import { staffFormSchema } from "@/schema/company"
 import { StaffTable } from "@/components/staffTable"
 import { useTranslations } from "next-intl"
 import { getErrorMessage } from "@/lib/utils"
+import { Loader } from "@/components/loader"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { EditUserForm } from "@/components/edit-user-form"
 
-// Define a type that extends StaffMember to handle response data
-type ExtendedStaffMember = StaffMember & {
-    languages?: string
-}
+// Replace the fetchStaff function with useQuery
+// Replace the handleAddStaff, handleUpdateStaff, and handleDeleteStaff functions with useMutation
+// Update the component to use the mutations
 
 export default function AccessManagementPage() {
-    const [staff, setStaff] = useState<ExtendedStaffMember[]>([])
-    const [isLoading, setIsLoading] = useState(false)
-    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [staff, setStaff] = useState<StaffMember[]>([])
+    const [showEditForm, setShowEditForm] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-    const [selectedStaff, setSelectedStaff] = useState<ExtendedStaffMember | null>(null)
+    const [selectedStaff, setSelectedStaff] = useState<StaffMember | null>(null)
     const [showAddForm, setShowAddForm] = useState(false)
     const [showPermissionsSection, setShowPermissionsSection] = useState(true)
-    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const t = useTranslations()
 
@@ -50,11 +50,12 @@ export default function AccessManagementPage() {
             email: "",
             role: "agent",
             phoneNumber: "",
-            languages: "English & Arabic",
+            languagesSpoken: "English & Arabic",
             status: "active",
             canAddProperty: true,
             canPublishProperty: true,
             canFeatureProperty: false,
+            biography: "",
         },
     })
 
@@ -63,28 +64,135 @@ export default function AccessManagementPage() {
         setShowPermissionsSection(role !== "admin")
     }, [role])
 
-    useEffect(() => {
-        fetchStaff()
-    }, [t, showAddForm])
+    // Use React Query to fetch staff
+    const { isLoading: isLoadingStaff, refetch: refetchStaff } = useQuery({
+        queryKey: ["getAllStaff"],
+        queryFn: async () => {
+            try {
+                const response: any = await companyService.getAllStaff()
 
-    const fetchStaff = async () => {
-        setIsLoading(true)
-        try {
-            const response: any = await companyService.getAllStaff()
-
-            // Handle different response formats
-            if (response.data) {
-                setStaff(response.data as ExtendedStaffMember[])
-            } else if (response.results) {
-                setStaff(response.results as ExtendedStaffMember[])
+                // Handle different response formats
+                if (response.data) {
+                    setStaff(response.data as StaffMember[])
+                } else if (response.results) {
+                    setStaff(response.results as StaffMember[])
+                }
+                return response
+            } catch (error: any) {
+                console.log("Failed to fetch staff:", error)
+                toast.error(getErrorMessage(error))
+                throw error
             }
-        } catch (error: any) {
-            console.log("Failed to fetch staff:", error)
+        },
+    })
+
+    // Use React Query for inviting staff
+    const inviteStaffMutation = useMutation({
+        mutationKey: ["inviteStaff"],
+        mutationFn: companyService.inviteStaff,
+        onSuccess: (response, variables) => {
+            // Create a properly typed staff member
+            const newStaffMember: StaffMember = {
+                ...(response.data as StaffMember),
+                languagesSpoken: variables.languagesSpoken || "English & Arabic",
+                status: variables.status || ("active" as any),
+            }
+
+            setStaff([...staff, newStaffMember])
+            toast.success(response.message || t("toast.staffInvited") || "Staff member invited successfully")
+            setShowAddForm(false)
+            resetForm()
+            refetchStaff()
+        },
+        onError: (error: any) => {
+            console.log("Failed to add staff:", error)
             toast.error(getErrorMessage(error))
-        } finally {
-            setIsLoading(false)
-        }
-    }
+        },
+    })
+
+    // Use React Query for updating staff
+    const updateStaffMutation = useMutation({
+        mutationKey: ["updateStaff"],
+        mutationFn: companyService.updateStaff,
+        onSuccess: (response, variables) => {
+            // Create a properly typed updated staff member
+            const updatedStaffMember: StaffMember = {
+                ...(response.data as StaffMember),
+                languagesSpoken: variables.languagesSpoken || "English",
+            }
+
+            const updatedStaffList = staff.map((s) => (s.id === selectedStaff?.id ? updatedStaffMember : s))
+
+            setStaff(updatedStaffList)
+            toast.success(response.message || t("toast.staffUpdated") || "Staff member updated successfully")
+            resetForm()
+            refetchStaff()
+        },
+        onError: (error: any) => {
+            console.log("Failed to update staff:", error)
+            toast.error(error?.message || t("toast.updateFailed") || "Failed to update staff member")
+        },
+    })
+
+    // Use React Query for deleting staff
+    const deleteStaffMutation = useMutation({
+        mutationKey: ["deleteStaff"],
+        mutationFn: (staffId: string) => companyService.deleteStaff(staffId),
+        onSuccess: () => {
+            if (selectedStaff) {
+                const updatedStaff = staff.filter((s) => s.staffId !== selectedStaff.staffId)
+                setStaff(updatedStaff)
+            }
+            toast.success(t("text.staffDeleted") || "Staff member deleted successfully")
+            setIsDeleteDialogOpen(false)
+            refetchStaff()
+        },
+        onError: (error: any) => {
+            console.log("Failed to delete staff:", error)
+            toast.error(error?.message || t("text.deleteFailed") || "Failed to delete staff member")
+        },
+    })
+
+    // Complete the getStaffById mutation implementation
+    const getStaffByIdMutation = useMutation({
+        mutationKey: ["getStaffById"],
+        mutationFn: companyService.getStaffById,
+        onSuccess: (response) => {
+            console.log("Response from getStaffById:", response)
+
+            // If response is empty, use the selectedStaff that was set before the API call
+            if (!response || Object.keys(response).length === 0) {
+                console.log("Using fallback staff data")
+                // We already set selectedStaff in handleEditClick, so we can just proceed
+                setShowAddForm(false)
+                setShowEditForm(true)
+                return
+            }
+
+            // If we have a response with data property
+            if (response.data) {
+                const staffMember = response.data as StaffMember
+                setSelectedStaff(staffMember)
+            } else {
+                // If response has a different structure, try to use it directly
+                // This handles cases where the API returns the staff object at the root level
+                setSelectedStaff(response as unknown as StaffMember)
+            }
+
+            setShowAddForm(false)
+            setShowEditForm(true)
+        },
+        onError: (error: any) => {
+            console.log("Failed to fetch staff by ID:", error)
+            toast.error(getErrorMessage(error))
+            // Still show the edit form with the data we already have
+            setShowEditForm(true)
+        },
+    })
+
+    useEffect(() => {
+        refetchStaff()
+    }, [refetchStaff, showAddForm])
 
     const resetForm = () => {
         form.reset({
@@ -93,157 +201,111 @@ export default function AccessManagementPage() {
             email: "",
             role: "agent",
             phoneNumber: "",
-            languages: "English & Arabic",
+            languagesSpoken: "English & Arabic",
             status: "active",
             canAddProperty: true,
             canPublishProperty: true,
             canFeatureProperty: false,
+            biography: "",
         })
         setShowPermissionsSection(true)
     }
 
-    const handleEditClick = (staffMember: ExtendedStaffMember) => {
-        if (isSubmitting) return
+    // Update the handleEditClick function to use the getStaffById mutation
+    const handleEditClick = (staffMember: any) => {
+        if (
+            inviteStaffMutation.isPending ||
+            updateStaffMutation.isPending ||
+            deleteStaffMutation.isPending ||
+            getStaffByIdMutation.isPending
+        )
+            return
 
-        setSelectedStaff(staffMember)
-        form.reset({
-            firstName: staffMember.firstName,
-            lastName: staffMember.lastName,
-            email: staffMember.email,
-            role: staffMember.role,
-            phoneNumber: staffMember.phoneNumber,
-            languages: staffMember.languages || "English",
-            status: staffMember.status,
-            canAddProperty: staffMember.canAddProperty,
-            canPublishProperty: staffMember.canPublishProperty,
-            canFeatureProperty: staffMember.canFeatureProperty,
+        console.log("Fetching staff details for:", staffMember.staffId)
+
+        // Set the selected staff member first as a fallback with all available data
+        setSelectedStaff({
+            ...staffMember,
+            // Set default values for any missing properties
+            email: staffMember.email || staffMember.user?.email || "",
+            status: staffMember.status || (staffMember.active ? "active" : "inactive"),
+            canAddProperty: staffMember.staffPermissions?.[0]?.canAddProperty ?? true,
+            canPublishProperty: staffMember.staffPermissions?.[0]?.canPublishProperty ?? true,
+            canFeatureProperty: staffMember.staffPermissions?.[0]?.canFeatureProperty ?? false,
+            biography: staffMember.biography || "",
         })
-        setIsEditDialogOpen(true)
+
+        // Try to get more complete data from API
+        getStaffByIdMutation.mutate(staffMember.staffId)
     }
 
-    const handleDeleteClick = (staffMember: ExtendedStaffMember) => {
-        if (isSubmitting) return
+    const handleDeleteClick = (staffMember: StaffMember) => {
+        if (inviteStaffMutation.isPending || updateStaffMutation.isPending || deleteStaffMutation.isPending) return
 
         setSelectedStaff(staffMember)
         setIsDeleteDialogOpen(true)
     }
 
     const handleAddStaff = async (data: z.infer<typeof staffFormSchema>) => {
-        setIsSubmitting(true)
-        setIsLoading(true)
-
-        try {
-            const response = await companyService.inviteStaff({
-                firstName: data.firstName,
-                lastName: data.lastName,
-                email: data.email,
-                role: data.role,
-                phoneNumber: data.phoneNumber,
-                canAddProperty: data.canAddProperty,
-                canPublishProperty: data.canPublishProperty,
-                canFeatureProperty: data.canFeatureProperty,
-            })
-
-            // Create a properly typed staff member
-            const newStaffMember: ExtendedStaffMember = {
-                ...(response.data as StaffMember),
-                languages: data.languages,
-                status: data.status,
-            }
-
-            setStaff([...staff, newStaffMember])
-            toast.success(response.message || t("toast.staffInvited") || "Staff member invited successfully")
-            setShowAddForm(false)
-            resetForm()
-        } catch (error: any) {
-            console.log("Failed to add staff:", error)
-            toast.error(getErrorMessage(error))
-        } finally {
-            setIsLoading(false)
-            setIsSubmitting(false)
-        }
+        inviteStaffMutation.mutate({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            role: data.role,
+            phoneNumber: data.phoneNumber,
+            languagesSpoken: data.languagesSpoken as any,
+            status: data.status,
+            canAddProperty: data.canAddProperty,
+            canPublishProperty: data.canPublishProperty,
+            canFeatureProperty: data.canFeatureProperty,
+        })
     }
 
     const handleUpdateStaff = async (data: z.infer<typeof staffFormSchema>) => {
         if (!selectedStaff) return
-
-        setIsSubmitting(true)
-        setIsLoading(true)
-
-        try {
-            const response = await companyService.updateStaff({
+        updateStaffMutation.mutate(
+            {
                 id: selectedStaff.staffId,
                 firstName: data.firstName,
                 lastName: data.lastName,
                 email: data.email,
                 role: data.role,
                 phoneNumber: data.phoneNumber,
+                languagesSpoken: data.languagesSpoken,
                 status: data.status,
                 canAddProperty: data.canAddProperty,
                 canPublishProperty: data.canPublishProperty,
                 canFeatureProperty: data.canFeatureProperty,
-            })
-
-            // Create a properly typed updated staff member
-            const updatedStaffMember: ExtendedStaffMember = {
-                ...(response.data as StaffMember),
-                languages: data.languages,
-            }
-
-            const updatedStaffList = staff.map((s) => (s.id === selectedStaff.id ? updatedStaffMember : s))
-
-            setStaff(updatedStaffList)
-            toast.success(response.message || t("toast.staffUpdated") || "Staff member updated successfully")
-            setIsEditDialogOpen(false)
-            resetForm()
-        } catch (error: any) {
-            console.log("Failed to update staff:", error)
-            toast.error(error?.message || t("toast.updateFailed") || "Failed to update staff member")
-        } finally {
-            setIsLoading(false)
-            setIsSubmitting(false)
-        }
+                biography: data.biography,
+            },
+            {
+                onSuccess: () => {
+                    setShowEditForm(false)
+                },
+            },
+        )
     }
 
     const handleDeleteStaff = async () => {
         if (!selectedStaff) return
-
-        setIsSubmitting(true)
-        setIsLoading(true)
-
-        try {
-            await companyService.deleteStaff(selectedStaff.staffId)
-
-            const updatedStaff = staff.filter((s) => s.staffId !== selectedStaff.staffId);
-            setStaff(updatedStaff)
-            toast.success(t("text.staffDeleted") || "Staff member deleted successfully")
-            setIsDeleteDialogOpen(false)
-        } catch (error: any) {
-            console.log("Failed to delete staff:", error)
-            toast.error(error?.message || t("text.deleteFailed") || "Failed to delete staff member")
-        } finally {
-            setIsLoading(false)
-            setIsSubmitting(false)
-        }
+        deleteStaffMutation.mutate(selectedStaff.staffId)
     }
 
-    const handleCloseEditDialog = (open: boolean) => {
-        if (!isSubmitting) {
-            setIsEditDialogOpen(open)
-            if (!open) {
-                resetForm()
-            }
+    const handleCancelEdit = () => {
+        if (!updateStaffMutation.isPending) {
+            setShowEditForm(false)
+            resetForm()
         }
     }
 
     const handleCloseDeleteDialog = (open: boolean) => {
-        if (!isSubmitting) {
+        if (!deleteStaffMutation.isPending) {
             setIsDeleteDialogOpen(open)
         }
     }
 
     const handleToggleAddForm = () => {
-        if (isSubmitting) return
+        if (inviteStaffMutation.isPending || updateStaffMutation.isPending || deleteStaffMutation.isPending) return
 
         setShowAddForm(!showAddForm)
         if (!showAddForm) {
@@ -251,12 +313,36 @@ export default function AccessManagementPage() {
         }
     }
 
+    // Determine if any mutation is in progress
+    const isSubmitting =
+        inviteStaffMutation.isPending ||
+        updateStaffMutation.isPending ||
+        deleteStaffMutation.isPending ||
+        getStaffByIdMutation.isPending
+    const isLoading = isLoadingStaff || isSubmitting
+
     return (
         <div className="space-y-6">
+            <Loader isLoading={isLoading}></Loader>
+
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold">{t("title.accessManagement") || "Access Management"}</h1>
-                <Button className="bg-blue-500 hover:bg-blue-600" onClick={handleToggleAddForm} disabled={isSubmitting}>
-                    {showAddForm ? (
+                <Button
+                    className="bg-blue-500 hover:bg-blue-600"
+                    onClick={() => {
+                        if (showEditForm) {
+                            setShowEditForm(false)
+                            resetForm()
+                        } else {
+                            setShowAddForm(!showAddForm)
+                            if (showAddForm) {
+                                resetForm()
+                            }
+                        }
+                    }}
+                    disabled={isSubmitting}
+                >
+                    {showAddForm || showEditForm ? (
                         t("button.cancel") || "Cancel"
                     ) : (
                         <>
@@ -330,7 +416,7 @@ export default function AccessManagementPage() {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel>{t("form.role.label") || "Role"}</FormLabel>
-                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <Select onValueChange={field.onChange} value={field.value}>
                                                         <FormControl>
                                                             <SelectTrigger>
                                                                 <SelectValue placeholder={t("form.role.placeholder") || "Select role"} />
@@ -366,7 +452,7 @@ export default function AccessManagementPage() {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel>{t("form.status.label") || "Status"}</FormLabel>
-                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <Select onValueChange={field.onChange} value={field.value}>
                                                         <FormControl>
                                                             <SelectTrigger>
                                                                 <SelectValue placeholder={t("form.status.placeholder") || "Select status"} />
@@ -386,11 +472,11 @@ export default function AccessManagementPage() {
 
                                         <FormField
                                             control={form.control}
-                                            name="languages"
+                                            name="languagesSpoken"
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel>{t("form.languages.label") || "Languages Spoken"}</FormLabel>
-                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <Select onValueChange={field.onChange} value={field.value as string}>
                                                         <FormControl>
                                                             <SelectTrigger>
                                                                 <SelectValue placeholder={t("form.languages.placeholder") || "Select languages"} />
@@ -479,243 +565,27 @@ export default function AccessManagementPage() {
                                         {t("button.cancel") || "Cancel"}
                                     </Button>
                                     <Button type="submit" className="bg-blue-500 hover:bg-blue-600" disabled={isLoading || isSubmitting}>
-                                        {isLoading || isSubmitting ? t("button.inviting") || "Inviting..." : t("button.invite") || "Invite"}
+                                        {inviteStaffMutation.isPending
+                                            ? t("button.inviting") || "Inviting..."
+                                            : t("button.invite") || "Invite"}
                                     </Button>
                                 </div>
                             </form>
                         </Form>
-                    ) : isLoading && staff.length === 0 ? (
+                    ) : showEditForm ? (
+                        <EditUserForm
+                            selectedStaff={selectedStaff}
+                            onSubmit={handleUpdateStaff}
+                            onCancel={handleCancelEdit}
+                            isSubmitting={updateStaffMutation.isPending}
+                        />
+                    ) : isLoadingStaff && staff.length === 0 ? (
                         <p>{t("text.loadingStaff") || "Loading staff members..."}</p>
                     ) : (
                         <StaffTable staff={staff} onEdit={handleEditClick} onDelete={handleDeleteClick} />
                     )}
                 </div>
             </div>
-
-            {/* Edit Agent Dialog */}
-            <Dialog open={isEditDialogOpen} onOpenChange={handleCloseEditDialog}>
-                <DialogContent className="max-w-md">
-                    <DialogHeader>
-                        <DialogTitle>{t("title.editAgent") || "Edit Agent"}</DialogTitle>
-                    </DialogHeader>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(handleUpdateStaff)} className="space-y-6">
-                            <div className="space-y-4">
-                                <h3 className="text-sm font-medium">{t("title.editUser") || "Edit User"}</h3>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <FormField
-                                        control={form.control}
-                                        name="firstName"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>{t("form.firstName.label") || "First Name"}</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder={t("form.firstName.placeholder") || "Enter first name"} {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="lastName"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>{t("form.lastName.label") || "Last Name"}</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder={t("form.lastName.placeholder") || "Enter last name"} {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="email"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>{t("form.email.label") || "Email Address"}</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        placeholder={t("form.email.placeholder") || "email@example.com"}
-                                                        type="email"
-                                                        {...field}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="role"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>{t("form.role.label") || "Role"}</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder={t("form.role.placeholder") || "Select role"} />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value="agent">{t("form.role.options.agent") || "Agent"}</SelectItem>
-                                                        <SelectItem value="admin">{t("form.role.options.admin") || "Admin"}</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="phoneNumber"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>{t("form.phoneNumber.label") || "Phone Number"}</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder={t("form.phoneNumber.placeholder") || "+972 0000 0000"} {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="status"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>{t("form.status.label") || "Status"}</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder={t("form.status.placeholder") || "Select status"} />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value="active">{t("form.status.options.active") || "Active"}</SelectItem>
-                                                        <SelectItem value="inactive">{t("form.status.options.inactive") || "Inactive"}</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="languages"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>{t("form.languages.label") || "Languages Spoken"}</FormLabel>
-                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                    <FormControl>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder={t("form.languages.placeholder") || "Select languages"} />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        <SelectItem value="English">{t("form.languages.options.english") || "English"}</SelectItem>
-                                                        <SelectItem value="Arabic">{t("form.languages.options.arabic") || "Arabic"}</SelectItem>
-                                                        <SelectItem value="English & Arabic">
-                                                            {t("form.languages.options.both") || "English & Arabic"}
-                                                        </SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                            </div>
-
-                            {showPermissionsSection && (
-                                <div className="space-y-4">
-                                    <div className="flex justify-between items-center">
-                                        <h3 className="text-sm font-medium">{t("title.permissionsAccess") || "Permissions & Access"}</h3>
-                                        <span className="text-xs text-right">{t("title.permissions") || "Permissions"}</span>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <FormField
-                                            control={form.control}
-                                            name="canAddProperty"
-                                            render={({ field }) => (
-                                                <div className="flex justify-between items-center">
-                                                    <label htmlFor="edit-canAddProperty" className="text-sm">
-                                                        {t("form.permissions.canPostListings") || "Can Post Listings"}
-                                                    </label>
-                                                    <FormControl>
-                                                        <Switch id="edit-canAddProperty" checked={field.value} onCheckedChange={field.onChange} />
-                                                    </FormControl>
-                                                </div>
-                                            )}
-                                        />
-
-                                        <FormField
-                                            control={form.control}
-                                            name="canPublishProperty"
-                                            render={({ field }) => (
-                                                <div className="flex justify-between items-center">
-                                                    <label htmlFor="edit-canPublishProperty" className="text-sm">
-                                                        {t("form.permissions.requiresApproval") || "Requires Approval for Listings"}
-                                                    </label>
-                                                    <FormControl>
-                                                        <Switch
-                                                            id="edit-canPublishProperty"
-                                                            checked={field.value}
-                                                            onCheckedChange={field.onChange}
-                                                        />
-                                                    </FormControl>
-                                                </div>
-                                            )}
-                                        />
-
-                                        <FormField
-                                            control={form.control}
-                                            name="canFeatureProperty"
-                                            render={({ field }) => (
-                                                <div className="flex justify-between items-center">
-                                                    <label htmlFor="edit-canFeatureProperty" className="text-sm">
-                                                        {t("form.permissions.canFeatureProperty") || "Can Feature Property"}
-                                                    </label>
-                                                    <FormControl>
-                                                        <Switch
-                                                            id="edit-canFeatureProperty"
-                                                            checked={field.value}
-                                                            onCheckedChange={field.onChange}
-                                                        />
-                                                    </FormControl>
-                                                </div>
-                                            )}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-
-                            <DialogFooter>
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    onClick={() => handleCloseEditDialog(false)}
-                                    disabled={isLoading || isSubmitting}
-                                >
-                                    {t("button.cancel") || "Cancel"}
-                                </Button>
-                                <Button type="submit" className="bg-blue-500 hover:bg-blue-600" disabled={isLoading || isSubmitting}>
-                                    {isLoading || isSubmitting ? t("button.updating") || "Updating..." : t("button.update") || "Update"}
-                                </Button>
-                            </DialogFooter>
-                        </form>
-                    </Form>
-                </DialogContent>
-            </Dialog>
 
             {/* Delete Agent Dialog */}
             <Dialog open={isDeleteDialogOpen} onOpenChange={handleCloseDeleteDialog}>
@@ -742,7 +612,7 @@ export default function AccessManagementPage() {
                             onClick={handleDeleteStaff}
                             disabled={isLoading || isSubmitting}
                         >
-                            {isLoading || isSubmitting ? t("button.deleting") || "Deleting..." : t("button.delete") || "Delete"}
+                            {deleteStaffMutation.isPending ? t("button.deleting") || "Deleting..." : t("button.delete") || "Delete"}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

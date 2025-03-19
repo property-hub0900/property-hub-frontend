@@ -13,9 +13,10 @@ export const staffFormSchema = z.object({
   phoneNumber: z
     .string()
     .min(10, { message: "Please enter a valid phone number" }),
-  languages: z.string().optional(),
+  languagesSpoken: z.string().optional(),
   status: z.enum(["active", "inactive"]),
   canAddProperty: z.boolean().default(true),
+  biography: z.string().optional(),
   canPublishProperty: z.boolean().default(true),
   canFeatureProperty: z.boolean().default(false),
 });
