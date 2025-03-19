@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { commonValidations } from "../commonValidations";
-import { PROPERTY_CATEGORIES, PROPERTY_PURPOSE } from "@/constants/constants";
+import {
+  PROPERTY_CATEGORIES,
+  PROPERTY_PURPOSE,
+  PROPERTY_STATUSES,
+} from "@/constants/constants";
 
 export const createPropertySchema = (t: (key: string) => string) =>
   z.object({
@@ -23,12 +27,15 @@ export const createPropertySchema = (t: (key: string) => string) =>
     views: commonValidations.stringRequired(t("form.required")),
     serviceCharges: commonValidations.stringRequired(t("form.required")),
     price: commonValidations.numberRequired(t("form.required")),
-    priceVisibilityFlag: z.boolean(),
+    priceVisibilityFlag: z.boolean().optional(),
     //location: commonValidations.stringRequired(t("form.required")),
     amenities: z.array(z.number()).optional(),
     description: commonValidations.stringRequired(t("form.required")),
     descriptionAr: commonValidations.stringRequired(t("form.required")),
-    featured: z.boolean(),
+    featured: z.boolean().optional(),
+    status: z.enum(PROPERTY_STATUSES, {
+      required_error: t("form.required"),
+    }),
 
     // images: z.array(
     //   z.object({

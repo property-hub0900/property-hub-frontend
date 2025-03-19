@@ -42,3 +42,12 @@ export const PROPERTY_VIEWS = [
   "Other",
 ] as const;
 export type TPropertyViews = (typeof PROPERTY_VIEWS)[number];
+
+export const PROPERTY_STATUSES = [
+  "draft",
+  "published",
+  "pending",
+  "closed",
+  "archived",
+] as const;
+export type TPropertyStatuses = (typeof PROPERTY_STATUSES)[number];

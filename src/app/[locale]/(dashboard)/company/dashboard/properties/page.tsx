@@ -17,8 +17,6 @@ import { columns } from "./columns";
 export default function PropertiesListing() {
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  //const dataCompaniesProperties = [];
-
   const {
     data: dataCompaniesProperties,
     isLoading: isLoadingProperties,
@@ -36,7 +34,7 @@ export default function PropertiesListing() {
           <Button>+Add New Property</Button>
         </Link>
       </div>
-      <div className="bg-white rounded-md shadow">
+      <div className="bg-white rounded-md shadow mb-10">
         <div className="p-6">
           <div className="flex justify-between items-center">
             <h4>My Properties</h4>
@@ -57,6 +55,29 @@ export default function PropertiesListing() {
                   onSortingChange={setSorting}
                 />
               </RoleGate>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="bg-white rounded-md shadow mb-10">
+        <div className="p-6">
+          <div className="flex justify-between items-center">
+            <h4>Agent’s Properties</h4>
+            <Button>Filters</Button>
+          </div>
+          <div className="relative">
+            <Loader
+              variant="inline"
+              isLoading={isLoadingProperties || isFetchingProperties}
+            ></Loader>
+
+            <div className="mx-auto container py-5">
+              <DataTable
+                columns={columns}
+                data={dataCompaniesProperties?.results || []}
+                sorting={sorting}
+                onSortingChange={setSorting}
+              />
             </div>
           </div>
         </div>

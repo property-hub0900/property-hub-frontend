@@ -1,5 +1,5 @@
 import apiClient from "@/lib/api-client";
-import { ICommonMessageResponse } from "@/types/common";
+import { ICommonMessageResponse, IUpdate } from "@/types/common";
 import {
   IAmenitiesResponse,
   IProperties,
@@ -17,14 +17,15 @@ export const createProperty = (
   return apiClient.post("/properties", payloads);
 };
 
-export const getPropertyById = (id: number): Promise<IProperty> => {
+export const getPropertyById = (id: string): Promise<IProperty> => {
   return apiClient.get(`/properties/${id}`);
 };
 
-export const updatePropertyById = (
-  payloads: TCreatePropertySchema
-): Promise<IProperties> => {
-  return apiClient.put("/properties", payloads);
+export const updatePropertyById = ({
+  id,
+  payload,
+}: IUpdate<TCreatePropertySchema>): Promise<ICommonMessageResponse> => {
+  return apiClient.put(`/properties/${id}`, payload);
 };
 
 export const deletePropertyById = (

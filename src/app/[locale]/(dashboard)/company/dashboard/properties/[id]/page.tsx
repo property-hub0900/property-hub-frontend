@@ -3,11 +3,13 @@
 import type React from "react";
 import { useTranslations } from "next-intl";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/utils";
 import { TCreatePropertySchema } from "@/types/dashboard/properties";
+
+import { useParams } from "next/navigation";
 
 import {
   createProperty,
@@ -18,19 +20,22 @@ import { Loader } from "@/components/loader";
 import { COMPANY_PATHS } from "@/constants/paths";
 import PropertyForm from "../propertyForm";
 
-export default function EditPropertyPage({
-  params,
-}: {
-  params: { id: number };
-}) {
-  const { id } = params;
+export default function EditPropertyPage() {
+  const params = useParams();
+
+  const id = params?.id ?? "0";
+
+  console.log("params id", id);
 
   const t = useTranslations();
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
   const { data: getPropertyByIdData } = useQuery({
     queryKey: ["getPropertyById", id],
-    queryFn: () => getPropertyById(id),
+    queryFn: () => getPropertyById(String(id)),
+    enabled: id !== "0",
   });
 
   const updatePropertyByIdMutation = useMutation({
@@ -39,13 +44,17 @@ export default function EditPropertyPage({
   });
 
   async function onSubmit(values: TCreatePropertySchema) {
-    console.log("updatePropertyByIdMutation values", values);
-
+    const updatedObj = { id: String(id), payload: values };
     try {
-      await updatePropertyByIdMutation.mutateAsync(values);
-      toast.success(t("form.success"));
-
-      //router.push(COMPANY_PATHS.properties);
+      const response = await updatePropertyByIdMutation.mutateAsync(updatedObj);
+      queryClient.invalidateQueries({
+        queryKey: ["companiesProperties"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["getPropertyById", id],
+      });
+      router.push(COMPANY_PATHS.properties);
+      toast.success(response.message);
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
@@ -61,9 +70,9 @@ export default function EditPropertyPage({
         <div className="p-6">
           {getPropertyByIdData && (
             <PropertyForm
-              mode="create"
+              mode="edit"
               onSubmit={onSubmit}
-              //defaultValues={getPropertyByIdData}
+              defaultValues={getPropertyByIdData}
             ></PropertyForm>
           )}
         </div>

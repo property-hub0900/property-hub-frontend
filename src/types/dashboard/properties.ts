@@ -1,3 +1,4 @@
+import { TPropertyStatuses } from "@/constants/constants";
 import { createPropertySchema } from "@/schema/dashboard/properties";
 import { z } from "zod";
 
@@ -17,13 +18,13 @@ export interface IProperty {
   propertyId: number;
   title: string;
   description: string;
-  price: string;
+  price: number;
   propertyType: string;
   purpose: string;
   bedrooms: number;
   bathrooms: number;
   area: string;
-  status: string;
+  status: TPropertyStatuses;
   featured: boolean;
   street: string;
   city: string;

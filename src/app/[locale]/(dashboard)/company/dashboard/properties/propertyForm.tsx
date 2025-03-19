@@ -43,7 +43,7 @@ import {
 import { amenities } from "@/services/dashboard/properties";
 import { Switch } from "@/components/ui/switch";
 import { IFilesUrlPayload, UploadImages } from "./uploadImages";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
@@ -79,7 +79,7 @@ export default function PropertyForm(
             title: "",
             titleAr: "",
             featured: false,
-            //propertyCategory: "",
+            category: undefined,
             price: 0,
             propertyType: "",
             purpose: undefined,
@@ -94,13 +94,23 @@ export default function PropertyForm(
             priceVisibilityFlag: false,
             propertySize: "",
             serviceCharges: "",
-            //tenure: "",
+            tenure: "",
             views: "",
             amenities: [],
             description: "",
             //images: [{ isPrimary: false, url: "" }],
           },
   });
+
+  console.log("form Errors", form.formState.errors);
+
+  // useEffect(() => {
+  //   if (mode === "edit" && props.defaultValues) {
+  //     Object.entries(props.defaultValues).forEach(([key, value]) => {
+  //       form.setValue(key, value);
+  //     });
+  //   }
+  // }, [props.defaultValues]);
 
   const [filesUrls, setFilesUrls] = useState<IFilesUrlPayload>({ images: [] });
 
@@ -412,19 +422,42 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("form.price.label")}</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div>
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("form.price.label")}</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="priceVisibilityFlag"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center space-x-2 space-y-0 mt-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        id="priceVisibilityFlag"
+                      />
+                    </FormControl>
+                    <FormLabel
+                      htmlFor="priceVisibilityFlag"
+                      className="text-sm font-normal cursor-pointer select-none text-muted-foreground"
+                    >
+                      Hide price from the listing
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="serviceCharges"
@@ -458,7 +491,7 @@ export default function PropertyForm(
                 <FormItem className="col-span-2">
                   <FormLabel>{t("form.amenities.label")}</FormLabel>
                   <SimpleMultiSelect
-                    //defaultValue={field.value?.map((v) => String(v))}
+                    defaultValue={["4"]}
                     options={transformedAmenities || []}
                     onValueChange={(value) =>
                       field.onChange(value.map((v) => Number(v)))
@@ -515,7 +548,11 @@ export default function PropertyForm(
             />
 
             <div className="col-span-2 flex justify-end">
-              <Button type="submit" className="">
+              <Button
+                type="submit"
+                // onClick={() => handleSubmitWithStatus()}
+                className=""
+              >
                 {t("button.save")}
               </Button>
             </div>

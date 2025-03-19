@@ -13,3 +13,8 @@ export interface IOption {
 export interface ICommonMessageResponse {
   message: string;
 }
+
+export interface IUpdate<T> {
+  id: string;
+  payload: T;
+}
