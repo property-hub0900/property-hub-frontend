@@ -101,8 +101,6 @@ export const useAuthStore = create<AuthState>()(
               imageUrl: userData.imageUrl,
             };
 
-            console.log("Setting user state:", user);
-
             // Set the state
             set({
               user,
