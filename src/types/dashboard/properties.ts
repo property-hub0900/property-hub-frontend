@@ -15,6 +15,7 @@ export interface IProperties {
 }
 
 export interface IProperty {
+  referenceNo: string;
   propertyId: number;
   title: string;
   description: string;
@@ -31,7 +32,7 @@ export interface IProperty {
   state: string;
   zipCode: string;
   country: string;
-  location: Location;
+  location: string;
   postedBy: any;
   companyId: any;
   createdAt: string;

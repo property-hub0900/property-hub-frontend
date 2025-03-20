@@ -7,8 +7,8 @@ import {
   TCreatePropertySchema,
 } from "@/types/dashboard/properties";
 
-export const companiesProperties = (): Promise<IProperties> => {
-  return apiClient.get("/companies/properties?role=self");
+export const companiesProperties = (role: string): Promise<IProperties> => {
+  return apiClient.get(`/companies/properties?role=${role}`);
 };
 
 export const createProperty = (
@@ -18,13 +18,15 @@ export const createProperty = (
 };
 
 export const getPropertyById = (id: string): Promise<IProperty> => {
-  return apiClient.get(`/properties/${id}`);
+  return apiClient.get(`/companies/properties/${id}`);
 };
 
 export const updatePropertyById = ({
   id,
   payload,
-}: IUpdate<TCreatePropertySchema>): Promise<ICommonMessageResponse> => {
+}: IUpdate<
+  Partial<TCreatePropertySchema>
+>): Promise<ICommonMessageResponse> => {
   return apiClient.put(`/properties/${id}`, payload);
 };
 

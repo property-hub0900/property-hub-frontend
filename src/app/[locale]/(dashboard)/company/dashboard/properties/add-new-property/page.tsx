@@ -10,7 +10,8 @@ import { toast } from "sonner";
 
 import { Loader } from "@/components/loader";
 import { createProperty } from "@/services/dashboard/properties";
-import PropertyForm from "../propertyForm";
+import PropertyForm from "../components/propertyForm";
+import { COMPANY_PATHS } from "@/constants/paths";
 
 export default function CreatePropertyPage() {
   const t = useTranslations();
@@ -27,8 +28,7 @@ export default function CreatePropertyPage() {
     try {
       const response = await createPropertyMutation.mutateAsync(values);
       toast.success(response.message);
-
-      //router.push(COMPANY_PATHS.properties);
+      router.push(COMPANY_PATHS.properties);
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
@@ -38,7 +38,7 @@ export default function CreatePropertyPage() {
     <>
       <Loader isLoading={createPropertyMutation.isPending}></Loader>
       <div className="flex justify-between items-center mb-5">
-        <h3>New Property</h3>
+        <h3>{t("title.addNewProperty")}</h3>
       </div>
       <div className="bg-white rounded-md shadow">
         <div className="p-6">

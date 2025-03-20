@@ -13,7 +13,9 @@
     "editAgent": "Edit Agent",
     "deleteAgent": "Delete Agent",
     "permissionsAccess": "Permissions & Access",
-    "permissions": "Permissions"
+    "permissions": "Permissions",
+    "addNewProperty": "Add New Property",
+    "editProperty": "Edit Property"
   },
   "button": {
     "next": "Next",
@@ -35,7 +37,8 @@
     "delete": "Delete",
     "deleting": "Deleting...",
     "saveDraft": "Save Draft",
-    "publish": "Publish"
+    "publish": "Publish",
+    "close": "close"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -51,7 +54,9 @@
     "deleteConfirmation": "Are you sure you want to delete this agent? This action cannot be undone.",
     "loadStaffFailed": "Failed to load staff members",
     "staffDeleted": "Staff member deleted successfully",
-    "deleteFailed": "Failed to delete staff member"
+    "deleteFailed": "Failed to delete staff member",
+    "hidePriceFromListing": "Hide price from the listing",
+    "wantToFeatureProperty": "Want to feature this property?"
   },
   "table": {
     "notFound": "No Record found...",
@@ -294,6 +299,21 @@
       "canPostListings": "Can Post Listings",
       "requiresApproval": "Requires Approval for Listings",
       "canFeatureProperty": "Can Feature Property"
+    },
+    "propertyStatuses": {
+      "label": "Status",
+      "placeholder": "Status",
+      "options": {
+        "draft": "draft",
+        "published": "published",
+        "pending": "pending",
+        "closed": "closed",
+        "archived": "archived"
+      }
+    },
+    "referenceNo": {
+      "label": "Reference No",
+      "placeholder": ""
     }
   },
   "seo": {

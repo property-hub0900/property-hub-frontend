@@ -270,3 +270,16 @@
     @apply bg-background text-foreground;
   }
 }
+
+.filepond--root .filepond--credits {
+  @apply hidden;
+}
+
+.filepond--item {
+  width: calc(20% - 0.5em);
+  min-height: 150px !important;
+}
+
+.singleImage .filepond--item {
+  @apply w-full;
+}

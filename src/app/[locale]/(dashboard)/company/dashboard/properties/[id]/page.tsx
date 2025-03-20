@@ -18,7 +18,7 @@ import {
 } from "@/services/dashboard/properties";
 import { Loader } from "@/components/loader";
 import { COMPANY_PATHS } from "@/constants/paths";
-import PropertyForm from "../propertyForm";
+import PropertyForm from "../components/propertyForm";
 
 export default function EditPropertyPage() {
   const params = useParams();
@@ -64,7 +64,7 @@ export default function EditPropertyPage() {
     <>
       <Loader isLoading={updatePropertyByIdMutation.isPending}></Loader>
       <div className="flex justify-between items-center mb-5">
-        <h3>Edit Property</h3>
+        <h3>{t("title.editProperty")}</h3>
       </div>
       <div className="bg-white rounded-md shadow">
         <div className="p-6">

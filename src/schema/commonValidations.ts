@@ -6,7 +6,7 @@ export const commonValidations = {
       .string({ required_error: requiredErrorMessage })
       .trim()
       .min(1, { message: requiredErrorMessage }),
-  stringOptional: () => z.string().trim(),
+  stringOptional: () => z.string().trim().optional().or(z.literal("")),
   numberRequired: (requiredErrorMessage: string) =>
     z.coerce
       .number({ required_error: requiredErrorMessage })

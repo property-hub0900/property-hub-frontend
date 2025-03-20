@@ -5,7 +5,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -45,10 +44,11 @@ import {
 import { amenities } from "@/services/dashboard/properties";
 import { Switch } from "@/components/ui/switch";
 import { IFilesUrlPayload, UploadImages } from "./uploadImages";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { COMPANY_PATHS } from "@/constants/paths";
+import PlacesAutocomplete from "../../../../../../../components/placesAutoComplete";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
@@ -62,18 +62,27 @@ export default function PropertyForm(
   const { mode, onSubmit, defaultValues } = props;
 
   const t = useTranslations();
-
   const router = useRouter();
-
   const { user } = useAuth();
 
-  console.log("user", user?.scope[0]);
+  const [filesUrls, setFilesUrls] = useState<IFilesUrlPayload>({ images: [] });
 
   const isOwner = user?.scope[0] === "owner";
-  // const isAdmin = user?.scope[0] === "admin";
-  // const isAgent = user?.scope[0] === "agent";
+  const isAdmin = user?.scope[0] === "admin";
+  const isAgent = user?.scope[0] === "agent";
 
   console.log("defaultValues", defaultValues);
+
+  // useEffect(() => {
+  //   setFilesUrls({
+  //     images: [
+  //       {
+  //         isPrimary: true,
+  //         url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742468400179-Screenshot%202025-03-20%20004111.png?alt=media&token=f5ac8f61-f768-495f-8be3-afdd7f9fae86",
+  //       },
+  //     ],
+  //   });
+  // }, [defaultValues]);
 
   const { data: amenitiesData, isLoading: isLoadingAmenities } = useQuery({
     queryKey: ["amenities"],
@@ -100,40 +109,53 @@ export default function PropertyForm(
             purpose: undefined,
             bedrooms: 0,
             bathrooms: 0,
-            // buildingFloors: "",
-            // floorNumber: "",
+            status: PROPERTY_STATUSES.draft,
             furnishedType: "",
-            occupancy: "",
-            ownershipStatus: "",
-            //location: "",
+            occupancy: undefined,
+            ownershipStatus: undefined,
+            referenceNo: "",
             priceVisibilityFlag: false,
             propertySize: "",
             serviceCharges: "",
+            buildingFloors: 0,
+            floor: 0,
             tenure: "",
             views: "",
+            city: "",
             amenities: [],
             description: "",
-            //images: [{ isPrimary: false, url: "" }],
+            PropertyImages: [],
           },
   });
 
   const category = form.watch("category");
   const propertyType = form.watch("propertyType");
 
-  const [filesUrls, setFilesUrls] = useState<IFilesUrlPayload>({ images: [] });
+  console.log("filesUrls", filesUrls);
 
   const handleCancel = () => {
     router.push(COMPANY_PATHS.properties);
   };
 
-  const handleSubmitWithStatus = (status: TPropertyStatuses) => {
+  console.log("form Errrors", form.formState.errors);
+
+  const handleSubmitWithStatus = (status: TPropertyStatuses | string) => {
     const statusValue = PROPERTY_STATUSES[status];
 
+    form.setValue("PropertyImages", filesUrls.images, { shouldValidate: true });
     form.setValue("status", statusValue);
-    //form.handleSubmit(onSubmit)();
-
     form.handleSubmit(onSubmit)();
+
+    //form.handleSubmit(onSubmit);
   };
+
+  // const existingImages = [
+  //   {
+  //     isPrimary: true,
+  //     url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742468400179-Screenshot%202025-03-20%20004111.png?alt=media&token=f5ac8f61-f768-495f-8be3-afdd7f9fae86",
+  //     path: "images/image1.jpg",
+  //   },
+  // ];
 
   return (
     <>
@@ -141,14 +163,19 @@ export default function PropertyForm(
       <div className="container mx-auto">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            // onSubmit={(event) => event.preventDefault()}
+            //onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={(event) => event.preventDefault()}
             className="grid grid-cols-2 gap-6"
           >
             <div className="col-span-2">
-              <UploadImages setUploadedFilesUrls={setFilesUrls} />
+              <UploadImages
+                //initialImages={existingImages}
+                // initialImages={defaultValues?.PropertyImages?.filter(
+                //   (image): image is TImages => image !== undefined
+                // )}
+                setUploadedFilesUrls={setFilesUrls}
+              />
             </div>
-
             <FormField
               control={form.control}
               name="title"
@@ -291,7 +318,6 @@ export default function PropertyForm(
                 )}
               />
             )}
-
             <FormField
               control={form.control}
               name="bathrooms"
@@ -375,7 +401,6 @@ export default function PropertyForm(
                 />
               </>
             )}
-
             <FormField
               control={form.control}
               name="occupancy"
@@ -412,7 +437,7 @@ export default function PropertyForm(
                     <FormLabel>{t("form.furnishedType.label")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      defaultValue={field.value ? field.value : ""}
                     >
                       <SelectTrigger>
                         <SelectValue
@@ -440,7 +465,7 @@ export default function PropertyForm(
                   <FormLabel>{t("form.views.label")}</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    defaultValue={field.value ? field.value : ""}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder={t("form.views.placeholder")} />
@@ -487,7 +512,7 @@ export default function PropertyForm(
                       htmlFor="priceVisibilityFlag"
                       className="text-sm font-normal cursor-pointer select-none text-muted-foreground"
                     >
-                      Hide price from the listing
+                      {t("text.hidePriceFromListing")}
                     </FormLabel>
                   </FormItem>
                 )}
@@ -506,19 +531,19 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-            {/* <FormField
+            <FormField
               control={form.control}
-              name="location"
+              name="city"
               render={({ field }) => (
                 <FormItem className="col-span-2">
                   <FormLabel>{t("form.location.label")}</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <PlacesAutocomplete {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            /> */}
+            />
             <FormField
               control={form.control}
               name="amenities"
@@ -526,12 +551,25 @@ export default function PropertyForm(
                 <FormItem className="col-span-2">
                   <FormLabel>{t("form.amenities.label")}</FormLabel>
                   <SimpleMultiSelect
-                    defaultValue={["4"]}
+                    defaultValue={field.value}
                     options={transformedAmenities || []}
                     onValueChange={(value) =>
-                      field.onChange(value.map((v) => Number(v)))
+                      field.onChange(value.map((v) => String(v)))
                     }
                   />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="referenceNo"
+              render={({ field }) => (
+                <FormItem className="col-span-2">
+                  <FormLabel>{t("form.referenceNo.label")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -549,7 +587,6 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="descriptionAr"
@@ -563,14 +600,13 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="featured"
               render={({ field }) => (
                 <FormItem className="col-span-2 flex justify-between items-center">
                   <FormLabel className="text-lg">
-                    Want to feature this property?
+                    {t("text.wantToFeatureProperty")}
                   </FormLabel>
                   <FormControl>
                     <Switch
@@ -585,21 +621,71 @@ export default function PropertyForm(
         </Form>
       </div>
       <div className="col-span-2 gap-2 flex justify-end mt-6">
+        {form.getValues("status") === PROPERTY_STATUSES.draft && (
+          <>
+            <Button
+              variant={"outline"}
+              type="button"
+              onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
+              className=""
+            >
+              {t("button.saveDraft")}
+            </Button>
+
+            {isOwner && (
+              <Button
+                type="button"
+                onClick={() =>
+                  handleSubmitWithStatus(PROPERTY_STATUSES.published)
+                }
+                className=""
+              >
+                {t("button.publish")}
+              </Button>
+            )}
+            {(isAgent || isAdmin) && (
+              <Button
+                type="button"
+                onClick={() =>
+                  handleSubmitWithStatus(PROPERTY_STATUSES.pending)
+                }
+                className=""
+              >
+                {t("button.requestForApproval")}
+              </Button>
+            )}
+          </>
+        )}
+
+        {form.getValues("status") === PROPERTY_STATUSES.published && (
+          <>
+            <Button
+              type="button"
+              onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.closed)}
+              className=""
+            >
+              {t("button.close")}
+            </Button>
+            <Button
+              type="button"
+              onClick={() =>
+                handleSubmitWithStatus(PROPERTY_STATUSES.published)
+              }
+              className=""
+            >
+              {t("button.save")}
+            </Button>
+          </>
+        )}
+
         <Button
-          variant={"outline"}
           type="button"
-          onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
+          onClick={() => handleSubmitWithStatus(form.getValues("status"))}
           className=""
         >
-          {t("button.saveDraft")}
+          {t("button.save")}
         </Button>
-        <Button
-          type="button"
-          onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.published)}
-          className=""
-        >
-          {t("button.publish")}
-        </Button>
+
         <Button
           variant={"secondary"}
           type="button"

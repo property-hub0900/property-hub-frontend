@@ -32,3 +32,26 @@ export const getErrorMessage = (e: unknown): string => {
 
   return "Something went wrong";
 };
+
+export const formatDateAndTime = (dateStr: string): string => {
+  const date = new Date(dateStr);
+
+  return new Intl.DateTimeFormat("en-QA", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false, // 24-hour format
+  }).format(date);
+};
+
+export const formatAmountToQAR = (amount: number): string => {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "decimal",
+    useGrouping: true, // Ensures thousand separators
+    minimumFractionDigits: 0, // No decimals
+  });
+
+  return `QAR ${formatter.format(amount)}`;
+};

@@ -11,6 +11,7 @@ import "../globals.css";
 import { inter } from "@/lib/fonts";
 
 import { ReactQueryProvider } from "@/providers/reactQueryProvider";
+import Script from "next/script";
 
 export async function generateMetadata(): Promise<Metadata> {
   const messages: any = await getMessages();
@@ -54,6 +55,10 @@ export default async function RootLayout({
         >
           <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID || ""}>
             <ReactQueryProvider>
+              <Script
+                src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+                strategy="beforeInteractive"
+              />
               <Header />
               <Toaster closeButton richColors />
               {children}
