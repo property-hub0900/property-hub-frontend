@@ -4,6 +4,7 @@ import { AuthContainer } from "@/components/auth/auth-container";
 import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { CustomFacebookButton } from "@/components/facebookLogin";
 import {
   Form,
   FormControl,
@@ -27,7 +28,6 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
-// import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -155,6 +155,7 @@ export default function CustomerLoginPage() {
     [customerSocialLoginMutation, t, router, pushUserAfterLogin]
   );
 
+
   return (
     <AuthContainer
       title={t("title.loginCustomerTitle")}
@@ -186,30 +187,9 @@ export default function CustomerLoginPage() {
           </div>
 
           <div className="facebook-auth-container relative w-full flex-1">
-            {/* <FacebookLogin
-              appId="610106238490107"
-              fields="name,email,picture"
-              callback={handleFacebookSuccess}
-              render={(renderProps: any) => (
-                <Button
-                  variant="outline"
-                  onClick={renderProps.onClick}
-                  className="w-full relative rounded-full"
-                  aria-label="Sign in with Facebook"
-                //disabled={isAnyLoading}
-                >
-                  <Image
-                    src="/facebook-login-icon.svg"
-                    alt="Facebook"
-                    width={20}
-                    height={20}
-                    className="mr-2"
-                  />
-                  Sign in
-                </Button>
-              )}
-            /> */}
+            <CustomFacebookButton appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string} callback={handleFacebookSuccess} />
           </div>
+
         </div>
       </div>
 
