@@ -14,7 +14,7 @@ export default function CompanyForgotPasswordPage() {
         <AuthContainer title={t("title.forgotPasswordTitle")} subtitle={t("text.forgotPasswordText")}>
             <ForgotPasswordForm
                 t={t}
-                redirectPath={`/${locale}/company/verification-rest`}
+                redirectPath={`/${locale}/company/verification-reset`}
                 authService={authService}
             />
         </AuthContainer>
