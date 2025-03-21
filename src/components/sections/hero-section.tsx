@@ -18,11 +18,11 @@ export default function HeroSection({ t }: HeroSectionProps) {
   return (
     <section className="relative h-[500px] w-full">
       <div className="absolute inset-0 bg-black/40 z-10"></div>
+
       <div
         className="absolute inset-0 bg-cover bg-center z-0"
         style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1200&q=80')",
+          backgroundImage: "url(/cover.png)",
         }}
       ></div>
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-white w-full px-4 sm:px-6 lg:px-8">
@@ -69,7 +69,7 @@ function SearchForm({ t }: { t: any }) {
           placeholder={t("search.placeholder")}
         />
       </div>
-      <Button className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground rounded-md h-10">
+      <Button className="w-full sm:w-1/6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-md h-10">
         {t("search.button")}
       </Button>
     </div>

@@ -155,7 +155,7 @@ export function DashboardSidebar({ userType = "company" }: DashboardSidebarProps
 
                             <div className="ml-2">
                                 <div className="text-xl font-bold text-black">Property</div>
-                                <div className="text-xl font-bold text-black -mt-1">Hub</div>
+                                <div className="text-xl font-bold text-black -mt-1">Explorer</div>
                             </div>
                         </div>
 
