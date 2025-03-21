@@ -15,7 +15,8 @@
     "permissionsAccess": "Permissions & Access",
     "permissions": "Permissions",
     "addNewProperty": "Add New Property",
-    "editProperty": "Edit Property"
+    "editProperty": "Edit Property",
+    "userDetails": "User Details"
   },
   "button": {
     "next": "Next",
@@ -38,7 +39,9 @@
     "deleting": "Deleting...",
     "saveDraft": "Save Draft",
     "publish": "Publish",
-    "close": "close"
+    "close": "close",
+    "uploadPhoto": "Upload Photo",
+    "save": "Save"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -64,6 +67,24 @@
     "of": "of"
   },
   "form": {
+    "fullName": {
+      "label": "Full Name",
+      "placeholder": "Enter your full name",
+      "errors": {
+        "required": "Full Name is required.",
+        "min": "Full Name should be at least 2 characters long.",
+        "max": "Full Name should be at most 50 characters long."
+      }
+    },
+    "bio": {
+      "label": "Bio",
+      "placeholder": "Enter your bio",
+      "errors": {
+        "required": "Bio is required.",
+        "min": "Bio should be at least 2 characters long.",
+        "max": "Bio should be at most 50 characters long."
+      }
+    },
     "required": "This field is required",
     "firstName": {
       "label": "First Name",
@@ -420,7 +441,7 @@
     "tryAgain": "Try Again"
   },
   "propertyHub": {
-    "brandName": "Property Hub",
+    "brandName": "Property Explorer",
     "nav": {
       "home": "Home",
       "properties": "Properties",
@@ -482,16 +503,16 @@
     },
     "testimonials": {
       "title": "What Our Clients Say",
-      "subtitle": "Hear from our satisfied clients about their experience with Property Hub.",
+      "subtitle": "Hear from our satisfied clients about their experience with Property Explorer.",
       "client1": {
         "name": "Emma Thompson",
         "location": "New York",
-        "quote": "Property Hub made finding my dream apartment so easy. Their 3D tours saved me so much time!"
+        "quote": "Property Explorer made finding my dream apartment so easy. Their 3D tours saved me so much time!"
       },
       "client2": {
         "name": "James Wilson",
         "location": "Los Angeles",
-        "quote": "The team at Property Hub went above and beyond to help me sell my house at the best price."
+        "quote": "The team at Property Explorer went above and beyond to help me sell my house at the best price."
       },
       "client3": {
         "name": "Sophia Garcia",
@@ -501,12 +522,12 @@
     },
     "cta": {
       "title": "Ready to Find Your Perfect Property?",
-      "description": "Join thousands of satisfied customers who found their dream homes with Property Hub.",
+      "description": "Join thousands of satisfied customers who found their dream homes with Property Explorer.",
       "primaryButton": "Browse Properties",
       "secondaryButton": "Contact an Agent"
     },
     "footer": {
-      "description": "Property Hub is your trusted partner in finding the perfect property for your needs.",
+      "description": "Property Explorer is your trusted partner in finding the perfect property for your needs.",
       "quickLinks": "Quick Links",
       "propertyTypes": "Property Types",
       "contact": "Contact Us",
@@ -516,8 +537,8 @@
   },
   "landingPage": {
     "hero": {
-      "title": "Find your next dream home",
-      "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae."
+      "title": "Exclusive Luxury Properties in Qatar",
+      "subtitle": "Boost Your Business with the Best Locations!"
     },
     "search": {
       "propertyType": "Property Type",
