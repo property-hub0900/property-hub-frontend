@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import { useEffect, useState } from "react";
+import { Container } from "../ui/container";
 
 type LatestProjectsSectionProps = {
   t: any;
@@ -145,41 +146,42 @@ export default function LatestProjectsSection({
           </h2>
           <Link
             href="/projects"
-            className="text-primary hover:text-primary/80 flex items-center text-sm"
+            className="text-primary hover:text-primary/80 flex items-center text-md"
           >
             {t("latestProjects.exploreAll")} <ChevronRight size={16} />
           </Link>
         </div>
+        <Container alignment="left" maxWidth="screen">
+          <Carousel
 
-        <Carousel
-
-          setApi={setApi}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-4">
-            {properties.map((property) => (
-              <CarouselItem
-                key={property.id}
-                className={`pl-4 ${slidesInView === 1
-                  ? 'basis-full'
-                  : slidesInView === 2
-                    ? 'basis-1/2'
-                    : 'basis-1/4'
-                  }`}
-              >
-                <PropertyCard
-                  t={t}
-                  location={property.location}
-                  price={property.price}
-                  beds={property.beds}
-                  rooms={property.rooms}
-                  rating={property.rating}
-                  imageUrl={property.imageUrl}
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+            setApi={setApi}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4">
+              {properties.map((property) => (
+                <CarouselItem
+                  key={property.id}
+                  className={`pl-4 ${slidesInView === 1
+                    ? 'basis-full'
+                    : slidesInView === 2
+                      ? 'basis-1/2'
+                      : 'basis-1/4'
+                    }`}
+                >
+                  <PropertyCard
+                    t={t}
+                    location={property.location}
+                    price={property.price}
+                    beds={property.beds}
+                    rooms={property.rooms}
+                    rating={property.rating}
+                    imageUrl={property.imageUrl}
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </Container>
       </div>
     </section>
   );
