@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { FilePond, registerPlugin } from "react-filepond";
 import {
   ref,
@@ -6,7 +6,6 @@ import {
   getDownloadURL,
   deleteObject,
 } from "firebase/storage";
-
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
@@ -18,7 +17,7 @@ import { storage } from "@/lib/firebaseConfig";
 type TImages = {
   isPrimary: boolean;
   url: string;
-  path?: string; // Track Firebase storage path for deletion
+  path?: string;
 };
 
 export interface IFilesUrlPayload {
@@ -27,33 +26,64 @@ export interface IFilesUrlPayload {
 
 interface IUploadFilesProps {
   setUploadedFilesUrls: React.Dispatch<React.SetStateAction<IFilesUrlPayload>>;
+  initialImages?: TImages[];
 }
 
 export const UploadImages = (props: IUploadFilesProps) => {
-  const { setUploadedFilesUrls } = props;
+  const { setUploadedFilesUrls, initialImages } = props;
   const [files, setFiles] = useState<any[]>([]);
+  const initialized = useRef(false);
 
-  // This maps FilePond's internal file IDs to Firebase storage paths
-  const [filePathMap, setFilePathMap] = useState<Record<string, string>>({});
+  // Initialize files and parent state
+  useEffect(() => {
+    if (initialized.current || !initialImages) return;
+
+    const initFiles = async () => {
+      const filePromises = initialImages.map(async (img) => {
+        const response = await fetch(img.url);
+        const blob = await response.blob();
+        return {
+          source: img.url,
+          options: {
+            type: "local",
+            serverId: img.path,
+            metadata: {
+              firebasePath: img.path,
+              downloadURL: img.url,
+            },
+          },
+        };
+      });
+
+      const initialFiles = await Promise.all(filePromises);
+      setFiles(initialFiles);
+      setUploadedFilesUrls((prev) => ({
+        images: initialImages.map((img) => ({
+          isPrimary: img.isPrimary,
+          url: img.url,
+          path: img.path,
+        })),
+      }));
+      initialized.current = true;
+    };
+
+    initFiles();
+  }, [initialImages, setUploadedFilesUrls]);
 
   return (
     <FilePond
-      //allowReorder={true}
       files={files}
-      onupdatefiles={setFiles}
+      onupdatefiles={(fileItems) => setFiles(fileItems)}
       allowMultiple={true}
       maxFiles={20}
       server={{
         process: (fieldName, file, metadata, load, error, progress, abort) => {
-          // Create a unique file path in Firebase Storage
           const fileName = `${Date.now()}-${file.name}`;
           const storagePath = `images/${fileName}`;
           const storageRef = ref(storage, storagePath);
 
-          // Start uploading the file
           const uploadTask = uploadBytesResumable(storageRef, file);
 
-          // Track upload progress
           uploadTask.on(
             "state_changed",
             (snapshot) => {
@@ -61,86 +91,51 @@ export const UploadImages = (props: IUploadFilesProps) => {
                 (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
               progress(true, percent, 100);
             },
-            (err) => {
-              error(err.message);
-            },
+            (err) => error(err.message),
             async () => {
               try {
-                // Get the download URL
                 const downloadURL = await getDownloadURL(
                   uploadTask.snapshot.ref
                 );
-                //file.id ||
-                // Store the file's path for later deletion
-                const fileId = Math.random().toString(36).substring(2, 15);
-                setFilePathMap((prev) => ({
-                  ...prev,
-                  [fileId]: storagePath,
-                }));
-
-                // Update the images array in the parent component
                 setUploadedFilesUrls((prev) => ({
                   images: [
                     ...prev.images,
                     {
-                      isPrimary: prev.images.length === 0,
+                      isPrimary: false,
                       url: downloadURL,
                       path: storagePath,
                     },
                   ],
                 }));
-
-                // Tell FilePond the upload is complete
-                load(fileId);
+                load(storagePath);
               } catch (err: any) {
                 error(err.message);
               }
             }
           );
 
-          // Return an abort function to cancel the upload if needed
-          return {
-            abort: () => {
-              uploadTask.cancel();
-              abort();
-            },
-          };
+          return { abort: () => uploadTask.cancel() };
         },
         revert: async (uniqueFileId, load, error) => {
           try {
-            // Get the file path from our map
-            const storagePath = filePathMap[uniqueFileId];
-            if (!storagePath) {
-              error("File path not found");
-              return;
-            }
-
-            // Create a reference to the file in Firebase Storage
-            const fileRef = ref(storage, storagePath);
-
-            // Delete the file
+            const fileRef = ref(storage, uniqueFileId);
             await deleteObject(fileRef);
-
-            // Remove the file from our uploaded files state
             setUploadedFilesUrls((prev) => ({
-              images: prev.images.filter((img) => img.path !== storagePath),
+              images: prev.images.filter((img) => img.path !== uniqueFileId),
             }));
-
-            // Remove from our path map
-            setFilePathMap((prev) => {
-              const newMap = { ...prev };
-              delete newMap[uniqueFileId];
-              return newMap;
-            });
-
-            // Tell FilePond the revert is complete
-            //load();
+            load();
           } catch (err: any) {
             error(err.message);
           }
         },
+        load: (source, load, error) => {
+          fetch(source)
+            .then((res) => res.blob())
+            .then(load)
+            .catch(error);
+        },
       }}
-      name="file"
+      name="files"
       labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
     />
   );

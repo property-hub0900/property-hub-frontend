@@ -1,17 +1,25 @@
 // src/components/simple-multi-select.tsx
 
-import { cva } from 'class-variance-authority';
-import { Check, ChevronDown, Trash2, XIcon } from 'lucide-react';
-import * as React from 'react';
+import { cva } from "class-variance-authority";
+import { Check, ChevronDown, Trash2, XIcon } from "lucide-react";
+import * as React from "react";
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
-    Command, CommandInput, CommandItem, CommandList, CommandSeparator
-} from '@/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+  Command,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 // MultiSelect variants for styling
 const multiSelectVariants = cva("m-1", {
@@ -65,6 +73,8 @@ export const SimpleMultiSelect = React.forwardRef<
     }, [options, searchQuery]);
 
     const toggleOption = (option: string) => {
+      console.log("toggleOption", option);
+
       if (selectedValues.includes(option)) {
         const newSelectedValues = selectedValues.filter(
           (value) => value !== option
@@ -89,7 +99,7 @@ export const SimpleMultiSelect = React.forwardRef<
           <Button
             ref={ref}
             {...props}
-            onClick={() => setIsPopoverOpen((prev) => !prev)}
+            // onClick={() => setIsPopoverOpen((prev) => !prev)}
             className={cn(
               "flex w-full p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit",
               className
@@ -116,7 +126,7 @@ export const SimpleMultiSelect = React.forwardRef<
                         )}
                         {option?.label}
                         <Trash2
-                          className="ms-2 size-3.5 cursor-pointer text-destructive"
+                          className="ms-2 size-3.5 cursor-pointer text-destructive !pointer-events-auto"
                           onClick={(event) => {
                             event.stopPropagation();
                             toggleOption(value.toString());
@@ -128,7 +138,7 @@ export const SimpleMultiSelect = React.forwardRef<
                 </div>
                 <div className="flex items-center justify-between">
                   <XIcon
-                    className="h-4 mx-2 cursor-pointer text-muted-foreground"
+                    className="h-4 mx-2 cursor-pointer text-muted-foreground !pointer-events-auto"
                     onClick={(event) => {
                       event.stopPropagation();
                       handleClear();

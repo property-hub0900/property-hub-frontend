@@ -49,6 +49,8 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { COMPANY_PATHS } from "@/constants/paths";
 import PlacesAutocomplete from "../../../../../../../components/placesAutoComplete";
+import Image from "next/image";
+import { UploadImages1 } from "./uploadImages copy";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
@@ -121,7 +123,7 @@ export default function PropertyForm(
             floor: 0,
             tenure: "",
             views: "",
-            city: "",
+            address: "",
             amenities: [],
             description: "",
             PropertyImages: [],
@@ -140,10 +142,17 @@ export default function PropertyForm(
   console.log("form Errrors", form.formState.errors);
 
   const handleSubmitWithStatus = (status: TPropertyStatuses | string) => {
+    const isFormValid = Object.keys(form.formState.errors).length === 0;
     const statusValue = PROPERTY_STATUSES[status];
+    if (isFormValid) {
+      console.log("isFormValid", isFormValid);
 
-    form.setValue("PropertyImages", filesUrls.images, { shouldValidate: true });
-    form.setValue("status", statusValue);
+      form.setValue("PropertyImages", filesUrls.images, {
+        shouldValidate: true,
+      });
+      form.setValue("status", statusValue);
+    }
+
     form.handleSubmit(onSubmit)();
 
     //form.handleSubmit(onSubmit);
@@ -157,6 +166,14 @@ export default function PropertyForm(
   //   },
   // ];
 
+  const initialImages = [
+    {
+      isPrimary: true,
+      url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742553428343-Screenshot%202025-03-20%20004111.png?alt=media&token=e754d33b-8a3f-4c6e-8e8b-a463f326696f",
+      path: "images/1742553428343-Screenshot 2025-03-20 004111.png",
+    },
+  ];
+
   return (
     <>
       <Loader isLoading={isLoadingAmenities}></Loader>
@@ -167,15 +184,6 @@ export default function PropertyForm(
             onSubmit={(event) => event.preventDefault()}
             className="grid grid-cols-2 gap-6"
           >
-            <div className="col-span-2">
-              <UploadImages
-                //initialImages={existingImages}
-                // initialImages={defaultValues?.PropertyImages?.filter(
-                //   (image): image is TImages => image !== undefined
-                // )}
-                setUploadedFilesUrls={setFilesUrls}
-              />
-            </div>
             <FormField
               control={form.control}
               name="title"
@@ -202,6 +210,15 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
+            <div className="col-span-2">
+              <UploadImages
+                // initialImages={initialImages}
+                setUploadedFilesUrls={setFilesUrls}
+              />
+              <UploadImages1
+                setUploadedFilesUrls={setFilesUrls}
+              ></UploadImages1>
+            </div>
             <FormField
               control={form.control}
               name="category"
@@ -533,7 +550,7 @@ export default function PropertyForm(
             />
             <FormField
               control={form.control}
-              name="city"
+              name="address"
               render={({ field }) => (
                 <FormItem className="col-span-2">
                   <FormLabel>{t("form.location.label")}</FormLabel>
@@ -621,7 +638,8 @@ export default function PropertyForm(
         </Form>
       </div>
       <div className="col-span-2 gap-2 flex justify-end mt-6">
-        {form.getValues("status") === PROPERTY_STATUSES.draft && (
+        {(!defaultValues ||
+          defaultValues?.status === PROPERTY_STATUSES.draft) && (
           <>
             <Button
               variant={"outline"}
@@ -632,7 +650,7 @@ export default function PropertyForm(
               {t("button.saveDraft")}
             </Button>
 
-            {isOwner && (
+            {(isOwner || isAdmin) && (
               <Button
                 type="button"
                 onClick={() =>
@@ -643,7 +661,7 @@ export default function PropertyForm(
                 {t("button.publish")}
               </Button>
             )}
-            {(isAgent || isAdmin) && (
+            {isAgent && (
               <Button
                 type="button"
                 onClick={() =>
@@ -657,7 +675,7 @@ export default function PropertyForm(
           </>
         )}
 
-        {form.getValues("status") === PROPERTY_STATUSES.published && (
+        {defaultValues?.status === PROPERTY_STATUSES.published && (
           <>
             <Button
               type="button"
@@ -666,25 +684,18 @@ export default function PropertyForm(
             >
               {t("button.close")}
             </Button>
-            <Button
-              type="button"
-              onClick={() =>
-                handleSubmitWithStatus(PROPERTY_STATUSES.published)
-              }
-              className=""
-            >
-              {t("button.save")}
-            </Button>
           </>
         )}
 
-        <Button
-          type="button"
-          onClick={() => handleSubmitWithStatus(form.getValues("status"))}
-          className=""
-        >
-          {t("button.save")}
-        </Button>
+        {defaultValues?.status && mode === "edit" && (
+          <Button
+            type="button"
+            onClick={() => handleSubmitWithStatus(`${defaultValues?.status}`)}
+            className=""
+          >
+            {t("button.update")}
+          </Button>
+        )}
 
         <Button
           variant={"secondary"}
