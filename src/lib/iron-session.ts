@@ -11,7 +11,7 @@ export const defaultSession: SessionData = {
 
 export const sessionOptions: SessionOptions = {
   password: process.env.NEXT_PUBLIC_SECERT_KEY!,
-  cookieName: "propertyHub-session",
+  cookieName: "PropertyExplorer-session",
   cookieOptions: {
     httpOnly: true,
     secure: process.env.NEXT_PUBLIC_NODE_ENV === "production",

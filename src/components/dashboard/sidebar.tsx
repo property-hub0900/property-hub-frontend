@@ -148,7 +148,7 @@ export function DashboardSidebar({ userType = "company" }: DashboardSidebarProps
                         <div className="flex items-center">
                             <Image
                                 src="/logo.svg"
-                                alt="PropertyHub"
+                                alt="PropertyExplorer"
                                 width={48}
                                 height={48}
                             />

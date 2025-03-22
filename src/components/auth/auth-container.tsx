@@ -33,7 +33,7 @@ export function AuthContainer({
         <div className="flex justify-center py-2">
           <Image
             src="/temp-logo.svg"
-            alt="PropertyHub"
+            alt="PropertyExplorer"
             width={48}
             height={48}
           />

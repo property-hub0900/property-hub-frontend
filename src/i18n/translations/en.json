@@ -1,9 +1,9 @@
 {
   "title": {
-    "loginCompanyTitle": "Welcome to PropertyHub",
+    "loginCompanyTitle": "Welcome to PropertyExplorer",
     "registerCompanyTitle": "Welcome to Property",
-    "loginCustomerTitle": "Welcome to PropertyHub",
-    "registerCustomerTitle": "Welcome to PropertyHub",
+    "loginCustomerTitle": "Welcome to PropertyExplorer",
+    "registerCustomerTitle": "Welcome to PropertyExplorer",
     "forgotPasswordTitle": "Forgot Password?",
     "createNewPassword": "Create New Password",
     "accessManagement": "Access Management",
@@ -184,12 +184,12 @@
     }
   },
   "seo": {
-    "title": "PropertyHub - Find Your Dream Property",
-    "description": "Discover the best properties for sale and rent on PropertyHub.",
-    "ogTitle": "PropertyHub - Your Property Search Starts Here",
-    "ogDescription": "Explore a wide range of properties on PropertyHub.",
-    "twitterTitle": "PropertyHub",
-    "twitterDescription": "Find your dream property on PropertyHub."
+    "title": "PropertyExplorer - Find Your Dream Property",
+    "description": "Discover the best properties for sale and rent on PropertyExplorer.",
+    "ogTitle": "PropertyExplorer - Your Property Search Starts Here",
+    "ogDescription": "Explore a wide range of properties on PropertyExplorer.",
+    "twitterTitle": "PropertyExplorer",
+    "twitterDescription": "Find your dream property on PropertyExplorer."
   },
 
   "welcome": "Welcome to Property",
@@ -286,7 +286,7 @@
     "submit": "Submit",
     "tryAgain": "Try Again"
   },
-  "propertyHub": {
+  "PropertyExplorer": {
     "brandName": "Property Explorer",
     "nav": {
       "home": "Home",

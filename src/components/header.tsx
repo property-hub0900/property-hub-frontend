@@ -60,14 +60,14 @@ export default function Header({ calledBy = "home" }) {
                 <div className="flex items-center">
                   <Image
                     src="/logo.svg"
-                    alt="PropertyHub"
+                    alt="PropertyExplorer"
                     width={48}
                     height={48}
                   />
 
                   <div className="ml-2">
                     <div className="text-xl font-bold text-black">Property</div>
-                    <div className="text-xl font-bold text-black -mt-1">Hub</div>
+                    <div className="text-xl font-bold text-black -mt-1">Explorer</div>
                   </div>
                 </div>
               </Link>
