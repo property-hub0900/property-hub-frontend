@@ -156,8 +156,9 @@ export default function LatestProjectsSection({
 
             setApi={setApi}
             className="w-full"
+
           >
-            <CarouselContent className="-ml-4">
+            <CarouselContent className="-ml-4 gap-4">
               {properties.map((property) => (
                 <CarouselItem
                   key={property.id}

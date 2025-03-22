@@ -43,9 +43,9 @@ function SearchForm({ t }: { t: any }) {
   return (
     <div className="flex flex-col bg-card sm:flex-row items-center p-4 rounded-sm rounded-tl-none">
       <div className="w-full sm:w-1/4 mb-3 sm:mb-0 sm:mr-3">
-        <Select defaultValue="all">
+        <Select defaultValue="all text-primary">
           <SelectTrigger className="w-full border border-input rounded-md h-10">
-            <SelectValue placeholder={t("search.propertyType")} />
+            <SelectValue className="text-black" placeholder={t("search.propertyType")} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">{t("search.allProperties")}</SelectItem>
@@ -57,7 +57,7 @@ function SearchForm({ t }: { t: any }) {
       </div>
       <div className="w-full mb-3 sm:mb-0 sm:mr-3 relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
-        <Input className="pl-10 border border-input rounded-md h-10 w-full" placeholder={t("search.placeholder")} />
+        <Input className="pl-10 border border-input rounded-md h-10 w-full text-primary/100 font-bold" placeholder={t("search.placeholder")} />
       </div>
       <Button className="w-full sm:w-1/6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-md h-10">
         {t("search.button")}
