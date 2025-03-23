@@ -345,7 +345,45 @@
     "twitterTitle": "PropertyExplorer",
     "twitterDescription": "Find your dream property on PropertyExplorer."
   },
+  "property": {
+    "loading": "Loading property details...",
 
+    "notFound": "Property Not Found",
+    "notFoundDesc": "We couldn't find the property you're looking for.",
+    "goBack": "Go Back",
+    "monthly": "/Monthly",
+    "sqm": "Sqm",
+    "for": "FOR",
+    "in": "IN",
+    "keyFeatures": "Key Features:",
+    "features": {
+      "bedrooms": "{count} well-appointed bedrooms with built-in wardrobes",
+      "openPlan": "Open-plan living and dining areas, perfect for entertaining",
+      "furnishing": "{type} with high-quality fixtures and fittings",
+      "views": "Beautiful {view} for a relaxing atmosphere",
+      "reference": "Reference number: {number}"
+    },
+    "seeFullDescription": "See full description",
+    "propertyDetails": "Property details",
+    "details": {
+      "propertyType": "Property Type",
+      "propertySize": "Property Size",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "furnishing": "Furnishing",
+      "purpose": "Purpose",
+      "category": "Category",
+      "referenceNo": "Reference No."
+    },
+    "amenities": "Amenities",
+    "contact": {
+      "call": "Call",
+      "whatsApp": "WhatsApp",
+      "email": "Email"
+    },
+    "similarProperties": "More available in same area",
+    "propertyDescription": "Paragon Properties is proud to present this fully renovated {bedrooms}-bedroom {type} in {location}. Set within a serene gated community, this spacious home features modern architecture, high-quality finishes, and a thoughtful layout that maximizes natural light and privacy. Perfect for families or professionals, the property provides a peaceful retreat while being close to key amenities."
+  },
   "welcome": "Welcome to Property",
   "welcomeCompany": "Welcome to Property Business",
   "loginSubtitle": "Enter your email & password to continue as Customer",

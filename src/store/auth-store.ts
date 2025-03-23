@@ -174,7 +174,6 @@ export const useAuthStore = create<AuthState>()(
           if (error) {
             console.error("Error rehydrating auth store:", error);
           } else if (rehydratedState) {
-            console.log("Auth store rehydrated:", rehydratedState);
           }
         };
       },
