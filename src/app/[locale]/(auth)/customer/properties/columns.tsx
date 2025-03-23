@@ -1,25 +1,16 @@
 "use client";
 
+import { IProperty } from "@/types/dashboard/properties";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit2, Trash2 } from "lucide-react";
 
-export type IPropertiesListing = {
-  id: string;
-  title: string;
-  type: string;
-  price: number;
-  lastUpdated: string;
-  status: string;
-  Action: string;
-};
-
-export const columns: ColumnDef<IPropertiesListing>[] = [
+export const columns: ColumnDef<IProperty>[] = [
   {
     accessorKey: "title",
     header: "Title",
   },
   {
-    accessorKey: "type",
+    accessorKey: "propertyType",
     header: "Type",
     // header: ({ column }) => (
     //   <DataTableColumnHeader column={column} title="Email" />
@@ -38,7 +29,7 @@ export const columns: ColumnDef<IPropertiesListing>[] = [
     header: "Status",
   },
   {
-    accessorKey: "id",
+    accessorKey: "propertyId",
     header: "Action",
     cell: () => {
       return (

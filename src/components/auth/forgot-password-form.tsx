@@ -41,7 +41,7 @@ export function ForgotPasswordForm({
   authService,
 }: ForgotPasswordFormProps) {
   const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  //const [isSubmitting, setIsSubmitting] = useState(false);
 
   const schema = createForgotPasswordSchema(t);
   type ForgotPasswordFormValues = z.infer<typeof schema>;
@@ -59,16 +59,17 @@ export function ForgotPasswordForm({
   });
 
   const onSubmit = async (values: ForgotPasswordFormValues) => {
-    setIsSubmitting(true);
+    //setIsSubmitting(true);
     try {
       await requestResetMutation.mutateAsync(values.email as any);
       toast.success(t("passwordResetEmailSent"));
       router.push(`${redirectPath}?email=${encodeURIComponent(values.email)}`);
     } catch (error) {
       toast.error(getErrorMessage(error));
-    } finally {
-      setIsSubmitting(false);
     }
+    //  finally {
+    //  // setIsSubmitting(false);
+    // }
   };
 
   return (
@@ -98,7 +99,11 @@ export function ForgotPasswordForm({
             />
           </div>
 
-          <Button disabled={isSubmitting} type="submit" className="w-full">
+          <Button
+            disabled={requestResetMutation.isPending}
+            type="submit"
+            className="w-full"
+          >
             {t("next")}
           </Button>
         </form>
