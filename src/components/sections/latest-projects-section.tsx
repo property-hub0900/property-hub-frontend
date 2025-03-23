@@ -138,20 +138,21 @@ export default function LatestProjectsSection({
   }, []);
 
   return (
-    <section className="py-16 w-full">
+    <section className="py-16 w-full overflow-hidden ">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-            {t("latestProjects.title")}
-          </h2>
-          <Link
-            href="/projects"
-            className="text-primary hover:text-primary/80 flex items-center text-md"
-          >
-            {t("latestProjects.exploreAll")} <ChevronRight size={16} />
-          </Link>
-        </div>
-        <Container alignment="left" maxWidth="screen">
+        <Container alignment="left" maxWidth="screen" className="">
+          <div className="flex items-center justify-between mb-8 w-[98%]">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+              {t("latestProjects.title")}
+            </h2>
+            <Link
+              href="/projects"
+              className="text-primary hover:text-primary/80 flex items-center text-md -ml-6"
+            >
+              {t("latestProjects.exploreAll")} <ChevronRight size={16} />
+            </Link>
+          </div>
+
           <Carousel
 
             setApi={setApi}

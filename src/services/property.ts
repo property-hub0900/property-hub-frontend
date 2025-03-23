@@ -6,4 +6,12 @@ export const propertyService = {
       params,
     });
   },
+
+  getPropertyById: async (id: string) => {
+    return apiClient.get(`/properties/${id}`);
+  },
+
+  getSimilarProperties: async (id: string) => {
+    return apiClient.get(`/properties/${id}/similar`);
+  },
 };

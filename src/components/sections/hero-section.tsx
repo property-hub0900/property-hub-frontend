@@ -68,7 +68,7 @@ export default function HeroSection({ t }: HeroSectionProps) {
       ></div>
 
       <div className="relative z-20 flex items-center justify-center h-full w-full">
-        <Container alignment="left" maxWidth="xl">
+        <Container alignment="left" maxWidth="screen" className="ml-6">
           <div className="flex flex-col text-white">
             <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">{t("hero.title")}</h1>
             <p className="text-white text-base max-w-xl mb-8 opacity-90">{t("hero.subtitle")}</p>
@@ -137,7 +137,7 @@ function SearchForm({ t, searchParams, setSearchParams, isLoading, onSearch }: S
     <div className="flex flex-col bg-card sm:flex-row items-center p-4 rounded-sm rounded-tl-none">
       <div className="w-full sm:w-1/4 mb-3 sm:mb-0 sm:mr-3">
         <Select value={searchParams.propertyType} onValueChange={handlePropertyTypeChange}>
-          <SelectTrigger className="w-full border border-input rounded-md h-10">
+          <SelectTrigger className="w-full border border-input rounded-md h-10 text-primary font-bold ">
             <SelectValue className="text-black" placeholder={t("search.propertyType")} />
           </SelectTrigger>
           <SelectContent>

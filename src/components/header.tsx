@@ -49,7 +49,7 @@ export default function Header({ calledBy = "home" }) {
     <>
       {/* Main Header */}
       <header className="bg-white border-b border-gray-200 w-full">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 w-[98%]">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center">
