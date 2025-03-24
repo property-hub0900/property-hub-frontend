@@ -215,9 +215,9 @@ export default function PropertyForm(
                 // initialImages={initialImages}
                 setUploadedFilesUrls={setFilesUrls}
               />
-              <UploadImages1
+              {/* <UploadImages1
                 setUploadedFilesUrls={setFilesUrls}
-              ></UploadImages1>
+              ></UploadImages1> */}
             </div>
             <FormField
               control={form.control}
