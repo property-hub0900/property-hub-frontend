@@ -16,6 +16,7 @@ import {
 import { ClientProperty } from "@/types/client/properties";
 import Link from "next/link";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { toast } from "sonner";
 
 export default function PropertyListing({ data }: { data: ClientProperty }) {
   const {
@@ -149,6 +150,14 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
               <Heart
                 className="h-4 w-4"
                 fill={favorite ? "currentColor" : "none"}
+                onClick={(e) => {
+                  if (favorite) {
+                    toast.success("Added property to favourite")
+                  } else {
+                    toast.success("Rmoved property from favourite")
+                  }
+                }
+                }
               />
             </Button>}
           </div>
