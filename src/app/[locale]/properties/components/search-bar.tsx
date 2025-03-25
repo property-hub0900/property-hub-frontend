@@ -58,7 +58,7 @@ export default function SearchBar() {
 
   // Initialize state from URL query parameters
   const [searchQuery, setSearchQuery] = useState(searchParams.get("searchQuery") || "")
-  const [purpose, setPurpose] = useState(searchParams.get("purpose") || FOR_SALE)
+  const [purpose, setPurpose] = useState(searchParams.get("purpose") || "")
   const [propertyType, setPropertyType] = useState(searchParams.get("propertyType") || "")
   const [bedrooms, setBedrooms] = useState(searchParams.get("bedrooms") || "")
   const [bathrooms, setBathrooms] = useState(searchParams.get("bathrooms") || "")
@@ -69,6 +69,22 @@ export default function SearchBar() {
   const [minArea, setMinArea] = useState(searchParams.get("minArea") || "")
   const [maxArea, setMaxArea] = useState(searchParams.get("maxArea") || "")
   const [keywords, setKeywords] = useState(searchParams.get("keywords") || "")
+
+  // Track current and pending filter states
+  const [pendingFilters, setPendingFilters] = useState({
+    searchQuery,
+    purpose,
+    propertyType,
+    bedrooms,
+    bathrooms,
+    priceMin,
+    priceMax,
+    amenitiesIds,
+    furnishing,
+    minArea,
+    maxArea,
+    keywords,
+  })
 
   // More filters dialog state
   const [moreFiltersOpen, setMoreFiltersOpen] = useState(false)
@@ -82,6 +98,21 @@ export default function SearchBar() {
   // Total active filters count
   const [totalActiveFilters, setTotalActiveFilters] = useState(0)
 
+  // Check if there are any active filters for the Find button
+  const hasActiveFilters =
+    searchQuery ||
+    purpose ||
+    propertyType ||
+    bedrooms ||
+    bathrooms ||
+    priceMin ||
+    priceMax ||
+    amenitiesIds.length > 0 ||
+    furnishing !== "all" ||
+    minArea ||
+    maxArea ||
+    keywords
+
   // Update active filters count
   useEffect(() => {
     let count = 0
@@ -94,6 +125,7 @@ export default function SearchBar() {
     // Calculate total active filters
     let total = count
     if (searchQuery) total++
+    if (purpose) total++
     if (propertyType) total++
     if (bedrooms) total++
     if (bathrooms) total++
@@ -107,6 +139,7 @@ export default function SearchBar() {
     maxArea,
     keywords,
     searchQuery,
+    purpose,
     propertyType,
     bedrooms,
     bathrooms,
@@ -117,47 +150,27 @@ export default function SearchBar() {
   // Handle purpose (rent/buy) change
   const handlePurposeChange = (value: string) => {
     setPurpose(value)
-    // Auto-submit when purpose changes for better UX
-    setTimeout(() => {
-      updateQueryParams()
-    }, 100)
   }
 
   // Handle property type change
   const handlePropertyTypeChange = (value: string) => {
     setPropertyType(value)
-    // Auto-submit when property type changes for better UX
-    setTimeout(() => {
-      updateQueryParams()
-    }, 100)
   }
 
   // Handle bedrooms change
   const handleBedroomsChange = (value: string) => {
     setBedrooms(value)
-    // Auto-submit when bedrooms changes for better UX
-    setTimeout(() => {
-      updateQueryParams()
-    }, 100)
   }
 
   // Handle bathrooms change
   const handleBathroomsChange = (value: string) => {
     setBathrooms(value)
-    // Auto-submit when bathrooms changes for better UX
-    setTimeout(() => {
-      updateQueryParams()
-    }, 100)
   }
 
   // Handle price range change
   const handlePriceChange = (min: string, max: string) => {
     setPriceMin(min)
     setPriceMax(max)
-    // Auto-submit when price changes for better UX
-    setTimeout(() => {
-      updateQueryParams()
-    }, 100)
   }
 
   // Handle amenity toggle
@@ -173,6 +186,7 @@ export default function SearchBar() {
   // Clear all filters
   const clearAllFilters = () => {
     setSearchQuery("")
+    setPurpose("")
     setPropertyType("")
     setBedrooms("")
     setBathrooms("")
@@ -185,9 +199,20 @@ export default function SearchBar() {
     setKeywords("")
 
     // Update URL after clearing filters
-    setTimeout(() => {
-      updateQueryParams()
-    }, 100)
+    updateQueryParams({
+      searchQuery: "",
+      purpose: "",
+      propertyType: "",
+      bedrooms: "",
+      bathrooms: "",
+      priceMin: "",
+      priceMax: "",
+      amenitiesIds: [],
+      furnishing: "all",
+      minArea: "",
+      maxArea: "",
+      keywords: "",
+    })
 
     // Focus search input after clearing
     if (searchInputRef.current) {
@@ -197,44 +222,59 @@ export default function SearchBar() {
 
   // Remove a specific filter
   const removeFilter = (filterType: string) => {
+    const updatedFilters = { ...pendingFilters }
+
     switch (filterType) {
       case "searchQuery":
         setSearchQuery("")
+        updatedFilters.searchQuery = ""
+        break
+      case "purpose":
+        setPurpose("")
+        updatedFilters.purpose = ""
         break
       case "propertyType":
         setPropertyType("")
+        updatedFilters.propertyType = ""
         break
       case "bedrooms":
         setBedrooms("")
+        updatedFilters.bedrooms = ""
         break
       case "bathrooms":
         setBathrooms("")
+        updatedFilters.bathrooms = ""
         break
       case "price":
         setPriceMin("")
         setPriceMax("")
+        updatedFilters.priceMin = ""
+        updatedFilters.priceMax = ""
         break
       case "amenities":
         setAmenitiesIds([])
+        updatedFilters.amenitiesIds = []
         break
       case "furnishing":
         setFurnishing("all")
+        updatedFilters.furnishing = "all"
         break
       case "area":
         setMinArea("")
         setMaxArea("")
+        updatedFilters.minArea = ""
+        updatedFilters.maxArea = ""
         break
       case "keywords":
         setKeywords("")
+        updatedFilters.keywords = ""
         break
       default:
         break
     }
 
     // Update URL after removing filter
-    setTimeout(() => {
-      updateQueryParams()
-    }, 100)
+    updateQueryParams(updatedFilters)
   }
 
   // Save search function
@@ -257,66 +297,97 @@ export default function SearchBar() {
     // Here you would typically save this to user's profile or localStorage
   }
 
-  // Create a memoized function to update URL with current search parameters
-  const updateQueryParams = useCallback(() => {
-    const params = new URLSearchParams()
+  // Create a function to update URL with search parameters
+  const updateQueryParams = useCallback(
+    (filters: any = null) => {
+      const params = new URLSearchParams()
 
-    if (searchQuery) params.set("searchQuery", searchQuery)
-    if (purpose) params.set("purpose", purpose)
-    if (propertyType) params.set("propertyType", propertyType)
-    if (bedrooms) params.set("bedrooms", bedrooms)
-    if (bathrooms) params.set("bathrooms", bathrooms)
-    if (priceMin) params.set("priceMin", priceMin)
-    if (priceMax) params.set("priceMax", priceMax)
-    if (amenitiesIds.length > 0) params.set("amenitiesIds", amenitiesIds.join(","))
-    if (furnishing && furnishing !== "all") params.set("furnishing", furnishing)
-    if (minArea) params.set("minArea", minArea)
-    if (maxArea) params.set("maxArea", maxArea)
-    if (keywords) params.set("keywords", keywords)
+      // Use provided filters or current state
+      const currentFilters = filters || {
+        searchQuery,
+        purpose,
+        propertyType,
+        bedrooms,
+        bathrooms,
+        priceMin,
+        priceMax,
+        amenitiesIds,
+        furnishing,
+        minArea,
+        maxArea,
+        keywords,
+      }
 
-    // Use replace to avoid adding to browser history for every change
-    router.push(`?${params.toString()}`)
-    setSearchPerformed(true)
-  }, [
-    searchQuery,
-    purpose,
-    propertyType,
-    bedrooms,
-    bathrooms,
-    priceMin,
-    priceMax,
-    amenitiesIds,
-    furnishing,
-    minArea,
-    maxArea,
-    keywords,
-    router,
-  ])
+      if (currentFilters.searchQuery) params.set("searchQuery", currentFilters.searchQuery)
+      if (currentFilters.purpose) params.set("purpose", currentFilters.purpose)
+      if (currentFilters.propertyType) params.set("propertyType", currentFilters.propertyType)
+      if (currentFilters.bedrooms) params.set("bedrooms", currentFilters.bedrooms)
+      if (currentFilters.bathrooms) params.set("bathrooms", currentFilters.bathrooms)
+      if (currentFilters.priceMin) params.set("priceMin", currentFilters.priceMin)
+      if (currentFilters.priceMax) params.set("priceMax", currentFilters.priceMax)
+      if (currentFilters.amenitiesIds.length > 0) params.set("amenitiesIds", currentFilters.amenitiesIds.join(","))
+      if (currentFilters.furnishing && currentFilters.furnishing !== "all")
+        params.set("furnishing", currentFilters.furnishing)
+      if (currentFilters.minArea) params.set("minArea", currentFilters.minArea)
+      if (currentFilters.maxArea) params.set("maxArea", currentFilters.maxArea)
+      if (currentFilters.keywords) params.set("keywords", currentFilters.keywords)
+
+      // Use replace to avoid adding to browser history for every change
+      router.push(`?${params.toString()}`)
+      setSearchPerformed(true)
+
+      // Update pending filters
+      setPendingFilters(currentFilters)
+    },
+    [router],
+  )
 
   // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    updateQueryParams()
+
+    const currentFilters = {
+      searchQuery,
+      purpose,
+      propertyType,
+      bedrooms,
+      bathrooms,
+      priceMin,
+      priceMax,
+      amenitiesIds,
+      furnishing,
+      minArea,
+      maxArea,
+      keywords,
+    }
+
+    updateQueryParams(currentFilters)
     setMoreFiltersOpen(false)
   }
 
   // Handle search input change with debounce
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value)
-
-    // Clear any existing timeout
-    const timeoutId = setTimeout(() => {
-      if (e.target.value.length > 2 || e.target.value.length === 0) {
-        updateQueryParams()
-      }
-    }, 500) // 500ms debounce
-
-    return () => clearTimeout(timeoutId)
   }
 
   // Apply more filters
   const applyMoreFilters = () => {
-    updateQueryParams()
+    const currentFilters = {
+      searchQuery,
+      purpose,
+      propertyType,
+      bedrooms,
+      bathrooms,
+      priceMin,
+      priceMax,
+      amenitiesIds,
+      furnishing,
+      minArea,
+      maxArea,
+      keywords,
+    }
+
+    updateQueryParams(currentFilters)
     setMoreFiltersOpen(false)
   }
 
@@ -344,6 +415,7 @@ export default function SearchBar() {
 
   // Get display text for purpose filter
   const getPurposeDisplayText = () => {
+    if (!purpose) return "Purpose"
     return purpose === FOR_SALE ? "Buy" : "Rent"
   }
 
@@ -370,7 +442,6 @@ export default function SearchBar() {
                 className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
                 onClick={() => {
                   setSearchQuery("")
-                  updateQueryParams()
                   if (searchInputRef.current) {
                     searchInputRef.current.focus()
                   }
@@ -510,14 +581,6 @@ export default function SearchBar() {
                       className="w-full"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button type="button" variant="outline" onClick={() => handlePriceChange("", "")}>
-                      Clear
-                    </Button>
-                    <Button type="button" onClick={() => handlePriceChange(priceMin, priceMax)}>
-                      Apply
-                    </Button>
-                  </div>
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -539,7 +602,11 @@ export default function SearchBar() {
             </Button>
 
             {/* Find Button */}
-            <Button type="submit" className="h-11 bg-blue-500 hover:bg-blue-600 w-full lg:flex-1">
+            <Button
+              type="submit"
+              className="h-11 bg-blue-500 hover:bg-blue-600 w-full lg:flex-1"
+              disabled={!hasActiveFilters}
+            >
               Find
             </Button>
           </div>
@@ -553,6 +620,7 @@ export default function SearchBar() {
           size="sm"
           className="text-sm flex items-center gap-1 text-blue-500 hover:text-blue-600"
           onClick={saveSearch}
+          disabled={!hasActiveFilters}
         >
           <BookmarkPlus className="h-4 w-4" />
           Save Search
@@ -581,6 +649,21 @@ export default function SearchBar() {
                     className="h-4 w-4 p-0 ml-1 shrink-0"
                     onClick={() => removeFilter("searchQuery")}
                     aria-label="Remove search filter"
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </Badge>
+              )}
+
+              {purpose && (
+                <Badge variant="outline" className="flex items-center gap-1 bg-background">
+                  <span className="truncate">Purpose: {purpose === FOR_SALE ? "Buy" : "Rent"}</span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-4 w-4 p-0 ml-1 shrink-0"
+                    onClick={() => removeFilter("purpose")}
+                    aria-label="Remove purpose filter"
                   >
                     <X className="h-3 w-3" />
                   </Button>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useSearchParams, useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import PropertyListing from "./components/property-listing"
 import SearchBar from "./components/search-bar"
@@ -10,9 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { fetchProperties } from "@/services/properties"
 import type { PropertyFilters } from "@/types/client/properties"
 import { useQuery } from "@tanstack/react-query"
-import { AlertCircle, BookmarkPlus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { FOR_SALE } from "@/constants"
+import { AlertCircle } from "lucide-react"
 
 export default function PropertiesPage() {
   const searchParams = useSearchParams()
@@ -22,7 +20,7 @@ export default function PropertiesPage() {
   const [filters, setFilters] = useState<PropertyFilters>({
     searchQuery: searchParams.get("searchQuery") || undefined,
     propertyType: searchParams.get("propertyType") || undefined,
-    purpose: searchParams.get("purpose") || FOR_SALE,
+    purpose: searchParams.get("purpose") || undefined,
     bedrooms: searchParams.get("bedrooms") ? Number(searchParams.get("bedrooms")) : undefined,
     bathrooms: searchParams.get("bathrooms") ? Number(searchParams.get("bathrooms")) : undefined,
     priceMin: searchParams.get("priceMin") ? Number(searchParams.get("priceMin")) : undefined,
@@ -42,7 +40,7 @@ export default function PropertiesPage() {
     setFilters({
       searchQuery: searchParams.get("searchQuery") || undefined,
       propertyType: searchParams.get("propertyType") || undefined,
-      purpose: searchParams.get("purpose") || FOR_SALE,
+      purpose: searchParams.get("purpose") || undefined,
       bedrooms: searchParams.get("bedrooms") ? Number(searchParams.get("bedrooms")) : undefined,
       bathrooms: searchParams.get("bathrooms") ? Number(searchParams.get("bathrooms")) : undefined,
       priceMin: searchParams.get("priceMin") ? Number(searchParams.get("priceMin")) : undefined,
@@ -104,7 +102,7 @@ export default function PropertiesPage() {
 
           {/* Properties list */}
           {!isLoading && !isError && (
-            <div className="space-y-6">
+            <div className="space-y-6 gap-2">
               {properties.length > 0 ? (
                 properties.map((property, index) => (
                   <PropertyListing key={property.propertyId || index} data={property} />
