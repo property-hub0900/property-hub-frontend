@@ -54,7 +54,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.674 0.181 229.54); /* Updated */
+  --primary: oklch(0.724 0.181 229.54); /* Updated */
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -97,6 +97,33 @@
 
   body {
     @apply bg-background text-foreground antialiased;
+  }
+
+  h1,
+  .h1 {
+    @apply text-5xl;
+  }
+  h2,
+  .h2 {
+    @apply text-4xl;
+  }
+
+  h3,
+  .h3 {
+    @apply text-3xl;
+  }
+  h4,
+  .h4 {
+    @apply text-2xl;
+  }
+
+  h5,
+  .h5 {
+    @apply text-xl;
+  }
+  h6,
+  .h6 {
+    @apply text-lg;
   }
 }
 
@@ -242,4 +269,17 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.filepond--root .filepond--credits {
+  @apply hidden;
+}
+
+.filepond--item {
+  width: calc(20% - 0.5em);
+  min-height: 150px !important;
+}
+
+.singleImage .filepond--item {
+  @apply w-full;
 }

@@ -1,9 +1,9 @@
 {
   "title": {
-    "loginCompanyTitle": "Welcome to PropertyHub",
+    "loginCompanyTitle": "Welcome to PropertyExplorer",
     "registerCompanyTitle": "Welcome to Property",
-    "loginCustomerTitle": "Welcome to PropertyHub",
-    "registerCustomerTitle": "Welcome to PropertyHub",
+    "loginCustomerTitle": "Welcome to PropertyExplorer",
+    "registerCustomerTitle": "Welcome to PropertyExplorer",
     "forgotPasswordTitle": "Forgot Password?",
     "createNewPassword": "Create New Password",
     "accessManagement": "Access Management",
@@ -14,16 +14,21 @@
     "deleteAgent": "Delete Agent",
     "permissionsAccess": "Permissions & Access",
     "permissions": "Permissions",
+    "addNewProperty": "Add New Property",
+    "editProperty": "Edit Property",
     "userDetails": "User Details"
   },
   "button": {
     "next": "Next",
     "login": "Login",
+    "submit": "Submit",
     "registerNow": "Register Now",
     "loginAsAgent": "Login as a Agent →",
     "loginAsCustomer": "Login as a Customer →",
     "forgotPassword": "Forgot Password?",
     "registerAsAgent": "Register As Agent",
+    "save": "Save",
+    "requestForApproval": "Request For Approval",
     "addNewAgent": "Add New Agent",
     "cancel": "Cancel",
     "invite": "Invite",
@@ -32,6 +37,9 @@
     "updating": "Updating...",
     "delete": "Delete",
     "deleting": "Deleting...",
+    "saveDraft": "Save Draft",
+    "publish": "Publish",
+    "close": "close",
     "uploadPhoto": "Upload Photo",
     "save": "Save"
   },
@@ -49,10 +57,14 @@
     "deleteConfirmation": "Are you sure you want to delete this agent? This action cannot be undone.",
     "loadStaffFailed": "Failed to load staff members",
     "staffDeleted": "Staff member deleted successfully",
-    "deleteFailed": "Failed to delete staff member"
+    "deleteFailed": "Failed to delete staff member",
+    "hidePriceFromListing": "Hide price from the listing",
+    "wantToFeatureProperty": "Want to feature this property?"
   },
   "table": {
-    "notFound": "No Record found"
+    "notFound": "No Record found...",
+    "page": "Page",
+    "of": "of"
   },
   "form": {
     "fullName": {
@@ -152,6 +164,133 @@
         "invalid": "Enter a valid Mobile Number (e.g. 03XXXXXXXXX)."
       }
     },
+    "featured": {
+      "label": "Featured",
+      "placeholder": ""
+    },
+    "title": {
+      "label": "Title",
+      "placeholder": ""
+    },
+    "propertyCategory": {
+      "label": "Property Category",
+      "placeholder": "Select Property Category",
+      "options": {
+        "Residential": "Residential",
+        "Commercial": "Commercial"
+      }
+    },
+    "propertyPurpose": {
+      "label": "Purpose",
+      "placeholder": "Select Purpose",
+      "options": {
+        "For Sale": "For Sale",
+        "For Rent": "For Rent"
+      }
+    },
+    "propertyType": {
+      "label": "Property Type",
+      "placeholder": "Select Property Type",
+      "options": {
+        "Apartment": "Apartment",
+        "Villa": "Villa",
+        "Townhouse": "Townhouse",
+        "Penthouse": "Penthouse",
+        "Office": "Office",
+        "Shop": "Shop",
+        "Warehouse": "Warehouse",
+        "Land": "Land"
+      }
+    },
+    "bedrooms": {
+      "label": "No of bedrooms",
+      "placeholder": ""
+    },
+    "bathrooms": {
+      "label": "No of bathrooms",
+      "placeholder": ""
+    },
+    "propertySize": {
+      "label": "Property Size",
+      "placeholder": "Property Size Sqft"
+    },
+    "tenureOfProperty": {
+      "label": "Tenure Of Property",
+      "placeholder": ""
+    },
+    "ownershipStatus": {
+      "label": "Ownership Status",
+      "placeholder": "Select Ownership Status",
+      "options": {
+        "FreeHold": "FreeHold",
+        "Non-FreeHold": "Non-FreeHold"
+      }
+    },
+    "buildingFloors": {
+      "label": "Building's Floor",
+      "placeholder": ""
+    },
+    "floorNumber": {
+      "label": "Floor Number",
+      "placeholder": ""
+    },
+    "occupancy": {
+      "label": "Occupancy",
+      "placeholder": "Occupancy",
+      "options": {
+        "Vacant": "Vacant",
+        "Occupied": "Occupied",
+        "Will be vacated soon": "Will be vacated soon"
+      }
+    },
+    "furnishedType": {
+      "label": "Furnished Type",
+      "placeholder": "Select Furnished Type",
+      "options": {
+        "Furnished": "Furnished",
+        "Semi-Furnished": "Semi-Furnished",
+        "Unfurnished": "Unfurnished"
+      }
+    },
+    "views": {
+      "label": "Views",
+      "placeholder": "Views",
+      "options": {
+        "Sea View": "Sea View",
+        "City View": "City View",
+        "Park View": "Park View",
+        "Other": "Other"
+      }
+    },
+    "price": {
+      "label": "Price",
+      "placeholder": ""
+    },
+    "priceVisibilityFlag": {
+      "label": "Price Visibility Flag",
+      "placeholder": ""
+    },
+    "serviceCharges": {
+      "label": "Service Charges",
+      "placeholder": ""
+    },
+
+    "location": {
+      "label": "Location",
+      "placeholder": ""
+    },
+    "amenities": {
+      "label": "Amenities",
+      "placeholder": ""
+    },
+    "description": {
+      "label": "description",
+      "placeholder": ""
+    },
+    "descriptionAr": {
+      "label": "descriptionAr",
+      "placeholder": ""
+    },
     "status": {
       "label": "Status",
       "placeholder": "Select status",
@@ -181,17 +320,70 @@
       "canPostListings": "Can Post Listings",
       "requiresApproval": "Requires Approval for Listings",
       "canFeatureProperty": "Can Feature Property"
+    },
+    "propertyStatuses": {
+      "label": "Status",
+      "placeholder": "Status",
+      "options": {
+        "draft": "draft",
+        "published": "published",
+        "pending": "pending",
+        "closed": "closed",
+        "archived": "archived"
+      }
+    },
+    "referenceNo": {
+      "label": "Reference No",
+      "placeholder": ""
     }
   },
   "seo": {
-    "title": "PropertyHub - Find Your Dream Property",
-    "description": "Discover the best properties for sale and rent on PropertyHub.",
-    "ogTitle": "PropertyHub - Your Property Search Starts Here",
-    "ogDescription": "Explore a wide range of properties on PropertyHub.",
-    "twitterTitle": "PropertyHub",
-    "twitterDescription": "Find your dream property on PropertyHub."
+    "title": "PropertyExplorer - Find Your Dream Property",
+    "description": "Discover the best properties for sale and rent on PropertyExplorer.",
+    "ogTitle": "PropertyExplorer - Your Property Search Starts Here",
+    "ogDescription": "Explore a wide range of properties on PropertyExplorer.",
+    "twitterTitle": "PropertyExplorer",
+    "twitterDescription": "Find your dream property on PropertyExplorer."
   },
+  "property": {
+    "loading": "Loading property details...",
 
+    "notFound": "Property Not Found",
+    "notFoundDesc": "We couldn't find the property you're looking for.",
+    "goBack": "Go Back",
+    "monthly": "/Monthly",
+    "sqm": "Sqm",
+    "for": "FOR",
+    "in": "IN",
+    "keyFeatures": "Key Features:",
+    "features": {
+      "bedrooms": "{count} well-appointed bedrooms with built-in wardrobes",
+      "openPlan": "Open-plan living and dining areas, perfect for entertaining",
+      "furnishing": "{type} with high-quality fixtures and fittings",
+      "views": "Beautiful {view} for a relaxing atmosphere",
+      "reference": "Reference number: {number}"
+    },
+    "seeFullDescription": "See full description",
+    "propertyDetails": "Property details",
+    "details": {
+      "propertyType": "Property Type",
+      "propertySize": "Property Size",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "furnishing": "Furnishing",
+      "purpose": "Purpose",
+      "category": "Category",
+      "referenceNo": "Reference No."
+    },
+    "amenities": "Amenities",
+    "contact": {
+      "call": "Call",
+      "whatsApp": "WhatsApp",
+      "email": "Email"
+    },
+    "similarProperties": "More available in same area",
+    "propertyDescription": "Paragon Properties is proud to present this fully renovated {bedrooms}-bedroom {type} in {location}. Set within a serene gated community, this spacious home features modern architecture, high-quality finishes, and a thoughtful layout that maximizes natural light and privacy. Perfect for families or professionals, the property provides a peaceful retreat while being close to key amenities."
+  },
   "welcome": "Welcome to Property",
   "welcomeCompany": "Welcome to Property Business",
   "loginSubtitle": "Enter your email & password to continue as Customer",
@@ -286,8 +478,8 @@
     "submit": "Submit",
     "tryAgain": "Try Again"
   },
-  "propertyHub": {
-    "brandName": "Property Hub",
+  "PropertyExplorer": {
+    "brandName": "Property Explorer",
     "nav": {
       "home": "Home",
       "properties": "Properties",
@@ -349,16 +541,16 @@
     },
     "testimonials": {
       "title": "What Our Clients Say",
-      "subtitle": "Hear from our satisfied clients about their experience with Property Hub.",
+      "subtitle": "Hear from our satisfied clients about their experience with Property Explorer.",
       "client1": {
         "name": "Emma Thompson",
         "location": "New York",
-        "quote": "Property Hub made finding my dream apartment so easy. Their 3D tours saved me so much time!"
+        "quote": "Property Explorer made finding my dream apartment so easy. Their 3D tours saved me so much time!"
       },
       "client2": {
         "name": "James Wilson",
         "location": "Los Angeles",
-        "quote": "The team at Property Hub went above and beyond to help me sell my house at the best price."
+        "quote": "The team at Property Explorer went above and beyond to help me sell my house at the best price."
       },
       "client3": {
         "name": "Sophia Garcia",
@@ -368,12 +560,12 @@
     },
     "cta": {
       "title": "Ready to Find Your Perfect Property?",
-      "description": "Join thousands of satisfied customers who found their dream homes with Property Hub.",
+      "description": "Join thousands of satisfied customers who found their dream homes with Property Explorer.",
       "primaryButton": "Browse Properties",
       "secondaryButton": "Contact an Agent"
     },
     "footer": {
-      "description": "Property Hub is your trusted partner in finding the perfect property for your needs.",
+      "description": "Property Explorer is your trusted partner in finding the perfect property for your needs.",
       "quickLinks": "Quick Links",
       "propertyTypes": "Property Types",
       "contact": "Contact Us",
@@ -383,8 +575,8 @@
   },
   "landingPage": {
     "hero": {
-      "title": "Find your next dream home",
-      "subtitle": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae."
+      "title": "Exclusive Luxury Properties in Qatar",
+      "subtitle": "Boost Your Business with the Best Locations!"
     },
     "search": {
       "propertyType": "Property Type",

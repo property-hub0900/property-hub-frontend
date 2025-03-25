@@ -52,7 +52,7 @@ export default function Footer() {
 
         <div className="border-t border-primary/40 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-primary-foreground/80 text-sm">
-            © 2025 PropertyHub. {t("footer.allRightsReserved")}
+            © 2025 PropertyExplorer. {t("footer.allRightsReserved")}
           </p>
           <p className="text-primary-foreground/80 text-sm mt-2 md:mt-0">
             <a href="#" className="hover:text-primary-foreground">
@@ -69,7 +69,7 @@ function FooterBrand({ t }: { t: any }) {
   return (
     <div>
       <h3 className="text-2xl text-primary-foreground font-bold mb-4">
-        PropertyHub
+        PropertyExplorer
       </h3>
       <p className="text-primary-foreground/80 mb-4 text-sm">
         {t("footer.tagline")}

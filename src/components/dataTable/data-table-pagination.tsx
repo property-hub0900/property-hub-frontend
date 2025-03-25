@@ -64,7 +64,7 @@ export function DataTablePagination<TData>({
           </Select>
         </div>
         <div className="flex items-center justify-center text-sm font-medium">
-          {t("table.pageOf", { total, current })}
+          {t("table.page")} {current} {t("table.of")} {total}
           {/* Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()} */}
         </div>
@@ -76,7 +76,7 @@ export function DataTablePagination<TData>({
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to first page</span>
-            <ArrowRightIcon className="h-4 w-4" />
+            <ArrowLeftIcon className="h-4 w-4" />
             {/* {isRTL ? (
               <DoubleArrowRightIcon className="h-4 w-4" />
             ) : (
@@ -90,7 +90,7 @@ export function DataTablePagination<TData>({
             disabled={!table.getCanPreviousPage()}
           >
             <span className="sr-only">Go to previous page</span>
-            <ChevronRightIcon className="h-4 w-4" />
+            <ChevronLeftIcon className="h-4 w-4" />
             {/* {isRTL ? (
               <ChevronRightIcon className="h-4 w-4" />
             ) : (
@@ -104,7 +104,7 @@ export function DataTablePagination<TData>({
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to next page</span>
-            <ChevronLeftIcon className="h-4 w-4" />
+            <ChevronRightIcon className="h-4 w-4" />
             {/* {isRTL ? (
               <ChevronLeftIcon className="h-4 w-4" />
             ) : (
@@ -118,7 +118,7 @@ export function DataTablePagination<TData>({
             disabled={!table.getCanNextPage()}
           >
             <span className="sr-only">Go to last page</span>
-            <ArrowLeftIcon className="h-4 w-4" />
+            <ArrowRightIcon className="h-4 w-4" />
             {/* {isRTL ? (
               <DoubleArrowLeftIcon className="h-4 w-4" />
             ) : (

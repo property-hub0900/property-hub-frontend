@@ -193,7 +193,7 @@ export function ResetPasswordForm({
       </Form>
 
       <div className="text-xs text-center text-gray-500 mt-6">
-        © 2025 Property Hub, Qatar. All Rights Reserved
+        © 2025 Property Explorer, Qatar. All Rights Reserved
       </div>
     </>
   );

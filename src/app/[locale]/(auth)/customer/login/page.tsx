@@ -78,7 +78,6 @@ export default function CustomerLoginPage() {
   const handleGoogleSuccess = useCallback(
     async (credentialResponse: any) => {
       if (!credentialResponse?.credential) return;
-
       try {
         const response = await fetch("/api/auth/google/verify", {
           method: "POST",
@@ -117,7 +116,6 @@ export default function CustomerLoginPage() {
           router.push(pushUserAfterLogin);
         }
       } catch (error: any) {
-        console.error("Error verifying Google token:", error);
         toast.error(getErrorMessage(error));
       }
     },

@@ -1,4 +1,4 @@
-export const properties: any[] = [
+export const properties: any[] | any = [
   {
     id: "1",
     title: "Modern Apartment with City View",

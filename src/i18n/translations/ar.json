@@ -85,13 +85,14 @@
     }
   },
   "seo": {
-    "title": "PropertyHub - ابحث عن عقار أحلامك",
-    "description": "اكتشف أفضل العقارات المعروضة للبيع والإيجار على PropertyHub.",
-    "ogTitle": "PropertyHub - بداية بحثك عن العقار هنا",
-    "ogDescription": "استكشف مجموعة واسعة من العقارات على PropertyHub.",
-    "twitterTitle": "PropertyHub",
-    "twitterDescription": "ابحث عن عقار أحلامك على PropertyHub."
+    "title": "PropertyExplorer - ابحث عن عقار أحلامك",
+    "description": "اكتشف أفضل العقارات المعروضة للبيع والإيجار على PropertyExplorer.",
+    "ogTitle": "PropertyExplorer - بداية بحثك عن العقار هنا",
+    "ogDescription": "استكشف مجموعة واسعة من العقارات على PropertyExplorer.",
+    "twitterTitle": "PropertyExplorer",
+    "twitterDescription": "ابحث عن عقار أحلامك على PropertyExplorer."
   },
+
   "loginPage": {
     "welcome": "مرحبًا بك في العقارات",
     "welcomeCompany": "مرحبًا بك في أعمال العقارات",
