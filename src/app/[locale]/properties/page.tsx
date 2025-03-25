@@ -62,16 +62,12 @@ export default function PropertiesPage() {
     queryFn: () => fetchProperties(filters),
   })
 
-  // Extract properties and pagination info
+
   const properties = data?.results || []
   const totalPages = Math.ceil((data?.total || 0) / (filters.pageSize || 10))
   const currentPage = filters.page || 0
 
-  // Save search function
-  const saveSearch = () => {
-    console.log("Saved search filters:", filters)
-    // Here you would typically save this to user's profile or localStorage
-  }
+
 
   return (
     <main className="container mx-auto px-4 py-6">

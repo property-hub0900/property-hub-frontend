@@ -21,6 +21,7 @@ import { Separator } from "@/components/ui/separator"
 import { BookmarkPlus, ChevronDown, Search, X } from "lucide-react"
 
 import { FOR_RENT, FOR_SALE } from "@/constants"
+import { useAuth } from "@/lib/hooks/useAuth"
 
 // Property types available in the system
 const PROPERTY_TYPES = ["Villa", "Apartment", "Office", "Townhouse"]
@@ -54,6 +55,7 @@ const FURNISHING_OPTIONS = [
 export default function SearchBar() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { user } = useAuth();
   const searchInputRef = useRef<HTMLInputElement>(null)
 
   // Initialize state from URL query parameters
@@ -604,7 +606,7 @@ export default function SearchBar() {
             {/* Find Button */}
             <Button
               type="submit"
-              className="h-11 bg-blue-500 hover:bg-blue-600 w-full lg:flex-1"
+              className="h-11 bg-primary w-full lg:flex-1"
               disabled={!hasActiveFilters}
             >
               Find
@@ -614,7 +616,7 @@ export default function SearchBar() {
       </form>
 
       {/* Save Search Link */}
-      <div className="flex justify-end mt-2">
+      {user?.role !== "staff" && <div className="flex justify-end mt-2">
         <Button
           variant="ghost"
           size="sm"
@@ -626,7 +628,7 @@ export default function SearchBar() {
           Save Search
         </Button>
       </div>
-
+      }
       {/* Active filters display */}
       {totalActiveFilters > 0 && (
         <div className="mt-3">

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { ClientProperty } from "@/types/client/properties";
 import Link from "next/link";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 export default function PropertyListing({ data }: { data: ClientProperty }) {
   const {
@@ -33,6 +34,7 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
 
   const [currentImage, setCurrentImage] = useState(0);
   const [favorite, setFavorite] = useState(false);
+  const { user } = useAuth();
 
   // Mock multiple images with valid URLs
   const images = PropertyImages.map((img, i) => {
@@ -138,7 +140,7 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
               <MessageCircle className="h-4 w-4" />
               <span>WhatsApp</span>
             </Button>
-            <Button
+            {user?.role !== 'staff' && <Button
               variant="outline"
               size="icon"
               className={favorite ? "text-red-500" : ""}
@@ -148,7 +150,7 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
                 className="h-4 w-4"
                 fill={favorite ? "currentColor" : "none"}
               />
-            </Button>
+            </Button>}
           </div>
 
           {/* <div className="mt-3 text-xs text-muted-foreground">
