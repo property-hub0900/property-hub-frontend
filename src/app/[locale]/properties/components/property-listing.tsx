@@ -1,21 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/lib/hooks/useAuth";
+import { ClientProperty } from "@/types/client/properties";
 import {
   Heart,
-  Phone,
   Mail,
-  MessageCircle,
-  LocateIcon,
   MapPin,
+  MessageCircle,
+  Phone
 } from "lucide-react";
-import { ClientProperty } from "@/types/client/properties";
 import Link from "next/link";
-import { useAuth } from "@/lib/hooks/useAuth";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function PropertyListing({ data }: { data: ClientProperty }) {
   const {
@@ -48,37 +46,38 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
   // console.log("images", images);
 
   return (
-    <Link href={`/properties/${data.propertyId}`}>
-      <Card className="overflow-hidden grid grid-cols-3">
-        <div className="relative col-span-1">
-          <div className="relative h-full w-full">
-            <img
-              src={
-                images[currentImage] ||
-                "/3f30036e18cdfc98064bc455840a4f07.png?height=300&width=500"
-              }
-              width={500}
-              height={300}
-              alt={`${propertyType} property`}
-              //fill
-              className="object-cover h-full"
-            />
-            <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1">
-              {PropertyImages.map((_, index) => (
-                <button
-                  key={index}
-                  className={`h-1.5 w-1.5 rounded-full ${currentImage === index ? "bg-white" : "bg-white/50"
-                    }`}
-                  onClick={() => setCurrentImage(index)}
-                />
-              ))}
-            </div>
-            <div className="absolute bottom-2 left-2 rounded bg-black/70 px-2 py-1 text-xs text-white">
-              {currentImage + 1}/{PropertyImages.length}
-            </div>
+
+    <Card className="overflow-hidden grid grid-cols-3">
+      <div className="relative col-span-1">
+        <div className="relative h-full w-full">
+          <img
+            src={
+              images[currentImage] ||
+              "/3f30036e18cdfc98064bc455840a4f07.png?height=300&width=500"
+            }
+            width={500}
+            height={300}
+            alt={`${propertyType} property`}
+            //fill
+            className="object-cover h-full"
+          />
+          <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1">
+            {PropertyImages.map((_, index) => (
+              <button
+                key={index}
+                className={`h-1.5 w-1.5 rounded-full ${currentImage === index ? "bg-white" : "bg-white/50"
+                  }`}
+                onClick={() => setCurrentImage(index)}
+              />
+            ))}
+          </div>
+          <div className="absolute bottom-2 left-2 rounded bg-black/70 px-2 py-1 text-xs text-white">
+            {currentImage + 1}/{PropertyImages.length}
           </div>
         </div>
-        <CardContent className="p-4 col-span-2">
+      </div>
+      <CardContent className="p-4 col-span-2">
+        <Link href={`/properties/${data.propertyId}`}>
           <div className="">
             <div>
               <div className="flex justify-between items-center gap-2">
@@ -114,50 +113,65 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
             <span>|</span>
             <span>{propertySize.toLocaleString()} Sqft</span>
           </div>
+        </Link>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-1"
+          >
+            <Phone className="h-4 w-4" />
+            <span>Call</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-1"
+          >
+            <Mail className="h-4 w-4" />
+            <span>Email</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-1"
+          >
+            <MessageCircle className="h-4 w-4" />
+            <span>WhatsApp</span>
+          </Button>
+          {user?.role !== 'staff' && <Button
+            variant="outline"
+            size="icon"
+            className={favorite ? "text-red-500" : ""}
+            onClick={() => {
+              setFavorite(!favorite)
+              // need to work on
+              if (!favorite) {
+                toast.success("Added property to favourite")
+              }
+            }}
+          >
+            <Heart
+              className="h-4 w-4"
+              fill={favorite ? "currentColor" : "none"}
+              onClick={(e) => {
+                if (favorite) {
+                  toast.success("Added property to favourite")
+                } else {
+                  toast.success("Rmoved property from favourite")
+                }
+              }
+              }
+            />
+          </Button>}
+        </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-1"
-            >
-              <Phone className="h-4 w-4" />
-              <span>Call</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-1"
-            >
-              <Mail className="h-4 w-4" />
-              <span>Email</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-1"
-            >
-              <MessageCircle className="h-4 w-4" />
-              <span>WhatsApp</span>
-            </Button>
-            {user?.role !== 'staff' && <Button
-              variant="outline"
-              size="icon"
-              className={favorite ? "text-red-500" : ""}
-              onClick={() => setFavorite(!favorite)}
-            >
-              <Heart
-                className="h-4 w-4"
-                fill={favorite ? "currentColor" : "none"}
-              />
-            </Button>}
-          </div>
-
-          {/* <div className="mt-3 text-xs text-muted-foreground">
+        {/* <div className="mt-3 text-xs text-muted-foreground">
           Posted {daysAgo} days ago
         </div> */}
-        </CardContent>
-      </Card>
-    </Link>
+
+
+      </CardContent>
+    </Card>
   );
 }

@@ -22,6 +22,7 @@ import { BookmarkPlus, ChevronDown, Search, X } from "lucide-react"
 
 import { FOR_RENT, FOR_SALE } from "@/constants"
 import { useAuth } from "@/lib/hooks/useAuth"
+import { toast } from "sonner"
 
 // Property types available in the system
 const PROPERTY_TYPES = ["Villa", "Apartment", "Office", "Townhouse"]
@@ -296,6 +297,7 @@ export default function SearchBar() {
       keywords,
     }
     console.log("Saved search filters:", filters)
+    toast.success("Saved Search successfully")
     // Here you would typically save this to user's profile or localStorage
   }
 
