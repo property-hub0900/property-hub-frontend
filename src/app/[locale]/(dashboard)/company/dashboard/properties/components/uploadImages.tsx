@@ -15,6 +15,7 @@ registerPlugin(FilePondPluginImagePreview);
 import { storage } from "@/lib/firebaseConfig";
 
 type TImages = {
+  //isPrimary: boolean;
   url: string;
   path?: string;
 };
@@ -64,6 +65,7 @@ export const UploadImages = (props: IUploadFilesProps) => {
       setFiles(initialFiles);
       setUploadedFilesUrls((prev) => ({
         images: initialImages.map((img) => ({
+          //isPrimary: img.isPrimary,
           url: img.url,
           path: img.path,
         })),
@@ -105,6 +107,7 @@ export const UploadImages = (props: IUploadFilesProps) => {
                   images: [
                     ...prev.images,
                     {
+                      //isPrimary: false,
                       url: downloadURL,
                       path: storagePath,
                     },

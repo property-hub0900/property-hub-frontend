@@ -2,16 +2,15 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import SearchTabs from "@/components/search/search-tabs"
 import { Container } from "@/components/ui/container"
-import { Input } from "@/components/ui/input"
 import { FOR_SALE } from "@/constants"
-// import PlacesAutocomplete from "@/components/search/places-autocomplete"
+import PlacesAutocomplete from "@/components/placesAutoComplete"
 
 type HeroSectionProps = {
   t: any
@@ -19,30 +18,26 @@ type HeroSectionProps = {
 
 export default function HeroSection({ t }: HeroSectionProps) {
   const router = useRouter()
+  const searchQueryRef = useRef("")
 
-  // Update the searchParams state to include all API parameters
+  // Simplified state with only the essential parameters
   const [searchParams, setSearchParams] = useState({
     propertyType: "all",
-    searchQuery: "", // Changed from searchTerm to match API
-    location: "", // Keep for UI purposes
-    purpose: FOR_SALE, // Changed from listingType to match API
-    bedrooms: undefined as number | undefined,
-    bathrooms: undefined as number | undefined,
-    priceMin: undefined as number | undefined,
-    priceMax: undefined as number | undefined,
-    // Additional API parameters
-    amenitiesIds: undefined as string | undefined,
-    companyId: undefined as number | undefined,
-    page: 0,
-    pageSize: 10,
+    searchQuery: "", // This will store the selected location from Google Places API
+    purpose: FOR_SALE,
   })
 
   const handleSearch = () => {
-
+    // When search button is clicked, this function builds the URL parameters
     const params = new URLSearchParams()
 
-    if (searchParams.searchQuery) {
-      params.set("searchQuery", searchParams.searchQuery)
+    // Use the ref value to ensure we have the latest searchQuery
+    const currentSearchQuery = searchQueryRef.current || searchParams.searchQuery
+
+    // Add the selected location from Google Places to the searchQuery parameter
+    if (currentSearchQuery) {
+      params.set("searchQuery", currentSearchQuery)
+      console.log("Search query:", currentSearchQuery) // Debug log
     }
 
     if (searchParams.propertyType && searchParams.propertyType !== "all") {
@@ -50,6 +45,8 @@ export default function HeroSection({ t }: HeroSectionProps) {
     }
 
     params.set("purpose", searchParams.purpose)
+
+    // Navigate to the properties page with the search parameters
     router.push(`/en/properties?${params.toString()}`)
   }
 
@@ -78,7 +75,13 @@ export default function HeroSection({ t }: HeroSectionProps) {
             {/* Search Box */}
             <div className="w-full max-w-4xl rounded-md overflow-hidden shadow-lg">
               <SearchTabs t={t} onTabChange={handleTabChange} />
-              <SearchForm t={t} searchParams={searchParams} setSearchParams={setSearchParams as any} onSearch={handleSearch} />
+              <SearchForm
+                t={t}
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
+                onSearch={handleSearch}
+                searchQueryRef={searchQueryRef}
+              />
             </div>
           </div>
         </Container>
@@ -87,48 +90,41 @@ export default function HeroSection({ t }: HeroSectionProps) {
   )
 }
 
-// Update the SearchFormProps type to include all parameters
+// Simplified SearchFormProps type
 type SearchFormProps = {
   t: any
   searchParams: {
     propertyType: string
     searchQuery: string
-    location: string
     purpose: string
-    bedrooms?: number
-    bathrooms?: number
-    priceMin?: number
-    priceMax?: number
-    amenitiesIds?: string
-    companyId?: number
-    page: number
-    pageSize: number
   }
   setSearchParams: React.Dispatch<
     React.SetStateAction<{
       propertyType: string
       searchQuery: string
       purpose: string
-      bedrooms?: number
-      bathrooms?: number
-      priceMin?: number
-      priceMax?: number
-      amenitiesIds?: string
-      companyId?: number
-      page: number
-      pageSize: number
     }>
   >
   onSearch: () => void
+  searchQueryRef: React.RefObject<string>
 }
 
-function SearchForm({ t, searchParams, setSearchParams, onSearch }: SearchFormProps) {
+function SearchForm({ t, searchParams, setSearchParams, onSearch, searchQueryRef }: SearchFormProps) {
   const handlePropertyTypeChange = (value: string) => {
     setSearchParams((prev) => ({ ...prev, propertyType: value }))
   }
 
   const handleLocationChange = (value: string) => {
-    setSearchParams((prev) => ({ ...prev, searchQuery: value }))
+    // When a location is selected from Google Places API, this function is called
+    // Update both the state and the ref to ensure we have the latest value
+    searchQueryRef.current = value
+
+    setSearchParams((prev) => ({
+      ...prev,
+      searchQuery: value,
+    }))
+
+    console.log("Location changed to:", value) // Debug log
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -154,17 +150,10 @@ function SearchForm({ t, searchParams, setSearchParams, onSearch }: SearchFormPr
       </div>
       <div className="w-full mb-3 sm:mb-0 sm:mr-3 relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10" size={18} />
-        {/* <PlacesAutocomplete
-          value={searchParams.location}
+        <PlacesAutocomplete
+          value={searchParams.searchQuery}
           onChange={handleLocationChange}
           onKeyPress={handleKeyPress}
-        /> */}
-        <Input
-          type="text"
-          placeholder="Enter location"
-          value={searchParams.searchQuery}
-          onChange={(e) => handleLocationChange(e.target.value)}
-          onKeyDown={handleKeyPress}
           className="pl-10 text-primary"
         />
       </div>
