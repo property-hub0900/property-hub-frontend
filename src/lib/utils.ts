@@ -59,41 +59,14 @@ export const formatAmountToQAR = (amount: number): string => {
 };
 
 // Helper function to build query string from filters
-export function buildQueryString(filters: PropertyFilters): string {
-  const params = new URLSearchParams();
+export function buildQueryString(params: Record<string, any>): string {
+  const filtered = Object.entries(params)
+    .filter(([_, value]) => value !== undefined && value !== null)
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+    )
+    .join("&");
 
-  if (filters.location) params.append("location", filters.location);
-  if (filters.propertyType && filters.propertyType !== "Property Type") {
-    params.append("type", filters.propertyType);
-  }
-  if (filters.bedsAndBath && filters.bedsAndBath !== "Beds & Bath") {
-    // Extract number of beds from string like "2+ Beds"
-    const bedsMatch = filters.bedsAndBath.match(/(\d+)\+\s*Beds?/i);
-    if (bedsMatch && bedsMatch[1]) {
-      params.append("minBeds", bedsMatch[1]);
-    }
-  }
-  if (filters.price && filters.price !== "Price") {
-    if (filters.price.includes("-")) {
-      const [minStr, maxStr] = filters.price.split("-");
-      const min = Number.parseInt(minStr.replace(/,/g, ""));
-      const max = Number.parseInt(maxStr.replace(/,/g, ""));
-      if (!isNaN(min)) params.append("minPrice", min.toString());
-      if (!isNaN(max)) params.append("maxPrice", max.toString());
-    } else if (filters.price.includes("+")) {
-      const min = Number.parseInt(
-        filters.price.replace(/,/g, "").replace("+", "")
-      );
-      if (!isNaN(min)) params.append("minPrice", min.toString());
-    }
-  }
-  if (filters.rent && filters.rent !== "Rent") {
-    params.append("listingType", filters.rent.toLowerCase());
-  }
-
-  // Pagination
-  if (filters.page) params.append("page", filters.page.toString());
-  if (filters.limit) params.append("limit", filters.limit.toString());
-
-  return params.toString();
+  return filtered;
 }

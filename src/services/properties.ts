@@ -9,6 +9,5 @@ import { PropertyFilters, PropertyResponse } from "@/types/client/properties";
 export async function fetchProperties(
   filters: PropertyFilters
 ): Promise<PropertyResponse> {
-  const queryString = buildQueryString(filters);
-  return apiClient.get(`/properties?${queryString}`);
+  return apiClient.get(`/properties?${buildQueryString(filters)}`);
 }

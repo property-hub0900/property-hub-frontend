@@ -51,11 +51,19 @@ export interface PropertyImage {
 }
 
 export interface PropertyFilters {
-  location?: string;
-  rent?: string;
+  searchQuery?: string;
   propertyType?: string;
-  bedsAndBath?: string;
-  price?: string;
+  purpose?: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  priceMin?: number;
+  priceMax?: number;
+  amenitiesIds?: string;
+  furnishing?: string;
+  minArea?: number;
+  maxArea?: number;
+  keywords?: string;
+  companyId?: number;
   page?: number;
   pageSize?: number;
 }

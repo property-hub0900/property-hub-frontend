@@ -1,5 +1,7 @@
 "use client";
 
+import { Loader } from "@/components/loader";
+import { SimpleMultiSelect } from "@/components/multiSelect";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -18,18 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
-import { DefaultValues, useForm } from "react-hook-form";
-
-import { createPropertySchema } from "@/schema/dashboard/properties";
-import { useQuery } from "@tanstack/react-query";
-
-import { TCreatePropertySchema } from "@/types/dashboard/properties";
-
-import { Loader } from "@/components/loader";
-import { SimpleMultiSelect } from "@/components/multiSelect";
 import {
   PROPERTY_CATEGORIES,
   PROPERTY_FURNISHED_TYPE,
@@ -41,16 +33,19 @@ import {
   PROPERTY_VIEWS,
   TPropertyStatuses,
 } from "@/constants/constants";
-import { amenities } from "@/services/dashboard/properties";
-import { Switch } from "@/components/ui/switch";
-import { IFilesUrlPayload, UploadImages } from "./uploadImages";
-import { useState } from "react";
-import { useAuth } from "@/lib/hooks/useAuth";
-import { useRouter } from "next/navigation";
 import { COMPANY_PATHS } from "@/constants/paths";
+import { useAuth } from "@/lib/hooks/useAuth";
+import { createPropertySchema } from "@/schema/dashboard/properties";
+import { amenities } from "@/services/dashboard/properties";
+import { TCreatePropertySchema } from "@/types/dashboard/properties";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { DefaultValues, useForm } from "react-hook-form";
 import PlacesAutocomplete from "../../../../../../../components/placesAutoComplete";
-import Image from "next/image";
-import { UploadImages1 } from "./uploadImages copy";
+import { IFilesUrlPayload, UploadImages } from "./uploadImages";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
@@ -102,32 +97,32 @@ export default function PropertyForm(
       mode === "edit"
         ? defaultValues
         : {
-            title: "",
-            titleAr: "",
-            featured: false,
-            category: undefined,
-            price: 0,
-            propertyType: "",
-            purpose: undefined,
-            bedrooms: 0,
-            bathrooms: 0,
-            status: PROPERTY_STATUSES.draft,
-            furnishedType: "",
-            occupancy: undefined,
-            ownershipStatus: undefined,
-            referenceNo: "",
-            priceVisibilityFlag: false,
-            propertySize: "",
-            serviceCharges: "",
-            buildingFloors: 0,
-            floor: 0,
-            tenure: "",
-            views: "",
-            address: "",
-            amenities: [],
-            description: "",
-            PropertyImages: [],
-          },
+          title: "",
+          titleAr: "",
+          featured: false,
+          category: undefined,
+          price: 0,
+          propertyType: "",
+          purpose: undefined,
+          bedrooms: 0,
+          bathrooms: 0,
+          status: PROPERTY_STATUSES.draft,
+          furnishedType: "",
+          occupancy: undefined,
+          ownershipStatus: undefined,
+          referenceNo: "",
+          priceVisibilityFlag: false,
+          propertySize: "",
+          serviceCharges: "",
+          buildingFloors: 0,
+          floor: 0,
+          tenure: "",
+          views: "",
+          address: "",
+          amenities: [],
+          description: "",
+          PropertyImages: [],
+        },
   });
 
   const category = form.watch("category");
@@ -640,40 +635,40 @@ export default function PropertyForm(
       <div className="col-span-2 gap-2 flex justify-end mt-6">
         {(!defaultValues ||
           defaultValues?.status === PROPERTY_STATUSES.draft) && (
-          <>
-            <Button
-              variant={"outline"}
-              type="button"
-              onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
-              className=""
-            >
-              {t("button.saveDraft")}
-            </Button>
+            <>
+              <Button
+                variant={"outline"}
+                type="button"
+                onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
+                className=""
+              >
+                {t("button.saveDraft")}
+              </Button>
 
-            {(isOwner || isAdmin) && (
-              <Button
-                type="button"
-                onClick={() =>
-                  handleSubmitWithStatus(PROPERTY_STATUSES.published)
-                }
-                className=""
-              >
-                {t("button.publish")}
-              </Button>
-            )}
-            {isAgent && (
-              <Button
-                type="button"
-                onClick={() =>
-                  handleSubmitWithStatus(PROPERTY_STATUSES.pending)
-                }
-                className=""
-              >
-                {t("button.requestForApproval")}
-              </Button>
-            )}
-          </>
-        )}
+              {(isOwner || isAdmin) && (
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitWithStatus(PROPERTY_STATUSES.published)
+                  }
+                  className=""
+                >
+                  {t("button.publish")}
+                </Button>
+              )}
+              {isAgent && (
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitWithStatus(PROPERTY_STATUSES.pending)
+                  }
+                  className=""
+                >
+                  {t("button.requestForApproval")}
+                </Button>
+              )}
+            </>
+          )}
 
         {defaultValues?.status === PROPERTY_STATUSES.published && (
           <>

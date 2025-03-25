@@ -17,7 +17,7 @@ import { AgentCard } from "@/components/property/agent-card"
 
 export default function PropertyPage() {
     const params = useParams<{ id: string }>()
-    const t = useTranslations("property")
+    const t = useTranslations("property");
     const [activeImageIndex, setActiveImageIndex] = useState(0)
 
     // Fetch property data
