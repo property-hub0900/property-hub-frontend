@@ -30,6 +30,8 @@ export default function PropertyCard({
           src={imageUrl || "/placeholder.svg"}
           alt={t("property.imageAlt")}
           className="w-full h-full object-cover"
+          width={500}
+          height={500}
         />
       </div>
       <div className="p-4">
