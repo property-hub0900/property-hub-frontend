@@ -17,6 +17,7 @@ import {
   Bell,
   Search,
   Building,
+  User,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -46,21 +47,31 @@ const companyNavItems = [
     icon: Database,
   },
   {
-    title: "Access Management",
+    title: "Roles and Access",
     href: "/company/dashboard/access-management",
     icon: Users,
     badge: 1,
   },
   {
-    title: "Wallet Points",
+    title: "Agents",
+    href: "/company/dashboard/agents",
+    icon: User,
+  },
+  {
+    title: "Points",
     href: "/company/dashboard/wallet-points",
     icon: Wallet,
-    badge: 3,
+    badge: 2,
   },
   {
     title: "Subscription Plans",
     href: "/company/dashboard/subscription-plans",
     icon: Package,
+  },
+  {
+    title: "Top-Up",
+    href: "/company/dashboard/top-up",
+    icon: Database,
   },
   {
     title: "Settings",
