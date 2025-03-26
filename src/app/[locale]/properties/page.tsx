@@ -11,12 +11,12 @@ import { fetchProperties } from "@/services/properties"
 import type { PropertyFilters } from "@/types/client/properties"
 import { useQuery } from "@tanstack/react-query"
 import { AlertCircle } from "lucide-react"
+import Image from "next/image"
 
 export default function PropertiesPage() {
   const searchParams = useSearchParams()
-  const router = useRouter()
 
-  // Initialize filters from URL parameters
+
   const [filters, setFilters] = useState<PropertyFilters>({
     searchQuery: searchParams.get("searchQuery") || undefined,
     propertyType: searchParams.get("propertyType") || undefined,
@@ -35,7 +35,7 @@ export default function PropertiesPage() {
     pageSize: 10,
   })
 
-  // Update filters when search params change
+
   useEffect(() => {
     setFilters({
       searchQuery: searchParams.get("searchQuery") || undefined,
@@ -84,7 +84,7 @@ export default function PropertiesPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-3">
         <div className="w-full mb-4 lg:mb-0 order-1">
-          <img src="/add1.jpg" alt="Advertisement" className="w-full h-auto" />
+          <Image src="/add1.jpg" alt="PropertyExplorer" className="w-full h-auto" width={200} height={200} />
         </div>
         <div className="w-full order-3 lg:order-2">
           {/* Loading state */}

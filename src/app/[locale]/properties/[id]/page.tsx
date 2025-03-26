@@ -1,19 +1,19 @@
 "use client"
 
-import { useState } from "react"
-import { useParams } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { useTranslations } from "next-intl"
+import { useParams } from "next/navigation"
+import { useState } from "react"
 
+import { AgentCard } from "@/components/property/agent-card"
+import { PropertyAmenities } from "@/components/property/property-amenities"
+import { PropertyDescription } from "@/components/property/property-description"
+import { PropertyDetails } from "@/components/property/property-details"
+import { PropertyGallery } from "@/components/property/property-gallery"
+import { PropertyHeader } from "@/components/property/property-header"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { propertyService } from "@/services/property"
-import { PropertyGallery } from "@/components/property/property-gallery"
-import { PropertyHeader } from "@/components/property/property-header"
-import { PropertyDescription } from "@/components/property/property-description"
-import { PropertyDetails } from "@/components/property/property-details"
-import { PropertyAmenities } from "@/components/property/property-amenities"
-import { AgentCard } from "@/components/property/agent-card"
 
 export default function PropertyPage() {
     const params = useParams<{ id: string }>()
@@ -42,19 +42,19 @@ export default function PropertyPage() {
     })
 
     // Fetch similar properties
-    const { data: similarProperties = [] } = useQuery({
-        queryKey: ["similarProperties", params.id],
-        queryFn: async () => {
-            try {
-                const response = await propertyService.getSimilarProperties(params.id)
-                return response || []
-            } catch (error) {
-                console.log("Failed to fetch similar properties:", error)
-                return []
-            }
-        },
-        enabled: !!property,
-    })
+    // const { data: similarProperties = [] } = useQuery({
+    //     queryKey: ["similarProperties", params.id],
+    //     queryFn: async () => {
+    //         try {
+    //             const response = await propertyService.getSimilarProperties(params.id)
+    //             return response || []
+    //         } catch (error) {
+    //             console.log("Failed to fetch similar properties:", error)
+    //             return []
+    //         }
+    //     },
+    //     enabled: !!property,
+    // })
 
     if (isLoading) {
         return (

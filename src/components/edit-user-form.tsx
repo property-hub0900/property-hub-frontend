@@ -13,6 +13,7 @@ import type * as z from "zod"
 import { staffFormSchema } from "@/schema/company"
 import type { StaffMember } from "@/services/company"
 import { useTranslations } from "next-intl"
+import { Separator } from "./ui/separator"
 
 interface EditUserFormProps {
     selectedStaff: StaffMember | null
@@ -268,17 +269,20 @@ export function EditUserForm({ selectedStaff, onSubmit, onCancel, isSubmitting }
                 {showPermissionsSection && (
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
-                            <h3 className="text-sm font-medium">{t("title.permissionsAccess") || "Permissions & Access"}</h3>
+                            <h3 className="text-lg font-semibold">{t("title.permissionsAccess") || "Permissions & Access"}</h3>
+                        </div>
+                        <Separator className="my-4" />
+                        <div className="flex justify-between items-center">
+                            <p className="text-xs text-righ">{t("title.access") || "Access"}</p>
                             <span className="text-xs text-right">{t("title.permissions") || "Permissions"}</span>
                         </div>
-
-                        <div className="space-y-2">
+                        <div className="space-y-6 text-xs">
                             <FormField
                                 control={form.control}
                                 name="canAddProperty"
                                 render={({ field }) => (
                                     <div className="flex justify-between items-center">
-                                        <label htmlFor="edit-canAddProperty" className="text-sm">
+                                        <label htmlFor="edit-canAddProperty" className="text-xm">
                                             {t("form.permissions.canPostListings") || "Can Post Listings"}
                                         </label>
                                         <FormControl>
@@ -293,7 +297,7 @@ export function EditUserForm({ selectedStaff, onSubmit, onCancel, isSubmitting }
                                 name="canPublishProperty"
                                 render={({ field }) => (
                                     <div className="flex justify-between items-center">
-                                        <label htmlFor="edit-canPublishProperty" className="text-sm">
+                                        <label htmlFor="edit-canPublishProperty" className="text-xm">
                                             {t("form.permissions.requiresApproval") || "Requires Approval for Listings"}
                                         </label>
                                         <FormControl>
@@ -308,7 +312,7 @@ export function EditUserForm({ selectedStaff, onSubmit, onCancel, isSubmitting }
                                 name="canFeatureProperty"
                                 render={({ field }) => (
                                     <div className="flex justify-between items-center">
-                                        <label htmlFor="edit-canFeatureProperty" className="text-sm">
+                                        <label htmlFor="edit-canFeatureProperty" className="text-xm">
                                             {t("form.permissions.canFeatureProperty") || "Can Feature Property"}
                                         </label>
                                         <FormControl>
@@ -325,7 +329,7 @@ export function EditUserForm({ selectedStaff, onSubmit, onCancel, isSubmitting }
                     <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
                         {t("button.cancel") || "Cancel"}
                     </Button>
-                    <Button type="submit" className="bg-blue-500 hover:bg-blue-600" disabled={isSubmitting}>
+                    <Button type="submit" className="bg-primary" disabled={isSubmitting}>
                         {isSubmitting ? t("button.updating") || "Updating..." : t("button.save") || "Save"}
                     </Button>
                 </div>

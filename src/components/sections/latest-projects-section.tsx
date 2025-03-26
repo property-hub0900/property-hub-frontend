@@ -1,14 +1,13 @@
 "use client"
 
-import Link from "next/link";
-import { ChevronRight } from 'lucide-react';
 import PropertyCard from "@/components/property/property-card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem
 } from "@/components/ui/carousel";
-import useEmblaCarousel from "embla-carousel-react";
+import { ChevronRight } from 'lucide-react';
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Container } from "../ui/container";
 
@@ -103,17 +102,10 @@ const properties = [
 export default function LatestProjectsSection({
   t,
 }: LatestProjectsSectionProps) {
-  const [api, setApi] = useState<any>(null);
 
-  // Configure carousel options
-  const options = {
-    align: "start",
-    loop: false,
-    skipSnaps: false,
-    dragFree: false,
-  };
 
-  // Responsive breakpoints for the carousel
+
+
   const [slidesInView, setSlidesInView] = useState(4);
 
   useEffect(() => {
@@ -154,8 +146,6 @@ export default function LatestProjectsSection({
           </div>
 
           <Carousel
-
-            setApi={setApi}
             className="w-full"
 
           >

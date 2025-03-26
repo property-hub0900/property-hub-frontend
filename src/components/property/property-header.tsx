@@ -1,5 +1,4 @@
 import { Bath, Bed } from "lucide-react"
-import Image from "next/image"
 
 interface PropertyHeaderProps {
     price: string

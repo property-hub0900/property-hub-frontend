@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 "use client"
 
 import { useState, useEffect, useRef, ReactNode } from "react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
 
 type InvestSectionProps = {
   t: any
@@ -79,7 +81,7 @@ export default function InvestSectionAlternative({ t }: InvestSectionProps) {
 
                   {/* First image (larger) */}
                   <div className="relative z-[1] rounded-lg overflow-hidden shadow-lg w-[65%] aspect-[4/3]">
-                    <img
+                    <Image
                       src={properties[activeIndex].images[0].url || "/placeholder.svg"}
                       alt={properties[activeIndex].images[0].alt}
                       className="w-full h-full object-cover"
@@ -88,7 +90,7 @@ export default function InvestSectionAlternative({ t }: InvestSectionProps) {
 
                   {/* Second image (smaller, overlapping) */}
                   <div className="relative -ml-8 mt-8 rounded-lg overflow-hidden shadow-lg w-[45%] aspect-[3/4] z-0">
-                    <img
+                    <Image
                       src={properties[activeIndex].images[1].url || "/placeholder.svg"}
                       alt={properties[activeIndex].images[1].alt}
                       className="w-full h-full object-cover"

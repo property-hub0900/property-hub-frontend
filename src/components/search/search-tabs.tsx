@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 "use client"
 
 import { FOR_RENT, FOR_SALE } from "@/constants"

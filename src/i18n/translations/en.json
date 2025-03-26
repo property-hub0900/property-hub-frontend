@@ -16,7 +16,8 @@
     "permissions": "Permissions",
     "addNewProperty": "Add New Property",
     "editProperty": "Edit Property",
-    "userDetails": "User Details"
+    "userDetails": "User Details",
+    "access": "Access"
   },
   "button": {
     "next": "Next",
@@ -27,7 +28,6 @@
     "loginAsCustomer": "Login as a Customer →",
     "forgotPassword": "Forgot Password?",
     "registerAsAgent": "Register As Agent",
-    "save": "Save",
     "requestForApproval": "Request For Approval",
     "addNewAgent": "Add New Agent",
     "cancel": "Cancel",

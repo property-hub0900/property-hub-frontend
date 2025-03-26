@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
-import { FilePond, registerPlugin } from "react-filepond";
 import {
-  ref,
-  uploadBytesResumable,
   getDownloadURL,
-  getBlob,
-  deleteObject,
+  ref,
+  uploadBytesResumable
 } from "firebase/storage";
+import { useState } from "react";
+import { FilePond, registerPlugin } from "react-filepond";
 
-import "filepond/dist/filepond.min.css";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import "filepond/dist/filepond.min.css";
 
 registerPlugin(FilePondPluginImagePreview);
 
@@ -35,7 +33,6 @@ export const UploadImages1 = (props: IUploadFilesProps) => {
   const [files, setFiles] = useState<any[]>([]);
 
   // This maps FilePond's internal file IDs to Firebase storage paths
-  const [filePathMap, setFilePathMap] = useState<Record<string, string>>({});
 
   // useEffect(() => {
 

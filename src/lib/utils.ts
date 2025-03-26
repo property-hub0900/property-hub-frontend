@@ -1,5 +1,5 @@
-import { fetchUrl } from "@/services/common";
-import { PropertyFilters } from "@/types/client/properties";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
