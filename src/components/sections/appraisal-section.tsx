@@ -85,6 +85,8 @@ export default function InvestSectionAlternative({ t }: InvestSectionProps) {
                       src={properties[activeIndex].images[0].url || "/placeholder.svg"}
                       alt={properties[activeIndex].images[0].alt}
                       className="w-full h-full object-cover"
+                      width={600}
+                      height={400}
                     />
                   </div>
 
@@ -94,6 +96,8 @@ export default function InvestSectionAlternative({ t }: InvestSectionProps) {
                       src={properties[activeIndex].images[1].url || "/placeholder.svg"}
                       alt={properties[activeIndex].images[1].alt}
                       className="w-full h-full object-cover"
+                      width={600}
+                      height={400}
                     />
                   </div>
                 </div>
