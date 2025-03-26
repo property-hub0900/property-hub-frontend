@@ -45,7 +45,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DefaultValues, useForm } from "react-hook-form";
 import PlacesAutocomplete from "../../../../../../../components/placesAutoComplete";
-import { IFilesUrlPayload, UploadImages } from "./uploadImages";
+import { IFilesUrlPayload, TImages, UploadImages } from "./uploadImages";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
@@ -67,19 +67,6 @@ export default function PropertyForm(
   const isOwner = user?.scope[0] === "owner";
   const isAdmin = user?.scope[0] === "admin";
   const isAgent = user?.scope[0] === "agent";
-
-  console.log("defaultValues", defaultValues);
-
-  // useEffect(() => {
-  //   setFilesUrls({
-  //     images: [
-  //       {
-  //         isPrimary: true,
-  //         url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742468400179-Screenshot%202025-03-20%20004111.png?alt=media&token=f5ac8f61-f768-495f-8be3-afdd7f9fae86",
-  //       },
-  //     ],
-  //   });
-  // }, [defaultValues]);
 
   const { data: amenitiesData, isLoading: isLoadingAmenities } = useQuery({
     queryKey: ["amenities"],
@@ -128,8 +115,6 @@ export default function PropertyForm(
   const category = form.watch("category");
   const propertyType = form.watch("propertyType");
 
-  console.log("filesUrls", filesUrls);
-
   const handleCancel = () => {
     router.push(COMPANY_PATHS.properties);
   };
@@ -151,6 +136,11 @@ export default function PropertyForm(
     //form.handleSubmit(onSubmit);
   };
 
+  console.log("Form Error", form.formState.errors);
+
+  console.log("filesUrls", filesUrls);
+  console.log("defaultValues", defaultValues);
+
   // const existingImages = [
   //   {
   //     isPrimary: true,
@@ -159,12 +149,16 @@ export default function PropertyForm(
   //   },
   // ];
 
-  const initialImages = [
-    {
-      url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742553428343-Screenshot%202025-03-20%20004111.png?alt=media&token=e754d33b-8a3f-4c6e-8e8b-a463f326696f",
-      path: "images/1742553428343-Screenshot 2025-03-20 004111.png",
-    },
-  ];
+  // const initialImages = [
+  //   {
+  //     url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742553428343-Screenshot%202025-03-20%20004111.png?alt=media&token=e754d33b-8a3f-4c6e-8e8b-a463f326696f",
+  //     path: "images/1742553428343-Screenshot 2025-03-20 004111.png",
+  //   },
+  // ];
+
+  const initialImages: TImages[] = (defaultValues?.PropertyImages || []).filter(
+    Boolean
+  ) as TImages[];
 
   return (
     <>
@@ -203,10 +197,20 @@ export default function PropertyForm(
               )}
             />
             <div className="col-span-2">
-              <UploadImages
-                //initialImages={defaultValues?.PropertyImages || []}
-                setUploadedFilesUrls={setFilesUrls}
+              <FormField
+                control={form.control}
+                name="PropertyImages"
+                render={({ field }) => (
+                  <FormItem className="col-span-2">
+                    <UploadImages
+                      initialImages={initialImages}
+                      setUploadedFilesUrls={setFilesUrls}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+
               {/* <UploadImages1
                 setUploadedFilesUrls={setFilesUrls}
               ></UploadImages1> */}
