@@ -12,7 +12,6 @@ import { TCreatePropertySchema } from "@/types/dashboard/properties";
 import { useParams } from "next/navigation";
 
 import {
-  createProperty,
   getPropertyById,
   updatePropertyById,
 } from "@/services/dashboard/properties";
@@ -71,7 +70,7 @@ export default function EditPropertyPage() {
           {getPropertyByIdData && (
             <PropertyForm
               mode="edit"
-              onSubmit={onSubmit}
+              onSubmit={onSubmit as any}
               defaultValues={getPropertyByIdData}
             ></PropertyForm>
           )}

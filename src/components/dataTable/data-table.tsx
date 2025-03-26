@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react";
 import * as React from "react";
 import { useTranslations } from "next-intl";
@@ -110,8 +111,8 @@ export function DataTable<TData, TValue>({
                                 asc: <ChevronUp className="ms-2 h-4 w-4" />,
                                 desc: <ChevronDown className="ms-2 h-4 w-4" />,
                               }[header.column.getIsSorted() as string] ?? (
-                                <ChevronsUpDown className="ms-2 h-4 w-4" />
-                              )}
+                                  <ChevronsUpDown className="ms-2 h-4 w-4" />
+                                )}
                             </Button>
                           ) : (
                             flexRender(

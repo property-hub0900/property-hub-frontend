@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 "use client";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { Menu, X } from "lucide-react";
@@ -8,6 +9,7 @@ import { UserDropdown } from "./userDropdown";
 import { Switch } from "@/components/ui/switch";
 import Image from "next/image";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function Header({ calledBy = "home" }) {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);

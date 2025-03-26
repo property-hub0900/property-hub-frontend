@@ -2,6 +2,7 @@ import type React from "react";
 import { Bed, Maximize, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import Image from "next/image";
 
 type PropertyCardProps = {
   t: any;
@@ -25,7 +26,7 @@ export default function PropertyCard({
   return (
     <Card className="overflow-hidden border border-border rounded-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       <div className="relative h-48 overflow-hidden">
-        <img
+        <Image
           src={imageUrl || "/placeholder.svg"}
           alt={t("property.imageAlt")}
           className="w-full h-full object-cover"

@@ -1,5 +1,3 @@
-import { inter } from "@/lib/fonts";
-
 export interface IResponse<T> {
   message: string;
   data?: T;

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { useAuthStore } from "@/store/auth-store";
 

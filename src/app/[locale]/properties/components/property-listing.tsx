@@ -11,6 +11,7 @@ import {
   MessageCircle,
   Phone
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -35,7 +36,7 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
   const { user } = useAuth();
 
   // Mock multiple images with valid URLs
-  const images = PropertyImages.map((img, i) => {
+  const images = PropertyImages.map((img) => {
     // Ensure the URL is valid
     // if (img.startsWith("/3f30036e18cdfc98064bc455840a4f07.png")) {
     //   return `/3f30036e18cdfc98064bc455840a4f07.png?height=300&width=500&id=${i}`;
@@ -50,7 +51,7 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
     <Card className="overflow-hidden grid grid-cols-3">
       <div className="relative col-span-1">
         <div className="relative h-full w-full">
-          <img
+          <Image
             src={
               images[currentImage] ||
               "/3f30036e18cdfc98064bc455840a4f07.png?height=300&width=500"
@@ -154,7 +155,7 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
             <Heart
               className="h-4 w-4"
               fill={favorite ? "currentColor" : "none"}
-              onClick={(e) => {
+              onClick={() => {
                 if (favorite) {
                   toast.success("Added property to favourite")
                 } else {
