@@ -35,7 +35,7 @@ export default function CustomerLoginPage() {
   const { locale } = useParams();
   const t = useTranslations();
   const router = useRouter();
-  const pushUserAfterLogin = `/${locale}/customer/dashboard`;
+  const pushUserAfterLogin = `/${locale}/`;
 
   const [showPassword, setShowPassword] = useState(false);
 

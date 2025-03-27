@@ -14,7 +14,7 @@ import type * as z from "zod"
 import { staffFormSchema } from "@/schema/company"
 import type { StaffMember } from "@/services/company"
 import { useTranslations } from "next-intl"
-import { Separator } from "./ui/separator"
+import { Separator } from "../ui/separator"
 
 interface EditUserFormProps {
     selectedStaff: StaffMember | null
