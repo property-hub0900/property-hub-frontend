@@ -1,21 +1,18 @@
 "use client"
 
-import { Bell, ChevronLeft, Menu, Search } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { UserDropdown } from "../userDropdown"
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
+import { Bell, ChevronLeft, Search } from 'lucide-react'
+import { UserDropdown } from "../userDropdown"
 
 export function DashboardHeader() {
-    const { toggleSidebar, isMobile } = useSidebar()
+    const { toggleSidebar } = useSidebar()
 
     return (
         <header className="flex h-16 items-center justify-between border-b px-4 md:px-6 bg-white">
             <div className="flex items-center gap-2">
-                {/* Mobile sidebar trigger */}
                 <SidebarTrigger className="md:hidden mr-2" />
-
-                {/* Desktop sidebar toggle */}
                 <Button
                     variant="ghost"
                     size="icon"
@@ -35,7 +32,6 @@ export function DashboardHeader() {
                     />
                 </div>
 
-                {/* Mobile search button */}
                 <Button variant="ghost" size="icon" className="md:hidden">
                     <Search className="h-5 w-5" />
                     <span className="sr-only">Search</span>

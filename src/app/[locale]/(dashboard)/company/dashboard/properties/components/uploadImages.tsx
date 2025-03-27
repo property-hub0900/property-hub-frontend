@@ -1,14 +1,14 @@
-import { useEffect, useState, useCallback, useRef } from "react";
-import { FilePond, registerPlugin } from "react-filepond";
-import {
-  ref,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject,
-} from "firebase/storage";
-import "filepond/dist/filepond.min.css";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import "filepond/dist/filepond.min.css";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { useEffect, useRef, useState } from "react";
+import { FilePond, registerPlugin } from "react-filepond";
 
 registerPlugin(FilePondPluginImagePreview);
 
@@ -46,7 +46,7 @@ export const UploadImages = (props: IUploadFilesProps) => {
     const initFiles = async () => {
       const filePromises = initialImages.map(async (img) => {
         const response = await fetch(img.url);
-        const blob = await response.blob();
+        await response.blob();
         return {
           source: img.url,
           options: {
@@ -62,7 +62,7 @@ export const UploadImages = (props: IUploadFilesProps) => {
 
       const initialFiles = await Promise.all(filePromises);
       setFiles(initialFiles);
-      setUploadedFilesUrls((prev) => ({
+      setUploadedFilesUrls(() => ({
         images: initialImages.map((img) => ({
           url: img.url,
           path: img.path,
@@ -82,6 +82,7 @@ export const UploadImages = (props: IUploadFilesProps) => {
       maxFiles={20}
       server={{
         process: (fieldName, file, metadata, load, error, progress, abort) => {
+          console.log("fieldName", fieldName, "metadata", metadata, "aboart", abort);
           const fileName = `${Date.now()}-${file.name}`;
           const storagePath = `images/${fileName}`;
           const storageRef = ref(storage, storagePath);

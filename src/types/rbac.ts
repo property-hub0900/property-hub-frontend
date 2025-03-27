@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * Role-based access control types
  */

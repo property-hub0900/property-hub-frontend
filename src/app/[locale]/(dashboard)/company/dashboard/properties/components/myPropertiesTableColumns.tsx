@@ -85,89 +85,91 @@ export const myPropertiesTableColumns: ColumnDef<IProperty>[] = [
     accessorKey: "featured",
     header: "Featured",
     enableSorting: true,
-    cell: ({ row }) => {
-      const rowData = row.original;
-      const { propertyId, featured } = rowData;
-
-      const queryClient = useQueryClient();
-
-      const updatePropertyByIdMutation = useMutation({
-        mutationKey: ["updatePropertyById"],
-        mutationFn: updatePropertyById,
-      });
-
-      const handleUpgradeFeatured = async () => {
-        try {
-          const updatedObj = {
-            id: String(propertyId),
-            payload: { featured: true },
-          };
-
-          const response = await updatePropertyByIdMutation.mutateAsync(
-            updatedObj
-          );
-          toast.success(response.message);
-          queryClient.refetchQueries({ queryKey: ["companiesProperties"] });
-        } catch (error) {
-          toast.error(getErrorMessage(error));
-        }
-      };
-
-      return (
-        <div className="flex justify-center w-[80px]">
-          {featured ? (
-            <Image width={20} height={20} src="/star.svg" alt="PropertyHub" />
-          ) : (
-            <Button
-              disabled={updatePropertyByIdMutation.isPending}
-              onClick={handleUpgradeFeatured}
-              size={"sm"}
-            >
-              Upgrade
-            </Button>
-          )}
-        </div>
-      );
-    },
+    cell: ({ row }) => <FeaturedCell row={row} />,
   },
   {
     accessorKey: "propertyId",
     header: "Action",
-    cell: ({ row }) => {
-      const rowData = row.original;
-      const { propertyId } = rowData;
-
-      const queryClient = useQueryClient();
-
-      const deletePropertyByIdMutation = useMutation({
-        mutationKey: ["deletePropertyById"],
-        mutationFn: deletePropertyById,
-      });
-
-      const onDelete = async (id) => {
-        try {
-          const response = await deletePropertyByIdMutation.mutateAsync(id);
-          toast.success(response.message);
-          queryClient.refetchQueries({ queryKey: ["companiesProperties"] });
-        } catch (error) {
-          toast.error(getErrorMessage(error));
-        }
-      };
-
-      return (
-        <>
-          <Loader isLoading={deletePropertyByIdMutation.isPending}></Loader>
-          <div className="flex gap-3 items-center">
-            <Link href={`${COMPANY_PATHS.properties}/${propertyId}`}>
-              <Edit2 className="size-5 text-primary" />
-            </Link>
-            <Trash2
-              onClick={() => onDelete(propertyId)}
-              className="size-5 text-destructive cursor-pointer"
-            />
-          </div>
-        </>
-      );
-    },
+    cell: ({ row }) => <ActionCell row={row} />,
   },
 ];
+
+const FeaturedCell = ({ row }) => {
+  const rowData = row.original;
+  const { propertyId, featured } = rowData;
+
+  const queryClient = useQueryClient();
+
+  const updatePropertyByIdMutation = useMutation({
+    mutationKey: ["updatePropertyById"],
+    mutationFn: updatePropertyById,
+  });
+
+  const handleUpgradeFeatured = async () => {
+    try {
+      const updatedObj = {
+        id: String(propertyId),
+        payload: { featured: true },
+      };
+
+      const response = await updatePropertyByIdMutation.mutateAsync(updatedObj);
+      toast.success(response.message);
+      queryClient.refetchQueries({ queryKey: ["companiesProperties"] });
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+  };
+
+  return (
+    <div className="flex justify-center w-[80px]">
+      {featured ? (
+        <Image width={20} height={20} src="/star.svg" alt="PropertyHub" />
+      ) : (
+        <Button
+          disabled={updatePropertyByIdMutation.isPending}
+          onClick={handleUpgradeFeatured}
+          size={"sm"}
+        >
+          Upgrade
+        </Button>
+      )}
+    </div>
+  );
+};
+
+const ActionCell = ({ row }) => {
+  const rowData = row.original;
+  const { propertyId } = rowData;
+
+  const queryClient = useQueryClient();
+
+  const deletePropertyByIdMutation = useMutation({
+    mutationKey: ["deletePropertyById"],
+    mutationFn: deletePropertyById,
+  });
+
+  const onDelete = async (id) => {
+    try {
+      const response = await deletePropertyByIdMutation.mutateAsync(id);
+      toast.success(response.message);
+      queryClient.refetchQueries({ queryKey: ["companiesProperties"] });
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+  };
+
+  return (
+    <>
+      <Loader isLoading={deletePropertyByIdMutation.isPending}></Loader>
+      <div className="flex gap-3 items-center">
+        <Link href={`${COMPANY_PATHS.properties}/${propertyId}`}>
+          <Edit2 className="size-5 text-primary" />
+        </Link>
+        <Trash2
+          onClick={() => onDelete(propertyId)}
+          className="size-5 text-destructive cursor-pointer"
+        />
+      </div>
+    </>
+  );
+};

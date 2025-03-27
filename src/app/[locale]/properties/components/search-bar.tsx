@@ -2,11 +2,10 @@
 
 import type React from "react"
 
-import { useCallback, useEffect, useState, useRef } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,14 +13,14 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose, DialogFooter } from "@/components/ui/dialog"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
-import { BookmarkPlus, ChevronDown, Search, X } from "lucide-react"
-
 import { FOR_RENT, FOR_SALE } from "@/constants"
 import { useAuth } from "@/lib/hooks/useAuth"
+import { BookmarkPlus, ChevronDown, Search, X } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
 
 // Property types available in the system
@@ -91,9 +90,10 @@ export default function SearchBar() {
 
   // More filters dialog state
   const [moreFiltersOpen, setMoreFiltersOpen] = useState(false)
+  const [saveSearchDialog, setSaveSearchDialog] = useState(false)
+  const [searchName, setSearchName] = useState("")
 
   // Track if search was performed
-  const [searchPerformed, setSearchPerformed] = useState(false)
 
   // Active filters count for the badge
   const [activeFiltersCount, setActiveFiltersCount] = useState(0)
@@ -171,10 +171,10 @@ export default function SearchBar() {
   }
 
   // Handle price range change
-  const handlePriceChange = (min: string, max: string) => {
-    setPriceMin(min)
-    setPriceMax(max)
-  }
+  // const handlePriceChange = (min: string, max: string) => {
+  //   setPriceMin(min)
+  //   setPriceMax(max)
+  // }
 
   // Handle amenity toggle
   const handleAmenityToggle = (amenityId: string) => {
@@ -296,8 +296,10 @@ export default function SearchBar() {
       maxArea,
       keywords,
     }
-    console.log("Saved search filters:", filters)
-    toast.success("Saved Search successfully")
+    console.log(filters);
+    setSaveSearchDialog(true)
+
+
     // Here you would typically save this to user's profile or localStorage
   }
 
@@ -338,12 +340,12 @@ export default function SearchBar() {
 
       // Use replace to avoid adding to browser history for every change
       router.push(`?${params.toString()}`)
-      setSearchPerformed(true)
+
 
       // Update pending filters
       setPendingFilters(currentFilters)
     },
-    [router],
+    [amenitiesIds, bathrooms, bedrooms, furnishing, keywords, maxArea, minArea, priceMax, priceMin, propertyType, purpose, router, searchQuery],
   )
 
   // Handle form submission
@@ -808,6 +810,34 @@ export default function SearchBar() {
           </div>
         </div>
       )}
+
+
+      <Dialog open={saveSearchDialog} onOpenChange={setSaveSearchDialog}>
+        <DialogContent className="w-[95vw] sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl">Save Search</DialogTitle>
+          </DialogHeader>
+          <small>Save search as:</small>
+          <Input
+            type="text"
+            placeholder="Search name"
+            value={searchName}
+            onChange={(e) => setSearchName(e.target.value)}
+          />
+
+          <Button
+            className=""
+            onClick={() => {
+              setSaveSearchDialog(false)
+              toast.success("Saved Search successfully")
+              setSearchName("")
+            }
+            }>Save</Button>
+
+
+
+        </DialogContent>
+      </Dialog>
 
       {/* More Filters Dialog */}
       <Dialog open={moreFiltersOpen} onOpenChange={setMoreFiltersOpen}>

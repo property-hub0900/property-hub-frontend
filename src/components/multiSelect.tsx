@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // src/components/simple-multi-select.tsx
 
 import { cva } from "class-variance-authority";

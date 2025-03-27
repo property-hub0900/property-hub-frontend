@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 "use client";
 
 import type React from "react";
@@ -132,14 +133,6 @@ export function VerificationForm({
     return () => clearTimeout(timer);
   }, []);
 
-  // Reset form when email changes
-  useEffect(() => {
-    if (email) {
-      resetForm();
-    }
-  }, [email]);
-
-  // Reset form function
   const resetForm = useCallback(() => {
     setOtp(new Array(OTP_LENGTH).fill(""));
     setActiveOtpIndex(0);
@@ -150,6 +143,15 @@ export function VerificationForm({
       inputRefs.current[0]?.focus();
     }, 100);
   }, []);
+  // Reset form when email changes
+  useEffect(() => {
+    if (email) {
+      resetForm();
+    }
+  }, [email, resetForm]);
+
+  // Reset form function
+
 
   // Handle input change
   const handleOnChange = useCallback(
@@ -357,9 +359,9 @@ export function VerificationForm({
                   activeOtpIndex === index ? "border-primary" : "border-input",
                   isFormDisabled && "opacity-70 cursor-not-allowed",
                   verificationStatus === "success" &&
-                    "border-green-500 text-green-600",
+                  "border-green-500 text-green-600",
                   verificationStatus === "error" &&
-                    "border-red-500 text-red-600"
+                  "border-red-500 text-red-600"
                 )}
                 aria-label={`Digit ${index + 1} of ${OTP_LENGTH}`}
                 aria-invalid={verificationStatus === "error"}
@@ -404,7 +406,7 @@ export function VerificationForm({
           className={cn(
             "w-full relative",
             verificationStatus === "success" &&
-              "bg-green-600 hover:bg-green-700"
+            "bg-green-600 hover:bg-green-700"
           )}
           disabled={
             verifyOtpMutation.isPending ||

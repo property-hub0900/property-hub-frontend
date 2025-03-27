@@ -49,7 +49,7 @@ import { IFilesUrlPayload, TImages, UploadImages } from "./uploadImages";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
-  onSubmit: (values: T) => Promise<void> | void;
+  onSubmit: () => Promise<void> | void;
   defaultValues?: DefaultValues<T>;
 }
 
@@ -141,14 +141,6 @@ export default function PropertyForm(
   console.log("filesUrls", filesUrls);
   console.log("defaultValues", defaultValues);
 
-  // const existingImages = [
-  //   {
-  //     isPrimary: true,
-  //     url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742468400179-Screenshot%202025-03-20%20004111.png?alt=media&token=f5ac8f61-f768-495f-8be3-afdd7f9fae86",
-  //     path: "images/image1.jpg",
-  //   },
-  // ];
-
   // const initialImages = [
   //   {
   //     url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742553428343-Screenshot%202025-03-20%20004111.png?alt=media&token=e754d33b-8a3f-4c6e-8e8b-a463f326696f",
@@ -197,18 +189,19 @@ export default function PropertyForm(
               )}
             />
             <div className="col-span-2">
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="PropertyImages"
                 render={({ field }) => (
                   <FormItem className="col-span-2">
-                    <UploadImages
-                      initialImages={initialImages}
-                      setUploadedFilesUrls={setFilesUrls}
-                    />
                     <FormMessage />
                   </FormItem>
                 )}
+              /> */}
+
+              <UploadImages
+                initialImages={initialImages}
+                setUploadedFilesUrls={setFilesUrls}
               />
 
               {/* <UploadImages1

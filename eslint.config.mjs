@@ -30,7 +30,16 @@ const eslintConfig = [
       "no-unused-vars": "warn", // Downgrade to warning
       "@typescript-eslint/no-unused-vars": "warn", // Downgrade to warning
       "react/no-unescaped-entities": "off", // Ignore React entity errors
+
       // Add more rules to disable as needed
+      // Enforces the Rules of Hooks
+      // React Hooks specific rules
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+
+      // Additional recommended React rules
+      "react/jsx-uses-react": "error",
+      "react/jsx-uses-vars": "error",
     },
   },
 ];

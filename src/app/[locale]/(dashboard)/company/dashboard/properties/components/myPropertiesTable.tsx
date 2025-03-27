@@ -1,16 +1,13 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-
-import { DataTable } from "@/components/dataTable/data-table";
-
-import { SortingState } from "@tanstack/react-table";
-
-import { myPropertiesTableColumns } from "./myPropertiesTableColumns";
-import { IProperties } from "@/types/dashboard/properties";
+import { useState } from "react"
+import { DataTable } from "@/components/dataTable/data-table"
+import type { SortingState } from "@tanstack/react-table"
+import type { IProperties } from "@/types/dashboard/properties"
+import { myPropertiesTableColumns } from "./myPropertiesTableColumns"
 
 export default function MyPropertiesTable(data: IProperties) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([])
 
   return (
     <>
@@ -33,5 +30,6 @@ export default function MyPropertiesTable(data: IProperties) {
         </div>
       </div>
     </>
-  );
+  )
 }
+

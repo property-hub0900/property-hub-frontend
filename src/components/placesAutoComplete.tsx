@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 "use client";
 
 import type React from "react";
@@ -28,7 +30,6 @@ export default function PlacesAutocomplete({
 }: PlacesAutocompleteProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchInput, setSearchInput] = useState(value || "");
-  const [suggestions, setSuggestions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isPlaceSelected, setIsPlaceSelected] = useState(false);
   const autocompleteRef = useRef<any>(null);
@@ -96,7 +97,6 @@ export default function PlacesAutocomplete({
           setSearchInput(place.formatted_address);
           onChange(place.formatted_address);
           setIsPlaceSelected(true);
-          setSuggestions([]);
         }
       });
 
@@ -182,7 +182,7 @@ export default function PlacesAutocomplete({
     setSearchInput("");
     onChange("");
     setIsPlaceSelected(false);
-    setSuggestions([]);
+
     if (inputRef.current) {
       inputRef.current.focus();
     }

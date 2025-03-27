@@ -42,7 +42,7 @@ export default function CreatePropertyPage() {
       </div>
       <div className="bg-white rounded-md shadow">
         <div className="p-6">
-          <PropertyForm mode="create" onSubmit={onSubmit}></PropertyForm>
+          <PropertyForm mode="create" onSubmit={onSubmit as any}></PropertyForm>
         </div>
       </div>
     </>
