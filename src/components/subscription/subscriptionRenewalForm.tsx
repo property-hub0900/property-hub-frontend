@@ -1,61 +1,165 @@
-"use client";
+"use client"
 
-import { StripeCardForm } from "@/components/stripe/stripeCardForm";
-import { Button } from "@/components/ui/button";
-import { CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import { ArrowLeft, BanknoteIcon, CreditCard } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { Separator } from "../ui/separator";
+import { StripeCardForm } from "@/components/stripe/stripeCardForm"
+import { Button } from "@/components/ui/button"
+import { CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { cn } from "@/lib/utils"
+import { ArrowLeft, BanknoteIcon, CreditCard } from 'lucide-react'
+import { useTranslations } from "next-intl"
+import { useState } from "react"
+import { Separator } from "@/components/ui/separator"
+import { useAuth } from "@/lib/hooks/useAuth"
+
 
 interface SubscriptionRenewalFormProps {
-    onCancel: () => void;
+    onCancel: () => void
+}
+
+// Define the billing details interface to match the one in StripeCardForm
+interface BillingDetails {
+    name?: string
+    email?: string
+    phone?: string
+    address?: {
+        country: string
+        line1?: string
+        line2?: string
+        city?: string
+        state?: string
+        postal_code?: string
+    }
 }
 
 export function SubscriptionRenewalForm({ onCancel }: SubscriptionRenewalFormProps) {
-    const [paymentMethod, setPaymentMethod] = useState("card");
-    const [paymentError, setPaymentError] = useState<string | null>(null);
-    const [paymentSuccess, setPaymentSuccess] = useState(false);
-    const t = useTranslations();
+    const [paymentMethod, setPaymentMethod] = useState("card")
+    const [paymentError, setPaymentError] = useState<string | null>(null)
+    const [paymentSuccess, setPaymentSuccess] = useState(false)
+    const [isProcessing, setIsProcessing] = useState(false)
+    const { user } = useAuth()
+    const t = useTranslations()
 
-    const handleCardPaymentSubmit = async (paymentMethodId: string) => {
+    const handleCardPaymentSubmit = async (paymentMethodId: string, billingDetails: BillingDetails) => {
+        if (!paymentMethodId) {
+            setPaymentError("Invalid payment method")
+            return
+        }
+
+        setIsProcessing(true)
+        setPaymentError(null)
+
         try {
+            // Use a nonce or CSRF token for additional security
+            const csrfToken = await fetchCsrfToken()
+
+            // Create a unique idempotency key to prevent duplicate charges
+            const idempotencyKey = `renewal-${user?.userId || ''}-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`
+
             const response = await fetch("/api/payment", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentMethodId, amount: 200 }), // Hardcoded $2.00 (200 cents)
-            });
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": csrfToken,
+                },
+                body: JSON.stringify({
+                    paymentMethodId,
+                    amount: 200,
+                    idempotencyKey,
+                    userId: user?.userId,
+                    billingDetails,
+                    metadata: {
+                        subscriptionType: "renewal",
+                        userId: user?.userId,
+                        userEmail: user?.email,
+                    }
+                }),
+            })
 
-            const result = await response.json();
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}))
+                throw new Error(errorData.message || `Payment failed with status: ${response.status}`)
+            }
+
+            const result = await response.json()
             if (result.success) {
-                setPaymentSuccess(true);
-                setPaymentError(null);
+                setPaymentSuccess(true)
+                setPaymentError(null)
             } else {
-                setPaymentError(result.error || "Payment failed");
-                setPaymentSuccess(false);
+                setPaymentError(result.error || "Payment failed")
+                setPaymentSuccess(false)
             }
         } catch (err) {
-            setPaymentError("An error occurred during payment");
-            setPaymentSuccess(false);
+            console.error("Payment error:", err)
+            setPaymentError(typeof err === 'object' && err !== null && 'message' in err
+                ? String(err.message)
+                : "An error occurred during payment processing. Please try again.")
+            setPaymentSuccess(false)
+        } finally {
+            setIsProcessing(false)
         }
-    };
+    }
 
-    const handleBankTransfer = () => {
-        // Handle bank transfer (not implemented here)
-        console.log("Bank transfer selected - manual process required.");
-        setPaymentSuccess(true); // Simulate success for demo
-    };
+    // Function to fetch CSRF token
+    const fetchCsrfToken = async (): Promise<string> => {
+        try {
+            const response = await fetch("/api/csrf-token")
+            const data = await response.json()
+            return data.csrfToken
+        } catch (error) {
+            console.error("Failed to fetch CSRF token:", error)
+            return ""
+        }
+    }
+
+    const handleBankTransfer = async () => {
+        setIsProcessing(true)
+        setPaymentError(null)
+
+        try {
+            // Record the bank transfer intent in your system
+            const response = await fetch("/api/bank-transfer", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    amount: 200,
+                    reference: user?.email || t("yourAccountEmail"),
+                    userId: user?.userId,
+                    metadata: {
+                        subscriptionType: "renewal",
+                        userId: user?.userId,
+                        userEmail: user?.email,
+                    }
+                }),
+            })
+
+            const result = await response.json()
+            if (result.success) {
+                setPaymentSuccess(true)
+            } else {
+                setPaymentError(result.error || "Failed to record bank transfer")
+            }
+        } catch (err) {
+            console.error("Bank transfer error:", err)
+            setPaymentError("An error occurred. Please try again.")
+        } finally {
+            setIsProcessing(false)
+        }
+    }
 
     return (
         <div className="w-full">
             <Separator />
             <CardHeader className="px-4 sm:px-6 py-4">
                 <div className="flex items-center">
-                    <Button variant="ghost" size="sm" className="-ml-8 p-0 h-8 w-8" onClick={onCancel}>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="-ml-8 p-0 h-8 w-8"
+                        onClick={onCancel}
+                        type="button"
+                        aria-label={t("back")}
+                    >
                         <ArrowLeft className="h-4 w-4" />
                     </Button>
                     <CardTitle className="text-xl font-bold">{t("subscriptionRenewal")}</CardTitle>
@@ -70,20 +174,25 @@ export function SubscriptionRenewalForm({ onCancel }: SubscriptionRenewalFormPro
                             <p className="text-sm text-muted-foreground">{t("autoRenewalMessage")}</p>
                         </div>
                         <div className="flex-1.5 text-xl sm:text-2xl font-bold text-primary">
-                            <span>20</span>{" "}
-                            <span className="text-sm font-normal w-full">/ {t("remainingDays")}</span>
+                            <span>20</span> <span className="text-sm font-normal w-full">/ {t("remainingDays")}</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="space-y-4">
                     <h3 className="text-base font-medium">{t("paymentDetails")}</h3>
-                    <RadioGroup defaultValue={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-2 gap-3 w-[400px]">
+                    <RadioGroup
+                        defaultValue={paymentMethod}
+                        onValueChange={setPaymentMethod}
+                        className="grid grid-cols-2 gap-3 w-full max-w-[400px]"
+                        disabled={isProcessing}
+                    >
                         <Label
                             htmlFor="card"
                             className={cn(
                                 "flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer",
-                                paymentMethod === "card" ? "border-primary" : "border-muted"
+                                paymentMethod === "card" ? "border-primary" : "border-muted",
+                                isProcessing && "opacity-50 cursor-not-allowed",
                             )}
                         >
                             <RadioGroupItem value="card" id="card" className="sr-only" />
@@ -95,7 +204,8 @@ export function SubscriptionRenewalForm({ onCancel }: SubscriptionRenewalFormPro
                             htmlFor="bank"
                             className={cn(
                                 "flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer",
-                                paymentMethod === "bank" ? "border-primary" : "border-muted"
+                                paymentMethod === "bank" ? "border-primary" : "border-muted",
+                                isProcessing && "opacity-50 cursor-not-allowed",
                             )}
                         >
                             <RadioGroupItem value="bank" id="bank" className="sr-only" />
@@ -107,21 +217,6 @@ export function SubscriptionRenewalForm({ onCancel }: SubscriptionRenewalFormPro
                     {paymentMethod === "card" && (
                         <div className="space-y-4 pt-2">
                             <StripeCardForm onSubmit={handleCardPaymentSubmit} amount={200} />
-                            <div className="space-y-2">
-                                <Label htmlFor="country">{t("country")}</Label>
-                                <Select>
-                                    <SelectTrigger id="country" className="w-full">
-                                        <SelectValue placeholder={t("select")} />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="us">{t("countries.us")}</SelectItem>
-                                        <SelectItem value="ca">{t("countries.ca")}</SelectItem>
-                                        <SelectItem value="uk">{t("countries.uk")}</SelectItem>
-                                        <SelectItem value="au">{t("countries.au")}</SelectItem>
-                                        <SelectItem value="ae">{t("countries.ae")}</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
                         </div>
                     )}
 
@@ -138,9 +233,12 @@ export function SubscriptionRenewalForm({ onCancel }: SubscriptionRenewalFormPro
                                             <p>{t("bankTransferInstructions")}</p>
                                             <p>{t("bankName")}: National Bank</p>
                                             <p>{t("accountName")}: Property Explorer LLC</p>
-                                            <p>{t("accountNumber")}: 1234567890</p>
-                                            <p className="break-words">IBAN: AE123456789012345678901</p>
-                                            <p>{t("reference")}: {t("yourAccountEmail")}</p>
+                                            {/* Don't display full account numbers in the UI */}
+                                            <p>{t("accountNumber")}: ****7890</p>
+                                            <p className="break-words">IBAN: AE12********78901</p>
+                                            <p>
+                                                {t("reference")}: {user?.email || t("yourAccountEmail")}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -148,21 +246,38 @@ export function SubscriptionRenewalForm({ onCancel }: SubscriptionRenewalFormPro
                         </div>
                     )}
                 </div>
-                {paymentError && <p className="text-sm text-red-600">{paymentError}</p>}
-                {paymentSuccess && <p className="text-sm text-green-600">{t("paymentSuccessful")}</p>}
+                {paymentError && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-md">
+                        <p className="text-sm text-red-600">{paymentError}</p>
+                    </div>
+                )}
+                {paymentSuccess && (
+                    <div className="p-3 bg-green-50 border border-green-200 rounded-md">
+                        <p className="text-sm text-green-600">{t("paymentSuccessful")}</p>
+                    </div>
+                )}
             </CardContent>
             <CardFooter className="flex flex-col sm:flex-row justify-between gap-3 border-t bg-muted/50 px-4 sm:px-6 py-4">
-                <Button variant="outline" onClick={onCancel} className="w-full sm:w-auto order-2 sm:order-1">
+                <Button
+                    variant="outline"
+                    onClick={onCancel}
+                    className="w-full sm:w-auto order-2 sm:order-1"
+                    type="button"
+                    disabled={isProcessing}
+                >
                     {t("cancel")}
                 </Button>
-                <Button
-                    onClick={paymentMethod === "card" ? undefined : handleBankTransfer}
-                    className="w-full sm:w-auto order-1 sm:order-2"
-                    disabled={paymentMethod === "card"}
-                >
-                    {t("payNow")}
-                </Button>
+                {paymentMethod === "bank" && (
+                    <Button
+                        onClick={handleBankTransfer}
+                        className="w-full sm:w-auto order-1 sm:order-2"
+                        type="button"
+                        disabled={isProcessing}
+                    >
+                        {isProcessing ? t("processing") : t("payNow")}
+                    </Button>
+                )}
             </CardFooter>
         </div>
-    );
+    )
 }

@@ -730,7 +730,12 @@
     "ca": "Canada",
     "uk": "United Kingdom",
     "au": "Australia",
-    "ae": "United Arab Emirates"
+    "ae": "United Arab Emirates",
+    "qatar": "Qatar",
+    "uae": "United Arab Emirates",
+    "saudiArabia": "Saudi Arabia",
+    "kuwait": "Kuwait",
+    "bahrain": "Bahrain"
   },
   "transactionHistory": "Transaction History",
   "transactionId": "Transaction ID",
@@ -772,5 +777,42 @@
   "cardNumber": "Card Number",
   "expiration": "Expiration Date",
   "cvc": "CVC",
-  "processing": "Processing..."
+  "processing": "Processing...",
+  "securePaymentNotice": "Your payment is secure and encrypted.",
+  "topUpSubscription": {
+    "title": "Top Up Subscription",
+    "history": "Top Up History",
+    "addNew": "Add New Top Up",
+    "selectStatus": "Filter by Status",
+    "allStatuses": "All Statuses",
+    "statusPaid": "Paid",
+    "statusPending": "Pending",
+    "statusCancelled": "Cancelled",
+    "topUpPoints": "Top Up Points",
+    "selectPointsHelp": "Select the number of points you want to purchase",
+    "points": "Points",
+    "paymentMethods": "Payment Methods",
+    "total": "Total Amount",
+    "card": "Credit/Debit Card",
+    "sofortKlarna": "Sofort/Klarna",
+    "cardNumber": "Card Number",
+    "expiration": "Expiration Date",
+    "cvc": "CVC",
+    "country": "Country",
+    "selectCountry": "Select Country",
+    "sofortInstructions": "You will be redirected to Sofort/Klarna to complete your payment after clicking 'Pay Now'.",
+    "cancel": "Cancel",
+    "processing": "Processing...",
+    "payNow": "Pay Now",
+    "paymentSuccessful": "Payment successful! Your points have been added.",
+    "paymentFailed": "Payment failed. Please try again.",
+    "columns": {
+      "date": "Date",
+      "points": "Points",
+      "expires": "Expires In",
+      "paymentMethod": "Payment Method",
+      "subscriptionExpiryDate": "Subscription Expiry",
+      "status": "Status"
+    }
+  }
 }

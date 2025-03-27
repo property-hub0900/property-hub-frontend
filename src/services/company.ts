@@ -123,4 +123,10 @@ export const companyService = {
   resendInvitation: async (email: string): Promise<IResponse<string>> => {
     return apiClient.post("/staff/resend-invitation", { email });
   },
+  getMe: async () => {
+    return apiClient.get("/staff/me");
+  },
+  getTopUpPlans: async (): Promise<IResponse<any>> => {
+    return apiClient.get("companies/topup-plans");
+  },
 };
