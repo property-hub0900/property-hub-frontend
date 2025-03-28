@@ -189,19 +189,22 @@ export default function PropertyForm(
               )}
             />
             <div className="col-span-2">
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="PropertyImages"
                 render={({ field }) => (
                   <FormItem className="col-span-2">
+                    <FormLabel>{t("form.propertyImages.label")}</FormLabel>
+                    <FormControl>
+                      {/* <Input {...field} /> */}
+                      <UploadImages
+                        initialImages={initialImages}
+                        setUploadedFilesUrls={setFilesUrls}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
-
-              <UploadImages
-                initialImages={initialImages}
-                setUploadedFilesUrls={setFilesUrls}
               />
 
               {/* <UploadImages1

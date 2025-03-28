@@ -172,6 +172,14 @@
       "label": "Title",
       "placeholder": ""
     },
+    "propertyImages": {
+      "label": "Property Images",
+      "placeholder": "",
+      "errors": {
+        "required": "Property Images are required.",
+        "invalid": "Images size should not be greater than 1MB"
+      }
+    },
     "propertyCategory": {
       "label": "Property Category",
       "placeholder": "Select Property Category",

@@ -26,18 +26,12 @@ export const createPropertySchema = (t: (key: string) => string) =>
     propertyType: commonValidations.stringRequired(t("form.required")),
     propertySize: commonValidations.stringRequired(t("form.required")),
     bedrooms: commonValidations.numberOptional(t("form.required")),
-    bathrooms: commonValidations.numberOptional(t("form.required")),
-    tenure: commonValidations.stringRequired(t("form.required")),
-    ownershipStatus: commonValidations.enumRequired(
-      PROPERTY_OWNERSHIP_STATUS,
-      t("form.required")
-    ),
+    bathrooms: commonValidations.numberRequired(t("form.required")),
+    tenure: commonValidations.stringOptional(),
+    ownershipStatus: commonValidations.enumOptional(PROPERTY_OWNERSHIP_STATUS),
     buildingFloors: commonValidations.numberOptional(t("form.required")),
     floor: commonValidations.numberOptional(t("form.required")),
-    occupancy: commonValidations.enumRequired(
-      PROPERTY_OCCUPANCY,
-      t("form.required")
-    ),
+    occupancy: commonValidations.enumOptional(PROPERTY_OCCUPANCY),
     furnishedType: z.string().trim().nullable(),
     views: commonValidations.stringOptional(),
     serviceCharges: commonValidations.stringOptional(),
