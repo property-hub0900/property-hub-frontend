@@ -1,5 +1,9 @@
 {
   "title": {
+    "companySettings": "Company Settings",
+    "personalDetails": "Personal Details",
+    "companyDetails": "Company Details",
+    "businessAddress": "Business Address",
     "loginCompanyTitle": "Welcome to PropertyExplorer",
     "registerCompanyTitle": "Welcome to Property",
     "loginCustomerTitle": "Welcome to PropertyExplorer",
@@ -41,6 +45,7 @@
     "publish": "Publish",
     "close": "close",
     "uploadPhoto": "Upload Photo",
+    "uploadLogo": "Upload Logo",
     "save": "Save"
   },
   "text": {
@@ -335,6 +340,45 @@
     "referenceNo": {
       "label": "Reference No",
       "placeholder": ""
+    },
+    "languagesSpoken": {
+      "label": "Languages Spoken",
+      "placeholder": "Select languages",
+      "options": {
+        "english": "English",
+        "arabic": "Arabic",
+        "both": "English & Arabic"
+      }
+    },
+    "address": {
+      "label": "Address",
+      "placeholder": "Address"
+    },
+    "businessEmail": {
+      "label": "Business Email",
+      "placeholder": "Business Email"
+    },
+    "websiteUrl": {
+      "label": "Website URL",
+      "placeholder": "Website URL"
+    },
+    "streetAddress": {
+      "label": "Street Address",
+      "placeholder": "Street Address"
+    },
+    "city": {
+      "label": "City",
+      "placeholder": "Select city"
+    },
+    "stateProvince": {
+      "label": "State/Province",
+      "placeholder": "Select state/province"
+    },
+    "postalCode": {
+      "label": "Postal Code"
+    },
+    "businessNumber": {
+      "label": "Business Number"
     }
   },
   "seo": {
@@ -704,5 +748,123 @@
         "viewResults": "View Results"
       }
     }
+  },
+  "subscriptionRenewal": "Subscription Renewal",
+  "reviewAndUpdatePayment": "Please Enter your Payment details.",
+  "subscriptionPlan": "Subscription Plan",
+  "remainingDays": "remaining days",
+  "autoRenewalMessage": "Please note that if you renew your subscription before the expiry date, the new quota of points will be added only after the current subscription expires.",
+  "paymentDetails": "Payment Details",
+  "card": "Card",
+  "bankTransfer": "Bank Transfer",
+  "cardDetails": "Card Details",
+  "country": "Country",
+  "select": "Select",
+  "bankTransferInfo": "Bank Transfer Information",
+  "bankTransferInstructions": "Please use the following details to make your bank transfer:",
+  "bankName": "Bank",
+  "accountName": "Account Name",
+  "accountNumber": "Account Number",
+  "reference": "Reference",
+  "yourAccountEmail": "Your account email",
+  "cancel": "Cancel",
+  "payNow": "Pay Now",
+  "countries": {
+    "us": "United States",
+    "ca": "Canada",
+    "uk": "United Kingdom",
+    "au": "Australia",
+    "ae": "United Arab Emirates",
+    "qatar": "Qatar",
+    "uae": "United Arab Emirates",
+    "saudiArabia": "Saudi Arabia",
+    "kuwait": "Kuwait",
+    "bahrain": "Bahrain"
+  },
+  "transactionHistory": "Transaction History",
+  "transactionId": "Transaction ID",
+  "date": "Date",
+  "amount": "Amount",
+  "status": "Status",
+  "paymentMethod": "Payment Method",
+  "invoice": "Invoice",
+  "view": "View",
+  "statusSuccessful": "Successful",
+  "statusPending": "Pending",
+  "statusFailed": "Failed",
+  "subscription": "Subscription",
+  "pointsAddedToAccount": "Points added to your account upon successful registration.",
+  "renewSubscription": "Renew Subscription",
+  "remainingPoints": "remaining points",
+  "pointsExpires": "Points Expires",
+  "contractExpires": "Contract Expires",
+  "onDate": "on {date}",
+  "subscriptionRecordsHistory": "Subscription Records History",
+  "filters": "Filters",
+  "previous": "Previous",
+  "subscriptionDate": "Subscription Date",
+  "points": "Points",
+  "expiry": "Expiry",
+  "type": "Type",
+  "subscriptionExpiryDate": "Subscription Expiry Date",
+  "statusActive": "Active",
+  "statusExpired": "Expired",
+  "toast": {
+    "paymentSuccess": "Payment processed successfully",
+    "paymentFailed": "Payment failed. Please try again.",
+    "profileUpdated": "Profile updated successfully",
+    "companyUpdated": "Company details updated successfully",
+    "updateFailed": "Failed to update"
+  },
+  "errors": {
+    "invalidCard": "Invalid card details",
+    "paymentFailed": "Payment failed. Please try again.",
+    "connectionError": "Connection error. Please check your internet connection."
+  },
+  "cardNumber": "Card Number",
+  "expiration": "Expiration Date",
+  "cvc": "CVC",
+  "processing": "Processing...",
+  "securePaymentNotice": "Your payment is secure and encrypted.",
+  "topUpSubscription": {
+    "title": "Top Up Subscription",
+    "history": "Top Up History",
+    "addNew": "Add New Top Up",
+    "back": "Back",
+    "selectStatus": "Filter by Status",
+    "allStatuses": "All Statuses",
+    "statusPaid": "Paid",
+    "statusPending": "Pending",
+    "statusCancelled": "Cancelled",
+    "topUpPoints": "Top Up Points",
+    "selectPointsHelp": "Select the number of points you want to purchase",
+    "points": "Points",
+    "paymentMethods": "Payment Methods",
+    "total": "Total Amount",
+    "card": "Credit/Debit Card",
+    "sofortKlarna": "Sofort/Klarna",
+    "cardNumber": "Card Number",
+    "expiration": "Expiration Date",
+    "cvc": "CVC",
+    "country": "Country",
+    "selectCountry": "Select Country",
+    "sofortInstructions": "You will be redirected to Sofort/Klarna to complete your payment after clicking 'Pay Now'.",
+    "cancel": "Cancel",
+    "processing": "Processing...",
+    "payNow": "Pay Now",
+    "paymentSuccessful": "Payment successful! Your points have been added.",
+    "paymentFailed": "Payment failed. Please try again.",
+    "columns": {
+      "date": "Date",
+      "points": "Points",
+      "expires": "Expires In",
+      "paymentMethod": "Payment Method",
+      "subscriptionExpiryDate": "Subscription Expiry",
+      "status": "Status"
+    }
+  },
+  "tabs": {
+    "personalDetails": "Personal Details",
+    "companyDetails": "Company Details"
   }
 }
