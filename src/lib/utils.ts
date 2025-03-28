@@ -84,3 +84,14 @@ export function formatCurrency(amount: number): string {
     currency: "USD",
   }).format(amount);
 }
+
+export const extractFirebaseStoragePath = (url) => {
+  // Create a URL object to parse the URL
+  const urlObj = new URL(url);
+
+  // Get the path after `/o/` and decode it
+  const encodedPath = urlObj.pathname.split("/o/")[1];
+  const decodedPath = decodeURIComponent(encodedPath);
+
+  return decodedPath;
+};

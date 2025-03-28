@@ -53,8 +53,8 @@ export const createPropertySchema = (t: (key: string) => string) =>
     status: commonValidations.stringRequired(t("form.required")),
     PropertyImages: z.array(
       z.object({
-        // isPrimary: z.boolean(),
-        url: z.string().url(t("form.required")),
+        url: z.string(), // Required field
+        path: z.string(), // Required field
       })
     ),
   });

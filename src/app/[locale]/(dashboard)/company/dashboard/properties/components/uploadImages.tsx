@@ -14,10 +14,9 @@ registerPlugin(FilePondPluginImagePreview);
 
 import { storage } from "@/lib/firebaseConfig";
 
-type TImages = {
-  //isPrimary: boolean;
+export type TImages = {
   url: string;
-  path?: string;
+  path: string;
 };
 
 export interface IFilesUrlPayload {
@@ -33,6 +32,12 @@ export const UploadImages = (props: IUploadFilesProps) => {
   const { setUploadedFilesUrls, initialImages } = props;
   const [files, setFiles] = useState<any[]>([]);
   const initialized = useRef(false);
+  const filesRef = useRef(files);
+
+  // Sync filesRef with current files state
+  useEffect(() => {
+    filesRef.current = files;
+  }, [files]);
 
   // Initialize files and parent state
   useEffect(() => {
@@ -59,7 +64,6 @@ export const UploadImages = (props: IUploadFilesProps) => {
       setFiles(initialFiles);
       setUploadedFilesUrls(() => ({
         images: initialImages.map((img) => ({
-          //isPrimary: img.isPrimary,
           url: img.url,
           path: img.path,
         })),
@@ -102,7 +106,6 @@ export const UploadImages = (props: IUploadFilesProps) => {
                   images: [
                     ...prev.images,
                     {
-                      //isPrimary: false,
                       url: downloadURL,
                       path: storagePath,
                     },
@@ -124,6 +127,10 @@ export const UploadImages = (props: IUploadFilesProps) => {
             setUploadedFilesUrls((prev) => ({
               images: prev.images.filter((img) => img.path !== uniqueFileId),
             }));
+            const updatedFiles = filesRef.current.filter(
+              (file) => file.serverId !== uniqueFileId
+            );
+            setFiles(updatedFiles);
             load();
           } catch (err: any) {
             error(err.message);
