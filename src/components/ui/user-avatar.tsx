@@ -72,7 +72,7 @@ interface UserAvatarProps {
     className?: string
 }
 
-export function UserAvatar({ src, firstName, lastName, size = "md", className = "" }: UserAvatarProps) {
+export function UserAvatar({ src, firstName, lastName, size = "md", className = "shadow-md" }: UserAvatarProps) {
     const initials = getInitials(firstName, lastName)
     const colorClass = getAvatarColor(`${firstName} ${lastName}`)
 
