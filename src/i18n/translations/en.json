@@ -1,5 +1,9 @@
 {
   "title": {
+    "companySettings": "Company Settings",
+    "personalDetails": "Personal Details",
+    "companyDetails": "Company Details",
+    "businessAddress": "Business Address",
     "loginCompanyTitle": "Welcome to PropertyExplorer",
     "registerCompanyTitle": "Welcome to Property",
     "loginCustomerTitle": "Welcome to PropertyExplorer",
@@ -41,6 +45,7 @@
     "publish": "Publish",
     "close": "close",
     "uploadPhoto": "Upload Photo",
+    "uploadLogo": "Upload Logo",
     "save": "Save"
   },
   "text": {
@@ -335,6 +340,45 @@
     "referenceNo": {
       "label": "Reference No",
       "placeholder": ""
+    },
+    "languagesSpoken": {
+      "label": "Languages Spoken",
+      "placeholder": "Select languages",
+      "options": {
+        "english": "English",
+        "arabic": "Arabic",
+        "both": "English & Arabic"
+      }
+    },
+    "address": {
+      "label": "Address",
+      "placeholder": "Address"
+    },
+    "businessEmail": {
+      "label": "Business Email",
+      "placeholder": "Business Email"
+    },
+    "websiteUrl": {
+      "label": "Website URL",
+      "placeholder": "Website URL"
+    },
+    "streetAddress": {
+      "label": "Street Address",
+      "placeholder": "Street Address"
+    },
+    "city": {
+      "label": "City",
+      "placeholder": "Select city"
+    },
+    "stateProvince": {
+      "label": "State/Province",
+      "placeholder": "Select state/province"
+    },
+    "postalCode": {
+      "label": "Postal Code"
+    },
+    "businessNumber": {
+      "label": "Business Number"
     }
   },
   "seo": {
@@ -767,7 +811,10 @@
   "statusExpired": "Expired",
   "toast": {
     "paymentSuccess": "Payment processed successfully",
-    "paymentFailed": "Payment failed. Please try again."
+    "paymentFailed": "Payment failed. Please try again.",
+    "profileUpdated": "Profile updated successfully",
+    "companyUpdated": "Company details updated successfully",
+    "updateFailed": "Failed to update"
   },
   "errors": {
     "invalidCard": "Invalid card details",
@@ -783,6 +830,7 @@
     "title": "Top Up Subscription",
     "history": "Top Up History",
     "addNew": "Add New Top Up",
+    "back": "Back",
     "selectStatus": "Filter by Status",
     "allStatuses": "All Statuses",
     "statusPaid": "Paid",
@@ -814,5 +862,9 @@
       "subscriptionExpiryDate": "Subscription Expiry",
       "status": "Status"
     }
+  },
+  "tabs": {
+    "personalDetails": "Personal Details",
+    "companyDetails": "Company Details"
   }
 }

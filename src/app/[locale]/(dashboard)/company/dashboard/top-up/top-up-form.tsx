@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
-import { CreditCardIcon as Card } from "lucide-react"
+import { ArrowLeft, CreditCardIcon as Card } from "lucide-react"
 import { CreditCard } from "lucide-react"
 import { toast } from "sonner"
 
@@ -97,7 +97,19 @@ export function TopUpForm({ onCancel, plans = [] }: TopUpFormProps) {
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Points Selection */}
         <div className="space-y-4">
-          <h2 className="text-lg font-medium">{t("topUpPoints")}</h2>
+          <div className="flex">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="-ml-8 p-0 h-8 w-8"
+              onClick={onCancel}
+              type="button"
+              aria-label={t("back")}
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            <h2 className="text-lg font-medium">{t("topUpPoints")}</h2>
+          </div>
           <p className="text-sm text-muted-foreground">{t("selectPointsHelp")}</p>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">

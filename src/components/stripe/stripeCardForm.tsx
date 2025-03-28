@@ -169,7 +169,6 @@ function CardForm({ onSubmit, amount }: StripeCardFormProps) {
                 },
             })
 
-            debugger;
 
             if (error) {
                 setErrors((prev) => ({

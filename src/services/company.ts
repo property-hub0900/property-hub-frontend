@@ -36,6 +36,21 @@ export interface InviteStaffRequest {
   canPublishProperty: boolean;
   canFeatureProperty: boolean;
   biography?: string;
+  profilePhoto?: string;
+}
+
+export interface UpdateCompanyRequest {
+  name: string;
+  email: string;
+  phone?: string;
+  website?: string;
+  logo?: string;
+  companySize?: string;
+  street?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: string;
 }
 
 export interface UpdateStaffRequest extends Partial<InviteStaffRequest> {
@@ -128,5 +143,10 @@ export const companyService = {
   },
   getTopUpPlans: async (): Promise<IResponse<any>> => {
     return apiClient.get("companies/topup-plans");
+  },
+  updateCompany: async (
+    payload: UpdateCompanyRequest
+  ): Promise<IResponse<any>> => {
+    return apiClient.put(`/companies`, payload);
   },
 };
