@@ -8,6 +8,10 @@ import {
   PROPERTY_PURPOSE,
 } from "@/constants/constants";
 
+// Define the maximum values
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILES = 3;
+
 export const createPropertySchema = (t: (key: string) => string) =>
   z.object({
     title: commonValidations.stringRequired(t("form.required")),
@@ -39,16 +43,25 @@ export const createPropertySchema = (t: (key: string) => string) =>
     priceVisibilityFlag: z.boolean().optional(),
     //city: commonValidations.stringRequired(t("form.required")),
     address: commonValidations.stringRequired(t("form.required")),
-    amenities: z.array(z.string()).optional(),
-    referenceNo: commonValidations.stringOptional(),
+    amenities: z.array(z.string()).min(1, t("form.required")),
+    referenceNo: commonValidations.stringRequired(t("form.required")),
     description: commonValidations.stringRequired(t("form.required")),
     descriptionAr: commonValidations.stringRequired(t("form.required")),
     featured: z.boolean().optional(),
     status: commonValidations.stringRequired(t("form.required")),
-    PropertyImages: z.array(
-      z.object({
-        url: z.string(), // Required field
-        path: z.string(), // Required field
-      })
-    ),
+    // PropertyImages: z.array(
+    //   z
+    //     .object({
+    //       url: z.string(), // Required field
+    //     })
+    //     .optional()
+    // ),
+    PropertyImages: z
+      .array(
+        z.object({
+          url: z.string().url("Invalid image URL"),
+        })
+      )
+      .min(1, "At least one image is required")
+      .max(MAX_FILES, `Maximum ${MAX_FILES} images allowed`),
   });

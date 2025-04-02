@@ -297,11 +297,11 @@
       "placeholder": ""
     },
     "description": {
-      "label": "description",
+      "label": "Description",
       "placeholder": ""
     },
     "descriptionAr": {
-      "label": "descriptionAr",
+      "label": "DescriptionAr",
       "placeholder": ""
     },
     "status": {

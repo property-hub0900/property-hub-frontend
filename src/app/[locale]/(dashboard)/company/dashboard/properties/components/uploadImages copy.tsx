@@ -82,14 +82,7 @@ export const UploadImages = (props: IUploadFilesProps) => {
       maxFiles={20}
       server={{
         process: (fieldName, file, metadata, load, error, progress, abort) => {
-          console.log(
-            "fieldName",
-            fieldName,
-            "metadata",
-            metadata,
-            "aboart",
-            abort
-          );
+          console.log("fieldName", fieldName, "metadata", metadata, "aboart", abort);
           const fileName = `${Date.now()}-${file.name}`;
           const storagePath = `images/${fileName}`;
           const storageRef = ref(storage, storagePath);
