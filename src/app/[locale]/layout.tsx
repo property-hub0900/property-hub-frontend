@@ -60,7 +60,7 @@ export default async function RootLayout({
                 strategy="beforeInteractive"
               />
               <Header />
-              <Toaster closeButton richColors />
+              <Toaster closeButton richColors theme="light" />
               {children}
               <Footer />
             </ReactQueryProvider>

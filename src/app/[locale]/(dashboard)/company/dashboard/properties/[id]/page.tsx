@@ -18,6 +18,7 @@ import {
 import { Loader } from "@/components/loader";
 import { COMPANY_PATHS } from "@/constants/paths";
 import PropertyForm from "../components/propertyForm";
+//import { PropertyForm } from "../components/property-form";
 
 export default function EditPropertyPage() {
   const params = useParams();
@@ -68,11 +69,18 @@ export default function EditPropertyPage() {
       <div className="bg-white rounded-md shadow">
         <div className="p-6">
           {getPropertyByIdData && (
-            <PropertyForm
-              mode="edit"
-              onSubmit={onSubmit as any}
-              defaultValues={getPropertyByIdData}
-            ></PropertyForm>
+            <>
+              {/* <PropertyForm
+                onSubmit={onSubmit as any}
+                initialImages={getPropertyByIdData.PropertyImages}
+              ></PropertyForm> */}
+
+              <PropertyForm
+                mode="edit"
+                onSubmit={onSubmit as any}
+                defaultValues={getPropertyByIdData}
+              ></PropertyForm>
+            </>
           )}
         </div>
       </div>

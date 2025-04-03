@@ -70,3 +70,28 @@ export function buildQueryString(params: Record<string, any>): string {
 
   return filtered;
 }
+export function formatDate(dateString: string): string {
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+export function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(amount);
+}
+
+export const extractFirebaseStoragePath = (url) => {
+  // Create a URL object to parse the URL
+  const urlObj = new URL(url);
+
+  // Get the path after `/o/` and decode it
+  const encodedPath = urlObj.pathname.split("/o/")[1];
+  const decodedPath = decodeURIComponent(encodedPath);
+
+  return decodedPath;
+};

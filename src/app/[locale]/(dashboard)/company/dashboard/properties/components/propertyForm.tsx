@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
+
 import {
   PROPERTY_CATEGORIES,
   PROPERTY_FURNISHED_TYPE,
@@ -42,10 +42,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DefaultValues, useForm } from "react-hook-form";
 import PlacesAutocomplete from "../../../../../../../components/placesAutoComplete";
-import { IFilesUrlPayload, UploadImages } from "./uploadImages";
+import { IFilesUrlPayload, UploadImages, TImages } from "./uploadImages";
+
+//import { FormTiptap } from "./form-tiptap";
+import { TiptapEditor, type TiptapEditorRef } from "./tiptap-editor";
+import { toast } from "sonner";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
@@ -68,19 +72,6 @@ export default function PropertyForm(
   const isAdmin = user?.scope[0] === "admin";
   const isAgent = user?.scope[0] === "agent";
 
-  console.log("defaultValues", defaultValues);
-
-  // useEffect(() => {
-  //   setFilesUrls({
-  //     images: [
-  //       {
-  //         isPrimary: true,
-  //         url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742468400179-Screenshot%202025-03-20%20004111.png?alt=media&token=f5ac8f61-f768-495f-8be3-afdd7f9fae86",
-  //       },
-  //     ],
-  //   });
-  // }, [defaultValues]);
-
   const { data: amenitiesData, isLoading: isLoadingAmenities } = useQuery({
     queryKey: ["amenities"],
     queryFn: amenities,
@@ -97,44 +88,40 @@ export default function PropertyForm(
       mode === "edit"
         ? defaultValues
         : {
-          title: "",
-          titleAr: "",
-          featured: false,
-          category: undefined,
-          price: 0,
-          propertyType: "",
-          purpose: undefined,
-          bedrooms: 0,
-          bathrooms: 0,
-          status: PROPERTY_STATUSES.draft,
-          furnishedType: "",
-          occupancy: undefined,
-          ownershipStatus: undefined,
-          referenceNo: "",
-          priceVisibilityFlag: false,
-          propertySize: "",
-          serviceCharges: "",
-          buildingFloors: 0,
-          floor: 0,
-          tenure: "",
-          views: "",
-          address: "",
-          amenities: [],
-          description: "",
-          PropertyImages: [],
-        },
+            title: "",
+            titleAr: "",
+            featured: false,
+            category: undefined,
+            price: 0,
+            propertyType: "",
+            purpose: undefined,
+            bedrooms: 0,
+            bathrooms: 0,
+            status: PROPERTY_STATUSES.draft,
+            furnishedType: "",
+            occupancy: undefined,
+            ownershipStatus: undefined,
+            referenceNo: "",
+            priceVisibilityFlag: false,
+            propertySize: "",
+            serviceCharges: "",
+            buildingFloors: 0,
+            floor: 0,
+            tenure: "",
+            views: "",
+            address: "",
+            amenities: [],
+            description: "",
+            PropertyImages: [],
+          },
   });
 
   const category = form.watch("category");
   const propertyType = form.watch("propertyType");
 
-  console.log("filesUrls", filesUrls);
-
   const handleCancel = () => {
     router.push(COMPANY_PATHS.properties);
   };
-
-  console.log("form Errrors", form.formState.errors);
 
   const handleSubmitWithStatus = (status: TPropertyStatuses | string) => {
     const isFormValid = Object.keys(form.formState.errors).length === 0;
@@ -153,14 +140,29 @@ export default function PropertyForm(
     //form.handleSubmit(onSubmit);
   };
 
-  // const existingImages = [
-  //   {
-  //     isPrimary: true,
-  //     url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742468400179-Screenshot%202025-03-20%20004111.png?alt=media&token=f5ac8f61-f768-495f-8be3-afdd7f9fae86",
-  //     path: "images/image1.jpg",
-  //   },
-  // ];
+  console.log("Form Error", form.formState.errors);
 
+  console.log("filesUrls", filesUrls);
+  console.log("defaultValues", defaultValues);
+
+  // const initialImages = [
+  //   {
+  //     url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742553428343-Screenshot%202025-03-20%20004111.png?alt=media&token=e754d33b-8a3f-4c6e-8e8b-a463f326696f",
+  //     path: "images/1742553428343-Screenshot 2025-03-20 004111.png",
+  //   },
+  // ];.
+
+  useEffect(() => {
+    form.setValue("PropertyImages", filesUrls.images, {
+      shouldValidate: true,
+    });
+  }, [filesUrls]);
+
+  const initialImages: TImages[] = (defaultValues?.PropertyImages || []).filter(
+    Boolean
+  ) as TImages[];
+
+  const editorRef = useRef<TiptapEditorRef>(null);
 
   return (
     <>
@@ -177,7 +179,10 @@ export default function PropertyForm(
               name="title"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.title.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.title.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -190,7 +195,9 @@ export default function PropertyForm(
               name="titleAr"
               render={({ field }) => (
                 <FormItem className="col-span-2" dir="rtl">
-                  <FormLabel>عنوان</FormLabel>
+                  <FormLabel>
+                    عنوان<span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -199,10 +206,26 @@ export default function PropertyForm(
               )}
             />
             <div className="col-span-2">
-              <UploadImages
-                // initialImages={initialImages}
-                setUploadedFilesUrls={setFilesUrls}
+              <FormField
+                control={form.control}
+                name="PropertyImages"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Property Images
+                      <span className="text-destructive ml-1">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <UploadImages
+                        initialImages={initialImages}
+                        setUploadedFilesUrls={setFilesUrls}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+
               {/* <UploadImages1
                 setUploadedFilesUrls={setFilesUrls}
               ></UploadImages1> */}
@@ -212,7 +235,10 @@ export default function PropertyForm(
               name="category"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.propertyCategory.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.propertyCategory.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -239,7 +265,10 @@ export default function PropertyForm(
               name="purpose"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.propertyPurpose.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.propertyPurpose.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -266,7 +295,10 @@ export default function PropertyForm(
               name="propertyType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.propertyType.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.propertyType.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -299,7 +331,8 @@ export default function PropertyForm(
                 <FormItem>
                   <FormLabel>
                     {t("form.propertySize.label")}
-                    <span className="text-muted-foreground"> (Sqft)</span>
+                    <span>*</span>
+                    <small className="text-muted-foreground"> (Sqft)</small>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -328,7 +361,10 @@ export default function PropertyForm(
               name="bathrooms"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.bathrooms.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.bathrooms.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>
@@ -493,7 +529,10 @@ export default function PropertyForm(
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.price.label")}</FormLabel>
+                    <FormLabel>
+                      {t("form.price.label")}
+                      <span>*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -541,20 +580,31 @@ export default function PropertyForm(
               name="address"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.location.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.location.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <FormControl>
-                    <PlacesAutocomplete {...field} />
+                    {/* Pass field.onChange and field.value */}
+                    <PlacesAutocomplete
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="amenities"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.amenities.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.amenities.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <SimpleMultiSelect
                     defaultValue={field.value}
                     options={transformedAmenities || []}
@@ -571,7 +621,10 @@ export default function PropertyForm(
               name="referenceNo"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.referenceNo.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.referenceNo.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -579,32 +632,82 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="description"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.description.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.description.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
+              control={form.control}
+              name={"description"}
+              render={({ field }) => (
+                <FormItem className="w-full col-span-2">
+                  <FormLabel>
+                    {t("form.description.label")}
+                    <span>*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <TiptapEditor
+                      ref={editorRef}
+                      content={field.value}
+                      onChange={field.onChange}
+                      className="w-full"
+                    />
+                  </FormControl>
+                  {/* {description && <FormDescription>{description}</FormDescription>} */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name={"descriptionAr"}
+              render={({ field }) => (
+                <FormItem className="col-span-2" dir="rtl">
+                  <FormLabel>
+                    وصف<span>*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <TiptapEditor
+                      ref={editorRef}
+                      content={field.value}
+                      onChange={field.onChange}
+                      className="w-full"
+                    />
+                  </FormControl>
+                  {/* {description && <FormDescription>{description}</FormDescription>} */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* <FormField
               control={form.control}
               name="descriptionAr"
               render={({ field }) => (
                 <FormItem className="col-span-2" dir="rtl">
-                  <FormLabel>وصف</FormLabel>
+                  <FormLabel>
+                    وصف<span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="featured"
@@ -628,40 +731,40 @@ export default function PropertyForm(
       <div className="col-span-2 gap-2 flex justify-end mt-6">
         {(!defaultValues ||
           defaultValues?.status === PROPERTY_STATUSES.draft) && (
-            <>
+          <>
+            <Button
+              variant={"outline"}
+              type="button"
+              onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
+              className=""
+            >
+              {t("button.saveDraft")}
+            </Button>
+
+            {(isOwner || isAdmin) && (
               <Button
-                variant={"outline"}
                 type="button"
-                onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
+                onClick={() =>
+                  handleSubmitWithStatus(PROPERTY_STATUSES.published)
+                }
                 className=""
               >
-                {t("button.saveDraft")}
+                {t("button.publish")}
               </Button>
-
-              {(isOwner || isAdmin) && (
-                <Button
-                  type="button"
-                  onClick={() =>
-                    handleSubmitWithStatus(PROPERTY_STATUSES.published)
-                  }
-                  className=""
-                >
-                  {t("button.publish")}
-                </Button>
-              )}
-              {isAgent && (
-                <Button
-                  type="button"
-                  onClick={() =>
-                    handleSubmitWithStatus(PROPERTY_STATUSES.pending)
-                  }
-                  className=""
-                >
-                  {t("button.requestForApproval")}
-                </Button>
-              )}
-            </>
-          )}
+            )}
+            {isAgent && (
+              <Button
+                type="button"
+                onClick={() =>
+                  handleSubmitWithStatus(PROPERTY_STATUSES.pending)
+                }
+                className=""
+              >
+                {t("button.requestForApproval")}
+              </Button>
+            )}
+          </>
+        )}
 
         {defaultValues?.status === PROPERTY_STATUSES.published && (
           <>

@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
 import PropertyCard from "@/components/property/property-card";
 import {
   Carousel,
   CarouselContent,
-  CarouselItem
+  CarouselItem,
 } from "@/components/ui/carousel";
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Container } from "../ui/container";
@@ -102,10 +102,6 @@ const properties = [
 export default function LatestProjectsSection({
   t,
 }: LatestProjectsSectionProps) {
-
-
-
-
   const [slidesInView, setSlidesInView] = useState(4);
 
   useEffect(() => {
@@ -123,10 +119,10 @@ export default function LatestProjectsSection({
     handleResize();
 
     // Add event listener
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Clean up
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -145,20 +141,18 @@ export default function LatestProjectsSection({
             </Link>
           </div>
 
-          <Carousel
-            className="w-full"
-
-          >
+          <Carousel className="w-full">
             <CarouselContent className="-ml-4 gap-4">
               {properties.map((property) => (
                 <CarouselItem
                   key={property.id}
-                  className={`pl-4 ${slidesInView === 1
-                    ? 'basis-full'
-                    : slidesInView === 2
-                      ? 'basis-1/2'
-                      : 'basis-1/4'
-                    }`}
+                  className={`pl-4 ${
+                    slidesInView === 1
+                      ? "basis-full"
+                      : slidesInView === 2
+                      ? "basis-1/2"
+                      : "basis-1/4"
+                  }`}
                 >
                   <PropertyCard
                     t={t}

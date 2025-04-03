@@ -51,7 +51,7 @@ export default function Header({ calledBy = "home" }) {
     <>
       {/* Main Header */}
       <header className="bg-white border-b border-gray-200 w-full">
-        <div className="mx-auto px-4 sm:px-6 lg:px-8 w-[98%]">
+        <div className="container mx-auto">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center">
@@ -66,7 +66,9 @@ export default function Header({ calledBy = "home" }) {
 
                   <div className="ml-2">
                     <div className="text-xl font-bold text-black">Property</div>
-                    <div className="text-xl font-bold text-black -mt-1">Explorer</div>
+                    <div className="text-xl font-bold text-black -mt-1">
+                      Explorer
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -87,7 +89,7 @@ export default function Header({ calledBy = "home" }) {
                 Rent
               </Link>
               <Link
-                href="#"
+                href="/properties"
                 className="text-gray-700 hover:text-primary transition-colors text-sm font-medium"
               >
                 Explore Properties
