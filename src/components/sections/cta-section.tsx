@@ -1,18 +1,16 @@
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
-type CtaSectionProps = {
-  t: any;
-};
-
-export default function CtaSection({ t }: CtaSectionProps) {
+export default function CtaSection() {
+  const t = useTranslations("landingPage");
   return (
     <section className="bg-primary py-12 w-full">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-        <h2 className="text-xl md:text-2xl font-bold text-primary-foreground mb-4 md:mb-0">
+        <h3 className="text-primary-foreground mb-4 md:mb-0">
           {t("cta.title")}
-        </h2>
+        </h3>
         <Button
-          variant="secondary"
+          variant="default"
           className="bg-white text-primary hover:bg-gray-100 rounded-md"
         >
           {t("cta.button")}

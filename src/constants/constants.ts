@@ -4,19 +4,6 @@ export type TPropertyCategory = (typeof PROPERTY_CATEGORIES)[number];
 export const PROPERTY_PURPOSE = ["For Sale", "For Rent"] as const;
 export type TPropertyPurpose = (typeof PROPERTY_PURPOSE)[number];
 
-// export const PROPERTY_TYPES = [
-//   "Apartment",
-//   "Villa",
-//   "Townhouse",
-//   "Penthouse",
-//   "Office",
-//   "Shop",
-//   "Warehouse",
-//   "Land",
-// ] as const;
-
-// export type TPropertyType = (typeof PROPERTY_TYPES)[number];
-
 export const PROPERTY_TYPES = {
   Residential: ["Apartment", "Villa", "Townhouse", "Penthouse"],
   Commercial: ["Office", "Shop", "Warehouse", "Land"],

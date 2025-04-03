@@ -6,12 +6,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
-type InvestSectionProps = {
-  t: any;
-};
-
-export default function InvestSectionAlternative({ t }: InvestSectionProps) {
+export default function InvestSectionAlternative() {
+  const t = useTranslations("landingPage");
   const [activeIndex, setActiveIndex] = useState(0);
   const imagesRef = useRef<HTMLDivElement>(null);
 
