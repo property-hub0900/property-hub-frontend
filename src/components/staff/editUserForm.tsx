@@ -67,8 +67,6 @@ export function EditUserForm({ selectedStaff, onSubmit, onCancel, isSubmitting }
                 // Use biography field if bio is not available
                 biography: selectedStaff.biography || selectedStaff.biography || "",
             })
-
-            console.log("Form reset with staff data:", selectedStaff)
         }
     }, [selectedStaff, form])
 

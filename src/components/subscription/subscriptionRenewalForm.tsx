@@ -63,9 +63,8 @@ export function SubscriptionRenewalForm({
       const csrfToken = await fetchCsrfToken();
 
       // Create a unique idempotency key to prevent duplicate charges
-      const idempotencyKey = `renewal-${
-        user?.userId || ""
-      }-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+      const idempotencyKey = `renewal-${user?.userId || ""
+        }-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
 
       const response = await fetch("/api/payment", {
         method: "POST",
@@ -165,40 +164,36 @@ export function SubscriptionRenewalForm({
   return (
     <div className="w-full">
       <Separator />
-      <CardHeader className="px-4 sm:px-6 py-4">
-        <div className="flex items-center">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="-ml-8 p-0 h-8 w-8"
-            onClick={onCancel}
-            type="button"
-            aria-label={t("back")}
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <CardTitle className="text-xl font-bold">
-            {t("subscriptionRenewal")}
-          </CardTitle>
+      <CardHeader className="flex justify-between items-center px-4 sm:px-6 py-4">
+        <div className="flex justify-between items-center w-full">
+          <div>
+            <div className="flex items-center">
+              <CardTitle className="text-xl font-bold">{t("subscriptionRenewal")}</CardTitle>
+            </div>
+            <p className="text-sm text-muted-foreground">{t("reviewAndUpdatePayment")}</p>
+          </div>
+          <div>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={onCancel}
+              type="button"
+              aria-label={t("back")}
+            >
+              {t("subscriptionPlan")}
+            </Button>
+          </div>
         </div>
-        <p className="text-sm text-muted-foreground">
-          {t("reviewAndUpdatePayment")}
-        </p>
       </CardHeader>
       <CardContent className="p-2 sm:p-4 space-y-6">
         <div className="space-y-2 -mt-3">
           <div className="flex items-center justify-between gap-2 rounded border p-4">
             <div className="flex-3">
               <h3 className="text-base font-medium">{t("subscriptionPlan")}</h3>
-              <p className="text-sm text-muted-foreground">
-                {t("autoRenewalMessage")}
-              </p>
+              <p className="text-sm text-muted-foreground">{t("autoRenewalMessage")}</p>
             </div>
             <div className="flex-1.5 text-xl sm:text-2xl font-bold text-primary">
-              <span>20</span>{" "}
-              <span className="text-sm font-normal w-full">
-                / {t("remainingDays")}
-              </span>
+              <span>20</span> <span className="text-sm font-normal w-full">/ {t("remainingDays")}</span>
             </div>
           </div>
         </div>
@@ -249,15 +244,10 @@ export function SubscriptionRenewalForm({
               <div className="rounded-md bg-blue-50 p-4">
                 <div className="flex flex-col sm:flex-row">
                   <div className="flex-shrink-0 mb-2 sm:mb-0">
-                    <BanknoteIcon
-                      className="h-5 w-5 text-blue-400"
-                      aria-hidden="true"
-                    />
+                    <BanknoteIcon className="h-5 w-5 text-blue-400" aria-hidden="true" />
                   </div>
                   <div className="sm:ml-3">
-                    <h3 className="text-sm font-medium text-blue-800">
-                      {t("bankTransferInfo")}
-                    </h3>
+                    <h3 className="text-sm font-medium text-blue-800">{t("bankTransferInfo")}</h3>
                     <div className="mt-2 text-sm text-blue-700">
                       <p>{t("bankTransferInstructions")}</p>
                       <p>{t("bankName")}: National Bank</p>
@@ -287,15 +277,7 @@ export function SubscriptionRenewalForm({
         )}
       </CardContent>
       <CardFooter className="flex flex-col sm:flex-row justify-between gap-3 border-t bg-muted/50 px-4 sm:px-6 py-4">
-        <Button
-          variant="outline"
-          onClick={onCancel}
-          className="w-full sm:w-auto order-2 sm:order-1"
-          type="button"
-          disabled={isProcessing}
-        >
-          {t("cancel")}
-        </Button>
+
         {paymentMethod === "bank" && (
           <Button
             onClick={handleBankTransfer}
@@ -308,5 +290,5 @@ export function SubscriptionRenewalForm({
         )}
       </CardFooter>
     </div>
-  );
+  )
 }

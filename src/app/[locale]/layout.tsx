@@ -17,8 +17,8 @@ import { getDirection } from "@/utils/rtl";
 export async function generateMetadata(): Promise<Metadata> {
   const messages: any = await getMessages();
   //const locale = await getLocale();
-  // console.log(messages);
-  // console.log(locale);
+  // 
+  // 
 
   return {
     title: messages.seo.title,

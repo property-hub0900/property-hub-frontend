@@ -62,8 +62,8 @@ export default function AccessManagementPage() {
       setStaff([...staff, newStaffMember]);
       toast.success(
         response.message ||
-          t("toast.staffInvited") ||
-          "Staff member invited successfully"
+        t("toast.staffInvited") ||
+        "Staff member invited successfully"
       );
       setShowAddForm(false);
       refetchStaff();
@@ -92,8 +92,8 @@ export default function AccessManagementPage() {
       setStaff(updatedStaffList);
       toast.success(
         response.message ||
-          t("toast.staffUpdated") ||
-          "Staff member updated successfully"
+        t("toast.staffUpdated") ||
+        "Staff member updated successfully"
       );
       setShowEditForm(false);
       refetchStaff();
@@ -102,8 +102,8 @@ export default function AccessManagementPage() {
       console.log("Failed to update staff:", error);
       toast.error(
         error?.message ||
-          t("toast.updateFailed") ||
-          "Failed to update staff member"
+        t("toast.updateFailed") ||
+        "Failed to update staff member"
       );
     },
   });
@@ -129,8 +129,8 @@ export default function AccessManagementPage() {
       console.log("Failed to delete staff:", error);
       toast.error(
         error?.message ||
-          t("text.deleteFailed") ||
-          "Failed to delete staff member"
+        t("text.deleteFailed") ||
+        "Failed to delete staff member"
       );
     },
   });
@@ -140,11 +140,11 @@ export default function AccessManagementPage() {
     mutationKey: ["getStaffById"],
     mutationFn: companyService.getStaffById,
     onSuccess: (response) => {
-      console.log("Response from getStaffById:", response);
+
 
       // If response is empty, use the selectedStaff that was set before the API call
       if (!response || Object.keys(response).length === 0) {
-        console.log("Using fallback staff data");
+
         // We already set selectedStaff in handleEditClick, so we can just proceed
         setShowAddForm(false);
         setShowEditForm(true);

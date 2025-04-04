@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import type React from "react";
+import type React from "react"
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -36,32 +36,30 @@ export default function HeroSection() {
 
   const handleSearch = () => {
     // When search button is clicked, this function builds the URL parameters
-    const params = new URLSearchParams();
+    const params = new URLSearchParams()
 
     // Use the ref value to ensure we have the latest searchQuery
-    const currentSearchQuery =
-      searchQueryRef.current || searchParams.searchQuery;
+    const currentSearchQuery = searchQueryRef.current || searchParams.searchQuery
 
     // Add the selected location from Google Places to the searchQuery parameter
     if (currentSearchQuery) {
-      params.set("searchQuery", currentSearchQuery);
-      console.log("Search query:", currentSearchQuery); // Debug log
+      params.set("searchQuery", currentSearchQuery)
     }
 
     if (searchParams.propertyType && searchParams.propertyType !== "") {
       params.set("propertyType", searchParams.propertyType);
     }
 
-    params.set("purpose", searchParams.purpose);
+    params.set("purpose", searchParams.purpose)
 
     // Navigate to the properties page with the search parameters
-    router.push(`/en/properties?${params.toString()}`);
-  };
+    router.push(`/en/properties?${params.toString()}`)
+  }
 
   // Update the handleTabChange function to map to the API's 'purpose' parameter
   const handleTabChange = (tab: string) => {
-    setSearchParams((prev) => ({ ...prev, purpose: tab }));
-  };
+    setSearchParams((prev) => ({ ...prev, purpose: tab }))
+  }
 
   return (
     <section className="relative w-full">
@@ -94,26 +92,26 @@ export default function HeroSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
 // Simplified SearchFormProps type
 type SearchFormProps = {
   searchParams: {
-    propertyType: string;
-    searchQuery: string;
-    purpose: string;
-  };
+    propertyType: string
+    searchQuery: string
+    purpose: string
+  }
   setSearchParams: React.Dispatch<
     React.SetStateAction<{
-      propertyType: string;
-      searchQuery: string;
-      purpose: string;
+      propertyType: string
+      searchQuery: string
+      purpose: string
     }>
-  >;
-  onSearch: () => void;
-  searchQueryRef: React.RefObject<string>;
-};
+  >
+  onSearch: () => void
+  searchQueryRef: React.RefObject<string>
+}
 
 function SearchForm({
   searchParams,
@@ -124,13 +122,13 @@ function SearchForm({
   const t = useTranslations();
 
   const handlePropertyTypeChange = (value: string) => {
-    setSearchParams((prev) => ({ ...prev, propertyType: value }));
-  };
+    setSearchParams((prev) => ({ ...prev, propertyType: value }))
+  }
 
   const handleLocationChange = (value: string) => {
     // When a location is selected from Google Places API, this function is called
     // Update both the state and the ref to ensure we have the latest value
-    searchQueryRef.current = value;
+    searchQueryRef.current = value
 
     setSearchParams((prev) => ({
       ...prev,
@@ -140,9 +138,9 @@ function SearchForm({
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      onSearch();
+      onSearch()
     }
-  };
+  }
 
   return (
     <div className="flex flex-col bg-card sm:flex-row items-center p-4 rounded-sm rounded-tl-none">
@@ -169,10 +167,7 @@ function SearchForm({
         </Select>
       </div>
       <div className="w-full mb-3 sm:mb-0 sm:mr-3 relative">
-        <Search
-          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10"
-          size={18}
-        />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10" size={18} />
         <PlacesAutocomplete
           value={searchParams.searchQuery}
           onChange={handleLocationChange}
@@ -184,5 +179,6 @@ function SearchForm({
         {t("button.search")}
       </Button>
     </div>
-  );
+  )
 }
+

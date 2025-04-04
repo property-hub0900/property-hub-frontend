@@ -147,11 +147,10 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
     };
 
     const handleRemoveImage = () => {
-      setProfileImage(null);
-      setProfileImageFile(null);
-      form.setValue("profilePhoto", "", { shouldDirty: true });
-      console.log("Profile photo removed");
-    };
+      setProfileImage(null)
+      setProfileImageFile(null)
+      form.setValue("profilePhoto", "", { shouldDirty: true })
+    }
 
     return (
       <div className="p-14">

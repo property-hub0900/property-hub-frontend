@@ -44,7 +44,7 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
     return img.url;
   });
 
-  // console.log("images", images);
+  // 
 
   return (
 

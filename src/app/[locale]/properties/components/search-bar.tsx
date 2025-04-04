@@ -878,8 +878,8 @@ export default function SearchBar() {
                     {furnishing === "furnished"
                       ? "Furnished"
                       : furnishing === "unfurnished"
-                      ? "Unfurnished"
-                      : "Partly Furnished"}
+                        ? "Unfurnished"
+                        : "Partly Furnished"}
                   </span>
                   <Button
                     variant="ghost"

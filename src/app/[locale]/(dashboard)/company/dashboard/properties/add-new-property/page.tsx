@@ -23,7 +23,7 @@ export default function CreatePropertyPage() {
   });
 
   async function onSubmit(values: TCreatePropertySchema) {
-    console.log("values", values);
+
 
     try {
       const response = await createPropertyMutation.mutateAsync(values);
