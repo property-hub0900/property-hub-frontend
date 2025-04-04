@@ -279,7 +279,6 @@
       "label": "Service Charges",
       "placeholder": ""
     },
-
     "location": {
       "label": "Location",
       "placeholder": ""
@@ -391,7 +390,6 @@
   },
   "property": {
     "loading": "Loading property details...",
-
     "notFound": "Property Not Found",
     "notFoundDesc": "We couldn't find the property you're looking for.",
     "goBack": "Go Back",
@@ -466,11 +464,9 @@
   "fullName": "Full Name",
   "fullNamePlaceholder": "Enter your full name",
   "companyName": "Company Name",
-
   "emailPlaceholder": "Enter your email address",
   "phone": "Phone Number",
   "phonePlaceholder": "Enter your phone number",
-
   "passwordPlaceholder": "Enter your password",
   "confirmPassword": "Confirm Password",
   "confirmPasswordPlaceholder": "Confirm your password",
@@ -507,7 +503,6 @@
     "otpDisclaimer": "For security reasons, do not share your OTP with anyone.",
     "verified": "Verified"
   },
-
   "common": {
     "required": "This field is required",
     "loading": "Loading...",
