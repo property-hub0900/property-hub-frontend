@@ -74,7 +74,7 @@ export const SimpleMultiSelect = React.forwardRef<
     }, [options, searchQuery]);
 
     const toggleOption = (option: string) => {
-      console.log("toggleOption", option);
+
 
       if (selectedValues.includes(option)) {
         const newSelectedValues = selectedValues.filter(

@@ -84,32 +84,32 @@ export default function PropertyForm(
       mode === "edit"
         ? defaultValues
         : {
-            title: "",
-            titleAr: "",
-            featured: false,
-            category: undefined,
-            price: 0,
-            propertyType: "",
-            purpose: undefined,
-            bedrooms: 0,
-            bathrooms: 0,
-            status: PROPERTY_STATUSES.draft,
-            furnishedType: "",
-            occupancy: undefined,
-            ownershipStatus: undefined,
-            referenceNo: "",
-            priceVisibilityFlag: false,
-            propertySize: "",
-            serviceCharges: "",
-            buildingFloors: 0,
-            floor: 0,
-            tenure: "",
-            views: "",
-            address: "",
-            amenities: [],
-            description: "",
-            PropertyImages: [],
-          },
+          title: "",
+          titleAr: "",
+          featured: false,
+          category: undefined,
+          price: 0,
+          propertyType: "",
+          purpose: undefined,
+          bedrooms: 0,
+          bathrooms: 0,
+          status: PROPERTY_STATUSES.draft,
+          furnishedType: "",
+          occupancy: undefined,
+          ownershipStatus: undefined,
+          referenceNo: "",
+          priceVisibilityFlag: false,
+          propertySize: "",
+          serviceCharges: "",
+          buildingFloors: 0,
+          floor: 0,
+          tenure: "",
+          views: "",
+          address: "",
+          amenities: [],
+          description: "",
+          PropertyImages: [],
+        },
   });
 
   const category = form.watch("category");
@@ -123,7 +123,7 @@ export default function PropertyForm(
     const isFormValid = Object.keys(form.formState.errors).length === 0;
     const statusValue = PROPERTY_STATUSES[status];
     if (isFormValid) {
-      console.log("isFormValid", isFormValid);
+
 
       form.setValue("PropertyImages", filesUrls.images, {
         shouldValidate: true,
@@ -136,10 +136,10 @@ export default function PropertyForm(
     //form.handleSubmit(onSubmit);
   };
 
-  console.log("Form Error", form.formState.errors);
 
-  console.log("filesUrls", filesUrls);
-  console.log("defaultValues", defaultValues);
+
+
+
 
   // const initialImages = [
   //   {
@@ -634,40 +634,40 @@ export default function PropertyForm(
       <div className="col-span-2 gap-2 flex justify-end mt-6">
         {(!defaultValues ||
           defaultValues?.status === PROPERTY_STATUSES.draft) && (
-          <>
-            <Button
-              variant={"outline"}
-              type="button"
-              onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
-              className=""
-            >
-              {t("button.saveDraft")}
-            </Button>
+            <>
+              <Button
+                variant={"outline"}
+                type="button"
+                onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
+                className=""
+              >
+                {t("button.saveDraft")}
+              </Button>
 
-            {(isOwner || isAdmin) && (
-              <Button
-                type="button"
-                onClick={() =>
-                  handleSubmitWithStatus(PROPERTY_STATUSES.published)
-                }
-                className=""
-              >
-                {t("button.publish")}
-              </Button>
-            )}
-            {isAgent && (
-              <Button
-                type="button"
-                onClick={() =>
-                  handleSubmitWithStatus(PROPERTY_STATUSES.pending)
-                }
-                className=""
-              >
-                {t("button.requestForApproval")}
-              </Button>
-            )}
-          </>
-        )}
+              {(isOwner || isAdmin) && (
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitWithStatus(PROPERTY_STATUSES.published)
+                  }
+                  className=""
+                >
+                  {t("button.publish")}
+                </Button>
+              )}
+              {isAgent && (
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitWithStatus(PROPERTY_STATUSES.pending)
+                  }
+                  className=""
+                >
+                  {t("button.requestForApproval")}
+                </Button>
+              )}
+            </>
+          )}
 
         {defaultValues?.status === PROPERTY_STATUSES.published && (
           <>

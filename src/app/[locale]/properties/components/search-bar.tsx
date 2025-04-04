@@ -296,7 +296,7 @@ export default function SearchBar() {
       maxArea,
       keywords,
     }
-    console.log(filters);
+
     setSaveSearchDialog(true)
 
 

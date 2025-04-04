@@ -57,7 +57,7 @@ export default function CustomerRegisterPage() {
 
       router.push(`/${locale}/customer/verification?email=${values.email}`);
     } catch (error: any) {
-      console.log(error);
+
       toast.error(getErrorMessage(error));
     } finally {
       setIsSubmitting(false);

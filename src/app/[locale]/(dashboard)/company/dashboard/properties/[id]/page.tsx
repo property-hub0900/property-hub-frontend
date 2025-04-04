@@ -24,7 +24,7 @@ export default function EditPropertyPage() {
 
   const id = params?.id ?? "0";
 
-  console.log("params id", id);
+
 
   const t = useTranslations();
   const router = useRouter();

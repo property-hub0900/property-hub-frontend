@@ -135,7 +135,6 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>((
         setProfileImage(null)
         setProfileImageFile(null)
         form.setValue("profilePhoto", "", { shouldDirty: true })
-        console.log("Profile photo removed")
     }
 
     return (

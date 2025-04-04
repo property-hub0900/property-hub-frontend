@@ -150,21 +150,26 @@ export function SubscriptionRenewalForm({ onCancel }: SubscriptionRenewalFormPro
     return (
         <div className="w-full">
             <Separator />
-            <CardHeader className="px-4 sm:px-6 py-4">
-                <div className="flex items-center">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="-ml-8 p-0 h-8 w-8"
-                        onClick={onCancel}
-                        type="button"
-                        aria-label={t("back")}
-                    >
-                        <ArrowLeft className="h-4 w-4" />
-                    </Button>
-                    <CardTitle className="text-xl font-bold">{t("subscriptionRenewal")}</CardTitle>
+            <CardHeader className="flex justify-between items-center px-4 sm:px-6 py-4">
+                <div className="flex justify-between items-center w-full">
+                    <div>
+                        <div className="flex items-center">
+                            <CardTitle className="text-xl font-bold">{t("subscriptionRenewal")}</CardTitle>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{t("reviewAndUpdatePayment")}</p>
+                    </div>
+                    <div>
+                        <Button
+                            variant="default"
+                            size="sm"
+                            onClick={onCancel}
+                            type="button"
+                            aria-label={t("back")}
+                        >
+                            {t("subscriptionPlan")}
+                        </Button>
+                    </div>
                 </div>
-                <p className="text-sm text-muted-foreground">{t("reviewAndUpdatePayment")}</p>
             </CardHeader>
             <CardContent className="p-2 sm:p-4 space-y-6">
                 <div className="space-y-2 -mt-3">
@@ -258,15 +263,7 @@ export function SubscriptionRenewalForm({ onCancel }: SubscriptionRenewalFormPro
                 )}
             </CardContent>
             <CardFooter className="flex flex-col sm:flex-row justify-between gap-3 border-t bg-muted/50 px-4 sm:px-6 py-4">
-                <Button
-                    variant="outline"
-                    onClick={onCancel}
-                    className="w-full sm:w-auto order-2 sm:order-1"
-                    type="button"
-                    disabled={isProcessing}
-                >
-                    {t("cancel")}
-                </Button>
+
                 {paymentMethod === "bank" && (
                     <Button
                         onClick={handleBankTransfer}

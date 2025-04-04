@@ -118,11 +118,11 @@ export default function AccessManagementPage() {
     mutationKey: ["getStaffById"],
     mutationFn: companyService.getStaffById,
     onSuccess: (response) => {
-      console.log("Response from getStaffById:", response)
+
 
       // If response is empty, use the selectedStaff that was set before the API call
       if (!response || Object.keys(response).length === 0) {
-        console.log("Using fallback staff data")
+
         // We already set selectedStaff in handleEditClick, so we can just proceed
         setShowAddForm(false)
         setShowEditForm(true)

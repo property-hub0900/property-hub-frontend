@@ -2,8 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { CalendarIcon, ArrowRight, Filter } from "lucide-react"
+import { ArrowRight, Filter } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { TransactionHistory } from "@/components/subscription/transactionHistory"
 import { SubscriptionRenewalForm } from "@/components/subscription/subscriptionRenewalForm"
@@ -22,44 +21,37 @@ export default function SubscriptionPlansPage() {
                 <SubscriptionRenewalForm onCancel={() => setShowRenewalForm(false)} />
             ) : (
                 <>
-                    <Card className="w-full">
-                        <CardHeader className="pb-3">
-                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                                <div>
-                                    <CardTitle className="text-lg sm:text-xl">{t("subscriptionPlan")}</CardTitle>
-                                    <CardDescription>{t("pointsAddedToAccount")}</CardDescription>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Left Panel - Subscription Plan */}
+                        <div className="md:col-span-2 border rounded-lg p-6">
+                            <h2 className="text-xl font-semibold">{t("subscriptionPlan")}</h2>
+                            <p className="text-muted-foreground mt-1">{t("pointsAddedToAccount")}</p>
+
+                            <div className="flex justify-between items-center mt-8">
+                                <div className="text-5xl font-bold text-primary">
+                                    1500 <span className="text-sm font-normal text-primary">/ {t("remainingPoints")}</span>
                                 </div>
-                                <Button onClick={() => setShowRenewalForm(true)} className="flex items-center gap-2 w-full sm:w-auto">
-                                    {t("renewSubscription")} <ArrowRight className="h-4 w-4" />
+                                <Button onClick={() => setShowRenewalForm(true)} variant="outline" className="flex items-center gap-2 border-gray-300">
+                                    {t("renewSubscription")} <ArrowRight className="h-4 w-4 text-primary" />
                                 </Button>
                             </div>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                <div className="space-y-2">
-                                    <div className="text-3xl sm:text-4xl font-bold text-primary">
-                                        1500 <span className="text-sm font-normal text-muted-foreground">/ {t("remainingPoints")}</span>
-                                    </div>
-                                </div>
+                        </div>
 
-                                <div className="space-y-2">
-                                    <div className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                                        <CalendarIcon className="h-4 w-4 flex-shrink-0" /> {t("pointsExpires")}
-                                    </div>
-                                    <div className="font-medium">{t("onDate", { date: "April 15, 2025" })}</div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <div className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                                        <CalendarIcon className="h-4 w-4 flex-shrink-0" /> {t("contractExpires")}
-                                    </div>
-                                    <div className="font-medium">{t("onDate", { date: "April 15, 2025" })}</div>
-                                </div>
+                        {/* Right Panel - Expiration Dates */}
+                        <div className="md:col-span-1 border rounded-lg p-6 space-y-8">
+                            <div>
+                                <h2 className="text-xl font-semibold">{t("pointsExpires")}</h2>
+                                <p className="text-muted-foreground mt-1">{t("onDate", { date: "April 13, 2025" })}</p>
                             </div>
-                        </CardContent>
-                    </Card>
 
-                    <div className="bg-white rounded-md shadow">
+                            <div>
+                                <h2 className="text-xl font-semibold">{t("contractExpires")}</h2>
+                                <p className="text-muted-foreground mt-1">{t("onDate", { date: "April 13, 2025" })}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="rounded-md shadow">
                         <div className="p-4 sm:p-6">
                             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                                 <h2 className="text-base sm:text-lg font-semibold">{t("subscriptionRecordsHistory")}</h2>
@@ -73,7 +65,6 @@ export default function SubscriptionPlansPage() {
                                     <TransactionHistory />
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </>

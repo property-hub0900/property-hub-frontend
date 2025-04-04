@@ -37,7 +37,6 @@ export default function HeroSection({ t }: HeroSectionProps) {
     // Add the selected location from Google Places to the searchQuery parameter
     if (currentSearchQuery) {
       params.set("searchQuery", currentSearchQuery)
-      console.log("Search query:", currentSearchQuery) // Debug log
     }
 
     if (searchParams.propertyType && searchParams.propertyType !== "all") {
@@ -123,8 +122,6 @@ function SearchForm({ t, searchParams, setSearchParams, onSearch, searchQueryRef
       ...prev,
       searchQuery: value,
     }))
-
-    console.log("Location changed to:", value) // Debug log
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
