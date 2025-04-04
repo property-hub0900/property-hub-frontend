@@ -74,28 +74,17 @@ export default function PropertyCard({
   );
 }
 
-function PropertyFeature({
-  icon,
-  text,
-}: {
-  icon: React.ReactNode;
-  text: string;
-}) {
-  return (
-    <div className="flex items-center gap-1">
-      <div className="text-muted-foreground">{icon}</div>
-      <span className="text-sm">{text}</span>
-    </div>
-  );
-}
-
-function PropertyRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center gap-1">
-      <div className="w-4 h-4 bg-muted flex items-center justify-center rounded-sm">
-        <span className="text-xs">{rating}</span>
-      </div>
-      <span className="text-sm">/10</span>
-    </div>
-  );
-}
+// function PropertyFeature({
+//   icon,
+//   text,
+// }: {
+//   icon: React.ReactNode;
+//   text: string;
+// }) {
+//   return (
+//     <div className="flex items-center gap-1">
+//       <div className="text-muted-foreground">{icon}</div>
+//       <span className="text-sm">{text}</span>
+//     </div>
+//   );
+// }

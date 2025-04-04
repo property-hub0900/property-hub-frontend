@@ -9,7 +9,7 @@ import {
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Container } from "../ui/container";
+
 import { useTranslations } from "next-intl";
 import { PUBLIC_ROUTES } from "@/constants/paths";
 
