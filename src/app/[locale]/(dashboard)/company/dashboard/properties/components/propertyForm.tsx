@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
+
 import {
   PROPERTY_CATEGORIES,
   PROPERTY_FURNISHED_TYPE,
@@ -42,10 +42,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DefaultValues, useForm } from "react-hook-form";
 import PlacesAutocomplete from "../../../../../../../components/placesAutoComplete";
-import { IFilesUrlPayload, TImages, UploadImages } from "./uploadImages";
+import { IFilesUrlPayload, UploadImages, TImages } from "./uploadImages";
+
+//import { FormTiptap } from "./form-tiptap";
+import { TiptapEditor, type TiptapEditorRef } from "./tiptap-editor";
+import { toast } from "sonner";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
@@ -146,11 +150,19 @@ export default function PropertyForm(
   //     url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742553428343-Screenshot%202025-03-20%20004111.png?alt=media&token=e754d33b-8a3f-4c6e-8e8b-a463f326696f",
   //     path: "images/1742553428343-Screenshot 2025-03-20 004111.png",
   //   },
-  // ];
+  // ];.
+
+  useEffect(() => {
+    form.setValue("PropertyImages", filesUrls.images, {
+      shouldValidate: true,
+    });
+  }, [filesUrls]);
 
   const initialImages: TImages[] = (defaultValues?.PropertyImages || []).filter(
     Boolean
   ) as TImages[];
+
+  const editorRef = useRef<TiptapEditorRef>(null);
 
   return (
     <>
@@ -167,7 +179,10 @@ export default function PropertyForm(
               name="title"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.title.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.title.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -180,7 +195,9 @@ export default function PropertyForm(
               name="titleAr"
               render={({ field }) => (
                 <FormItem className="col-span-2" dir="rtl">
-                  <FormLabel>عنوان</FormLabel>
+                  <FormLabel>
+                    عنوان<span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -189,19 +206,24 @@ export default function PropertyForm(
               )}
             />
             <div className="col-span-2">
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="PropertyImages"
                 render={({ field }) => (
-                  <FormItem className="col-span-2">
+                  <FormItem>
+                    <FormLabel>
+                      Property Images
+                      <span className="text-destructive ml-1">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <UploadImages
+                        initialImages={initialImages}
+                        setUploadedFilesUrls={setFilesUrls}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
-
-              <UploadImages
-                initialImages={initialImages}
-                setUploadedFilesUrls={setFilesUrls}
               />
 
               {/* <UploadImages1
@@ -213,7 +235,10 @@ export default function PropertyForm(
               name="category"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.propertyCategory.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.propertyCategory.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -240,7 +265,10 @@ export default function PropertyForm(
               name="purpose"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.propertyPurpose.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.propertyPurpose.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -267,7 +295,10 @@ export default function PropertyForm(
               name="propertyType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.propertyType.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.propertyType.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -300,7 +331,8 @@ export default function PropertyForm(
                 <FormItem>
                   <FormLabel>
                     {t("form.propertySize.label")}
-                    <span className="text-muted-foreground"> (Sqft)</span>
+                    <span>*</span>
+                    <small className="text-muted-foreground"> (Sqft)</small>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />
@@ -329,7 +361,10 @@ export default function PropertyForm(
               name="bathrooms"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.bathrooms.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.bathrooms.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>
@@ -494,7 +529,10 @@ export default function PropertyForm(
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.price.label")}</FormLabel>
+                    <FormLabel>
+                      {t("form.price.label")}
+                      <span>*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -542,7 +580,10 @@ export default function PropertyForm(
               name="address"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.location.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.location.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <FormControl>
                     {/* Pass field.onChange and field.value */}
                     <PlacesAutocomplete
@@ -560,7 +601,10 @@ export default function PropertyForm(
               name="amenities"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.amenities.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.amenities.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <SimpleMultiSelect
                     defaultValue={field.value}
                     options={transformedAmenities || []}
@@ -577,7 +621,10 @@ export default function PropertyForm(
               name="referenceNo"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.referenceNo.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.referenceNo.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -585,32 +632,82 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="description"
               render={({ field }) => (
                 <FormItem className="col-span-2">
-                  <FormLabel>{t("form.description.label")}</FormLabel>
+                  <FormLabel>
+                    {t("form.description.label")}
+                    <span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
+              control={form.control}
+              name={"description"}
+              render={({ field }) => (
+                <FormItem className="w-full col-span-2">
+                  <FormLabel>
+                    {t("form.description.label")}
+                    <span>*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <TiptapEditor
+                      ref={editorRef}
+                      content={field.value}
+                      onChange={field.onChange}
+                      className="w-full"
+                    />
+                  </FormControl>
+                  {/* {description && <FormDescription>{description}</FormDescription>} */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name={"descriptionAr"}
+              render={({ field }) => (
+                <FormItem className="col-span-2" dir="rtl">
+                  <FormLabel>
+                    وصف<span>*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <TiptapEditor
+                      ref={editorRef}
+                      content={field.value}
+                      onChange={field.onChange}
+                      className="w-full"
+                    />
+                  </FormControl>
+                  {/* {description && <FormDescription>{description}</FormDescription>} */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* <FormField
               control={form.control}
               name="descriptionAr"
               render={({ field }) => (
                 <FormItem className="col-span-2" dir="rtl">
-                  <FormLabel>وصف</FormLabel>
+                  <FormLabel>
+                    وصف<span>*</span>
+                  </FormLabel>
                   <FormControl>
                     <Textarea {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="featured"

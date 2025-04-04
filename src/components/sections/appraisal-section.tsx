@@ -1,19 +1,19 @@
 /* eslint-disable no-unused-vars */
-"use client"
+"use client";
 
-import { useState, useEffect, useRef, ReactNode } from "react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { motion, AnimatePresence } from "framer-motion"
-import Image from "next/image"
+import { useState, useEffect, useRef, ReactNode } from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 type InvestSectionProps = {
-  t: any
-}
+  t: any;
+};
 
 export default function InvestSectionAlternative({ t }: InvestSectionProps) {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const imagesRef = useRef<HTMLDivElement>(null)
+  const [activeIndex, setActiveIndex] = useState(0);
+  const imagesRef = useRef<HTMLDivElement>(null);
 
   const properties = [
     {
@@ -31,7 +31,8 @@ export default function InvestSectionAlternative({ t }: InvestSectionProps) {
       title: "Qatar's Blooming",
       highlight: "Real Estate",
       suffix: "Market",
-      description: "Take advantage of Qatar's growing economy and invest in premium properties with high returns.",
+      description:
+        "Take advantage of Qatar's growing economy and invest in premium properties with high returns.",
     },
     {
       id: 2,
@@ -48,21 +49,22 @@ export default function InvestSectionAlternative({ t }: InvestSectionProps) {
       title: "Exclusive Properties in",
       highlight: "Premium",
       suffix: "Locations",
-      description: "Find your dream property in the most sought-after locations throughout Qatar.",
+      description:
+        "Find your dream property in the most sought-after locations throughout Qatar.",
     },
-  ]
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % properties.length)
-    }, 6000)
+      setActiveIndex((prev) => (prev + 1) % properties.length);
+    }, 6000);
 
-    return () => clearInterval(interval)
-  }, [properties.length])
+    return () => clearInterval(interval);
+  }, [properties.length]);
 
   return (
     <section className="py-16 w-full bg-background overflow-hidden">
-      <CustomContainer leftAligned>
+      <div className="container mx-auto">
         <div className="flex flex-col lg:flex-row items-start gap-8">
           {/* Images with animation */}
           <div className="w-full lg:w-[55%] relative">
@@ -82,7 +84,10 @@ export default function InvestSectionAlternative({ t }: InvestSectionProps) {
                   {/* First image (larger) */}
                   <div className="relative z-[1] rounded-lg overflow-hidden shadow-lg w-[65%] aspect-[4/3]">
                     <Image
-                      src={properties[activeIndex].images[0].url || "/placeholder.svg"}
+                      src={
+                        properties[activeIndex].images[0].url ||
+                        "/placeholder.svg"
+                      }
                       alt={properties[activeIndex].images[0].alt}
                       className="w-full h-full object-cover"
                       width={600}
@@ -93,7 +98,10 @@ export default function InvestSectionAlternative({ t }: InvestSectionProps) {
                   {/* Second image (smaller, overlapping) */}
                   <div className="relative -ml-8 mt-8 rounded-lg overflow-hidden shadow-lg w-[45%] aspect-[3/4] z-0">
                     <Image
-                      src={properties[activeIndex].images[1].url || "/placeholder.svg"}
+                      src={
+                        properties[activeIndex].images[1].url ||
+                        "/placeholder.svg"
+                      }
                       alt={properties[activeIndex].images[1].alt}
                       className="w-full h-full object-cover"
                       width={600}
@@ -112,7 +120,9 @@ export default function InvestSectionAlternative({ t }: InvestSectionProps) {
                   onClick={() => setActiveIndex(index)}
                   className={cn(
                     "w-2 h-2 rounded-full transition-all duration-300",
-                    activeIndex === index ? "bg-blue-400 w-6" : "bg-gray-300 hover:bg-gray-400",
+                    activeIndex === index
+                      ? "bg-blue-400 w-6"
+                      : "bg-gray-300 hover:bg-gray-400"
                   )}
                   aria-label={`Go to slide ${index + 1}`}
                 />
@@ -122,39 +132,25 @@ export default function InvestSectionAlternative({ t }: InvestSectionProps) {
 
           {/* Content - No animation */}
           <div className="w-full lg:w-[40%]">
-            <div className="text-sm uppercase tracking-wider mb-2">INVEST IN</div>
+            <div className="text-sm uppercase tracking-wider mb-2">
+              INVEST IN
+            </div>
             <h2 className="text-4xl font-bold mb-2">
-              {properties[activeIndex].title} <span className="text-blue-400">{properties[activeIndex].highlight}</span>{" "}
+              {properties[activeIndex].title}{" "}
+              <span className="text-blue-400">
+                {properties[activeIndex].highlight}
+              </span>{" "}
               {properties[activeIndex].suffix}
             </h2>
-            <p className="text-muted-foreground mb-6">{properties[activeIndex].description}</p>
-            <Button className="bg-foreground text-background hover:bg-foreground/90">Contact Us</Button>
+            <p className="text-muted-foreground mb-6">
+              {properties[activeIndex].description}
+            </p>
+            <Button className="bg-foreground text-background hover:bg-foreground/90">
+              Contact Us
+            </Button>
           </div>
         </div>
-      </CustomContainer>
+      </div>
     </section>
-  )
+  );
 }
-
-
-
-type CustomContainerProps = {
-  children: ReactNode
-  className?: string
-  leftAligned?: boolean
-}
-
-const CustomContainer = ({ children, className, leftAligned = false }: CustomContainerProps) => {
-  return (
-    <div
-      className={cn(
-        "w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8",
-        leftAligned && "lg:ml-14 lg:mr-auto lg:pl-0",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  )
-}
-

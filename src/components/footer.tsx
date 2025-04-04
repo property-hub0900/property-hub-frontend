@@ -10,13 +10,12 @@ export default function Footer() {
   const pathName = usePathname();
 
   if (pathName.includes("/dashboard")) {
-    return null
+    return null;
   }
-
 
   return (
     <footer className="bg-primary text-primary-foreground pt-16 pb-8 w-full">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <FooterBrand t={t} />
           <FooterLinks
