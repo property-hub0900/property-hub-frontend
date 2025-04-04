@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { getErrorMessage } from "@/lib/utils";
+import { getErrorMessage } from "@/utils/utils";
 import { userAuthCustomerLoginSchema } from "@/schema/auth";
 import { authService } from "@/services/auth";
 import { useAuthStore } from "@/store/auth-store";
@@ -94,7 +94,6 @@ export default function CustomerLoginPage() {
 
         const data = await response.json();
 
-
         if (data.success && data.user) {
           const { email, name, googleUserId } = data.user;
 
@@ -102,14 +101,17 @@ export default function CustomerLoginPage() {
           const firstName = nameParts[0] || "";
           const lastName = nameParts.slice(1).join(" ") || "";
 
-          const loginResponse: Record<string, any> = await customerSocialLoginMutation.mutateAsync({
-            googleId: googleUserId,
-            email,
-            firstName,
-            lastName,
-          });
+          const loginResponse: Record<string, any> =
+            await customerSocialLoginMutation.mutateAsync({
+              googleId: googleUserId,
+              email,
+              firstName,
+              lastName,
+            });
 
-          useAuthStore.getState().login({ ...loginResponse.data, imageUrl: data.user.picture });
+          useAuthStore
+            .getState()
+            .login({ ...loginResponse.data, imageUrl: data.user.picture });
 
           toast.success(t("loginSuccess"));
 
@@ -153,7 +155,6 @@ export default function CustomerLoginPage() {
     [customerSocialLoginMutation, t, router, pushUserAfterLogin]
   );
 
-
   return (
     <AuthContainer
       title={t("title.loginCustomerTitle")}
@@ -185,9 +186,11 @@ export default function CustomerLoginPage() {
           </div>
 
           <div className="facebook-auth-container relative w-full flex-1">
-            <CustomFacebookButton appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string} callback={handleFacebookSuccess} />
+            <CustomFacebookButton
+              appId={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID as string}
+              callback={handleFacebookSuccess}
+            />
           </div>
-
         </div>
       </div>
 

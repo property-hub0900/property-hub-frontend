@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { DataTable } from "@/components/dataTable/data-table"
 import { Loader } from "@/components/loader"
@@ -77,40 +77,42 @@ export default function TopUpSubscriptionPage() {
             try {
                 // In a real app, you would fetch the history from an API
                 // For now, we'll use the sample data
-                setTopUpHistory(topUpData)
-                return topUpData
+                setTopUpHistory(topUpData);
+                return topUpData;
             } catch (error) {
-                console.error("Failed to fetch top-up history:", error)
-                toast.error(getErrorMessage(error))
-                return topUpData
+                console.error("Failed to fetch top-up history:", error);
+                toast.error(getErrorMessage(error));
+                return topUpData;
             }
         },
-    })
+    });
 
     // Fetch top-up plans
     const { isLoading: isLoadingPlans } = useQuery({
         queryKey: ["topUpPlans"],
         queryFn: async () => {
             try {
-                const response: any = await companyService.getTopUpPlans()
+                const response: any = await companyService.getTopUpPlans();
                 if (response.results) {
-                    setTopUpPlans(response.results)
+                    setTopUpPlans(response.results);
                 }
-                return response.results
+                return response.results;
             } catch (error) {
-                console.error("Failed to fetch top-up plans:", error)
-                toast.error(getErrorMessage(error))
-                return []
+                console.error("Failed to fetch top-up plans:", error);
+                toast.error(getErrorMessage(error));
+                return [];
             }
         },
-    })
+    });
 
     // Filter data based on status
     const filteredData = statusFilter
-        ? topUpHistory.filter((item) => item.status.toLowerCase() === statusFilter.toLowerCase())
-        : topUpHistory
+        ? topUpHistory.filter(
+            (item) => item.status.toLowerCase() === statusFilter.toLowerCase()
+        )
+        : topUpHistory;
 
-    const isLoading = isLoadingHistory || isLoadingPlans
+    const isLoading = isLoadingHistory || isLoadingPlans;
 
     return (
         <div className="container px-4 sm:px-6 py-6 space-y-6 max-w-full">
@@ -159,9 +161,11 @@ export default function TopUpSubscriptionPage() {
             </div>
 
             <div style={{ display: showTopUpForm ? "block" : "none" }}>
-                <TopUpForm onCancel={() => setShowTopUpForm(false)} plans={topUpPlans} />
+                <TopUpForm
+                    onCancel={() => setShowTopUpForm(false)}
+                    plans={topUpPlans}
+                />
             </div>
         </div>
-    )
+    );
 }
-

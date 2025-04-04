@@ -2,30 +2,37 @@
 
 import type React from "react"
 
-import { useState, useRef } from "react"
-import { useRouter } from "next/navigation"
-import { Search } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import SearchTabs from "@/components/search/search-tabs"
-import { Container } from "@/components/ui/container"
-import { FOR_SALE } from "@/constants"
-import PlacesAutocomplete from "@/components/placesAutoComplete"
+import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import SearchTabs from "@/components/search/search-tabs";
 
-type HeroSectionProps = {
-  t: any
-}
+import PlacesAutocomplete from "@/components/placesAutoComplete";
+import { useTranslations } from "next-intl";
+import { PROPERTY_PURPOSE, PROPERTY_TYPES } from "@/constants/constants";
 
-export default function HeroSection({ t }: HeroSectionProps) {
-  const router = useRouter()
-  const searchQueryRef = useRef("")
+export default function HeroSection() {
+  const t = useTranslations();
+
+  const router = useRouter();
+  const searchQueryRef = useRef("");
 
   // Simplified state with only the essential parameters
   const [searchParams, setSearchParams] = useState({
-    propertyType: "all",
+    propertyType: "",
     searchQuery: "", // This will store the selected location from Google Places API
-    purpose: FOR_SALE,
-  })
+    purpose: `${PROPERTY_PURPOSE[1]}`,
+  });
+
+  console.log("searchParams", searchParams); // Debug log
 
   const handleSearch = () => {
     // When search button is clicked, this function builds the URL parameters
@@ -39,8 +46,8 @@ export default function HeroSection({ t }: HeroSectionProps) {
       params.set("searchQuery", currentSearchQuery)
     }
 
-    if (searchParams.propertyType && searchParams.propertyType !== "all") {
-      params.set("propertyType", searchParams.propertyType)
+    if (searchParams.propertyType && searchParams.propertyType !== "") {
+      params.set("propertyType", searchParams.propertyType);
     }
 
     params.set("purpose", searchParams.purpose)
@@ -55,7 +62,7 @@ export default function HeroSection({ t }: HeroSectionProps) {
   }
 
   return (
-    <section className="relative h-[500px] w-full">
+    <section className="relative w-full">
       <div className="absolute inset-0 bg-black/40 z-10"></div>
 
       <div
@@ -65,25 +72,24 @@ export default function HeroSection({ t }: HeroSectionProps) {
         }}
       ></div>
 
-      <div className="relative z-20 flex items-center justify-center h-full w-full">
-        <Container alignment="left" maxWidth="screen" className="ml-6">
-          <div className="flex flex-col text-white">
-            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">{t("hero.title")}</h1>
-            <p className="text-white text-base max-w-xl mb-8 opacity-90">{t("hero.subtitle")}</p>
-
-            {/* Search Box */}
-            <div className="w-full max-w-4xl rounded-md overflow-hidden shadow-lg">
-              <SearchTabs t={t} onTabChange={handleTabChange} />
-              <SearchForm
-                t={t}
-                searchParams={searchParams}
-                setSearchParams={setSearchParams}
-                onSearch={handleSearch}
-                searchQueryRef={searchQueryRef}
-              />
-            </div>
+      <div className="container mx-auto relative z-10 px-5 lg:px-0 py-16 lg:py-28">
+        <div className="flex flex-col w-full lg:w-2/3">
+          <div className="text-white space-y-5 mb-8 w-full lg:w-2/3">
+            <h1 className="text-white">{t("title.landingHeroTitle")}</h1>
+            <p className="text-lg">{t("title.landingHeroSubTitle")}</p>
           </div>
-        </Container>
+
+          {/* Search Box */}
+          <div className="w-full max-w-4xl rounded-md overflow-hidden shadow-lg">
+            <SearchTabs onTabChange={handleTabChange} />
+            <SearchForm
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+              onSearch={handleSearch}
+              searchQueryRef={searchQueryRef}
+            />
+          </div>
+        </div>
       </div>
     </section>
   )
@@ -91,7 +97,6 @@ export default function HeroSection({ t }: HeroSectionProps) {
 
 // Simplified SearchFormProps type
 type SearchFormProps = {
-  t: any
   searchParams: {
     propertyType: string
     searchQuery: string
@@ -108,7 +113,14 @@ type SearchFormProps = {
   searchQueryRef: React.RefObject<string>
 }
 
-function SearchForm({ t, searchParams, setSearchParams, onSearch, searchQueryRef }: SearchFormProps) {
+function SearchForm({
+  searchParams,
+  setSearchParams,
+  onSearch,
+  searchQueryRef,
+}: SearchFormProps) {
+  const t = useTranslations();
+
   const handlePropertyTypeChange = (value: string) => {
     setSearchParams((prev) => ({ ...prev, propertyType: value }))
   }
@@ -121,8 +133,8 @@ function SearchForm({ t, searchParams, setSearchParams, onSearch, searchQueryRef
     setSearchParams((prev) => ({
       ...prev,
       searchQuery: value,
-    }))
-  }
+    }));
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
@@ -133,15 +145,24 @@ function SearchForm({ t, searchParams, setSearchParams, onSearch, searchQueryRef
   return (
     <div className="flex flex-col bg-card sm:flex-row items-center p-4 rounded-sm rounded-tl-none">
       <div className="w-full sm:w-1/4 mb-3 sm:mb-0 sm:mr-3">
-        <Select value={searchParams.propertyType} onValueChange={handlePropertyTypeChange}>
-          <SelectTrigger className="w-full border border-input rounded-md h-10 text-primary font-bold">
-            <SelectValue className="text-black" placeholder={t("search.propertyType")} />
+        <Select
+          value={searchParams.propertyType}
+          onValueChange={handlePropertyTypeChange}
+        >
+          <SelectTrigger className="border-0 shadow-none !outline-none focus:outline-none focus:ring-0 ">
+            <SelectValue placeholder={t("form.propertyType.placeholder")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("search.allProperties")}</SelectItem>
-            <SelectItem value="House">{t("search.house")}</SelectItem>
-            <SelectItem value="Apartment">{t("search.apartment")}</SelectItem>
-            <SelectItem value="Villa">{t("search.villa")}</SelectItem>
+            {PROPERTY_TYPES.Commercial.map((item, index) => (
+              <SelectItem key={index} value={item}>
+                {t(`form.propertyType.options.${item}`)}
+              </SelectItem>
+            ))}
+            {PROPERTY_TYPES.Residential.map((item, index) => (
+              <SelectItem key={index} value={item}>
+                {t(`form.propertyType.options.${item}`)}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -151,14 +172,11 @@ function SearchForm({ t, searchParams, setSearchParams, onSearch, searchQueryRef
           value={searchParams.searchQuery}
           onChange={handleLocationChange}
           onKeyPress={handleKeyPress}
-          className="pl-10 text-primary"
+          className="pl-10 text-primary outline-none shadow-none border-0 focus:border-0 focus:ring-0 focus:outline-none focus-visible:outline-none"
         />
       </div>
-      <Button
-        className="w-full sm:w-1/6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-md h-10"
-        onClick={onSearch}
-      >
-        {t("search.button")}
+      <Button className="w-28" onClick={onSearch}>
+        {t("button.search")}
       </Button>
     </div>
   )

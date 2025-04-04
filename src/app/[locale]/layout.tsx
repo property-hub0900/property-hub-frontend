@@ -12,6 +12,7 @@ import { inter } from "@/lib/fonts";
 
 import { ReactQueryProvider } from "@/providers/reactQueryProvider";
 import Script from "next/script";
+import { getDirection } from "@/utils/rtl";
 
 export async function generateMetadata(): Promise<Metadata> {
   const messages: any = await getMessages();
@@ -46,7 +47,7 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} dir={getDirection(locale)} suppressHydrationWarning>
       <body className={`${inter.variable}`} suppressHydrationWarning>
         <NextIntlClientProvider
           locale={locale}

@@ -1,5 +1,5 @@
 import apiClient from "@/lib/api-client";
-import { buildQueryString } from "@/lib/utils";
+import { buildQueryString } from "@/utils/utils";
 import { PropertyFilters, PropertyResponse } from "@/types/client/properties";
 
 // export const fetchProperties = (): Promise<IProperties> => {

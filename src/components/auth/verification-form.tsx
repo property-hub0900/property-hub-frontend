@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { authService } from "@/services/auth";
@@ -151,7 +151,6 @@ export function VerificationForm({
   }, [email, resetForm]);
 
   // Reset form function
-
 
   // Handle input change
   const handleOnChange = useCallback(
@@ -359,9 +358,9 @@ export function VerificationForm({
                   activeOtpIndex === index ? "border-primary" : "border-input",
                   isFormDisabled && "opacity-70 cursor-not-allowed",
                   verificationStatus === "success" &&
-                  "border-green-500 text-green-600",
+                    "border-green-500 text-green-600",
                   verificationStatus === "error" &&
-                  "border-red-500 text-red-600"
+                    "border-red-500 text-red-600"
                 )}
                 aria-label={`Digit ${index + 1} of ${OTP_LENGTH}`}
                 aria-invalid={verificationStatus === "error"}
@@ -406,7 +405,7 @@ export function VerificationForm({
           className={cn(
             "w-full relative",
             verificationStatus === "success" &&
-            "bg-green-600 hover:bg-green-700"
+              "bg-green-600 hover:bg-green-700"
           )}
           disabled={
             verifyOtpMutation.isPending ||

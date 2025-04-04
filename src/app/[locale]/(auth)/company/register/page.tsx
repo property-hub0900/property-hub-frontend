@@ -24,7 +24,7 @@ import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { authService } from "@/services/auth";
 import { toast } from "sonner";
-import { getErrorMessage } from "@/lib/utils";
+import { getErrorMessage } from "@/utils/utils";
 import { TUserAuthStaffRegisterSchema } from "@/types/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useMemo } from "react";

@@ -80,7 +80,6 @@ export default function PlacesAutocomplete({
     if (!inputRef.current || !window.google?.maps?.places) return;
 
     try {
-
       const autocompleteInstance = new window.google.maps.places.Autocomplete(
         inputRef.current,
         {

@@ -16,7 +16,7 @@ export default function Footer() {
   return (
     <footer className="bg-primary text-primary-foreground pt-16 pb-8 w-full">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-16 mb-12">
           <FooterBrand t={t} />
           <FooterLinks
             title={t("footer.product")}
@@ -49,11 +49,11 @@ export default function Footer() {
           />
         </div>
 
-        <div className="border-t border-primary/40 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-primary-foreground/80 text-sm">
+        <div className="border-t border-primary-foreground/40 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className=" text-sm">
             © 2025 PropertyExplorer. {t("footer.allRightsReserved")}
           </p>
-          <p className="text-primary-foreground/80 text-sm mt-2 md:mt-0">
+          <p className="text-primary-foreground hover:underline text-sm mt-2 md:mt-0">
             <a href="#" className="hover:text-primary-foreground">
               {t("footer.termsAndConditions")}
             </a>
@@ -66,11 +66,11 @@ export default function Footer() {
 
 function FooterBrand({ t }: { t: any }) {
   return (
-    <div>
+    <div className="col-span-2">
       <h3 className="text-2xl text-primary-foreground font-bold mb-4">
         PropertyExplorer
       </h3>
-      <p className="text-primary-foreground/80 mb-4 text-sm">
+      <p className="text-primary-foreground text-base mb-5 ">
         {t("footer.tagline")}
       </p>
       <div className="flex gap-4">
@@ -86,7 +86,7 @@ function SocialLink({ href, icon }: { href: string; icon: React.ReactNode }) {
   return (
     <a
       href={href}
-      className="text-primary-foreground hover:text-primary-foreground/80 bg-primary-foreground/20 p-1.5 rounded-full"
+      className="text-primary bg-primary-foreground p-1.5 rounded-full"
     >
       {icon}
     </a>
@@ -101,13 +101,13 @@ type FooterLink = {
 function FooterLinks({ title, links }: { title: string; links: FooterLink[] }) {
   return (
     <div>
-      <h4 className="font-medium mb-4">{title}</h4>
+      <h5 className="font-medium mb-4">{title}</h5>
       <ul className="space-y-2 text-sm">
         {links.map((link, index) => (
           <li key={index}>
             <a
               href={link.href}
-              className="text-primary-foreground/80 hover:text-primary-foreground"
+              className="text-primary-foreground hover:underline"
             >
               {link.label}
             </a>

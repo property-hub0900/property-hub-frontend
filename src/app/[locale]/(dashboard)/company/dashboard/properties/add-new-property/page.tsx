@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import { getErrorMessage } from "@/lib/utils";
+import { getErrorMessage } from "@/utils/utils";
 import { TCreatePropertySchema } from "@/types/dashboard/properties";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";

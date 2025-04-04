@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { getErrorMessage } from "@/lib/utils";
+import { getErrorMessage } from "@/utils/utils";
 import { useAuthCustomerRegisterSchema } from "@/schema/auth";
 import { authService } from "@/services/auth";
 import { TUseAuthCustomerRegisterSchema } from "@/types/auth";

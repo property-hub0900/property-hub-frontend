@@ -21,7 +21,13 @@
     "addNewProperty": "Add New Property",
     "editProperty": "Edit Property",
     "userDetails": "User Details",
-    "access": "Access"
+    "access": "Access",
+    "landingHeroTitle": "Exclusive Luxury Properties in Qatar",
+    "landingHeroSubTitle": "Boost Your Business with the Best Locations!",
+    "discoverTheLatestProperties": "Discover the latest properties",
+    "lookingToAdvertiseAProperty": "Looking to advertise a property? Contact us.",
+    "investIn": "Invest In",
+    "qatarBloomingRealEstateMarket": "Qatar's Blooming <highlight>Real Estate</highlight> Market"
   },
   "button": {
     "next": "Next",
@@ -46,7 +52,15 @@
     "close": "close",
     "uploadPhoto": "Upload Photo",
     "uploadLogo": "Upload Logo",
-    "save": "Save"
+    "save": "Save",
+    "buy": "Buy",
+    "rent": "Rent",
+    "search": "Search",
+    "exploreAll": "Explore All",
+    "whatsapp": "WhatsApp",
+    "letsTalk": "Let's Talk",
+    "contactUs": "Contact Us",
+    "exploreProperties": "Explore Properties"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -187,7 +201,7 @@
     },
     "propertyCategory": {
       "label": "Property Category",
-      "placeholder": "Select Property Category",
+      "placeholder": "Property Category",
       "options": {
         "Residential": "Residential",
         "Commercial": "Commercial"
@@ -195,7 +209,7 @@
     },
     "propertyPurpose": {
       "label": "Purpose",
-      "placeholder": "Select Purpose",
+      "placeholder": "Purpose",
       "options": {
         "For Sale": "For Sale",
         "For Rent": "For Rent"
@@ -203,7 +217,7 @@
     },
     "propertyType": {
       "label": "Property Type",
-      "placeholder": "Select Property Type",
+      "placeholder": "Property Type",
       "options": {
         "Apartment": "Apartment",
         "Villa": "Villa",
@@ -621,35 +635,12 @@
     }
   },
   "landingPage": {
-    "hero": {
-      "title": "Exclusive Luxury Properties in Qatar",
-      "subtitle": "Boost Your Business with the Best Locations!"
-    },
-    "search": {
-      "propertyType": "Property Type",
-      "allProperties": "All Properties",
-      "house": "House",
-      "apartment": "Apartment",
-      "villa": "Villa",
-      "placeholder": "Search by location or property ID....",
-      "button": "Search",
-      "rent": "Rent",
-      "buy": "Buy"
-    },
-    "latestProjects": {
-      "title": "Discover the latest projects",
-      "exploreAll": "Explore All"
-    },
     "property": {
       "imageAlt": "Property image",
       "newYork": "New York",
       "sqft": "sq ft",
       "viewDetails": "View Details",
       "contactNow": "Contact Now"
-    },
-    "cta": {
-      "title": "Looking to advertise a property? Contact us.",
-      "button": "Let's Talk"
     },
     "appraisal": {
       "ourValue": "OUR VALUE",

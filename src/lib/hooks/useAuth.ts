@@ -99,8 +99,5 @@ export const useAuth = () => {
     window.location.assign(`/`);
   };
 
-  // For debugging
-  useEffect(() => {}, [user, isAuthenticated]);
-
   return { user, isAuthenticated, logOut };
 };

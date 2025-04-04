@@ -8,7 +8,7 @@ import {
   formatAmountToQAR,
   formatDateAndTime,
   getErrorMessage,
-} from "@/lib/utils";
+} from "@/utils/utils";
 import {
   deletePropertyById,
   updatePropertyById,
