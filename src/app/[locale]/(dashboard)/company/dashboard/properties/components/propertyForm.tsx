@@ -145,6 +145,8 @@ export default function PropertyForm(
   console.log("filesUrls", filesUrls);
   console.log("defaultValues", defaultValues);
 
+  console.log("form values", form.getValues());
+
   // const initialImages = [
   //   {
   //     url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742553428343-Screenshot%202025-03-20%20004111.png?alt=media&token=e754d33b-8a3f-4c6e-8e8b-a463f326696f",
@@ -153,9 +155,11 @@ export default function PropertyForm(
   // ];.
 
   useEffect(() => {
-    form.setValue("PropertyImages", filesUrls.images, {
-      shouldValidate: true,
-    });
+    if (filesUrls.images.length > 0) {
+      form.setValue("PropertyImages", filesUrls.images, {
+        shouldValidate: true,
+      });
+    }
   }, [filesUrls]);
 
   const initialImages: TImages[] = (defaultValues?.PropertyImages || []).filter(

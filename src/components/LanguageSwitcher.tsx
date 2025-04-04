@@ -71,7 +71,7 @@ export function LanguageSwitcher() {
               {lang.name}
             </button>
             {index < LANGUAGES.length - 1 && (
-              <span className="text-gray-400 mx-1">|</span>
+              <span className="text-muted-foreground/30 mx-1">|</span>
             )}
           </div>
         ))}

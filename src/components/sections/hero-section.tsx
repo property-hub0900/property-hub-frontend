@@ -18,6 +18,7 @@ import SearchTabs from "@/components/search/search-tabs";
 import PlacesAutocomplete from "@/components/placesAutoComplete";
 import { useTranslations } from "next-intl";
 import { PROPERTY_PURPOSE, PROPERTY_TYPES } from "@/constants/constants";
+import { PUBLIC_ROUTES } from "@/constants/paths";
 
 export default function HeroSection() {
   const t = useTranslations();
@@ -32,8 +33,6 @@ export default function HeroSection() {
     purpose: `${PROPERTY_PURPOSE[1]}`,
   });
 
-  console.log("searchParams", searchParams); // Debug log
-
   const handleSearch = () => {
     // When search button is clicked, this function builds the URL parameters
     const params = new URLSearchParams();
@@ -44,8 +43,7 @@ export default function HeroSection() {
 
     // Add the selected location from Google Places to the searchQuery parameter
     if (currentSearchQuery) {
-      params.set("searchQuery", currentSearchQuery);
-      console.log("Search query:", currentSearchQuery); // Debug log
+      params.set("address", currentSearchQuery);
     }
 
     if (searchParams.propertyType && searchParams.propertyType !== "") {
@@ -55,7 +53,7 @@ export default function HeroSection() {
     params.set("purpose", searchParams.purpose);
 
     // Navigate to the properties page with the search parameters
-    router.push(`/en/properties?${params.toString()}`);
+    router.push(`${PUBLIC_ROUTES.properties}?${params.toString()}`);
   };
 
   // Update the handleTabChange function to map to the API's 'purpose' parameter
@@ -169,15 +167,11 @@ function SearchForm({
         </Select>
       </div>
       <div className="w-full mb-3 sm:mb-0 sm:mr-3 relative">
-        <Search
-          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10"
-          size={18}
-        />
         <PlacesAutocomplete
           value={searchParams.searchQuery}
           onChange={handleLocationChange}
           onKeyPress={handleKeyPress}
-          className="pl-10 text-primary outline-none shadow-none border-0 focus:border-0 focus:ring-0 focus:outline-none focus-visible:outline-none"
+          className="outline-none shadow-none border-0 focus:border-0 focus:ring-0 focus:outline-none focus-visible:outline-none"
         />
       </div>
       <Button className="w-28" onClick={onSearch}>

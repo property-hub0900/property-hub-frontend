@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface PaginationProps {
@@ -17,6 +18,8 @@ export default function Pagination({
   totalItems,
   pageSize,
 }: PaginationProps) {
+  const t = useTranslations();
+
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -83,18 +86,20 @@ export default function Pagination({
     <div className="flex flex-col items-center gap-4 py-4">
       <div className="flex items-center gap-2">
         <Button
-          variant="outline"
-          size="icon"
+          variant="ghost"
+          size="sm"
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 0}
         >
           <ChevronLeft className="h-4 w-4" />
+          {t("button.previous")}
         </Button>
 
         {getPageNumbers().map((page, index) => (
           <Button
             key={index}
-            variant={currentPage === page ? "default" : "outline"}
+            variant={currentPage === page ? "outline" : "ghost"}
+            size="icon"
             onClick={() =>
               typeof page === "number" ? handlePageChange(page) : undefined
             }
@@ -105,16 +110,18 @@ export default function Pagination({
         ))}
 
         <Button
-          variant="outline"
-          size="icon"
+          variant="ghost"
+          size="sm"
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage >= totalPages - 1}
+          className="border-muted-foreground/40 text-foreground"
         >
+          {t("button.next")}
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>
 
-      <div className="text-sm text-muted-foreground">
+      <div className="text-sm text-muted-foreground hidden">
         Showing {startItem} to {endItem} of {totalItems} results
       </div>
     </div>

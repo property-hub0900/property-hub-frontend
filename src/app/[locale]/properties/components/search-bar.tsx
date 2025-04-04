@@ -22,7 +22,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
-import { Search, ChevronDown } from "lucide-react";
+import { Bookmark, ChevronDown, Save } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import {
@@ -33,6 +33,9 @@ import {
 import { amenities } from "@/services/dashboard/properties";
 import { useQuery } from "@tanstack/react-query";
 import PlacesAutocomplete from "@/components/placesAutoComplete";
+import { IPropertyFilters } from "@/types/client/properties";
+import { useTranslations } from "next-intl";
+import { Separator } from "@/components/ui/separator";
 
 interface Filters {
   address: string;
@@ -44,15 +47,15 @@ interface Filters {
   priceMin: string;
   priceMax: string;
   furnishedType: string[];
-  propertySizeMin: string;
-  propertySizeMax: string;
+  minArea: string;
+  maxArea: string;
   amenitiesIds: string[];
   page: string;
   pageSize: string;
   sortBy: string;
 }
 
-const BEDROOM_OPTIONS = ["Studio", "1", "2", "3", "4", "5", "6", "7", "7+"];
+const BEDROOM_OPTIONS = ["1", "2", "3", "4", "5", "6", "7", "7+"];
 const BATHROOM_OPTIONS = ["1", "2", "3", "4", "5", "6", "7", "7+"];
 const SORT_OPTIONS = [
   { label: "Featured", value: "featured" },
@@ -62,6 +65,7 @@ const SORT_OPTIONS = [
 ];
 
 export default function SearchBar() {
+  const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isMoreFiltersOpen, setIsMoreFiltersOpen] = useState(false);
@@ -71,37 +75,39 @@ export default function SearchBar() {
     queryFn: amenities,
   });
 
-  const initialFilters: Filters = {
+  const initialFilters: IPropertyFilters = {
     address: searchParams.get("address") || "",
     searchQuery: searchParams.get("searchQuery") || "",
     purpose: searchParams.get("purpose") || "",
-    propertyType: searchParams.get("propertyType") || "",
+    propertyType:
+      searchParams.get("propertyType") || t("form.propertyType.label"),
     bedrooms: searchParams.get("bedrooms") || "",
     bathrooms: searchParams.get("bathrooms") || "",
     priceMin: searchParams.get("priceMin") || "",
     priceMax: searchParams.get("priceMax") || "",
     furnishedType: searchParams.get("furnishedType")?.split(",") || [],
-    propertySizeMin: searchParams.get("propertySizeMin") || "",
-    propertySizeMax: searchParams.get("propertySizeMax") || "",
+    minArea: searchParams.get("minArea") || "",
+    maxArea: searchParams.get("maxArea") || "",
     amenitiesIds: searchParams.get("amenitiesIds")?.split(",") || [],
     page: searchParams.get("page") || "0",
     pageSize: searchParams.get("pageSize") || "10",
     sortBy: searchParams.get("sortBy") || "featured",
   };
 
-  const [filters, setFilters] = useState<Filters>(initialFilters);
+  const [filters, setFilters] = useState<IPropertyFilters>(initialFilters);
 
   useEffect(() => {
     setFilters(initialFilters);
   }, [searchParams]);
 
   const updateURL = useCallback(
-    (filters: Filters) => {
+    (filters: IPropertyFilters) => {
       const params = new URLSearchParams();
       Object.entries(filters).forEach(([key, value]) => {
         if (
           value &&
-          (typeof value === "string" ? value.trim() : value.length > 0)
+          (typeof value === "string" ? value.trim() : value.length > 0) &&
+          !(key === "propertyType" && value === t("form.propertyType.label"))
         ) {
           if (Array.isArray(value)) {
             params.set(key, value.join(","));
@@ -166,23 +172,25 @@ export default function SearchBar() {
       priceMin: "",
       priceMax: "",
       furnishedType: [],
-      propertySizeMin: "",
-      propertySizeMax: "",
+      minArea: "",
+      maxArea: "",
       amenitiesIds: [],
       page: "0",
       pageSize: "10",
       sortBy: "featured",
     });
     router.push("?");
+    setIsMoreFiltersOpen(false);
   };
 
   return (
-    <form onSubmit={handleSearch} className="space-y-4">
-      <div className="flex flex-col md:flex-row gap-4">
+    <form onSubmit={handleSearch} className="">
+      <div className="flex flex-col grow md:flex-row gap-2 mb-6">
         {/* Location Search */}
-        <div className="relative flex-1">
+        <div className="relative w-96 flex-1 ">
           <PlacesAutocomplete
-            value={filters.address}
+            className="h-11"
+            value={filters.address || ""}
             onChange={(value) => handleSelectChange("address", value)}
           />
         </div>
@@ -192,13 +200,13 @@ export default function SearchBar() {
           value={filters.purpose}
           onValueChange={(value) => handleSelectChange("purpose", value)}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-auto h-11">
             <SelectValue placeholder="Purpose" />
           </SelectTrigger>
           <SelectContent>
             {PROPERTY_PURPOSE.map((purpose) => (
-              <SelectItem key={purpose} value={purpose.toLowerCase()}>
-                {purpose}
+              <SelectItem key={purpose} value={purpose}>
+                {purpose === "For Sale" ? t("button.buy") : t("button.rent")}
               </SelectItem>
             ))}
           </SelectContent>
@@ -209,46 +217,44 @@ export default function SearchBar() {
           value={filters.propertyType}
           onValueChange={(value) => handleSelectChange("propertyType", value)}
         >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Property Type" />
+          <SelectTrigger className="w-auto h-11">
+            <SelectValue placeholder={t("form.propertyType.label")} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="">
+            <SelectItem value={t("form.propertyType.label")}>
+              {t("form.propertyType.label")}
+            </SelectItem>
             {[...PROPERTY_TYPES.Residential, ...PROPERTY_TYPES.Commercial].map(
               (type) => (
-                <SelectItem key={type} value={type.toLowerCase()}>
+                <SelectItem key={type} value={type}>
                   {type}
                 </SelectItem>
               )
             )}
           </SelectContent>
         </Select>
-      </div>
 
-      <div className="flex flex-wrap gap-4 items-center">
         {/* Beds & Baths Popover */}
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="w-[180px]">
+            <Button variant="outline">
               {filters.bedrooms || filters.bathrooms
-                ? `${filters.bedrooms || "0"} Bed, ${
-                    filters.bathrooms || "0"
-                  } Bath`
+                ? `${filters.bedrooms} Bed, ${filters.bathrooms} Bath`
                 : "Beds & Baths"}{" "}
               <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[400px] p-4">
+          <PopoverContent className="w-[400px] p-4s">
             <div className="space-y-4">
               <div className="space-y-2">
-                <h4 className="font-medium">Bedrooms</h4>
+                <h6 className="">Bedrooms</h6>
                 <div className="flex flex-wrap gap-2">
                   {BEDROOM_OPTIONS.map((bed) => (
                     <Button
                       key={bed}
-                      size="sm"
+                      size="icon"
                       variant={filters.bedrooms === bed ? "default" : "outline"}
                       onClick={() => handleSelectChange("bedrooms", bed)}
-                      className="flex-1"
                     >
                       {bed}
                     </Button>
@@ -256,17 +262,16 @@ export default function SearchBar() {
                 </div>
               </div>
               <div className="space-y-2">
-                <h4 className="font-medium">Bathrooms</h4>
+                <h6 className="font-medium">Bathrooms</h6>
                 <div className="flex flex-wrap gap-2">
                   {BATHROOM_OPTIONS.map((bath) => (
                     <Button
                       key={bath}
-                      size="sm"
+                      size="icon"
                       variant={
                         filters.bathrooms === bath ? "default" : "outline"
                       }
                       onClick={() => handleSelectChange("bathrooms", bath)}
-                      className="flex-1"
                     >
                       {bath}
                     </Button>
@@ -280,17 +285,17 @@ export default function SearchBar() {
         {/* Price Popover */}
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="w-[150px]">
+            <Button variant="outline">
               {filters.priceMin || filters.priceMax
                 ? `${filters.priceMin || "0"} - ${filters.priceMax || "Any"}`
                 : "Price"}{" "}
-              <ChevronDown className="ml-2 h-4 w-4" />
+              <ChevronDown className="ms-2 h-4 w-4" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[300px] p-4">
+          <PopoverContent className="w-[380px] px-4 py-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <h4 className="font-medium">Price Range (QAR)</h4>
+                {/* <h6 className="font-normal">Price Range (QAR)</h6> */}
                 <div className="flex gap-2">
                   <Input
                     type="number"
@@ -316,30 +321,26 @@ export default function SearchBar() {
         <Dialog open={isMoreFiltersOpen} onOpenChange={setIsMoreFiltersOpen}>
           <DialogTrigger asChild>
             <Button variant="outline">
-              More Filters <ChevronDown className="ml-2 h-4 w-4" />
+              More Filters <ChevronDown className="ms-2 size-4" />
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
-            <DialogHeader>
+          <DialogContent className="sm:max-w-[800px] px-0">
+            <DialogHeader className="px-10">
               <DialogTitle>More Filters</DialogTitle>
             </DialogHeader>
-            <div className="space-y-6 p-4">
+            <Separator />
+            <div className="overflow-y-auto h-[65vh] px-10">
               {/* Furnishing */}
               <div className="space-y-2">
-                <h4 className="font-medium">Furnishing</h4>
-                <div className="grid grid-cols-2 gap-2">
+                <h6>Furnishing</h6>
+                <div className="grid grid-cols-2 gap-2 lg:grid-cols-3">
                   {PROPERTY_FURNISHED_TYPE.map((type) => (
                     <div key={type} className="flex items-center space-x-2">
                       <Checkbox
                         id={`furnishing-${type}`}
-                        checked={filters.furnishedType.includes(
-                          type.toLowerCase()
-                        )}
+                        checked={filters.furnishedType?.includes(type)}
                         onCheckedChange={() =>
-                          handleCheckboxChange(
-                            "furnishedType",
-                            type.toLowerCase()
-                          )
+                          handleCheckboxChange("furnishedType", type)
                         }
                       />
                       <label
@@ -352,32 +353,32 @@ export default function SearchBar() {
                   ))}
                 </div>
               </div>
-
+              <Separator className="mt-6 mb-4" />
               {/* Property Size */}
               <div className="space-y-2">
-                <h4 className="font-medium">Property Size (Sqm)</h4>
+                <h6>Property Size (Sqf)</h6>
                 <div className="flex gap-4">
                   <Input
                     type="number"
-                    name="propertySizeMin"
+                    name="minArea"
                     placeholder="Min Area"
-                    value={filters.propertySizeMin}
+                    value={filters.minArea}
                     onChange={handleInputChange}
                   />
                   <Input
                     type="number"
-                    name="propertySizeMax"
+                    name="maxArea"
                     placeholder="Max Area"
-                    value={filters.propertySizeMax}
+                    value={filters.maxArea}
                     onChange={handleInputChange}
                   />
                 </div>
               </div>
-
+              <Separator className="mt-6 mb-4" />
               {/* Amenities */}
               <div className="space-y-2">
-                <h4 className="font-medium">Amenities</h4>
-                <div className="grid grid-cols-2 gap-2">
+                <h6>Amenities</h6>
+                <div className="grid grid-cols-2 gap-2 lg:grid-cols-3">
                   {amenitiesData?.results.map((amenity) => (
                     <div
                       key={amenity.amenityId}
@@ -385,7 +386,7 @@ export default function SearchBar() {
                     >
                       <Checkbox
                         id={`amenity-${amenity.amenityId}`}
-                        checked={filters.amenitiesIds.includes(
+                        checked={filters.amenitiesIds?.includes(
                           String(amenity.amenityId)
                         )}
                         onCheckedChange={() =>
@@ -405,10 +406,10 @@ export default function SearchBar() {
                   ))}
                 </div>
               </div>
-
+              <Separator className="mt-6 mb-4" />
               {/* Search Query */}
-              <div className="space-y-2">
-                <h4 className="font-medium">Keyword Search</h4>
+              <div className="space-y-2 mb-2">
+                <h6>Keyword Search</h6>
                 <Input
                   type="text"
                   name="searchQuery"
@@ -418,7 +419,7 @@ export default function SearchBar() {
                 />
               </div>
             </div>
-            <div className="flex justify-between p-4 border-t">
+            <div className="flex justify-between px-10 pt-4 border-t">
               <Button variant="outline" onClick={clearAllFilters}>
                 Reset
               </Button>
@@ -427,13 +428,24 @@ export default function SearchBar() {
           </DialogContent>
         </Dialog>
 
-        <div className="flex items-center gap-4 ml-auto">
+        {/* Find Button */}
+        <Button type="submit">Find</Button>
+      </div>
+      <div className="flex justify-between mb-10">
+        <div>
+          <Button type="button" variant="outlinePrimary">
+            <Bookmark className="size-5" />
+            {t("button.save")} {t("button.search")}
+          </Button>
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="text-sm text-muted-foreground">Sort By: </label>
           {/* Sort By Select */}
           <Select
             value={filters.sortBy}
             onValueChange={(value) => handleSelectChange("sortBy", value)}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[120px] h-11">
               <SelectValue placeholder="Sort By" />
             </SelectTrigger>
             <SelectContent>
@@ -444,9 +456,6 @@ export default function SearchBar() {
               ))}
             </SelectContent>
           </Select>
-
-          {/* Find Button */}
-          <Button type="submit">Find</Button>
         </div>
       </div>
     </form>

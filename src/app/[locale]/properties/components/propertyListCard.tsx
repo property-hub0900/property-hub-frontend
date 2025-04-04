@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/lib/hooks/useAuth";
-import { ClientProperty } from "@/types/client/properties";
+import { IProperty } from "@/types/client/properties";
 import {
   Heart,
   Mail,
@@ -12,7 +12,6 @@ import {
   Phone,
   Bath,
   Camera,
-  CircleUser,
   BedDouble,
   Ruler,
   User,
@@ -29,7 +28,7 @@ import "swiper/css/navigation";
 import { formatAmountToQAR } from "@/utils/utils";
 import { PUBLIC_ROUTES } from "@/constants/paths";
 
-export default function PropertyListing({ data }: { data: ClientProperty }) {
+export default function PropertyListCard({ data }: { data: IProperty }) {
   const {
     title,
     propertyType,
@@ -53,7 +52,7 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
   );
 
   return (
-    <Card className="overflow-hidden grid grid-cols-3">
+    <Card className="overflow-hidden grid grid-cols-1 lg:grid-cols-3">
       <div className="relative col-span-1">
         {images.length > 0 && (
           <Swiper
@@ -133,21 +132,21 @@ export default function PropertyListing({ data }: { data: ClientProperty }) {
         </Link>
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outlinePrimary" size="sm">
             <Phone className="h-4 w-4" />
             Call
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outlinePrimary" size="sm">
             <Mail className="h-4 w-4" />
             Email
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outlinePrimary" size="sm">
             <MessageCircle className="h-4 w-4" />
             WhatsApp
           </Button>
-          {user?.role !== "staff" && (
+          {user?.role && user?.role !== "staff" && (
             <Button
-              variant="outline"
+              variant="outlinePrimary"
               size="icon"
               onClick={() => {
                 setFavorite(!favorite);

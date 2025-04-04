@@ -60,7 +60,8 @@
     "whatsapp": "WhatsApp",
     "letsTalk": "Let's Talk",
     "contactUs": "Contact Us",
-    "exploreProperties": "Explore Properties"
+    "exploreProperties": "Explore Properties",
+    "previous": "Previous"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",

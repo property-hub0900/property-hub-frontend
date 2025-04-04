@@ -339,10 +339,10 @@
   font-weight: 600;
 }
 
-/* .swiper .swiper-button-next, */
+/* Property Listing Page swiper Style */
 .swiper .swiper-button-prev,
 .swiper .swiper-button-next {
-  @apply text-white bg-black/30 w-7 h-7 rounded-full transition duration-300 ease-in-out;
+  @apply text-white bg-black/30 size-6  rounded-full transition duration-300 ease-in-out;
 }
 
 .swiper .swiper-button-next:hover,
@@ -352,7 +352,7 @@
 
 .swiper .swiper-button-next::after,
 .swiper .swiper-button-prev::after {
-  @apply text-base font-bold text-white;
+  @apply text-xs font-bold text-white;
 }
 
 .swiper .swiper-pagination-bullet {

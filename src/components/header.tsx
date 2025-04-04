@@ -10,6 +10,7 @@ import { PUBLIC_ROUTES } from "@/constants/paths";
 import { PROPERTY_PURPOSE } from "@/constants/constants";
 import { useTranslations } from "next-intl";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { Button } from "./ui/button";
 
 export default function Header() {
   const t = useTranslations();
@@ -24,7 +25,7 @@ export default function Header() {
   return (
     <>
       {/* Main Header */}
-      <header className="bg-white w-full py-1">
+      <header className="bg-white w-full py-1 shadow-md">
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
             <div className="">
@@ -84,11 +85,10 @@ export default function Header() {
                 </Link>
               )}
 
-              <Link
-                href="#"
-                className="text-gray-700 hover:text-primary transition-colors text-sm font-medium"
-              >
-                Contact Us
+              <Link href="#" className="">
+                <Button size={"sm"} variant={"outline"}>
+                  Contact Us
+                </Button>
               </Link>
 
               <LanguageSwitcher />
