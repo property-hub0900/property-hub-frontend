@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 "use client";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { Menu, X } from "lucide-react";
@@ -64,9 +63,7 @@ export default function Header() {
 
             {/* Auth Buttons / User Menu */}
             <div className="hidden md:flex items-center space-x-6">
-              {isAuthenticated ? (
-                <UserMenu />
-              ) : (
+              {!isAuthenticated && (
                 <Link
                   href="/customer/login"
                   className="text-gray-700 hover:text-primary transition-colors text-sm font-medium flex items-center"
@@ -95,6 +92,8 @@ export default function Header() {
               </Link>
 
               <LanguageSwitcher />
+
+              {isAuthenticated && <UserMenu />}
             </div>
 
             {/* Mobile Menu Button */}
