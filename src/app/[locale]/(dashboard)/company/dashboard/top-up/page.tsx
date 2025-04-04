@@ -4,7 +4,7 @@ import { DataTable } from "@/components/dataTable/data-table"
 import { Loader } from "@/components/loader"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { getErrorMessage } from "@/lib/utils"
+import { getErrorMessage } from "@/utils/utils"
 import { companyService } from "@/services/company"
 import { useQuery } from "@tanstack/react-query"
 import { useTranslations } from "next-intl"
@@ -146,7 +146,7 @@ export default function TopUpSubscriptionPage() {
 
 
 
-                    <div className="w-full overflow-x-auto">
+                    <div className="w-full overflow-x-auto ">
                         <DataTable
                             columns={Columns() as any}
                             data={filteredData}

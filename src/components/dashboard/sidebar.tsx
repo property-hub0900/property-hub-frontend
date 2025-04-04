@@ -1,9 +1,10 @@
 "use client"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/utils"
 import { Button } from "@/components/ui/button"
 import { useSidebar } from "@/components/ui/sidebar"
+import { COMPANY_PATHS, CUSTOMER_PATHS, PUBLIC_ROUTES } from "@/constants/paths";
 import {
   BarChart2,
   Database,
@@ -82,42 +83,42 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   const companyNavItems = [
     {
       title: "Dashboard",
-      href: "/company/dashboard",
+      href: COMPANY_PATHS.dashboard,
       icon: BarChart2,
     },
     {
       title: "Property Data",
-      href: "/company/dashboard/properties",
+      href: COMPANY_PATHS.properties,
       icon: Database,
     },
     {
       title: "Access Management",
-      href: "/company/dashboard/access-management",
+      href: COMPANY_PATHS.accessManagement,
       icon: Users,
     },
     {
       title: "Agents",
-      href: "/company/dashboard/agents",
+      href: COMPANY_PATHS.agents,
       icon: User,
     },
     {
       title: "Points",
-      href: "/company/dashboard/wallet-points",
+      href: COMPANY_PATHS.walletPoints,
       icon: Wallet,
     },
     {
       title: "Subscription Plans",
-      href: "/company/dashboard/subscription-plans",
+      href: COMPANY_PATHS.subscriptionPlans,
       icon: Package,
     },
     {
       title: "Top-Up",
-      href: "/company/dashboard/top-up",
+      href: COMPANY_PATHS.topUp,
       icon: Database,
     },
     {
       title: "Settings",
-      href: "/company/dashboard/settings",
+      href: COMPANY_PATHS.settings,
       icon: Settings,
     },
   ]
@@ -126,34 +127,34 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   const customerNavItems = [
     {
       title: "Home",
-      href: "/customer/dashboard",
+      href: CUSTOMER_PATHS.dashboard,
       icon: HomeIcon,
     },
     {
       title: "Search Properties",
-      href: "/customer/dashboard/search",
+      href: CUSTOMER_PATHS.search,
       icon: Search,
     },
     {
       title: "Saved Properties",
-      href: "/customer/dashboard/saved",
+      href: CUSTOMER_PATHS.saved,
       icon: Heart,
       badge: 5,
     },
     {
       title: "Notifications",
-      href: "/customer/dashboard/notifications",
+      href: CUSTOMER_PATHS.notifications,
       icon: Bell,
       badge: 2,
     },
     {
       title: "My Inquiries",
-      href: "/customer/dashboard/inquiries",
+      href: CUSTOMER_PATHS.inquiries,
       icon: Building,
     },
     {
       title: "Settings",
-      href: "/customer/dashboard/settings",
+      href: CUSTOMER_PATHS.settings,
       icon: Settings,
     },
   ]
@@ -162,12 +163,12 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   const footerItems = [
     {
       title: "Help Centre",
-      href: "/help",
+      href: PUBLIC_ROUTES.help,
       icon: HelpCircle,
     },
     {
       title: "Contact us",
-      href: "/contact",
+      href: PUBLIC_ROUTES.contact,
       icon: MessageSquare,
     },
   ]
@@ -201,8 +202,8 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       <div className={cn("flex h-16 items-center px-4", open ? "justify-start" : "justify-center")}>
         <Link href={dashboardBasePath} className="flex items-center gap-2">
           {open ? <>
-            <Image src="/logo.svg" alt="PropertyExplorer" width={48} height={48} />
-            <span className="font-semibold">Property Explorer</span>
+            <Image src="/logo.svg" alt="PropertyExplorer" width={160} height={160} />
+
           </>
             : <>
               <Image src="/logo.svg" alt="PropertyExplorer" width={48} height={48} />

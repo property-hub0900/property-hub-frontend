@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
 import { Bell, Search } from 'lucide-react'
-import { UserDropdown } from "../userDropdown"
+import { UserMenu } from "../userMenu"
 
 export function DashboardHeader() {
   const { toggleSidebar } = useSidebar();
