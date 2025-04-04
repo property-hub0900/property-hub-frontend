@@ -24,7 +24,10 @@
     "access": "Access",
     "landingHeroTitle": "Exclusive Luxury Properties in Qatar",
     "landingHeroSubTitle": "Boost Your Business with the Best Locations!",
-    "discoverTheLatestProperties": "Discover the latest properties"
+    "discoverTheLatestProperties": "Discover the latest properties",
+    "lookingToAdvertiseAProperty": "Looking to advertise a property? Contact us.",
+    "investIn": "Invest In",
+    "qatarBloomingRealEstateMarket": "Qatar's Blooming <highlight>Real Estate</highlight> Market"
   },
   "button": {
     "next": "Next",
@@ -54,7 +57,10 @@
     "rent": "Rent",
     "search": "Search",
     "exploreAll": "Explore All",
-    "whatsapp": "WhatsApp"
+    "whatsapp": "WhatsApp",
+    "letsTalk": "Let's Talk",
+    "contactUs": "Contact Us",
+    "exploreProperties": "Explore Properties"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -640,10 +646,6 @@
       "sqft": "sq ft",
       "viewDetails": "View Details",
       "contactNow": "Contact Now"
-    },
-    "cta": {
-      "title": "Looking to advertise a property? Contact us.",
-      "button": "Let's Talk"
     },
     "appraisal": {
       "ourValue": "OUR VALUE",

@@ -13,7 +13,7 @@ import {
   Redo,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { forwardRef, useImperativeHandle } from "react";
 
 export interface TiptapEditorProps {

@@ -20,7 +20,7 @@ import {
   User,
 } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import {
   Sidebar,
   SidebarContent,
@@ -158,7 +158,6 @@ export function DashboardSidebar({
       <SidebarHeader className="py-1.5 border-b">
         <Link href={dashboardBasePath} className="flex items-center gap-2 px-4">
           <div className="flex items-center">
-
             <div className="flex items-center">
               <Image
                 src="/logo.svg"

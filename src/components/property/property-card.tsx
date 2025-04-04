@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
-import { formatAmountToQAR } from "@/lib/utils";
+import { formatAmountToQAR } from "@/utils/utils";
 
 type PropertyCardProps = {
   t: any;
@@ -72,11 +72,7 @@ export default function PropertyCard({
           <span className="font-bold text-base">
             {formatAmountToQAR(Number(price))}
           </span>
-          <Button
-            variant="outline"
-            //size=""
-            className="text-primary border-primary hover:bg-primary/10 rounded-md text-xs h-8"
-          >
+          <Button variant="outline" size="sm" className="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="19"

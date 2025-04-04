@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 "use client";
 
 import { PROPERTY_PURPOSE } from "@/constants/constants";
@@ -7,15 +6,11 @@ import { useState } from "react";
 
 type SearchTabsProps = {
   onTabChange?: (tab: string) => void;
-  initialTab?: string;
 };
 
-export default function SearchTabs({
-  onTabChange,
-  initialTab = PROPERTY_PURPOSE[0],
-}: SearchTabsProps) {
+export default function SearchTabs({ onTabChange }: SearchTabsProps) {
   const t = useTranslations();
-  const [activeTab, setActiveTab] = useState(initialTab);
+  const [activeTab, setActiveTab] = useState<string>(PROPERTY_PURPOSE[1]);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);

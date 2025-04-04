@@ -29,8 +29,10 @@ export default function HeroSection() {
   const [searchParams, setSearchParams] = useState({
     propertyType: "",
     searchQuery: "", // This will store the selected location from Google Places API
-    purpose: `${PROPERTY_PURPOSE[0]}`,
+    purpose: `${PROPERTY_PURPOSE[1]}`,
   });
+
+  console.log("searchParams", searchParams); // Debug log
 
   const handleSearch = () => {
     // When search button is clicked, this function builds the URL parameters
@@ -178,10 +180,7 @@ function SearchForm({
           className="pl-10 text-primary outline-none shadow-none border-0 focus:border-0 focus:ring-0 focus:outline-none focus-visible:outline-none"
         />
       </div>
-      <Button
-        className="w-full sm:w-1/6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-md h-10"
-        onClick={onSearch}
-      >
+      <Button className="w-28" onClick={onSearch}>
         {t("button.search")}
       </Button>
     </div>
