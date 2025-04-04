@@ -4,9 +4,9 @@
 
 import type React from "react";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Input } from "@/components/ui/input";
-import { X, Loader2 } from "lucide-react";
+import { X, Loader2, Search } from "lucide-react";
 
 interface PlacesAutocompleteProps {
   value: string;
@@ -22,6 +22,35 @@ declare global {
   }
 }
 
+// Define a custom hook for loading the Google Maps API
+const useGoogleMapsAPI = (initializeAutocomplete) => {
+  useEffect(() => {
+    const loadGoogleMapsAPI = async () => {
+      if (typeof window === "undefined") return;
+
+      if (window.google && window.google.maps && window.google.maps.places) {
+        initializeAutocomplete();
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = initializeAutocomplete;
+      script.onerror = () => console.error("Error loading Google Maps API");
+      document.head.appendChild(script);
+
+      return () => {
+        document.head.removeChild(script);
+      };
+    };
+
+    console.log("Attempting to load Google Maps API...");
+    loadGoogleMapsAPI();
+  }, [initializeAutocomplete]);
+};
+
 export default function PlacesAutocomplete({
   value,
   onChange,
@@ -34,134 +63,38 @@ export default function PlacesAutocomplete({
   const [isPlaceSelected, setIsPlaceSelected] = useState(false);
   const autocompleteRef = useRef<any>(null);
 
-  // Load Google Maps API
-  useEffect(() => {
-    const loadGoogleMapsAPI = async () => {
-      if (typeof window === "undefined") return;
-
-      // If Google Maps API is already loaded
-      if (window.google && window.google.maps && window.google.maps.places) {
-        initializeAutocomplete();
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        // Load Google Maps API script
-        const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
-        script.async = true;
-        script.defer = true;
-        script.onload = () => {
-          initializeAutocomplete();
-          setIsLoading(false);
-        };
-        script.onerror = () => {
-          console.error("Error loading Google Maps API");
-          setIsLoading(false);
-        };
-        document.head.appendChild(script);
-
-        return () => {
-          // Clean up script if component unmounts during loading
-          document.head.removeChild(script);
-        };
-      } catch (error) {
-        console.error("Error setting up Google Maps API:", error);
-        setIsLoading(false);
-      }
-    };
-
-    loadGoogleMapsAPI();
-  }, []);
-
-  // Initialize autocomplete when input ref is available and API is loaded
-  const initializeAutocomplete = () => {
+  // Initialize autocomplete
+  const initializeAutocomplete = useCallback(() => {
     if (!inputRef.current || !window.google?.maps?.places) return;
 
-    try {
-      const autocompleteInstance = new window.google.maps.places.Autocomplete(
-        inputRef.current,
-        {
-          types: ["geocode"],
-          componentRestrictions: { country: "QA" },
-        }
-      );
-      autocompleteRef.current = autocompleteInstance;
+    const autocompleteInstance = new window.google.maps.places.Autocomplete(
+      inputRef.current,
+      {
+        types: ["geocode"],
+        componentRestrictions: { country: "QA" },
+      }
+    );
+    autocompleteRef.current = autocompleteInstance;
 
-      // Listen for place selection
-      autocompleteInstance.addListener("place_changed", () => {
-        const place = autocompleteInstance.getPlace();
-        if (place.formatted_address) {
-          setSearchInput(place.formatted_address);
-          onChange(place.formatted_address);
-          setIsPlaceSelected(true);
-        }
-      });
+    console.log("Initializing autocomplete...");
 
-      // This is a hack to access predictions
-      // Google doesn't officially expose this, but it works in most browsers
-      const originalFunc = inputRef.current.addEventListener;
-      inputRef.current.addEventListener = function (type, listener, options) {
-        if (type === "keydown") {
-          const originalListener = listener;
-          listener = (e) => {
-            // After a short delay, try to access predictions
-            setTimeout(() => {
-              try {
-                // This is accessing a private property of the autocomplete instance
-                // It's not ideal, but it's the only way to get predictions without using Places API directly
-                const pacContainer = document.querySelector(".pac-container");
-                if (pacContainer) {
-                  // Make sure the pac-container is visible and positioned correctly
-                  const inputRect = inputRef.current?.getBoundingClientRect();
-                  if (inputRect) {
-                    pacContainer.setAttribute(
-                      "style",
-                      `
-                      display: block !important; 
-                      position: absolute !important;
-                      z-index: 1000 !important;
-                      width: ${inputRect.width}px !important;
-                      top: ${inputRect.bottom}px !important;
-                      left: ${inputRect.left}px !important;
-                    `
-                    );
-                  }
+    autocompleteInstance.addListener("place_changed", () => {
+      const place = autocompleteInstance.getPlace();
+      if (place.formatted_address) {
+        setSearchInput(place.formatted_address);
+        onChange(place.formatted_address);
+        setIsPlaceSelected(true);
+        console.log("Place selected:", place.formatted_address);
+      }
+    });
 
-                  // Force the pac-container to be visible
-                  const style = document.createElement("style");
-                  style.textContent = `
-                    .pac-container {
-                      display: block !important;
-                      z-index: 1000 !important;
-                    }
-                  `;
-                  document.head.appendChild(style);
+    console.log("Autocomplete instance created.");
+  }, [onChange]);
 
-                  // Clean up style after a short delay
-                  setTimeout(() => {
-                    document.head.removeChild(style);
-                  }, 100);
-                }
-              } catch (err) {
-                console.error("Error accessing predictions:", err);
-              }
-            }, 100);
-
-            // Call the original listener
-            originalListener.call(this as any, e) as any;
-          };
-        }
-        return originalFunc.call(this, type, listener, options);
-      };
-    } catch (error) {
-      console.error("Error initializing autocomplete:", error);
-    }
-  };
+  // Use custom hook to load Google Maps API
+  useGoogleMapsAPI(initializeAutocomplete);
 
   useEffect(() => {
-    // Sync the input value with the prop value
     if (value !== searchInput) {
       setSearchInput(value);
     }
@@ -197,25 +130,31 @@ export default function PlacesAutocomplete({
           value={searchInput}
           onChange={handleInputChange}
           onKeyDown={onKeyPress}
-          className={`${className} ${isPlaceSelected ? "border-primary" : ""}`}
-          disabled={isLoading}
+          className={`ps-10 ${className}`}
+          // disabled={isLoading}
+          aria-label="Location input"
         />
+
+        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+          <Search size={16} />
+        </div>
 
         {searchInput && (
           <button
             onClick={clearInput}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
             type="button"
+            aria-label="Clear input"
           >
             <X size={16} />
           </button>
         )}
 
-        {isLoading && (
+        {/* {isLoading && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
             <Loader2 size={16} className="animate-spin" />
           </div>
-        )}
+        )} */}
       </div>
 
       {/* We don't need to render our own dropdown as Google will inject its own */}

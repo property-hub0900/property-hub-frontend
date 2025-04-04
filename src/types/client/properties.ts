@@ -1,12 +1,12 @@
-export interface PropertyResponse {
-  results: ClientProperty[];
+export interface IPropertyResponse {
+  results: IProperty[];
   total: number;
   page: number;
   pageSize: number;
   isError: boolean;
 }
 
-export interface ClientProperty {
+export interface IProperty {
   propertyId: number;
   title: string;
   titleAr: string;
@@ -22,15 +22,16 @@ export interface ClientProperty {
   propertySize: string;
   description: string;
   descriptionAr: string;
-  price: string;
+  price: number;
   hidePrice: string | null;
   propertyType: string;
   purpose: string;
-  bedrooms: number;
+  bedrooms?: number;
   bathrooms: number;
   status: string;
   featured: boolean;
   street: string | null;
+  address: string | null;
   city: string | null;
   state: string | null;
   zipCode: string | null;
@@ -40,32 +41,52 @@ export interface ClientProperty {
   companyId: number;
   referenceNo: string;
   createdAt: string;
-  PropertyImages: PropertyImage[];
+  PropertyImages: IPropertyImage[];
+  postedByStaff: IPostedByStaff;
 }
 
-export interface PropertyImage {
+export interface IPostedByStaff {
+  staffId: number;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  userId: number;
+  companyId: number;
+  role: string;
+  profilePhoto: string | null;
+  biography: string | null;
+  languagesSpoken: string;
+  active: boolean;
+  isOwner: boolean;
+  createdAt: string;
+}
+
+export interface IPropertyImage {
   imageId: number;
   propertyId: number;
   url: string;
   isPrimary: boolean;
 }
 
-export interface PropertyFilters {
+export interface IPropertyFilters {
   searchQuery?: string;
   propertyType?: string;
+  furnishedType?: string[];
   purpose?: string;
-  bedrooms?: number;
-  bathrooms?: number;
-  priceMin?: number;
-  priceMax?: number;
-  amenitiesIds?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  priceMin?: string;
+  priceMax?: string;
+  amenitiesIds?: string[];
   furnishing?: string;
-  minArea?: number;
-  maxArea?: number;
+  minArea?: string;
+  maxArea?: string;
   keywords?: string;
-  companyId?: number;
-  page?: number;
-  pageSize?: number;
+  companyId?: string;
+  page?: string;
+  pageSize?: string;
+  sortBy?: string;
+  address?: string;
 }
 
 export interface PaginatedResponse<T> {

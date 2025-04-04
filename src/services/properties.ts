@@ -1,13 +1,13 @@
 import apiClient from "@/lib/api-client";
 import { buildQueryString } from "@/utils/utils";
-import { PropertyFilters, PropertyResponse } from "@/types/client/properties";
+import { IPropertyFilters, IPropertyResponse } from "@/types/client/properties";
 
 // export const fetchProperties = (): Promise<IProperties> => {
 //   return apiClient.get(`/properties`);
 // };
 
 export async function fetchProperties(
-  filters: PropertyFilters
-): Promise<PropertyResponse> {
+  filters: IPropertyFilters
+): Promise<IPropertyResponse> {
   return apiClient.get(`/properties?${buildQueryString(filters)}`);
 }

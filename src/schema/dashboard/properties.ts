@@ -9,8 +9,7 @@ import {
 } from "@/constants/constants";
 
 // Define the maximum values
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const MAX_FILES = 3;
+const MAX_FILES = 20;
 
 export const createPropertySchema = (t: (key: string) => string) =>
   z.object({
