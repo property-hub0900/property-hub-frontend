@@ -22,15 +22,16 @@ export interface ClientProperty {
   propertySize: string;
   description: string;
   descriptionAr: string;
-  price: string;
+  price: number;
   hidePrice: string | null;
   propertyType: string;
   purpose: string;
-  bedrooms: number;
+  bedrooms?: number;
   bathrooms: number;
   status: string;
   featured: boolean;
   street: string | null;
+  address: string | null;
   city: string | null;
   state: string | null;
   zipCode: string | null;
@@ -41,6 +42,23 @@ export interface ClientProperty {
   referenceNo: string;
   createdAt: string;
   PropertyImages: PropertyImage[];
+  postedByStaff: IPostedByStaff;
+}
+
+export interface IPostedByStaff {
+  staffId: number;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  userId: number;
+  companyId: number;
+  role: string;
+  profilePhoto: string | null;
+  biography: string | null;
+  languagesSpoken: string;
+  active: boolean;
+  isOwner: boolean;
+  createdAt: string;
 }
 
 export interface PropertyImage {

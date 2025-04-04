@@ -1,13 +1,5 @@
 import type React from "react";
-import {
-  Bed,
-  Maximize,
-  MapPin,
-  BedDouble,
-  Bath,
-  AreaChart,
-  Ruler,
-} from "lucide-react";
+import { MapPin, BedDouble, Bath, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";

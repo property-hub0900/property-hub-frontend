@@ -338,3 +338,31 @@
 .pac-matched {
   font-weight: 600;
 }
+
+/* .swiper .swiper-button-next, */
+.swiper .swiper-button-prev,
+.swiper .swiper-button-next {
+  @apply text-white bg-black/30 w-7 h-7 rounded-full transition duration-300 ease-in-out;
+}
+
+.swiper .swiper-button-next:hover,
+.swiper .swiper-button-prev:hover {
+  @apply bg-black/50;
+}
+
+.swiper .swiper-button-next::after,
+.swiper .swiper-button-prev::after {
+  @apply text-base font-bold text-white;
+}
+
+.swiper .swiper-pagination-bullet {
+  @apply bg-white opacity-50 w-1.5 h-1.5;
+}
+
+.swiper .swiper-pagination-bullet-active {
+  @apply opacity-100 bg-white;
+}
+
+.swiper .swiper-pagination {
+  @apply bottom-2;
+}
