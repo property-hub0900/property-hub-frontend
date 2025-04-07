@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { getErrorMessage } from "@/lib/utils";
+import { getErrorMessage } from "@/utils/utils";
 import { TCreatePropertySchema } from "@/types/dashboard/properties";
 
 import { useParams } from "next/navigation";
@@ -25,7 +25,7 @@ export default function EditPropertyPage() {
 
   const id = params?.id ?? "0";
 
-  console.log("params id", id);
+
 
   const t = useTranslations();
   const router = useRouter();

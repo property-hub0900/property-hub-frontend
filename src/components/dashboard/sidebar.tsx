@@ -1,242 +1,292 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+"use client"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { cn } from "@/utils/utils"
+import { Button } from "@/components/ui/button"
+import { useSidebar } from "@/components/ui/sidebar"
+import { COMPANY_PATHS, CUSTOMER_PATHS, PUBLIC_ROUTES } from "@/constants/paths";
 import {
   BarChart2,
   Database,
   Users,
+  Settings,
+  LogOut,
+  ChevronLeft,
+  ChevronRight,
+  User,
   Wallet,
   Package,
-  Settings,
+  Bell,
+  Building,
+  Heart,
   HelpCircle,
   MessageSquare,
-  LogOut,
-  Home,
-  Heart,
-  Bell,
   Search,
-  Building,
-  User,
-} from "lucide-react";
+  HomeIcon,
+} from "lucide-react"
+import { useAuth } from "@/lib/hooks/useAuth"
+import Image from "next/image"
+import { useEffect, useState } from "react"
 
-import { cn } from "@/lib/utils";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarFooter,
-  SidebarRail,
-} from "@/components/ui/sidebar";
-import { useAuth } from "@/lib/hooks/useAuth";
-import Image from "next/image";
-
-// Company navigation items
-const companyNavItems = [
-  {
-    title: "Dashboard",
-    href: "/company/dashboard",
-    icon: BarChart2,
-  },
-  {
-    title: "Property Data",
-    href: "/company/dashboard/properties",
-    icon: Database,
-  },
-  {
-    title: "Roles and Access",
-    href: "/company/dashboard/access-management",
-    icon: Users,
-    badge: 1,
-  },
-  {
-    title: "Agents",
-    href: "/company/dashboard/agents",
-    icon: User,
-  },
-  {
-    title: "Points",
-    href: "/company/dashboard/wallet-points",
-    icon: Wallet,
-    badge: 2,
-  },
-  {
-    title: "Subscription Plans",
-    href: "/company/dashboard/subscription-plans",
-    icon: Package,
-  },
-  {
-    title: "Top-Up",
-    href: "/company/dashboard/top-up",
-    icon: Database,
-  },
-  {
-    title: "Settings",
-    href: "/company/dashboard/settings",
-    icon: Settings,
-  },
-];
-
-// Customer navigation items
-const customerNavItems = [
-  {
-    title: "Home",
-    href: "/customer/dashboard",
-    icon: Home,
-  },
-  {
-    title: "Search Properties",
-    href: "/customer/dashboard/search",
-    icon: Search,
-  },
-  {
-    title: "Saved Properties",
-    href: "/customer/dashboard/saved",
-    icon: Heart,
-    badge: 5,
-  },
-  {
-    title: "Notifications",
-    href: "/customer/dashboard/notifications",
-    icon: Bell,
-    badge: 2,
-  },
-  {
-    title: "My Inquiries",
-    href: "/customer/dashboard/inquiries",
-    icon: Building,
-  },
-  {
-    title: "Settings",
-    href: "/customer/dashboard/settings",
-    icon: Settings,
-  },
-];
-
-// Footer items are the same for both user types
-const footerItems = [
-  {
-    title: "Help Centre",
-    href: "/help",
-    icon: HelpCircle,
-  },
-  {
-    title: "Contact us",
-    href: "/contact",
-    icon: MessageSquare,
-  },
-  {
-    title: "Log out",
-    href: "/logout",
-    icon: LogOut,
-    className: "text-red-500 hover:text-red-600",
-  },
-];
-
-interface DashboardSidebarProps {
-  userType?: "company" | "customer";
+interface SidebarProps {
+  userType?: "company" | "customer"
 }
 
-export function DashboardSidebar({
-  userType = "company",
-}: DashboardSidebarProps) {
-  const pathname = usePathname();
-  const { logOut } = useAuth();
+export function DashboardSidebar({ userType = "company" }: SidebarProps) {
+  const pathname = usePathname()
+  const { open, setOpen } = useSidebar()
+  const { logOut } = useAuth()
+  const [isMobile, setIsMobile] = useState(false)
+  const [isInitialized, setIsInitialized] = useState(false)
+
+  // Determine if the screen size is mobile or tablet
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth <= 768
+      setIsMobile(mobile)
+
+      // Only set the initial state if not already initialized
+      if (!isInitialized) {
+        setOpen(!mobile)
+        setIsInitialized(true)
+      }
+    }
+
+    // Set initial state
+    handleResize()
+
+    // Add event listener to update isMobile state on resize
+    window.addEventListener("resize", handleResize)
+
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener("resize", handleResize)
+  }, [isInitialized, setOpen])
+
+  const handleToggle = () => {
+    setOpen(!open)
+  }
+
+  // Check if a path is active (exact match or starts with the path)
+  const isActive = (path: string) => {
+    // Handle language prefix in pathname (e.g., /en/company/dashboard/top-up)
+    const normalizedPathname = pathname.replace(/^\/[a-z]{2}\//, '/');
+
+    if (path === "/dashboard" || path === "/company/dashboard" || path === "/customer/dashboard") {
+      return normalizedPathname === path
+    }
+    // Add console log to debug the path matching
+    console.log(`Checking path: ${path}, current pathname: ${pathname}, normalized: ${normalizedPathname}, match: ${normalizedPathname === path || normalizedPathname.startsWith(`${path}/`)}`)
+    return normalizedPathname === path || normalizedPathname.startsWith(`${path}/`)
+  }
+
+  // Company navigation items
+  const companyNavItems = [
+    {
+      title: "Dashboard",
+      href: COMPANY_PATHS.dashboard,
+      icon: BarChart2,
+    },
+    {
+      title: "Property Data",
+      href: COMPANY_PATHS.properties,
+      icon: Database,
+    },
+    {
+      title: "Access Management",
+      href: COMPANY_PATHS.accessManagement,
+      icon: Users,
+    },
+    {
+      title: "Agents",
+      href: COMPANY_PATHS.agents,
+      icon: User,
+    },
+    {
+      title: "Points",
+      href: COMPANY_PATHS.walletPoints,
+      icon: Wallet,
+    },
+    {
+      title: "Subscription Plans",
+      href: COMPANY_PATHS.subscriptionPlans,
+      icon: Package,
+    },
+    {
+      title: "Top-Up",
+      href: COMPANY_PATHS.topUp,
+      icon: Database,
+    },
+    {
+      title: "Settings",
+      href: COMPANY_PATHS.settings,
+      icon: Settings,
+    },
+  ]
+
+  // Customer navigation items
+  const customerNavItems = [
+    {
+      title: "Home",
+      href: CUSTOMER_PATHS.dashboard,
+      icon: HomeIcon,
+    },
+    {
+      title: "Search Properties",
+      href: CUSTOMER_PATHS.search,
+      icon: Search,
+    },
+    {
+      title: "Saved Properties",
+      href: CUSTOMER_PATHS.saved,
+      icon: Heart,
+      badge: 5,
+    },
+    {
+      title: "Notifications",
+      href: CUSTOMER_PATHS.notifications,
+      icon: Bell,
+      badge: 2,
+    },
+    {
+      title: "My Inquiries",
+      href: CUSTOMER_PATHS.inquiries,
+      icon: Building,
+    },
+    {
+      title: "Settings",
+      href: CUSTOMER_PATHS.settings,
+      icon: Settings,
+    },
+  ]
+
+  // Footer items are the same for both user types
+  const footerItems = [
+    {
+      title: "Help Centre",
+      href: PUBLIC_ROUTES.help,
+      icon: HelpCircle,
+    },
+    {
+      title: "Contact us",
+      href: PUBLIC_ROUTES.contact,
+      icon: MessageSquare,
+    },
+  ]
 
   // Select the appropriate navigation items based on user type
-  const navItems = userType === "company" ? companyNavItems : customerNavItems;
+  const navItems: any = userType === "company" ? companyNavItems : customerNavItems
 
   // Determine the dashboard base path for the logo link
-  const dashboardBasePath =
-    userType === "company" ? "/company/dashboard" : "/customer/dashboard";
+  const dashboardBasePath = userType === "company" ? "/company/dashboard" : "/customer/dashboard"
 
   return (
-    <Sidebar className="border-r bg-white" collapsible="offcanvas">
-      <SidebarHeader className="py-1.5 border-b">
-        <Link href={dashboardBasePath} className="flex items-center gap-2 px-4">
-          <div className="flex items-center">
+    <div
+      className={cn(
+        "relative flex flex-col border-r bg-white transition-all duration-300",
+        open ? "w-92 p-4 md:p-6 lg:p-8" : "w-[78px] p-2",
+      )}
+    >
+      {/* Toggle button positioned at the edge of the sidebar */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={handleToggle}
+        className={cn(
+          "absolute -right-4 top-20 z-10 flex h-8 w-8 items-center justify-center rounded-full border bg-white shadow-sm",
+        )}
+      >
+        {open ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+      </Button>
 
-            <div className="flex items-center">
-              <Image
-                src="/logo.svg"
-                alt="PropertyExplorer"
-                width={48}
-                height={48}
-              />
+      {/* Logo */}
+      <div className={cn("flex h-16 items-center px-4", open ? "justify-start" : "justify-center")}>
+        <Link href={dashboardBasePath} className="flex items-center gap-2">
+          {open ? <>
+            <Image src="/logo.svg" alt="PropertyExplorer" width={160} height={160} />
 
-              <div className="ml-2">
-                <div className="text-xl font-bold text-black">Property</div>
-                <div className="text-xl font-bold text-black -mt-1">
-                  Explorer
-                </div>
-              </div>
-            </div>
-          </div>
+          </>
+            : <>
+              <Image src="/logo.svg" alt="PropertyExplorer" width={48} height={48} />
+            </>}
         </Link>
-      </SidebarHeader>
-      <SidebarContent className="py-4">
-        <SidebarMenu>
-          {navItems.map((item) => (
-            <SidebarMenuItem key={item.href} className="cursor-pointer">
-              <SidebarMenuButton
-                asChild
-                isActive={pathname === item.href}
+      </div>
+
+      {/* Navigation */}
+      <div className="flex-1 overflow-auto py-4">
+        <nav className="grid gap-1 px-2">
+          {navItems.map((item, index) => {
+            const active = isActive(item.href)
+            console.log(`Menu item ${item.title}: ${active ? 'active' : 'inactive'}`)
+            return (
+              <Link
+                key={index}
+                href={item.href}
                 className={cn(
-                  "gap-3 h-10 px-4",
-                  pathname === item.href
-                    ? "bg-blue-50 text-blue-600 font-medium"
-                    : "text-gray-600"
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
+                  active ? "text-primary font-medium bg-primary/10" : "text-gray-500 hover:bg-gray-100",
+                  !open && "justify-center",
                 )}
-                tooltip={item.title}
               >
-                <Link href={item.href}>
-                  <item.icon className="h-5 w-5 cursor-pointer" />
-                  <span>{item.title}</span>
-                  {item.badge && (
-                    <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs text-white">
-                      {item.badge}
-                    </span>
-                  )}
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarContent>
-      <SidebarFooter className="mt-auto border-t py-4">
-        <SidebarMenu>
-          {footerItems.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton
-                asChild
+                <item.icon className={cn("h-5 w-5", !open && "h-6 w-6", active && "text-primary")} />
+                {open && (
+                  <div className="flex flex-1 items-center justify-between">
+                    <span>{item.title}</span>
+                    {item?.badge && (
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        {item?.badge}
+                      </span>
+                    )}
+                  </div>
+                )}
+                {!open && item?.badge && (
+                  <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-white">
+                    {item?.badge}
+                  </span>
+                )}
+              </Link>
+            )
+          })}
+        </nav>
+      </div>
+
+      {/* Footer Items */}
+      <div className="px-2 py-4">
+        <nav className="grid gap-1">
+          {footerItems.map((item, index) => {
+            const active = isActive(item.href)
+            return (
+              <Link
+                key={index}
+                href={item.href}
                 className={cn(
-                  "gap-3 h-10 px-4",
-                  item.className,
-                  item.title === "Log out" ? "text-red-500" : "text-gray-600"
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
+                  active ? "text-primary font-medium bg-primary/10" : "text-gray-500 hover:bg-gray-100",
+                  !open && "justify-center",
                 )}
-                tooltip={item.title}
               >
-                <Link
-                  href={item.title === "Log out" ? "#" : item.href}
-                  onClick={(e) => {
-                    if (item.title === "Log out") {
-                      e.preventDefault();
-                      logOut();
-                    }
-                  }}
-                >
-                  <item.icon className="h-5 w-5" />
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarFooter>
-      <SidebarRail />
-    </Sidebar>
-  );
+                <item.icon className={cn("h-5 w-5", !open && "h-6 w-6", active && "text-primary")} />
+                {open && <span>{item.title}</span>}
+              </Link>
+            )
+          })}
+        </nav>
+      </div>
+
+      {/* Logout button */}
+      <div className={cn("border-t p-4", !open && "flex justify-center")}>
+        <Button
+          variant="ghost"
+          onClick={logOut}
+          className={cn(
+            "w-full justify-start text-red-500 hover:bg-red-50 hover:text-red-600",
+            !open && "justify-center px-0",
+          )}
+        >
+          <LogOut className="mr-2 h-5 w-5" />
+          {open && <span>Log out</span>}
+        </Button>
+      </div>
+    </div>
+  )
 }
+

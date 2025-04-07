@@ -124,7 +124,6 @@ apiClient.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.log("Request error:", error);
     return Promise.reject(error);
   }
 );
@@ -142,7 +141,6 @@ apiClient.interceptors.response.use(
       // Handle authentication errors (401 Unauthorized, 403 Forbidden)
       if (status === 401 || status === 403) {
         if (process.env.NODE_ENV === "development") {
-          console.log(`Authentication error (${status}):`, error.message);
         }
 
         // Check if the current request is for an auth endpoint
@@ -154,7 +152,6 @@ apiClient.interceptors.response.use(
         // For 401 (Unauthorized), clear tokens and redirect to login
         if (status === 401 && !isAuthApiEndpoint && !onAuthPage) {
           if (process.env.NODE_ENV === "development") {
-            console.log(`Authentication error (${status}):`, error.message);
           }
 
           // Clear tokens before redirecting
@@ -170,16 +167,16 @@ apiClient.interceptors.response.use(
           console.log(
             "Forbidden access detected. User doesn't have permission."
           );
+          // take it to "/"
+          window.location.href = "/";
+          localStorage.clear();
         }
       } else if (error.code === "ECONNABORTED") {
         // Handle timeout errors
-        console.log("Request timeout:", error.message);
       } else if (!error.response) {
         // Handle network errors (no response from server)
-        console.log("Network error:", error.message);
       } else {
         // Handle other errors
-        console.log(`API error (${status}):`, error.message);
       }
     }
 

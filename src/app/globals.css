@@ -54,7 +54,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.724 0.181 229.54); /* Updated */
+  --primary: oklch(0.688 0.107 240.15);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -100,8 +100,23 @@
   }
 
   h1,
+  .h1,
+  h2,
+  .h2,
+  h3,
+  .h3,
+  h4,
+  .h4,
+  h5,
+  .h5,
+  h6,
+  .h6 {
+    @apply font-semibold;
+  }
+
+  h1,
   .h1 {
-    @apply text-5xl;
+    @apply text-6xl font-medium leading-16;
   }
   h2,
   .h2 {
@@ -123,8 +138,12 @@
   }
   h6,
   .h6 {
-    @apply text-lg;
+    @apply text-lg font-medium;
   }
+}
+
+.container {
+  @apply mx-auto px-5 lg:px-0;
 }
 
 @layer components {
@@ -318,4 +337,32 @@
 
 .pac-matched {
   font-weight: 600;
+}
+
+/* Property Listing Page swiper Style */
+.swiper .swiper-button-prev,
+.swiper .swiper-button-next {
+  @apply text-white bg-black/30 size-6  rounded-full transition duration-300 ease-in-out;
+}
+
+.swiper .swiper-button-next:hover,
+.swiper .swiper-button-prev:hover {
+  @apply bg-black/50;
+}
+
+.swiper .swiper-button-next::after,
+.swiper .swiper-button-prev::after {
+  @apply text-xs font-bold text-white;
+}
+
+.swiper .swiper-pagination-bullet {
+  @apply bg-white opacity-50 w-1.5 h-1.5;
+}
+
+.swiper .swiper-pagination-bullet-active {
+  @apply opacity-100 bg-white;
+}
+
+.swiper .swiper-pagination {
+  @apply bottom-2;
 }

@@ -4,7 +4,7 @@ import type React from "react";
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -14,23 +14,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SearchTabs from "@/components/search/search-tabs";
-import { Container } from "@/components/ui/container";
-import { FOR_SALE } from "@/constants";
+
 import PlacesAutocomplete from "@/components/placesAutoComplete";
+import { useTranslations } from "next-intl";
+import { PROPERTY_PURPOSE, PROPERTY_TYPES } from "@/constants/constants";
+import { PUBLIC_ROUTES } from "@/constants/paths";
 
-type HeroSectionProps = {
-  t: any;
-};
+export default function HeroSection() {
+  const t = useTranslations();
 
-export default function HeroSection({ t }: HeroSectionProps) {
   const router = useRouter();
   const searchQueryRef = useRef("");
 
   // Simplified state with only the essential parameters
   const [searchParams, setSearchParams] = useState({
-    propertyType: "all",
+    propertyType: "",
     searchQuery: "", // This will store the selected location from Google Places API
-    purpose: FOR_SALE,
+    purpose: `${PROPERTY_PURPOSE[1]}`,
   });
 
   const handleSearch = () => {
@@ -43,18 +43,17 @@ export default function HeroSection({ t }: HeroSectionProps) {
 
     // Add the selected location from Google Places to the searchQuery parameter
     if (currentSearchQuery) {
-      params.set("searchQuery", currentSearchQuery);
-      console.log("Search query:", currentSearchQuery); // Debug log
+      params.set("address", currentSearchQuery);
     }
 
-    if (searchParams.propertyType && searchParams.propertyType !== "all") {
+    if (searchParams.propertyType && searchParams.propertyType !== "") {
       params.set("propertyType", searchParams.propertyType);
     }
 
     params.set("purpose", searchParams.purpose);
 
     // Navigate to the properties page with the search parameters
-    router.push(`/en/properties?${params.toString()}`);
+    router.push(`${PUBLIC_ROUTES.properties}?${params.toString()}`);
   };
 
   // Update the handleTabChange function to map to the API's 'purpose' parameter
@@ -63,7 +62,7 @@ export default function HeroSection({ t }: HeroSectionProps) {
   };
 
   return (
-    <section className="relative h-[500px] w-full">
+    <section className="relative w-full">
       <div className="absolute inset-0 bg-black/40 z-10"></div>
 
       <div
@@ -73,27 +72,22 @@ export default function HeroSection({ t }: HeroSectionProps) {
         }}
       ></div>
 
-      <div className="relative z-20 flex items-center justify-center h-full w-full">
-        <div className="container mx-auto">
-          <div className="flex flex-col text-white">
-            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
-              {t("hero.title")}
-            </h1>
-            <p className="text-white text-base max-w-xl mb-8 opacity-90">
-              {t("hero.subtitle")}
-            </p>
+      <div className="container mx-auto relative z-10 px-5 lg:px-0 py-16 lg:py-28">
+        <div className="flex flex-col w-full lg:w-2/3">
+          <div className="text-white space-y-5 mb-8 w-full lg:w-2/3">
+            <h1 className="text-white">{t("title.landingHeroTitle")}</h1>
+            <p className="text-lg">{t("title.landingHeroSubTitle")}</p>
+          </div>
 
-            {/* Search Box */}
-            <div className="w-full max-w-4xl rounded-md overflow-hidden shadow-lg">
-              <SearchTabs t={t} onTabChange={handleTabChange} />
-              <SearchForm
-                t={t}
-                searchParams={searchParams}
-                setSearchParams={setSearchParams}
-                onSearch={handleSearch}
-                searchQueryRef={searchQueryRef}
-              />
-            </div>
+          {/* Search Box */}
+          <div className="w-full max-w-4xl rounded-md overflow-hidden shadow-lg">
+            <SearchTabs onTabChange={handleTabChange} />
+            <SearchForm
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+              onSearch={handleSearch}
+              searchQueryRef={searchQueryRef}
+            />
           </div>
         </div>
       </div>
@@ -103,7 +97,6 @@ export default function HeroSection({ t }: HeroSectionProps) {
 
 // Simplified SearchFormProps type
 type SearchFormProps = {
-  t: any;
   searchParams: {
     propertyType: string;
     searchQuery: string;
@@ -121,12 +114,13 @@ type SearchFormProps = {
 };
 
 function SearchForm({
-  t,
   searchParams,
   setSearchParams,
   onSearch,
   searchQueryRef,
 }: SearchFormProps) {
+  const t = useTranslations();
+
   const handlePropertyTypeChange = (value: string) => {
     setSearchParams((prev) => ({ ...prev, propertyType: value }));
   };
@@ -140,8 +134,6 @@ function SearchForm({
       ...prev,
       searchQuery: value,
     }));
-
-    console.log("Location changed to:", value); // Debug log
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -157,37 +149,33 @@ function SearchForm({
           value={searchParams.propertyType}
           onValueChange={handlePropertyTypeChange}
         >
-          <SelectTrigger className="w-full border border-input rounded-md h-10 text-primary font-bold">
-            <SelectValue
-              className="text-black"
-              placeholder={t("search.propertyType")}
-            />
+          <SelectTrigger className="border-0 shadow-none !outline-none focus:outline-none focus:ring-0 ">
+            <SelectValue placeholder={t("form.propertyType.placeholder")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{t("search.allProperties")}</SelectItem>
-            <SelectItem value="House">{t("search.house")}</SelectItem>
-            <SelectItem value="Apartment">{t("search.apartment")}</SelectItem>
-            <SelectItem value="Villa">{t("search.villa")}</SelectItem>
+            {PROPERTY_TYPES.Commercial.map((item, index) => (
+              <SelectItem key={index} value={item}>
+                {t(`form.propertyType.options.${item}`)}
+              </SelectItem>
+            ))}
+            {PROPERTY_TYPES.Residential.map((item, index) => (
+              <SelectItem key={index} value={item}>
+                {t(`form.propertyType.options.${item}`)}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
       <div className="w-full mb-3 sm:mb-0 sm:mr-3 relative">
-        <Search
-          className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground z-10"
-          size={18}
-        />
         <PlacesAutocomplete
           value={searchParams.searchQuery}
           onChange={handleLocationChange}
           onKeyPress={handleKeyPress}
-          className="pl-10 text-primary"
+          className="outline-none shadow-none border-0 focus:border-0 focus:ring-0 focus:outline-none focus-visible:outline-none"
         />
       </div>
-      <Button
-        className="w-full sm:w-1/6 bg-primary hover:bg-primary/90 text-primary-foreground rounded-md h-10"
-        onClick={onSearch}
-      >
-        {t("search.button")}
+      <Button className="w-28" onClick={onSearch}>
+        {t("button.search")}
       </Button>
     </div>
   );

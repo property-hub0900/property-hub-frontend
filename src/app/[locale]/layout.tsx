@@ -12,12 +12,13 @@ import { inter } from "@/lib/fonts";
 
 import { ReactQueryProvider } from "@/providers/reactQueryProvider";
 import Script from "next/script";
+import { getDirection } from "@/utils/rtl";
 
 export async function generateMetadata(): Promise<Metadata> {
   const messages: any = await getMessages();
   //const locale = await getLocale();
-  // console.log(messages);
-  // console.log(locale);
+  // 
+  // 
 
   return {
     title: messages.seo.title,
@@ -46,7 +47,7 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} dir={getDirection(locale)} suppressHydrationWarning>
       <body className={`${inter.variable}`} suppressHydrationWarning>
         <NextIntlClientProvider
           locale={locale}

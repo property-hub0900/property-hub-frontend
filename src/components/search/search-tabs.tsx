@@ -1,42 +1,46 @@
-/* eslint-disable no-unused-vars */
-"use client"
+"use client";
 
-import { FOR_RENT, FOR_SALE } from "@/constants"
-import { useState } from "react"
+import { PROPERTY_PURPOSE } from "@/constants/constants";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 type SearchTabsProps = {
-  t: any
-  onTabChange?: (tab: string) => void
-  initialTab?: string
-}
+  onTabChange?: (tab: string) => void;
+};
 
-export default function SearchTabs({ t, onTabChange, initialTab = FOR_SALE }: SearchTabsProps) {
-  const [activeTab, setActiveTab] = useState(initialTab)
+export default function SearchTabs({ onTabChange }: SearchTabsProps) {
+  const t = useTranslations();
+  const [activeTab, setActiveTab] = useState<string>(PROPERTY_PURPOSE[1]);
 
   const handleTabChange = (tab: string) => {
-    setActiveTab(tab)
+    setActiveTab(tab);
     if (onTabChange) {
-      onTabChange(tab)
+      onTabChange(tab);
     }
-  }
+  };
 
   return (
     <div className="flex">
       <button
-        className={`py-3 px-6 font-medium rounded-tl-sm ${activeTab === FOR_RENT ? "text-primary-foreground bg-primary" : "text-muted-foreground bg-muted"
-          }`}
-        onClick={() => handleTabChange(FOR_RENT)}
+        className={`py-3 px-6 font-medium rounded-tl-sm ${
+          activeTab === PROPERTY_PURPOSE[1]
+            ? "text-primary-foreground bg-primary"
+            : "text-foreground bg-muted"
+        }`}
+        onClick={() => handleTabChange(PROPERTY_PURPOSE[1])}
       >
-        {t("search.rent")}
+        {t(`button.rent`)}
       </button>
       <button
-        className={`py-3 px-6 font-medium rounded-tr-sm ${activeTab === FOR_SALE ? "text-primary-foreground bg-primary" : "text-muted-foreground bg-muted"
-          }`}
-        onClick={() => handleTabChange(FOR_SALE)}
+        className={`py-3 px-6 font-medium rounded-tr-sm ${
+          activeTab === PROPERTY_PURPOSE[0]
+            ? "text-primary-foreground bg-primary"
+            : "text-foreground bg-muted"
+        }`}
+        onClick={() => handleTabChange(PROPERTY_PURPOSE[0])}
       >
-        {t("search.buy")}
+        {t(`button.buy`)}
       </button>
     </div>
-  )
+  );
 }
-

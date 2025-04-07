@@ -21,7 +21,13 @@
     "addNewProperty": "Add New Property",
     "editProperty": "Edit Property",
     "userDetails": "User Details",
-    "access": "Access"
+    "access": "Access",
+    "landingHeroTitle": "Exclusive Luxury Properties in Qatar",
+    "landingHeroSubTitle": "Boost Your Business with the Best Locations!",
+    "discoverTheLatestProperties": "Discover the latest properties",
+    "lookingToAdvertiseAProperty": "Looking to advertise a property? Contact us.",
+    "investIn": "Invest In",
+    "qatarBloomingRealEstateMarket": "Qatar's Blooming <highlight>Real Estate</highlight> Market"
   },
   "button": {
     "next": "Next",
@@ -46,7 +52,16 @@
     "close": "close",
     "uploadPhoto": "Upload Photo",
     "uploadLogo": "Upload Logo",
-    "save": "Save"
+    "save": "Save",
+    "buy": "Buy",
+    "rent": "Rent",
+    "search": "Search",
+    "exploreAll": "Explore All",
+    "whatsapp": "WhatsApp",
+    "letsTalk": "Let's Talk",
+    "contactUs": "Contact Us",
+    "exploreProperties": "Explore Properties",
+    "previous": "Previous"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -187,7 +202,7 @@
     },
     "propertyCategory": {
       "label": "Property Category",
-      "placeholder": "Select Property Category",
+      "placeholder": "Property Category",
       "options": {
         "Residential": "Residential",
         "Commercial": "Commercial"
@@ -195,7 +210,7 @@
     },
     "propertyPurpose": {
       "label": "Purpose",
-      "placeholder": "Select Purpose",
+      "placeholder": "Purpose",
       "options": {
         "For Sale": "For Sale",
         "For Rent": "For Rent"
@@ -203,7 +218,7 @@
     },
     "propertyType": {
       "label": "Property Type",
-      "placeholder": "Select Property Type",
+      "placeholder": "Property Type",
       "options": {
         "Apartment": "Apartment",
         "Villa": "Villa",
@@ -287,7 +302,6 @@
       "label": "Service Charges",
       "placeholder": ""
     },
-
     "location": {
       "label": "Location",
       "placeholder": ""
@@ -399,7 +413,6 @@
   },
   "property": {
     "loading": "Loading property details...",
-
     "notFound": "Property Not Found",
     "notFoundDesc": "We couldn't find the property you're looking for.",
     "goBack": "Go Back",
@@ -474,11 +487,9 @@
   "fullName": "Full Name",
   "fullNamePlaceholder": "Enter your full name",
   "companyName": "Company Name",
-
   "emailPlaceholder": "Enter your email address",
   "phone": "Phone Number",
   "phonePlaceholder": "Enter your phone number",
-
   "passwordPlaceholder": "Enter your password",
   "confirmPassword": "Confirm Password",
   "confirmPasswordPlaceholder": "Confirm your password",
@@ -515,7 +526,6 @@
     "otpDisclaimer": "For security reasons, do not share your OTP with anyone.",
     "verified": "Verified"
   },
-
   "common": {
     "required": "This field is required",
     "loading": "Loading...",
@@ -626,35 +636,12 @@
     }
   },
   "landingPage": {
-    "hero": {
-      "title": "Exclusive Luxury Properties in Qatar",
-      "subtitle": "Boost Your Business with the Best Locations!"
-    },
-    "search": {
-      "propertyType": "Property Type",
-      "allProperties": "All Properties",
-      "house": "House",
-      "apartment": "Apartment",
-      "villa": "Villa",
-      "placeholder": "Search by location or property ID....",
-      "button": "Search",
-      "rent": "Rent",
-      "buy": "Buy"
-    },
-    "latestProjects": {
-      "title": "Discover the latest projects",
-      "exploreAll": "Explore All"
-    },
     "property": {
       "imageAlt": "Property image",
       "newYork": "New York",
       "sqft": "sq ft",
       "viewDetails": "View Details",
       "contactNow": "Contact Now"
-    },
-    "cta": {
-      "title": "Looking to advertise a property? Contact us.",
-      "button": "Let's Talk"
     },
     "appraisal": {
       "ourValue": "OUR VALUE",
@@ -801,7 +788,7 @@
   "statusPending": "Pending",
   "statusFailed": "Failed",
   "subscription": "Subscription",
-  "pointsAddedToAccount": "Points added to your account upon successful registration.",
+  "pointsAddedToAccount": "The initial points are credited to your account upon successful registration.",
   "renewSubscription": "Renew Subscription",
   "remainingPoints": "remaining points",
   "pointsExpires": "Points Expires",
@@ -837,22 +824,26 @@
   "topUpSubscription": {
     "title": "Top Up Subscription",
     "history": "Top Up History",
-    "addNew": "Add New Top Up",
+    "addNew": "+ Top-Up Subscription",
     "back": "Back",
     "selectStatus": "Filter by Status",
     "allStatuses": "All Statuses",
     "statusPaid": "Paid",
     "statusPending": "Pending",
     "statusCancelled": "Cancelled",
-    "topUpPoints": "Top Up Points",
+    "topUpPoints": "Top-Up Points",
     "selectPointsHelp": "Select the number of points you want to purchase",
     "points": "Points",
     "paymentMethods": "Payment Methods",
     "total": "Total Amount",
-    "card": "Credit/Debit Card",
-    "sofortKlarna": "Sofort/Klarna",
+    "card": "Card",
+    "contactSalesTeam": "Contact Sales Team",
+    "email": "Email Address",
+    "phoneNumber": "Phone Number",
+    "message": "Message",
     "cardNumber": "Card Number",
     "expiration": "Expiration Date",
+    "optionalMessage": "Optional Message",
     "cvc": "CVC",
     "country": "Country",
     "selectCountry": "Select Country",

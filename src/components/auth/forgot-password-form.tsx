@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { getErrorMessage } from "@/lib/utils";
+import { getErrorMessage } from "@/utils/utils";
 import { Loader } from "../loader";
 
 type ForgotPasswordFormProps = {

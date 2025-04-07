@@ -1,20 +1,17 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useTranslations } from "next-intl"
-import { PlusCircle } from "lucide-react"
-import { useQuery } from "@tanstack/react-query"
-import { toast } from "sonner"
-
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Columns } from "./columns"
-import { Loader } from "@/components/loader"
 import { DataTable } from "@/components/dataTable/data-table"
-import { TopUpForm } from "./top-up-form"
+import { Loader } from "@/components/loader"
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { getErrorMessage } from "@/utils/utils"
 import { companyService } from "@/services/company"
-import { getErrorMessage } from "@/lib/utils"
+import { useQuery } from "@tanstack/react-query"
+import { useTranslations } from "next-intl"
+import { useState } from "react"
+import { toast } from "sonner"
+import { Columns } from "./columns"
+import { TopUpForm } from "./top-up-form"
 
 // Sample data for development/fallback
 const topUpData = [
@@ -29,16 +26,16 @@ const topUpData = [
     },
     {
         id: "2",
-        date: new Date("2025-03-15"),
+        date: new Date("2025-03-10"),
         points: 30,
         expires: "7 Days",
-        paymentMethod: "Sofort/Klarna",
+        paymentMethod: "Sales Team",
         subscriptionExpiryDate: new Date("2025-04-12"),
         status: "Cancelled",
     },
     {
         id: "3",
-        date: new Date("2025-03-18"),
+        date: new Date("2025-03-10"),
         points: 25,
         expires: "2 Days",
         paymentMethod: "Credit/Debit",
@@ -66,12 +63,12 @@ const topUpData = [
 ]
 
 export default function TopUpSubscriptionPage() {
-    // Always declare all hooks at the top level, never conditionally
     const t = useTranslations("topUpSubscription")
     const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
     const [showTopUpForm, setShowTopUpForm] = useState(false)
     const [topUpHistory, setTopUpHistory] = useState(topUpData)
     const [topUpPlans, setTopUpPlans] = useState<any[]>([])
+    const [currentPage, setCurrentPage] = useState(1)
 
     // Fetch top-up history (this would be a real API call in production)
     const { isLoading: isLoadingHistory } = useQuery({
@@ -80,79 +77,82 @@ export default function TopUpSubscriptionPage() {
             try {
                 // In a real app, you would fetch the history from an API
                 // For now, we'll use the sample data
-                setTopUpHistory(topUpData)
-                return topUpData
+                setTopUpHistory(topUpData);
+                return topUpData;
             } catch (error) {
-                console.error("Failed to fetch top-up history:", error)
-                toast.error(getErrorMessage(error))
-                return topUpData
+                console.error("Failed to fetch top-up history:", error);
+                toast.error(getErrorMessage(error));
+                return topUpData;
             }
         },
-    })
+    });
 
     // Fetch top-up plans
     const { isLoading: isLoadingPlans } = useQuery({
         queryKey: ["topUpPlans"],
         queryFn: async () => {
             try {
-                const response: any = await companyService.getTopUpPlans()
+                const response: any = await companyService.getTopUpPlans();
                 if (response.results) {
-                    setTopUpPlans(response.results)
+                    setTopUpPlans(response.results);
                 }
-                return response.results
+                return response.results;
             } catch (error) {
-                console.error("Failed to fetch top-up plans:", error)
-                toast.error(getErrorMessage(error))
-                return []
+                console.error("Failed to fetch top-up plans:", error);
+                toast.error(getErrorMessage(error));
+                return [];
             }
         },
-    })
+    });
 
     // Filter data based on status
     const filteredData = statusFilter
-        ? topUpHistory.filter((item) => item.status.toLowerCase() === statusFilter.toLowerCase())
-        : topUpHistory
+        ? topUpHistory.filter(
+            (item) => item.status.toLowerCase() === statusFilter.toLowerCase()
+        )
+        : topUpHistory;
 
-    const isLoading = isLoadingHistory || isLoadingPlans
+    const isLoading = isLoadingHistory || isLoadingPlans;
 
-    // Always render both components but conditionally show/hide them
-    // This ensures hooks are always called in the same order
     return (
         <div className="container px-4 sm:px-6 py-6 space-y-6 max-w-full">
             <Loader isLoading={isLoading} />
-            <Separator className="mb-6" />
 
             <div style={{ display: showTopUpForm ? "none" : "block" }}>
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                    <h1 className="text-2xl font-bold tracking-tight">{t("history")}</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
                     <Button onClick={() => setShowTopUpForm(true)} className="self-start sm:self-auto">
-                        <PlusCircle className="mr-2 h-4 w-4" />
                         {t("addNew")}
                     </Button>
                 </div>
 
-                <div className="rounded-md border overflow-x-auto">
-                    <div className="flex justify-end p-4">
-                        <Select value={statusFilter} onValueChange={setStatusFilter}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder={t("selectStatus")} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value={undefined as any}>{t("allStatuses")}</SelectItem>
-                                <SelectItem value="paid">{t("statusPaid")}</SelectItem>
-                                <SelectItem value="pending">{t("statusPending")}</SelectItem>
-                                <SelectItem value="cancelled">{t("statusCancelled")}</SelectItem>
-                            </SelectContent>
-                        </Select>
+                <div className="rounded-md border overflow-hidden">
+                    <div className="flex justify-between items-center px-2 py-1 border-b">
+                        <h2 className="text-xl font-bold">{t("history")}</h2>
+                        <div className="flex justify-end p-4">
+                            <Select value={statusFilter} onValueChange={setStatusFilter}>
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder={t("selectStatus")} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value={undefined as any}>{t("allStatuses")}</SelectItem>
+                                    <SelectItem value="paid">{t("statusPaid")}</SelectItem>
+                                    <SelectItem value="pending">{t("statusPending")}</SelectItem>
+                                    <SelectItem value="cancelled">{t("statusCancelled")}</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
 
-                    <div className="w-full overflow-x-auto">
+
+
+                    <div className="w-full overflow-x-auto ">
                         <DataTable
                             columns={Columns() as any}
                             data={filteredData}
                             rowClassName={(row) => {
-                                if (row.status.toLowerCase() === "cancelled") return "bg-red-50/50 dark:bg-red-950/20"
-                                if (row.status.toLowerCase() === "pending") return "bg-yellow-50/50 dark:bg-yellow-950/20"
+                                if (row.status.toLowerCase() === "cancelled") return "bg-red-50/10"
+                                if (row.status.toLowerCase() === "pending") return "bg-yellow-50/10"
                                 return ""
                             }}
                         />
@@ -161,9 +161,11 @@ export default function TopUpSubscriptionPage() {
             </div>
 
             <div style={{ display: showTopUpForm ? "block" : "none" }}>
-                <TopUpForm onCancel={() => setShowTopUpForm(false)} plans={topUpPlans} />
+                <TopUpForm
+                    onCancel={() => setShowTopUpForm(false)}
+                    plans={topUpPlans}
+                />
             </div>
         </div>
-    )
+    );
 }
-

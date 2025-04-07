@@ -85,8 +85,6 @@ export const useAuthStore = create<AuthState>()(
       // Login action - sets user data and decodes token
       login: (userData) => {
         try {
-          console.log("Login called with:", userData);
-
           // If we have a token, decode it to get expiration
           if (userData.token) {
             const decoded: any = jwtDecode(userData.token);
@@ -127,7 +125,6 @@ export const useAuthStore = create<AuthState>()(
 
       // Logout action
       logout: () => {
-        console.log("Logout called");
         set({ user: null, isAuthenticated: false });
         Cookies.remove("auth-check", { path: "/" });
       },
@@ -135,11 +132,9 @@ export const useAuthStore = create<AuthState>()(
       // Check if user is authenticated and token is valid
       checkAuth: () => {
         const { user } = get();
-        console.log("Checking auth:", user);
 
         // If no user or token expiry, not authenticated
         if (!user || !user.tokenExpiry) {
-          console.log("No user or token expiry");
           return false;
         }
 
@@ -147,12 +142,11 @@ export const useAuthStore = create<AuthState>()(
         const now = Math.floor(Date.now() / 1000); // Current time in seconds
         if (now >= user.tokenExpiry) {
           // Token expired, logout
-          console.log("Token expired");
+
           get().logout();
           return false;
         }
 
-        console.log("Auth check passed");
         return true;
       },
 
@@ -186,11 +180,8 @@ export const useAuthStore = create<AuthState>()(
 export const initializeAuthFromLocalStorage = () => {
   if (typeof window === "undefined") return;
 
-  console.log("Initializing auth from localStorage");
-
   // Check if we already have state from the store
   if (useAuthStore.getState().isAuthenticated) {
-    console.log("Auth already initialized");
     return; // Already initialized
   }
 
@@ -200,11 +191,9 @@ export const initializeAuthFromLocalStorage = () => {
   if (authData) {
     try {
       const parsedData = JSON.parse(authData);
-      console.log("Found auth data in localStorage:", parsedData);
 
       // Check if the data is in the expected format with state property
       if (parsedData.state && parsedData.state.user) {
-        console.log("Logging in user from localStorage");
         useAuthStore.getState().login(parsedData.state.user);
         return;
       }
@@ -221,9 +210,9 @@ export const initializeAuthFromLocalStorage = () => {
     if (userData) {
       try {
         const parsedUserData = JSON.parse(userData);
-        console.log(`Found user data in ${key}:`, parsedUserData);
+
         useAuthStore.getState().login(parsedUserData);
-        console.log(`Migrated auth data from legacy storage: ${key}`);
+
         break; // Stop after finding valid data
       } catch (error) {
         console.error(`Failed to parse user data from ${key}:`, error);
@@ -235,7 +224,6 @@ export const initializeAuthFromLocalStorage = () => {
 // Initialize the store immediately
 if (typeof window !== "undefined") {
   // Run on the client side only
-  console.log("Running auth store initialization");
 
   // Wait for the DOM to be fully loaded
   if (document.readyState === "complete") {

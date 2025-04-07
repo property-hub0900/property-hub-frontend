@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import type { ReactNode } from "react";
@@ -10,7 +10,6 @@ interface AuthContainerProps {
   title: string;
   subtitle: string;
   size?: "sm" | "lg";
-
 }
 
 export function AuthContainer({

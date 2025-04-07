@@ -20,7 +20,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 
 // MultiSelect variants for styling
 const multiSelectVariants = cva("m-1", {
@@ -74,7 +74,7 @@ export const SimpleMultiSelect = React.forwardRef<
     }, [options, searchQuery]);
 
     const toggleOption = (option: string) => {
-      console.log("toggleOption", option);
+
 
       if (selectedValues.includes(option)) {
         const newSelectedValues = selectedValues.filter(
