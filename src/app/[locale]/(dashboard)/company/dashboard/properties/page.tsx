@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { COMPANY_PATHS } from "@/constants/paths";
 
 import MyPropertiesTable from "./components/myPropertiesTable";
-import AgentPropertiesTable from "./components/agentPropertiesTable";
+
 import { useQuery } from "@tanstack/react-query";
 import { companiesProperties } from "@/services/dashboard/properties";
 import { Loader } from "@/components/loader";
@@ -21,25 +21,11 @@ export default function PropertiesListing() {
     queryFn: () => companiesProperties("self"),
   });
 
-  const {
-    data: dataAgentProperties,
-    isLoading: isLoadingAgentProperties,
-    isFetching: isFetchingAgentProperties,
-  } = useQuery({
-    queryKey: ["companiesPropertiesAgent"],
-    queryFn: () => companiesProperties("agent"),
-  });
-
   return (
     <>
       <Loader
         variant="inline"
-        isLoading={
-          isLoadingProperties ||
-          isFetchingProperties ||
-          isLoadingAgentProperties ||
-          isFetchingAgentProperties
-        }
+        isLoading={isLoadingProperties || isFetchingProperties}
       ></Loader>
       <div className="flex justify-between items-center mb-5">
         <h3>Property Data</h3>
@@ -50,7 +36,6 @@ export default function PropertiesListing() {
       {dataCompaniesProperties && (
         <MyPropertiesTable {...dataCompaniesProperties} />
       )}
-      {dataAgentProperties && <AgentPropertiesTable {...dataAgentProperties} />}
     </>
   );
 }
