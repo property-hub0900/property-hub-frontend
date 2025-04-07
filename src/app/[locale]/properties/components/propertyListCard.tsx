@@ -63,7 +63,7 @@ export default function PropertyListCard({ data }: { data: IProperty }) {
           >
             {images.map((image, index) => (
               <SwiperSlide key={index}>
-                <div className="relative h-full w-full">
+                <div className="relative h-full w-full select-none">
                   <Image
                     src={image}
                     width={500}
