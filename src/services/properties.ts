@@ -9,5 +9,7 @@ import { IPropertyFilters, IPropertyResponse } from "@/types/client/properties";
 export async function fetchProperties(
   filters: IPropertyFilters
 ): Promise<IPropertyResponse> {
-  return apiClient.get(`/properties?${buildQueryString(filters)}`);
+  return apiClient.get(
+    `/properties?status=published&${buildQueryString(filters)}`
+  );
 }
