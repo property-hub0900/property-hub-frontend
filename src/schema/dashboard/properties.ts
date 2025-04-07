@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { z } from "zod";
 import { commonValidations } from "../commonValidations";
 import {
@@ -7,9 +6,6 @@ import {
   PROPERTY_OWNERSHIP_STATUS,
   PROPERTY_PURPOSE,
 } from "@/constants/constants";
-
-// Define the maximum values
-const MAX_FILES = 20;
 
 export const createPropertySchema = (t: (key: string) => string) =>
   z.object({
@@ -62,5 +58,5 @@ export const createPropertySchema = (t: (key: string) => string) =>
         })
       )
       .min(1, "At least one image is required")
-      .max(MAX_FILES, `Maximum ${MAX_FILES} images allowed`),
+      .max(20, `Maximum 20 images allowed`),
   });

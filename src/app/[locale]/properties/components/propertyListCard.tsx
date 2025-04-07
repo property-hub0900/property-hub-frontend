@@ -52,8 +52,8 @@ export default function PropertyListCard({ data }: { data: IProperty }) {
   );
 
   return (
-    <Card className="overflow-hidden grid grid-cols-1 lg:grid-cols-3">
-      <div className="relative col-span-1">
+    <Card className="overflow-hidden flex flex-col lg:flex-row">
+      <div className="relative  lg:w-[300px]">
         {images.length > 0 && (
           <Swiper
             modules={[Pagination, Navigation]}
@@ -82,7 +82,7 @@ export default function PropertyListCard({ data }: { data: IProperty }) {
           <span className="text-sm">{PropertyImages.length}</span>
         </div>
       </div>
-      <CardContent className="p-4 col-span-2">
+      <CardContent className="p-4 grow">
         <Link href={`${PUBLIC_ROUTES.properties}/${data.propertyId}`}>
           <div className="flex justify-between items-start">
             <div>

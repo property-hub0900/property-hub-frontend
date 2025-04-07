@@ -36,6 +36,7 @@ import PlacesAutocomplete from "@/components/placesAutoComplete";
 import { IPropertyFilters } from "@/types/client/properties";
 import { useTranslations } from "next-intl";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 interface Filters {
   address: string;
@@ -65,6 +66,8 @@ const SORT_OPTIONS = [
 ];
 
 export default function SearchBar() {
+  const { user } = useAuth();
+
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -433,10 +436,12 @@ export default function SearchBar() {
       </div>
       <div className="flex justify-between mb-10">
         <div>
-          <Button type="button" variant="outlinePrimary">
-            <Bookmark className="size-5" />
-            {t("button.save")} {t("button.search")}
-          </Button>
+          {user?.role && user?.role !== "staff" && (
+            <Button type="button" variant="outlinePrimary">
+              <Bookmark className="size-5" />
+              {t("button.save")} {t("button.search")}
+            </Button>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <label className="text-sm text-muted-foreground">Sort By: </label>
