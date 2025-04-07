@@ -28,7 +28,7 @@ import "swiper/css/navigation";
 import { formatAmountToQAR } from "@/utils/utils";
 import { PUBLIC_ROUTES } from "@/constants/paths";
 
-export default function PropertyListCard({ data }: { data: IProperty }) {
+export const PropertyListCard = ({ data }: { data: IProperty }) => {
   const {
     title,
     propertyType,
@@ -193,4 +193,4 @@ export default function PropertyListCard({ data }: { data: IProperty }) {
       </CardContent>
     </Card>
   );
-}
+};

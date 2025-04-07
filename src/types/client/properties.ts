@@ -43,7 +43,8 @@ export interface IProperty {
   createdAt: string;
   PropertyImages: IPropertyImage[];
   postedByStaff: IPostedByStaff;
-  company?: IPropertyCompany;
+  company: IPropertyCompany;
+  PropertyAmenities: IPropertyAmenities[];
 }
 
 export interface IPostedByStaff {
@@ -81,6 +82,19 @@ export interface IPropertyCompany {
   phone: string | null;
   website: string | null;
   logo: string | null;
+}
+
+export interface IPropertyAmenities {
+  propertyAmenityId: number;
+  propertyId: number;
+  amenityId: number;
+  Amenity: IAmenity;
+}
+interface IAmenity {
+  amenityId: number;
+  name: string;
+  nameAr: string | null;
+  icon: string | null;
 }
 
 export interface IPropertyFilters {

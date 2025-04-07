@@ -2,13 +2,13 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import PropertyListCard from "./components/propertyListCard";
-import SearchBar from "./components/search-bar";
-import Pagination from "../../../components/pagination";
+import { PropertyListCard } from "@/components/property/property-list-card";
+import { PropertySearchFilters } from "@/components/property/property-search-filters";
+import Pagination from "@/components/pagination";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchProperties } from "@/services/properties";
+import { propertyServices } from "@/services/properties";
 import type { IPropertyFilters } from "@/types/client/properties";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
@@ -57,7 +57,7 @@ export default function PropertiesPage() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["properties", filters],
-    queryFn: () => fetchProperties(filters),
+    queryFn: () => propertyServices.fetchProperties(filters),
   });
 
   const totalPages = data?.total
@@ -66,7 +66,7 @@ export default function PropertiesPage() {
 
   return (
     <div className="container mx-auto py-14">
-      <SearchBar />
+      <PropertySearchFilters />
       <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-3">
         <div className="w-full hidden lg:block">
           <Image

@@ -13,14 +13,14 @@ import { PropertyGallery } from "@/components/property/property-gallery";
 import { PropertyHeader } from "@/components/property/property-header";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { propertyService } from "@/services/property";
+
 import { Loader } from "@/components/loader";
 import { formatAmountToQAR } from "@/utils/utils";
+import { propertyServices } from "@/services/properties";
 
 export default function PropertyPage() {
   const params = useParams<{ id: string }>();
   const t = useTranslations("property");
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   // Fetch property data
   const {
@@ -29,18 +29,7 @@ export default function PropertyPage() {
     error,
   } = useQuery({
     queryKey: ["property", params.id],
-    queryFn: async () => {
-      try {
-        const response = await propertyService.getPropertyById(params.id);
-        if (!response) {
-          throw new Error("No data returned from API");
-        }
-        return response as any;
-      } catch (error) {
-        console.log("Failed to fetch property:", error);
-        throw error;
-      }
-    },
+    queryFn: () => propertyServices.getPropertyById(params.id),
   });
 
   // Fetch similar properties
@@ -82,37 +71,34 @@ export default function PropertyPage() {
     );
   }
 
-  // Format price
-  const formattedPrice = formatAmountToQAR(property.price);
-
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen">
+    <div className="container mx-auto py-8 min-h-screen">
       <PropertyGallery
         images={property.PropertyImages}
         title={property.title}
-        activeIndex={activeImageIndex}
-        onImageClick={setActiveImageIndex}
       />
 
       <PropertyHeader
-        price={formattedPrice}
+        price={property.price}
         bedrooms={property.bedrooms}
         bathrooms={property.bathrooms}
         propertySize={property.propertySize}
-        t={t}
       />
 
       <Separator className="my-6" />
 
       <div className="flex gap-8">
         <div className="grow">
-          <PropertyDescription property={property} t={t} />
+          <h4 className="font-bold uppercase mb-4">{property.title}</h4>
+          <PropertyDescription description={property.description} />
 
           <Separator className="my-6" />
 
-          <PropertyDetails property={property} t={t} />
+          <PropertyDetails property={property} />
 
-          <PropertyAmenities amenities={property.PropertyAmenities} t={t} />
+          <Separator className="my-6" />
+
+          <PropertyAmenities amenities={property?.PropertyAmenities ?? []} />
         </div>
 
         <div className="w-[350px] shrink-0">

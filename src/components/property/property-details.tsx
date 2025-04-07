@@ -1,50 +1,89 @@
+import { IProperty } from "@/types/client/properties";
+import { formatNumber } from "@/utils/utils";
+import {
+  Bath,
+  BedDouble,
+  Building2,
+  ChartColumnStacked,
+  Expand,
+  IdCard,
+  LampCeiling,
+  ShoppingBag,
+} from "lucide-react";
+import { useTranslations } from "next-intl";
+
 interface PropertyDetailsProps {
-  property: any;
-  t: any;
+  property: IProperty;
 }
 
-export function PropertyDetails({ property, t }: PropertyDetailsProps) {
+export function PropertyDetails({ property }: PropertyDetailsProps) {
+  const t = useTranslations();
   return (
     <div className="mb-8">
-      <h3 className="text-lg font-semibold mb-4">{t("propertyDetails")}</h3>
+      <h3 className="text-lg font-semibold mb-4">
+        {t("title.propertyDetails")}
+      </h3>
       <div className="grid grid-cols-2 gap-y-4">
-        <div className="flex items-center gap-2">
-          <div className="text-muted-foreground">
-            {t("details.propertyType")}
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex gap-2 items-center text-muted-foreground">
+            <ChartColumnStacked className="size-5" />
+            {t("form.propertyCategory.label")}
+          </div>
+          <div className="font-medium">{property.category}</div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex gap-2 items-center text-muted-foreground">
+            <ShoppingBag className="size-5" />
+            {t("form.propertyPurpose.label")}
+          </div>
+          <div className="font-medium">{property.purpose}</div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex gap-2 items-center text-muted-foreground">
+            <Building2 className="size-5" />
+            {t("form.propertyType.label")}
           </div>
           <div className="font-medium">{property.propertyType}</div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="text-muted-foreground">
-            {t("details.propertySize")}
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex gap-2 items-center text-muted-foreground">
+            <Expand className="size-5" />
+            {t("form.propertySize.label")}
           </div>
           <div className="font-medium">
-            {property.propertySize} {t("sqf")}
+            {formatNumber(property.propertySize)} {t("text.sqft")}
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="text-muted-foreground">{t("details.bedrooms")}</div>
-          <div className="font-medium">{property.bedrooms}</div>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="text-muted-foreground">{t("details.bathrooms")}</div>
+        {property.bedrooms && (
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex gap-2 items-center text-muted-foreground">
+              <BedDouble className="size-5" />
+              {t("form.bedrooms.label")}
+            </div>
+            <div className="font-medium">{formatNumber(property.bedrooms)}</div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex gap-2 items-center text-muted-foreground">
+            <Bath className="size-5" />
+            {t("form.bathrooms.label")}
+          </div>
           <div className="font-medium">{property.bathrooms}</div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="text-muted-foreground">{t("details.furnishing")}</div>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex gap-2 items-center text-muted-foreground">
+            <LampCeiling className="size-5" />
+            {t("form.furnishedType.label")}
+          </div>
           <div className="font-medium">{property.furnishedType}</div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="text-muted-foreground">{t("details.purpose")}</div>
-          <div className="font-medium">{property.purpose}</div>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="text-muted-foreground">{t("details.category")}</div>
-          <div className="font-medium">{property.category}</div>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="text-muted-foreground">
-            {t("details.referenceNo")}
+
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex gap-2 items-center text-muted-foreground">
+            <IdCard className="size-5" />
+            {t("form.referenceNo.label")}
           </div>
           <div className="font-medium">{property.referenceNo}</div>
         </div>

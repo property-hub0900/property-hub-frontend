@@ -96,6 +96,10 @@ export const extractFirebaseStoragePath = (url) => {
   return decodedPath;
 };
 
+export function formatNumber(num: number | string): string {
+  return Number(num).toLocaleString(); // defaults to en-US
+}
+
 // export function getFormattedShortHTML(html: string, limit = 150): string {
 //   if (typeof window === "undefined") return "";
 

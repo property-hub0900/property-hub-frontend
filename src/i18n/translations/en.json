@@ -27,7 +27,9 @@
     "discoverTheLatestProperties": "Discover the latest properties",
     "lookingToAdvertiseAProperty": "Looking to advertise a property? Contact us.",
     "investIn": "Invest In",
-    "qatarBloomingRealEstateMarket": "Qatar's Blooming <highlight>Real Estate</highlight> Market"
+    "qatarBloomingRealEstateMarket": "Qatar's Blooming <highlight>Real Estate</highlight> Market",
+    "amenities": "Amenities",
+    "propertyDetails": "Property details"
   },
   "button": {
     "next": "Next",
@@ -61,7 +63,11 @@
     "letsTalk": "Let's Talk",
     "contactUs": "Contact Us",
     "exploreProperties": "Explore Properties",
-    "previous": "Previous"
+    "previous": "Previous",
+    "amenities": "Amenities",
+    "call": "Call",
+    "whatsApp": "WhatsApp",
+    "email": "Email"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -79,7 +85,9 @@
     "staffDeleted": "Staff member deleted successfully",
     "deleteFailed": "Failed to delete staff member",
     "hidePriceFromListing": "Hide price from the listing",
-    "wantToFeatureProperty": "Want to feature this property?"
+    "wantToFeatureProperty": "Want to feature this property?",
+    "monthly": "Monthly",
+    "sqft": "Sqft"
   },
   "table": {
     "notFound": "No Record found...",
@@ -201,8 +209,8 @@
       }
     },
     "propertyCategory": {
-      "label": "Property Category",
-      "placeholder": "Property Category",
+      "label": "Category",
+      "placeholder": "Category",
       "options": {
         "Residential": "Residential",
         "Commercial": "Commercial"
@@ -231,12 +239,12 @@
       }
     },
     "bedrooms": {
-      "label": "No of bedrooms",
-      "placeholder": ""
+      "label": "Bedrooms",
+      "placeholder": "No of bedrooms"
     },
     "bathrooms": {
-      "label": "No of bathrooms",
-      "placeholder": ""
+      "label": "Bathrooms",
+      "placeholder": "No of bathrooms"
     },
     "propertySize": {
       "label": "Property Size",
@@ -417,8 +425,8 @@
     "notFoundDesc": "We couldn't find the property you're looking for.",
     "goBack": "Go Back",
     "monthly": "/Monthly",
-    "sqm": "Sqf",
-    "sqf": "Sqf",
+    "sqm": "Sqft",
+    "sqf": "Sqft",
     "for": "FOR",
     "in": "IN",
     "keyFeatures": "Key Features:",

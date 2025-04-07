@@ -1,15 +1,22 @@
 import apiClient from "@/lib/api-client";
 import { buildQueryString } from "@/utils/utils";
-import { IPropertyFilters, IPropertyResponse } from "@/types/client/properties";
+import {
+  IProperty,
+  IPropertyFilters,
+  IPropertyResponse,
+} from "@/types/client/properties";
 
-// export const fetchProperties = (): Promise<IProperties> => {
-//   return apiClient.get(`/properties`);
-// };
+export const propertyServices = {
+  fetchProperties(filters: IPropertyFilters): Promise<IPropertyResponse> {
+    return apiClient.get(
+      `/properties?status=published&${buildQueryString(filters)}`
+    );
+  },
+  getPropertyById: async (id: string): Promise<IProperty> => {
+    return apiClient.get(`/properties/${id}`);
+  },
 
-export async function fetchProperties(
-  filters: IPropertyFilters
-): Promise<IPropertyResponse> {
-  return apiClient.get(
-    `/properties?status=published&${buildQueryString(filters)}`
-  );
-}
+  getSimilarProperties: async (id: string) => {
+    return apiClient.get(`/properties/${id}/similar`);
+  },
+};

@@ -65,7 +65,7 @@ const SORT_OPTIONS = [
   { label: "Price (High to Low)", value: "price_high" },
 ];
 
-export default function SearchBar() {
+export const PropertySearchFilters = () => {
   const { user } = useAuth();
 
   const t = useTranslations();
@@ -465,4 +465,4 @@ export default function SearchBar() {
       </div>
     </form>
   );
-}
+};
