@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -99,55 +97,3 @@ export const extractFirebaseStoragePath = (url) => {
 export function formatNumber(num: number | string): string {
   return Number(num).toLocaleString(); // defaults to en-US
 }
-
-// export function getFormattedShortHTML(html: string, limit = 150): string {
-//   if (typeof window === "undefined") return "";
-
-//   const parser = new DOMParser();
-//   const doc = parser.parseFromString(html, "text/html");
-//   const body = doc.body;
-
-//   let charCount = 0;
-//   const fragment = document.createDocumentFragment();
-
-//   function traverse(node: Node): Node | null {
-//     if (charCount >= limit) return null;
-
-//     if (node.nodeType === Node.TEXT_NODE) {
-//       const text = (node.textContent || "").slice(0, limit - charCount);
-//       charCount += text.length;
-//       return document.createTextNode(text);
-//     }
-
-//     if (node.nodeType === Node.ELEMENT_NODE) {
-//       const el = node as HTMLElement;
-//       const clone = document.createElement(el.tagName.toLowerCase());
-
-//       // Copy basic formatting attributes
-//       for (let attr of el.attributes) {
-//         clone.setAttribute(attr.name, attr.value);
-//       }
-
-//       for (let child of Array.from(el.childNodes)) {
-//         const childClone = traverse(child);
-//         if (childClone) clone.appendChild(childClone);
-//         if (charCount >= limit) break;
-//       }
-
-//       return clone;
-//     }
-
-//     return null;
-//   }
-
-//   for (let child of Array.from(body.childNodes)) {
-//     const partial = traverse(child);
-//     if (partial) fragment.appendChild(partial);
-//     if (charCount >= limit) break;
-//   }
-
-//   const tempDiv = document.createElement("div");
-//   tempDiv.appendChild(fragment);
-
-//   return tempDiv.innerHTML + "...";
-// }

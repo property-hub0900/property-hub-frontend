@@ -9,21 +9,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { TiptapEditor, type TiptapEditorRef } from "./tiptap-editor";
+import { TiptapEditor, type TiptapEditorRef } from "@/components/tiptap-editor";
 
 interface FormTiptapProps {
   name: string;
   label?: string;
   description?: string;
-  placeholder?: string;
 }
 
-export function FormTiptap({
-  name,
-  label,
-  description,
-  placeholder,
-}: FormTiptapProps) {
+export function FormTiptap({ name, label, description }: FormTiptapProps) {
   const { control } = useFormContext();
   const editorRef = useRef<TiptapEditorRef>(null);
 

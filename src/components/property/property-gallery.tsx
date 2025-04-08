@@ -6,25 +6,14 @@ import Image from "next/image";
 import { Heart, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyGalleryPopup } from "./property-gallery-popup";
-
-interface PropertyImage {
-  url: string;
-  isPrimary: boolean;
-}
+import { IPropertyImages } from "@/types/client/properties";
 
 interface PropertyGalleryProps {
-  images: PropertyImage[];
+  images: IPropertyImages[];
   title: string;
-  // activeIndex: number;
-  // onImageClick: (index: number) => void;
 }
 
-export function PropertyGallery({
-  images,
-  title,
-}: // activeIndex,
-// onImageClick,
-PropertyGalleryProps) {
+export function PropertyGallery({ images, title }: PropertyGalleryProps) {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -32,31 +21,6 @@ PropertyGalleryProps) {
   const primaryImage = images[0];
 
   const otherImages = images.slice(1, 3);
-
-  //   images[0] || {
-  //     url: "/placeholder.svg?height=600&width=800",
-  //     isPrimary: false,
-  //   };
-
-  // Get primary image or first image
-  // const primaryImage = images.find((img) => img.isPrimary) ||
-  //   images[0] || {
-  //     url: "/placeholder.svg?height=600&width=800",
-  //     isPrimary: false,
-  //   };
-
-  // Get other images
-  // const otherImages = images
-  //   .filter((img) => img !== images.find((i) => i.isPrimary))
-  //   .slice(0, 2);
-
-  // // If we don't have enough images, add placeholders
-  // while (otherImages.length < 2) {
-  //   otherImages.push({
-  //     url: "/placeholder.svg?height=300&width=400",
-  //     isPrimary: false,
-  //   });
-  // }
 
   const openPopup = (index: number) => {
     setActiveImageIndex(index);
@@ -73,8 +37,9 @@ PropertyGalleryProps) {
           <Image
             src={primaryImage.url}
             alt={title}
-            fill
             className="object-cover rounded-l-xl"
+            fill
+            priority
           />
           <div className="absolute z-10 bottom-2 right-2 flex items-center gap-2">
             <div className="flex items-center text-primary gap-1 bg-white/90 rounded-sm px-3 h-9">

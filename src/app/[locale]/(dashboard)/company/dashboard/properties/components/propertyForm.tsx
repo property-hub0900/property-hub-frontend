@@ -2,6 +2,7 @@
 
 import { Loader } from "@/components/loader";
 import { SimpleMultiSelect } from "@/components/multiSelect";
+import { TiptapEditor, type TiptapEditorRef } from "@/components/tiptap-editor";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -21,7 +22,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-
 import {
   PROPERTY_CATEGORIES,
   PROPERTY_FURNISHED_TYPE,
@@ -45,11 +45,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DefaultValues, useForm } from "react-hook-form";
 import PlacesAutocomplete from "../../../../../../../components/placesAutoComplete";
-import { IFilesUrlPayload, UploadImages, TImages } from "./uploadImages";
-
-//import { FormTiptap } from "./form-tiptap";
-import { TiptapEditor, type TiptapEditorRef } from "./tiptap-editor";
-import { toast } from "sonner";
+import { IFilesUrlPayload, TImages, UploadImages } from "./uploadImages";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
@@ -88,32 +84,32 @@ export default function PropertyForm(
       mode === "edit"
         ? defaultValues
         : {
-          title: "",
-          titleAr: "",
-          featured: false,
-          category: undefined,
-          price: 0,
-          propertyType: "",
-          purpose: undefined,
-          bedrooms: 0,
-          bathrooms: 0,
-          status: PROPERTY_STATUSES.draft,
-          furnishedType: "",
-          occupancy: undefined,
-          ownershipStatus: undefined,
-          referenceNo: "",
-          priceVisibilityFlag: false,
-          propertySize: "",
-          serviceCharges: "",
-          buildingFloors: 0,
-          floor: 0,
-          tenure: "",
-          views: "",
-          address: "",
-          amenities: [],
-          description: "",
-          PropertyImages: [],
-        },
+            title: "",
+            titleAr: "",
+            featured: false,
+            category: undefined,
+            price: 0,
+            propertyType: "",
+            purpose: undefined,
+            bedrooms: 0,
+            bathrooms: 0,
+            status: PROPERTY_STATUSES.draft,
+            furnishedType: "",
+            occupancy: undefined,
+            ownershipStatus: undefined,
+            referenceNo: "",
+            priceVisibilityFlag: false,
+            propertySize: "",
+            serviceCharges: "",
+            buildingFloors: 0,
+            floor: 0,
+            tenure: "",
+            views: "",
+            address: "",
+            amenities: [],
+            description: "",
+            PropertyImages: [],
+          },
   });
 
   const category = form.watch("category");
@@ -127,8 +123,6 @@ export default function PropertyForm(
     const isFormValid = Object.keys(form.formState.errors).length === 0;
     const statusValue = PROPERTY_STATUSES[status];
     if (isFormValid) {
-
-
       form.setValue("PropertyImages", filesUrls.images, {
         shouldValidate: true,
       });
@@ -136,23 +130,7 @@ export default function PropertyForm(
     }
 
     form.handleSubmit(onSubmit)();
-
-    //form.handleSubmit(onSubmit);
   };
-
-
-
-
-
-
-  console.log("form values", form.getValues());
-
-  // const initialImages = [
-  //   {
-  //     url: "https://firebasestorage.googleapis.com/v0/b/property-explorer-3f0f3.firebasestorage.app/o/images%2F1742553428343-Screenshot%202025-03-20%20004111.png?alt=media&token=e754d33b-8a3f-4c6e-8e8b-a463f326696f",
-  //     path: "images/1742553428343-Screenshot 2025-03-20 004111.png",
-  //   },
-  // ];.
 
   useEffect(() => {
     if (filesUrls.images.length > 0) {
@@ -735,40 +713,40 @@ export default function PropertyForm(
       <div className="col-span-2 gap-2 flex justify-end mt-6">
         {(!defaultValues ||
           defaultValues?.status === PROPERTY_STATUSES.draft) && (
-            <>
+          <>
+            <Button
+              variant={"outline"}
+              type="button"
+              onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
+              className=""
+            >
+              {t("button.saveDraft")}
+            </Button>
+
+            {(isOwner || isAdmin) && (
               <Button
-                variant={"outline"}
                 type="button"
-                onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
+                onClick={() =>
+                  handleSubmitWithStatus(PROPERTY_STATUSES.published)
+                }
                 className=""
               >
-                {t("button.saveDraft")}
+                {t("button.publish")}
               </Button>
-
-              {(isOwner || isAdmin) && (
-                <Button
-                  type="button"
-                  onClick={() =>
-                    handleSubmitWithStatus(PROPERTY_STATUSES.published)
-                  }
-                  className=""
-                >
-                  {t("button.publish")}
-                </Button>
-              )}
-              {isAgent && (
-                <Button
-                  type="button"
-                  onClick={() =>
-                    handleSubmitWithStatus(PROPERTY_STATUSES.pending)
-                  }
-                  className=""
-                >
-                  {t("button.requestForApproval")}
-                </Button>
-              )}
-            </>
-          )}
+            )}
+            {isAgent && (
+              <Button
+                type="button"
+                onClick={() =>
+                  handleSubmitWithStatus(PROPERTY_STATUSES.pending)
+                }
+                className=""
+              >
+                {t("button.requestForApproval")}
+              </Button>
+            )}
+          </>
+        )}
 
         {defaultValues?.status === PROPERTY_STATUSES.published && (
           <>

@@ -16,7 +16,7 @@ interface PropertyDetailsProps {
   property: IProperty;
 }
 
-export function PropertyDetails({ property }: PropertyDetailsProps) {
+export function PropertyDetailFeatures({ property }: PropertyDetailsProps) {
   const t = useTranslations();
   return (
     <div className="mb-8">

@@ -41,7 +41,7 @@ export interface IProperty {
   companyId: number;
   referenceNo: string;
   createdAt: string;
-  PropertyImages: IPropertyImage[];
+  PropertyImages: IPropertyImages[];
   postedByStaff: IPostedByStaff;
   company: IPropertyCompany;
   PropertyAmenities: IPropertyAmenities[];
@@ -68,11 +68,11 @@ export interface IPostedByStaffUser {
   email: string;
 }
 
-export interface IPropertyImage {
-  imageId: number;
-  propertyId: number;
+export interface IPropertyImages {
+  // imageId: number;
+  // propertyId: number;
   url: string;
-  isPrimary: boolean;
+  //isPrimary: boolean;
 }
 
 export interface IPropertyCompany {
@@ -94,7 +94,7 @@ interface IAmenity {
   amenityId: number;
   name: string;
   nameAr: string | null;
-  icon: string | null;
+  icon: string;
 }
 
 export interface IPropertyFilters {

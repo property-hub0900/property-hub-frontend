@@ -3,19 +3,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
-import { useState } from "react";
 
 import { AgentCard } from "@/components/property/agent-card";
 import { PropertyAmenities } from "@/components/property/property-amenities";
 import { PropertyDescription } from "@/components/property/property-description";
-import { PropertyDetails } from "@/components/property/property-details";
+import { PropertyDetailFeatures } from "@/components/property/property-detail-features";
 import { PropertyGallery } from "@/components/property/property-gallery";
 import { PropertyHeader } from "@/components/property/property-header";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import { Loader } from "@/components/loader";
-import { formatAmountToQAR } from "@/utils/utils";
+
 import { propertyServices } from "@/services/properties";
 
 export default function PropertyPage() {
@@ -94,7 +93,7 @@ export default function PropertyPage() {
 
           <Separator className="my-6" />
 
-          <PropertyDetails property={property} />
+          <PropertyDetailFeatures property={property} />
 
           <Separator className="my-6" />
 
@@ -105,7 +104,6 @@ export default function PropertyPage() {
           <AgentCard
             postedByStaff={property.postedByStaff}
             company={property.company}
-            t={t}
           />
         </div>
       </div>

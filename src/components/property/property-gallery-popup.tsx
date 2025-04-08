@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { IPropertyImage } from "@/types/client/properties";
+import { IPropertyImages } from "@/types/client/properties";
 
 interface PropertyImagePopupProps {
-  images: IPropertyImage[];
+  images: IPropertyImages[];
   title: string;
   isOpen: boolean;
   onClose: () => void;
