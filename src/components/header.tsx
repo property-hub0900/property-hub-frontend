@@ -1,26 +1,20 @@
 "use client";
+import { PROPERTY_PURPOSE } from "@/constants/constants";
+import { PUBLIC_ROUTES } from "@/constants/paths";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { Menu, X } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { UserMenu } from "./userMenu";
-import Image from "next/image";
-import { PUBLIC_ROUTES } from "@/constants/paths";
-import { PROPERTY_PURPOSE } from "@/constants/constants";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Button } from "./ui/button";
+import { UserMenu } from "./userMenu";
 
 export default function Header() {
   const t = useTranslations();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAuthenticated } = useAuth();
-  const pathName = usePathname();
-
-  if (pathName.includes("/dashboard")) {
-    return null;
-  }
 
   return (
     <>
