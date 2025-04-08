@@ -32,6 +32,7 @@ import { Loader } from "@/components/loader";
 import { getErrorMessage } from "@/utils/utils";
 import { uploadImageToFirebase } from "@/lib/firebaseUtil";
 import { UserAvatar } from "../ui/user-avatar";
+import { DeleteDialog } from "../delete-dailog";
 
 const companySettingsSchema = z.object({
   name: z.string().min(1, "Company name is required"),
@@ -62,6 +63,8 @@ export const CompanySettingsForm = forwardRef<any, CompanySettingsFormProps>(
       userData.company?.logo || null
     );
     const [companyLogoFile, setCompanyLogoFile] = useState<File | null>(null);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     let company: any = userData.company || {};
 
@@ -158,13 +161,19 @@ export const CompanySettingsForm = forwardRef<any, CompanySettingsFormProps>(
     };
 
     const handleRemoveLogo = () => {
+      // why photo is not removed? from ui
+      setIsDeleting(true);
       setCompanyLogo(null);
       setCompanyLogoFile(null);
+      debugger;
       company = {
         ...company,
         logo: null,
       };
       form.setValue("logo", "", { shouldDirty: true });
+      setIsDeleting(false);
+      setIsDeleteDialogOpen(false);
+
     };
 
     return (
@@ -212,7 +221,7 @@ export const CompanySettingsForm = forwardRef<any, CompanySettingsFormProps>(
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleRemoveLogo}
+                onClick={() => setIsDeleteDialogOpen(true)}
                 className="text-destructive hover:text-destructive"
                 disabled={isUploading}
               >
@@ -407,6 +416,14 @@ export const CompanySettingsForm = forwardRef<any, CompanySettingsFormProps>(
             </div>
           </form>
         </Form>
+        <DeleteDialog
+          title={t("title.deletePhoto") || "Delete Photo"}
+          deleteConfirmation={t("text.deletePhotoConfirmation") || "Are you sure you want to delete this agent? This action cannot be undone."}
+          isOpen={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          onDelete={handleRemoveLogo}
+          isSubmitting={isDeleting}
+        />
       </div>
     );
   }
