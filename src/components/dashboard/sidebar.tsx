@@ -97,11 +97,6 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       icon: Users,
     },
     {
-      title: "Agents",
-      href: COMPANY_PATHS.agents,
-      icon: User,
-    },
-    {
       title: "Points",
       href: COMPANY_PATHS.walletPoints,
       icon: Wallet,
