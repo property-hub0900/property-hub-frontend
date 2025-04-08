@@ -72,15 +72,15 @@ export default function HeroSection() {
         }}
       ></div>
 
-      <div className="container mx-auto relative z-10 px-5 lg:px-0 py-16 lg:py-28">
-        <div className="flex flex-col w-full lg:w-2/3">
-          <div className="text-white space-y-5 mb-8 w-full lg:w-2/3">
+      <div className="container mx-auto relative z-10 py-16 lg:py-28">
+        <div className="flex flex-col w-full xl:w-2/3">
+          <div className="text-white space-y-5 mb-8 w-full xl:w-2/3">
             <h1 className="text-white">{t("title.landingHeroTitle")}</h1>
             <p className="text-lg">{t("title.landingHeroSubTitle")}</p>
           </div>
 
           {/* Search Box */}
-          <div className="w-full max-w-4xl rounded-md overflow-hidden shadow-lg">
+          <div className="w-full max-w-3xl rounded-md overflow-hidden shadow-lg">
             <SearchTabs onTabChange={handleTabChange} />
             <SearchForm
               searchParams={searchParams}

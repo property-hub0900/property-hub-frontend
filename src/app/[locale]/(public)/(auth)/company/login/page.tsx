@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { getErrorMessage } from "@/utils/utils";
-import { userAuthStaffLoginSchema } from "@/schema/auth";
+import { userAuthStaffLoginSchema } from "@/schema/public/auth";
 import { authService } from "@/services/public/auth";
 import { useAuthStore } from "@/store/auth-store";
 import { TUserAuthStaffLoginSchema } from "@/types/public/auth";

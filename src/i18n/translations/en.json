@@ -67,7 +67,8 @@
     "amenities": "Amenities",
     "call": "Call",
     "whatsApp": "WhatsApp",
-    "email": "Email"
+    "email": "Email",
+    "loginRegister": "Login/Register"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { getErrorMessage } from "@/utils/utils";
-import { useAuthCustomerRegisterSchema } from "@/schema/auth";
+import { useAuthCustomerRegisterSchema } from "@/schema/public/auth";
 import { authService } from "@/services/public/auth";
 import { TUseAuthCustomerRegisterSchema } from "@/types/public/auth";
 import { zodResolver } from "@hookform/resolvers/zod";

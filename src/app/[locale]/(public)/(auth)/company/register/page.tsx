@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { userAuthStaffRegisterSchema } from "@/schema/auth";
+import { userAuthStaffRegisterSchema } from "@/schema/public/auth";
 
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";

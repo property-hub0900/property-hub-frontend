@@ -31,7 +31,7 @@ export function PropertyHeader({
           </h2>
         </div>
         <div className="flex items-center justify-center gap-3 text-lg text-primary shadow-md px-5 py-4">
-          {bedrooms && (
+          {bedrooms && bedrooms > 0 && (
             <>
               <div className="flex items-center gap-1">
                 <BedDouble className="size-5" />

@@ -5,7 +5,7 @@ export default function CtaSection() {
   const t = useTranslations();
   return (
     <section className="bg-primary py-14 w-full">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+      <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <h3 className="text-primary-foreground mb-4 md:mb-0">
           {t("title.lookingToAdvertiseAProperty")}
         </h3>

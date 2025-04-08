@@ -55,7 +55,7 @@ export function PropertyDetailFeatures({ property }: PropertyDetailsProps) {
             {formatNumber(property.propertySize)} {t("text.sqft")}
           </div>
         </div>
-        {property.bedrooms && (
+        {property.bedrooms && property.bedrooms > 0 && (
           <div className="grid grid-cols-2 gap-2">
             <div className="flex gap-2 items-center text-muted-foreground">
               <BedDouble className="size-5" />
@@ -72,13 +72,15 @@ export function PropertyDetailFeatures({ property }: PropertyDetailsProps) {
           </div>
           <div className="font-medium">{property.bathrooms}</div>
         </div>
-        <div className="grid grid-cols-2 gap-2">
-          <div className="flex gap-2 items-center text-muted-foreground">
-            <LampCeiling className="size-5" />
-            {t("form.furnishedType.label")}
+        {property.furnishedType && (
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex gap-2 items-center text-muted-foreground">
+              <LampCeiling className="size-5" />
+              {t("form.furnishedType.label")}
+            </div>
+            <div className="font-medium">{property.furnishedType}</div>
           </div>
-          <div className="font-medium">{property.furnishedType}</div>
-        </div>
+        )}
 
         <div className="grid grid-cols-2 gap-2">
           <div className="flex gap-2 items-center text-muted-foreground">

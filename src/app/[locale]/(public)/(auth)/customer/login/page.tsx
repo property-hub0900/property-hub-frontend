@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { getErrorMessage } from "@/utils/utils";
-import { userAuthCustomerLoginSchema } from "@/schema/auth";
+import { userAuthCustomerLoginSchema } from "@/schema/public/auth";
 import { authService } from "@/services/public/auth";
 import { useAuthStore } from "@/store/auth-store";
 import { TUserAuthCustomerLoginSchema } from "@/types/public/auth";

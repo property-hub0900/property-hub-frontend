@@ -58,7 +58,7 @@ export default function PropertyPage() {
 
   if (error || !property) {
     return (
-      <div className="container mx-auto px-4 py-8 flex justify-center items-center min-h-[50vh]">
+      <div className="container mx-auto py-8 flex justify-center items-center min-h-[50vh]">
         <div className="text-center">
           <h2 className="text-2xl font-bold">{t("notFound")}</h2>
           <p className="mt-2 text-muted-foreground">{t("notFoundDesc")}</p>
