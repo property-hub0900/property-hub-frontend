@@ -326,13 +326,13 @@ export default function CustomerLoginPage() {
         </Link>
       </div>
 
-      <Button
+      {/* <Button
         variant={"outline"}
         className="w-full border border-primary text-primary mt-4"
         onClick={() => router.push(`/${locale}/company/login`)}
       >
         {t("button.loginAsAgent")}
-      </Button>
+      </Button> */}
     </AuthContainer>
   );
 }

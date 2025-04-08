@@ -364,5 +364,9 @@
 }
 
 .swiper .swiper-pagination {
-  @apply bottom-2;
+  @apply !bottom-2;
+}
+
+.swiper .swiper-pagination span {
+  @apply !mx-0.5 shadow-sm;
 }

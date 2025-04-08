@@ -52,8 +52,8 @@ export default function PropertyListCard({ data }: { data: IProperty }) {
   );
 
   return (
-    <Card className="overflow-hidden grid grid-cols-1 lg:grid-cols-3">
-      <div className="relative col-span-1">
+    <Card className="overflow-hidden flex flex-col lg:flex-row">
+      <div className="relative  lg:w-[300px]">
         {images.length > 0 && (
           <Swiper
             modules={[Pagination, Navigation]}
@@ -63,7 +63,7 @@ export default function PropertyListCard({ data }: { data: IProperty }) {
           >
             {images.map((image, index) => (
               <SwiperSlide key={index}>
-                <div className="relative h-full w-full">
+                <div className="relative h-full w-full select-none">
                   <Image
                     src={image}
                     width={500}
@@ -82,7 +82,7 @@ export default function PropertyListCard({ data }: { data: IProperty }) {
           <span className="text-sm">{PropertyImages.length}</span>
         </div>
       </div>
-      <CardContent className="p-4 col-span-2">
+      <CardContent className="p-4 grow">
         <Link href={`${PUBLIC_ROUTES.properties}/${data.propertyId}`}>
           <div className="flex justify-between items-start">
             <div>
@@ -126,24 +126,33 @@ export default function PropertyListCard({ data }: { data: IProperty }) {
             </div>
             <div className="flex items-center gap-1">
               <Ruler className="h-4 w-4" />
-              <span>{propertySize.toLocaleString()} Sqm</span>
+              <span>{propertySize.toLocaleString()} Sqf</span>
             </div>
           </div>
         </Link>
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <Button variant="outlinePrimary" size="sm">
-            <Phone className="h-4 w-4" />
-            Call
-          </Button>
-          <Button variant="outlinePrimary" size="sm">
-            <Mail className="h-4 w-4" />
-            Email
-          </Button>
-          <Button variant="outlinePrimary" size="sm">
-            <MessageCircle className="h-4 w-4" />
-            WhatsApp
-          </Button>
+          <Link href={`tel:${postedByStaff.phoneNumber}`}>
+            <Button variant="outlinePrimary" size="sm">
+              <Phone className="h-4 w-4" />
+              Call
+            </Button>
+          </Link>
+          <Link href={`mailto:${postedByStaff?.user.email}`}>
+            <Button variant="outlinePrimary" size="sm">
+              <Mail className="h-4 w-4" />
+              Email
+            </Button>
+          </Link>
+          <Link
+            target="_blank"
+            href={`https://wa.me/${postedByStaff.phoneNumber}`}
+          >
+            <Button variant="outlinePrimary" size="sm">
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp
+            </Button>
+          </Link>
           {user?.role && user?.role !== "staff" && (
             <Button
               variant="outlinePrimary"

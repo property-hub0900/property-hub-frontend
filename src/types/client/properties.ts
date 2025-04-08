@@ -43,6 +43,7 @@ export interface IProperty {
   createdAt: string;
   PropertyImages: IPropertyImage[];
   postedByStaff: IPostedByStaff;
+  company?: IPropertyCompany;
 }
 
 export interface IPostedByStaff {
@@ -59,6 +60,11 @@ export interface IPostedByStaff {
   active: boolean;
   isOwner: boolean;
   createdAt: string;
+  user: IPostedByStaffUser;
+}
+
+export interface IPostedByStaffUser {
+  email: string;
 }
 
 export interface IPropertyImage {
@@ -66,6 +72,15 @@ export interface IPropertyImage {
   propertyId: number;
   url: string;
   isPrimary: boolean;
+}
+
+export interface IPropertyCompany {
+  companyId: number;
+  name: string;
+  email: string;
+  phone: string | null;
+  website: string | null;
+  logo: string | null;
 }
 
 export interface IPropertyFilters {
