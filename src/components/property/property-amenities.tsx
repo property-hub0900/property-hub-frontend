@@ -1,4 +1,4 @@
-import { IPropertyAmenities } from "@/types/client/properties";
+import { IPropertyAmenities } from "@/types/public/properties";
 import { useTranslations } from "next-intl";
 
 import { AmenityIcon } from "./amenity-icon";

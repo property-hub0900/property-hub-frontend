@@ -22,10 +22,10 @@ import { userAuthStaffRegisterSchema } from "@/schema/auth";
 
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
-import { authService } from "@/services/auth";
+import { authService } from "@/services/public/auth";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/utils";
-import { TUserAuthStaffRegisterSchema } from "@/types/auth";
+import { TUserAuthStaffRegisterSchema } from "@/types/public/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { Loader } from "@/components/loader";

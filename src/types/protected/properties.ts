@@ -1,5 +1,5 @@
 import { TPropertyStatuses } from "@/constants/constants";
-import { createPropertySchema } from "@/schema/dashboard/properties";
+import { createPropertySchema } from "@/schema/protected/properties";
 import { z } from "zod";
 
 export type TCreatePropertySchema = z.infer<

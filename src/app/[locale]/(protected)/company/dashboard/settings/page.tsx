@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PersonalSettingsForm } from "@/components/settings-company/personalSettingsForm";
 import { CompanySettingsForm } from "@/components/settings-company/companySettingsForm";
-import { companyService } from "@/services/company";
+import { companyService } from "@/services/protected/company";
 import { Loader } from "@/components/loader";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/utils";

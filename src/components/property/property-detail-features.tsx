@@ -1,4 +1,4 @@
-import { IProperty } from "@/types/client/properties";
+import { IProperty } from "@/types/public/properties";
 import { formatNumber } from "@/utils/utils";
 import {
   Bath,

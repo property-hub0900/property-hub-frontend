@@ -11,8 +11,8 @@ import {
 import {
   deletePropertyById,
   updatePropertyById,
-} from "@/services/dashboard/properties";
-import { IProperty } from "@/types/dashboard/properties";
+} from "@/services/protected/properties";
+import { IProperty } from "@/types/protected/properties";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit2, Trash2 } from "lucide-react";

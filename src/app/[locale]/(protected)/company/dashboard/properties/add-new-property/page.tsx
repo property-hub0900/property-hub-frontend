@@ -3,13 +3,13 @@
 import { useTranslations } from "next-intl";
 
 import { getErrorMessage } from "@/utils/utils";
-import { TCreatePropertySchema } from "@/types/dashboard/properties";
+import { TCreatePropertySchema } from "@/types/protected/properties";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { Loader } from "@/components/loader";
-import { createProperty } from "@/services/dashboard/properties";
+import { createProperty } from "@/services/protected/properties";
 import PropertyForm from "../components/propertyForm";
 import { COMPANY_PATHS } from "@/constants/paths";
 

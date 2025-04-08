@@ -14,8 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { getErrorMessage } from "@/utils/utils";
 import { useAuthCustomerRegisterSchema } from "@/schema/auth";
-import { authService } from "@/services/auth";
-import { TUseAuthCustomerRegisterSchema } from "@/types/auth";
+import { authService } from "@/services/public/auth";
+import { TUseAuthCustomerRegisterSchema } from "@/types/public/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -57,7 +57,6 @@ export default function CustomerRegisterPage() {
 
       router.push(`/${locale}/customer/verification?email=${values.email}`);
     } catch (error: any) {
-
       toast.error(getErrorMessage(error));
     } finally {
       setIsSubmitting(false);

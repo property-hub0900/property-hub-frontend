@@ -5,7 +5,7 @@ import type {
   TUseAuthCustomerRegisterSchema,
   TUserAuthStaffLoginSchema,
   TUserAuthStaffRegisterSchema,
-} from "@/types/auth";
+} from "@/types/public/auth";
 
 import type { IResponse } from "@/types/common";
 

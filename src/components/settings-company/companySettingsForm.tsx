@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { companyService } from "@/services/company";
+import { companyService } from "@/services/protected/company";
 import { Loader } from "@/components/loader";
 import { getErrorMessage } from "@/utils/utils";
 import { uploadImageToFirebase } from "@/lib/firebaseUtil";

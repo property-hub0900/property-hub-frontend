@@ -35,9 +35,9 @@ import {
 } from "@/constants/constants";
 import { COMPANY_PATHS } from "@/constants/paths";
 import { useAuth } from "@/lib/hooks/useAuth";
-import { createPropertySchema } from "@/schema/dashboard/properties";
-import { amenities } from "@/services/dashboard/properties";
-import { TCreatePropertySchema } from "@/types/dashboard/properties";
+import { createPropertySchema } from "@/schema/protected/properties";
+import { amenities } from "@/services/protected/properties";
+import { TCreatePropertySchema } from "@/types/protected/properties";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";

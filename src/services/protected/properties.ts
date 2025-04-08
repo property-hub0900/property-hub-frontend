@@ -5,7 +5,7 @@ import {
   IProperties,
   IProperty,
   TCreatePropertySchema,
-} from "@/types/dashboard/properties";
+} from "@/types/protected/properties";
 
 export const companiesProperties = (role: string): Promise<IProperties> => {
   return apiClient.get(`/companies/properties?role=${role}`);

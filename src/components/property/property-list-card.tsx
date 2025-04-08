@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/lib/hooks/useAuth";
-import { IProperty } from "@/types/client/properties";
+import { IProperty } from "@/types/public/properties";
 import {
   Heart,
   Mail,
@@ -106,8 +106,8 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
 
           <div className="mt-4">
             <h2 className="text-base font-medium">{title}</h2>
-            <p className="mt-1 text-base font-light flex items-center gap-1">
-              <MapPin className="h-4 w-4" />
+            <p className="mt-1 text-base font-light flex gap-1">
+              <MapPin className="h-4 w-4 mt-1" />
               {address}
             </p>
           </div>

@@ -8,7 +8,7 @@ import { COMPANY_PATHS } from "@/constants/paths";
 import MyPropertiesTable from "./components/myPropertiesTable";
 
 import { useQuery } from "@tanstack/react-query";
-import { companiesProperties } from "@/services/dashboard/properties";
+import { companiesProperties } from "@/services/protected/properties";
 import { Loader } from "@/components/loader";
 
 export default function PropertiesListing() {

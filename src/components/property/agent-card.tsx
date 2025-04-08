@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/ui/user-avatar";
-import { IPostedByStaff, IPropertyCompany } from "@/types/client/properties";
+import { IPostedByStaff, IPropertyCompany } from "@/types/public/properties";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";

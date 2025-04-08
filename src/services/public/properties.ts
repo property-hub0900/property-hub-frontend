@@ -4,7 +4,7 @@ import {
   IProperty,
   IPropertyFilters,
   IPropertyResponse,
-} from "@/types/client/properties";
+} from "@/types/public/properties";
 
 export const propertyServices = {
   fetchProperties(filters: IPropertyFilters): Promise<IPropertyResponse> {

@@ -7,14 +7,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/utils";
-import { TCreatePropertySchema } from "@/types/dashboard/properties";
+import { TCreatePropertySchema } from "@/types/protected/properties";
 
 import { useParams } from "next/navigation";
 
 import {
   getPropertyById,
   updatePropertyById,
-} from "@/services/dashboard/properties";
+} from "@/services/protected/properties";
 import { Loader } from "@/components/loader";
 import { COMPANY_PATHS } from "@/constants/paths";
 import PropertyForm from "../components/propertyForm";
@@ -24,8 +24,6 @@ export default function EditPropertyPage() {
   const params = useParams();
 
   const id = params?.id ?? "0";
-
-
 
   const t = useTranslations();
   const router = useRouter();

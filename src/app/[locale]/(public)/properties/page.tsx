@@ -8,8 +8,8 @@ import Pagination from "@/components/pagination";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
-import { propertyServices } from "@/services/properties";
-import type { IPropertyFilters } from "@/types/client/properties";
+import { propertyServices } from "@/services/public/properties";
+import type { IPropertyFilters } from "@/types/public/properties";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
 import Image from "next/image";

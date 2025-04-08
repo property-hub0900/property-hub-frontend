@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Heart, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyGalleryPopup } from "./property-gallery-popup";
-import { IPropertyImages } from "@/types/client/properties";
+import { IPropertyImages } from "@/types/public/properties";
 
 interface PropertyGalleryProps {
   images: IPropertyImages[];

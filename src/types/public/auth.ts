@@ -5,7 +5,7 @@ import {
   userAuthStaffLoginSchema,
   userAuthStaffRegisterSchema,
   verificationSchema,
-} from "@/schema/auth";
+} from "@/schema/public/auth";
 
 export type TUserAuthStaffRegisterSchema = z.infer<
   ReturnType<typeof userAuthStaffRegisterSchema>

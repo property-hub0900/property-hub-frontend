@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { companyService } from "@/services/company";
+import { companyService } from "@/services/protected/company";
 import { Loader } from "@/components/loader";
 import { getErrorMessage } from "@/utils/utils";
 import { uploadImageToFirebase } from "@/lib/firebaseUtil";
@@ -147,10 +147,10 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
     };
 
     const handleRemoveImage = () => {
-      setProfileImage(null)
-      setProfileImageFile(null)
-      form.setValue("profilePhoto", "", { shouldDirty: true })
-    }
+      setProfileImage(null);
+      setProfileImageFile(null);
+      form.setValue("profilePhoto", "", { shouldDirty: true });
+    };
 
     return (
       <div className="p-14">

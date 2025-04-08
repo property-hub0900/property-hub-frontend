@@ -30,10 +30,10 @@ import {
   PROPERTY_PURPOSE,
   PROPERTY_TYPES,
 } from "@/constants/constants";
-import { amenities } from "@/services/dashboard/properties";
+import { amenities } from "@/services/protected/properties";
 import { useQuery } from "@tanstack/react-query";
 import PlacesAutocomplete from "@/components/placesAutoComplete";
-import { IPropertyFilters } from "@/types/client/properties";
+import { IPropertyFilters } from "@/types/public/properties";
 import { useTranslations } from "next-intl";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/lib/hooks/useAuth";

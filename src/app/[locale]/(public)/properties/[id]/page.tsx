@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { Loader } from "@/components/loader";
 
-import { propertyServices } from "@/services/properties";
+import { propertyServices } from "@/services/public/properties";
 
 export default function PropertyPage() {
   const params = useParams<{ id: string }>();

@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuthStore } from "@/store/auth-store";
-import type { userAuthCustomerLoginResponse } from "@/types/auth";
+import type { userAuthCustomerLoginResponse } from "@/types/public/auth";
 import { useEffect, useState } from "react";
 
 export const useAuth = () => {

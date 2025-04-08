@@ -8,9 +8,9 @@ import { PlusCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { companyService, type StaffMember } from "@/services/company";
+import { companyService, type StaffMember } from "@/services/protected/company";
 import { getErrorMessage } from "@/utils/utils";
-import type { staffFormSchema } from "@/schema/company";
+import type { staffFormSchema } from "@/schema/protected/company";
 import { AddStaffForm } from "@/components/staff/addStaffForm";
 import { EditUserForm } from "@/components/staff/editUserForm";
 import { DeleteStaffDialog } from "@/components/staff/deleteStaffDialog";
@@ -62,8 +62,8 @@ export default function AccessManagementPage() {
       setStaff([...staff, newStaffMember]);
       toast.success(
         response.message ||
-        t("toast.staffInvited") ||
-        "Staff member invited successfully"
+          t("toast.staffInvited") ||
+          "Staff member invited successfully"
       );
       setShowAddForm(false);
       refetchStaff();
@@ -92,8 +92,8 @@ export default function AccessManagementPage() {
       setStaff(updatedStaffList);
       toast.success(
         response.message ||
-        t("toast.staffUpdated") ||
-        "Staff member updated successfully"
+          t("toast.staffUpdated") ||
+          "Staff member updated successfully"
       );
       setShowEditForm(false);
       refetchStaff();
@@ -102,8 +102,8 @@ export default function AccessManagementPage() {
       console.log("Failed to update staff:", error);
       toast.error(
         error?.message ||
-        t("toast.updateFailed") ||
-        "Failed to update staff member"
+          t("toast.updateFailed") ||
+          "Failed to update staff member"
       );
     },
   });
@@ -129,8 +129,8 @@ export default function AccessManagementPage() {
       console.log("Failed to delete staff:", error);
       toast.error(
         error?.message ||
-        t("text.deleteFailed") ||
-        "Failed to delete staff member"
+          t("text.deleteFailed") ||
+          "Failed to delete staff member"
       );
     },
   });
@@ -140,11 +140,8 @@ export default function AccessManagementPage() {
     mutationKey: ["getStaffById"],
     mutationFn: companyService.getStaffById,
     onSuccess: (response) => {
-
-
       // If response is empty, use the selectedStaff that was set before the API call
       if (!response || Object.keys(response).length === 0) {
-
         // We already set selectedStaff in handleEditClick, so we can just proceed
         setShowAddForm(false);
         setShowEditForm(true);
