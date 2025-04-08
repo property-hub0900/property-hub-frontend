@@ -1,19 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { DeleteDialog } from "@/components/delete-dailog";
 import { Loader } from "@/components/loader";
-import { StaffTable } from "@/components/staffTable";
-import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { toast } from "sonner";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { companyService, type StaffMember } from "@/services/protected/company";
-import { getErrorMessage } from "@/utils/utils";
-import type { staffFormSchema } from "@/schema/protected/company";
 import { AddStaffForm } from "@/components/staff/addStaffForm";
 import { EditUserForm } from "@/components/staff/editUserForm";
-import { DeleteStaffDialog } from "@/components/staff/deleteStaffDialog";
+import { StaffTable } from "@/components/staffTable";
+import { Button } from "@/components/ui/button";
+import type { staffFormSchema } from "@/schema/protected/company";
+import { companyService, type StaffMember } from "@/services/protected/company";
+import { getErrorMessage } from "@/utils/utils";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { PlusCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import type * as z from "zod";
 
 export default function AccessManagementPage() {
@@ -62,8 +62,8 @@ export default function AccessManagementPage() {
       setStaff([...staff, newStaffMember]);
       toast.success(
         response.message ||
-          t("toast.staffInvited") ||
-          "Staff member invited successfully"
+        t("toast.staffInvited") ||
+        "Staff member invited successfully"
       );
       setShowAddForm(false);
       refetchStaff();
@@ -92,8 +92,8 @@ export default function AccessManagementPage() {
       setStaff(updatedStaffList);
       toast.success(
         response.message ||
-          t("toast.staffUpdated") ||
-          "Staff member updated successfully"
+        t("toast.staffUpdated") ||
+        "Staff member updated successfully"
       );
       setShowEditForm(false);
       refetchStaff();
@@ -102,8 +102,8 @@ export default function AccessManagementPage() {
       console.log("Failed to update staff:", error);
       toast.error(
         error?.message ||
-          t("toast.updateFailed") ||
-          "Failed to update staff member"
+        t("toast.updateFailed") ||
+        "Failed to update staff member"
       );
     },
   });
@@ -129,8 +129,8 @@ export default function AccessManagementPage() {
       console.log("Failed to delete staff:", error);
       toast.error(
         error?.message ||
-          t("text.deleteFailed") ||
-          "Failed to delete staff member"
+        t("text.deleteFailed") ||
+        "Failed to delete staff member"
       );
     },
   });
@@ -236,10 +236,11 @@ export default function AccessManagementPage() {
     }
   };
 
-  const handleCloseDeleteDialog = (open: boolean) => {
+  const handleCloseDeleteDialog = () => {
     if (!deleteStaffMutation.isPending) {
-      setIsDeleteDialogOpen(open);
+      setIsDeleteDialogOpen(!isDeleteDialogOpen);
     }
+    return;
   };
 
   return (
@@ -305,7 +306,9 @@ export default function AccessManagementPage() {
       </div>
 
       {/* Delete Agent Dialog */}
-      <DeleteStaffDialog
+      <DeleteDialog
+        title={t("title.deleteAgent")}
+        deleteConfirmation={t("text.deleteAgentConfirmation")}
         isOpen={isDeleteDialogOpen}
         onOpenChange={handleCloseDeleteDialog}
         onDelete={handleDeleteStaff}

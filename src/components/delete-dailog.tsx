@@ -11,24 +11,25 @@ import {
 } from "@/components/ui/dialog"
 import { useTranslations } from "next-intl"
 
-interface DeleteStaffDialogProps {
+interface DeleteDialogProps {
+    title,
+    deleteConfirmation
     isOpen: boolean
     onOpenChange: (open: boolean) => void
     onDelete: () => void
     isSubmitting: boolean
 }
 
-export function DeleteStaffDialog({ isOpen, onOpenChange, onDelete, isSubmitting }: DeleteStaffDialogProps) {
+export function DeleteDialog({ title, deleteConfirmation, isOpen, onOpenChange, onDelete, isSubmitting }: DeleteDialogProps) {
     const t = useTranslations()
 
     return (
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>{t("title.deleteAgent") || "Delete Agent"}</DialogTitle>
+                    <DialogTitle>{title}</DialogTitle>
                     <DialogDescription>
-                        {t("text.deleteConfirmation") ||
-                            "Are you sure you want to delete this agent? This action cannot be undone."}
+                        {deleteConfirmation}
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
