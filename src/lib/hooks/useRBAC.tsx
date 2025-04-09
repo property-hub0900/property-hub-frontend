@@ -53,7 +53,7 @@ export const useRBAC = () => {
             if (staffPermission.canAddProperty) {
                 permissions.add(PERMISSIONS.CREATE_PROPERTY);
             }
-            debugger;
+
             if (staffPermission.canPublishProperty) {
 
                 permissions.add(PERMISSIONS.PUBLISH_PROPERTY);
