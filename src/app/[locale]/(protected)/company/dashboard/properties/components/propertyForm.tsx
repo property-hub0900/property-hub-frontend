@@ -715,71 +715,60 @@ export default function PropertyForm(
         </Form>
       </div>
       <div className="col-span-2 gap-2 flex justify-end mt-6">
-        {(!defaultValues ||
-          defaultValues?.status === PROPERTY_STATUSES.draft) && (
-            <>
-              <Button
-                variant={"outline"}
-                type="button"
-                onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
-                className=""
-              >
-                {t("button.saveDraft")}
-              </Button>
-
-              {(isOwner || isAdmin) && (
-                <Button
-                  type="button"
-                  onClick={() =>
-                    handleSubmitWithStatus(PROPERTY_STATUSES.published)
-                  }
-                  className=""
-                >
-                  {t("button.publish")}
-                </Button>
-              )}
-              {hasPermission(PERMISSIONS.CREATE_PROPERTY) && (
-                <Button
-                  type="button"
-                  onClick={() =>
-                    handleSubmitWithStatus(PROPERTY_STATUSES.published)
-                  }
-                  className=""
-                >
-                  {t("button.POST")}
-                </Button>
-              )}
-              {hasPermission(PERMISSIONS.PUBLISH_PROPERTY) && hasPermission(PERMISSIONS.CREATE_PROPERTY) && <Button
-                type="button"
-                onClick={() =>
-                  handleSubmitWithStatus(PROPERTY_STATUSES.pending)
-                }
-                className=""
-              >
-                {t("button.requestForApproval")}
-              </Button>
-              }
-
-            </>
-          )}
-
-        {defaultValues?.status === PROPERTY_STATUSES.published && (
+        {(!defaultValues || defaultValues?.status === PROPERTY_STATUSES.draft) && (
           <>
             <Button
+              variant={"outline"}
               type="button"
-              onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.closed)}
-              className=""
+              onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
             >
-              {t("button.close")}
+              {t("button.saveDraft")}
             </Button>
+
+            {(isOwner || isAdmin) && (
+              <Button
+                type="button"
+                onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.published)}
+              >
+                {t("button.publish")}
+              </Button>
+            )}
+
+            {isAgent && hasPermission(PERMISSIONS.CREATE_PROPERTY) && (
+              <>
+                {hasPermission(PERMISSIONS.PUBLISH_PROPERTY) ? (
+                  <Button
+                    type="button"
+                    onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.published)}
+                  >
+                    {t("button.publish")}
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.pending)}
+                  >
+                    {t("button.requestForApproval")}
+                  </Button>
+                )}
+              </>
+            )}
           </>
+        )}
+
+        {defaultValues?.status === PROPERTY_STATUSES.published && (
+          <Button
+            type="button"
+            onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.closed)}
+          >
+            {t("button.close")}
+          </Button>
         )}
 
         {defaultValues?.status && mode === "edit" && (
           <Button
             type="button"
             onClick={() => handleSubmitWithStatus(`${defaultValues?.status}`)}
-            className=""
           >
             {t("button.update")}
           </Button>
@@ -789,7 +778,6 @@ export default function PropertyForm(
           variant={"secondary"}
           type="button"
           onClick={handleCancel}
-          className=""
         >
           {t("button.cancel")}
         </Button>

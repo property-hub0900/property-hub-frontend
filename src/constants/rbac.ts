@@ -46,6 +46,14 @@ export const PERMISSIONS = {
     // Favorites and saved searches (customer)
     MANAGE_FAVORITES: "manage:favorites",
     MANAGE_SAVED_SEARCHES: "manage:saved:searches",
+
+    // Sidebar menu access
+    ACCESS_PROPERTIES_MENU: "access:menu:properties",
+    ACCESS_USERS_MENU: "access:menu:users",
+    ACCESS_WALLET_MENU: "access:menu:wallet",
+    ACCESS_SUBSCRIPTION_MENU: "access:menu:subscription",
+    ACCESS_TOPUP_MENU: "access:menu:topup",
+    ACCESS_SETTINGS_MENU: "access:menu:settings",
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -74,6 +82,12 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
         PERMISSIONS.RESPOND_INQUIRIES,
         PERMISSIONS.MANAGE_FAVORITES,
         PERMISSIONS.MANAGE_SAVED_SEARCHES,
+        PERMISSIONS.ACCESS_PROPERTIES_MENU,
+        PERMISSIONS.ACCESS_USERS_MENU,
+        PERMISSIONS.ACCESS_WALLET_MENU,
+        PERMISSIONS.ACCESS_SUBSCRIPTION_MENU,
+        PERMISSIONS.ACCESS_TOPUP_MENU,
+        PERMISSIONS.ACCESS_SETTINGS_MENU,
     ],
 
     [USER_ROLES.ADMIN]: [
@@ -94,6 +108,12 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
         PERMISSIONS.MANAGE_SETTINGS,
         PERMISSIONS.VIEW_INQUIRIES,
         PERMISSIONS.RESPOND_INQUIRIES,
+        PERMISSIONS.ACCESS_PROPERTIES_MENU,
+        PERMISSIONS.ACCESS_USERS_MENU,
+        PERMISSIONS.ACCESS_WALLET_MENU,
+        PERMISSIONS.ACCESS_SUBSCRIPTION_MENU,
+        PERMISSIONS.ACCESS_TOPUP_MENU,
+        PERMISSIONS.ACCESS_SETTINGS_MENU,
     ],
 
     [USER_ROLES.AGENT]: [
@@ -103,6 +123,8 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
         PERMISSIONS.ACCESS_COMPANY_DASHBOARD,
         PERMISSIONS.VIEW_INQUIRIES,
         PERMISSIONS.RESPOND_INQUIRIES,
+        PERMISSIONS.ACCESS_PROPERTIES_MENU,
+        PERMISSIONS.ACCESS_SETTINGS_MENU,
     ],
 
     [USER_ROLES.CUSTOMER]: [
@@ -111,6 +133,12 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
         PERMISSIONS.ACCESS_CUSTOMER_DASHBOARD, // Crucial permission for customer dashboard
         PERMISSIONS.MANAGE_FAVORITES,
         PERMISSIONS.MANAGE_SAVED_SEARCHES,
+        PERMISSIONS.ACCESS_PROPERTIES_MENU,
+        PERMISSIONS.ACCESS_USERS_MENU,
+        PERMISSIONS.ACCESS_WALLET_MENU,
+        PERMISSIONS.ACCESS_SUBSCRIPTION_MENU,
+        PERMISSIONS.ACCESS_TOPUP_MENU,
+        PERMISSIONS.ACCESS_SETTINGS_MENU,
     ],
 };
 
@@ -135,4 +163,19 @@ export const ROUTE_PERMISSIONS: Record<string, Permission[]> = {
 
     // Analytics
     "/analytics": [PERMISSIONS.VIEW_ANALYTICS],
+
+    // Add menu item routes with their permissions
+    "/company/dashboard/properties": [PERMISSIONS.ACCESS_PROPERTIES_MENU],
+    "/company/dashboard/access-management": [PERMISSIONS.ACCESS_USERS_MENU, PERMISSIONS.MANAGE_USERS],
+    "/company/dashboard/points": [PERMISSIONS.ACCESS_WALLET_MENU],
+    "/company/dashboard/subscription-plans": [PERMISSIONS.ACCESS_SUBSCRIPTION_MENU],
+    "/company/dashboard/top-up": [PERMISSIONS.ACCESS_TOPUP_MENU],
+    "/company/dashboard/settings": [PERMISSIONS.ACCESS_SETTINGS_MENU, PERMISSIONS.MANAGE_SETTINGS],
+
+    // Customer dashboard routes
+    "/customer/dashboard/search": [PERMISSIONS.ACCESS_CUSTOMER_DASHBOARD],
+    "/customer/dashboard/saved": [PERMISSIONS.MANAGE_FAVORITES],
+    "/customer/dashboard/notifications": [PERMISSIONS.ACCESS_CUSTOMER_DASHBOARD],
+    "/customer/dashboard/inquiries": [PERMISSIONS.VIEW_INQUIRIES],
+    "/customer/dashboard/settings": [PERMISSIONS.ACCESS_SETTINGS_MENU],
 }; 

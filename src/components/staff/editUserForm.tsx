@@ -100,8 +100,13 @@ export function EditUserForm({
   // Watch role to determine if permissions section should be shown
   const role = form.watch("role");
   useEffect(() => {
-    setShowPermissionsSection(role !== "admin");
-  }, [role]);
+
+    if (selectedStaff?.isOwner) {
+      setShowPermissionsSection(false);
+    } else {
+      setShowPermissionsSection(role !== "admin");
+    }
+  }, [role, selectedStaff]);
 
   return (
     <Form {...form}>
@@ -128,9 +133,8 @@ export function EditUserForm({
               <div>
                 <p className="font-medium">
                   {selectedStaff
-                    ? `${selectedStaff.firstName || ""} ${
-                        selectedStaff.lastName || ""
-                      }`
+                    ? `${selectedStaff.firstName || ""} ${selectedStaff.lastName || ""
+                    }`
                     : ""}
                 </p>
                 <p className="text-sm text-gray-500">
@@ -406,8 +410,8 @@ export function EditUserForm({
                       htmlFor="edit-canPublishProperty"
                       className="text-xm"
                     >
-                      {t("form.permissions.requiresApproval") ||
-                        "Requires Approval for Listings"}
+                      {t("form.permissions.canPublishProperty") ||
+                        "Can Publish Property"}
                     </label>
                     <FormControl>
                       <Switch

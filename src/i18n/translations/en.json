@@ -356,7 +356,7 @@
     },
     "permissions": {
       "canPostListings": "Can Post Listings",
-      "requiresApproval": "Requires Approval for Listings",
+      "canPublishProperty": "Can Publish Property",
       "canFeatureProperty": "Can Feature Property"
     },
     "propertyStatuses": {

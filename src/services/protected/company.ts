@@ -22,6 +22,11 @@ export interface StaffMember {
   user?: Record<string, any>;
   staffPermissions?: Record<string, any>;
   active?: boolean;
+  isOwner?: boolean;
+  companyId?: number;
+  lastLogin?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface InviteStaffRequest {
