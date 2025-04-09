@@ -68,7 +68,8 @@
     "amenities": "Amenities",
     "call": "Call",
     "whatsApp": "WhatsApp",
-    "email": "Email"
+    "email": "Email",
+    "POST": "POST"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -460,6 +461,9 @@
     "similarProperties": "More available in same area",
     "propertyDescription": "Paragon Properties is proud to present this fully renovated {bedrooms}-bedroom {type} in {location}. Set within a serene gated community, this spacious home features modern architecture, high-quality finishes, and a thoughtful layout that maximizes natural light and privacy. Perfect for families or professionals, the property provides a peaceful retreat while being close to key amenities."
   },
+  "passwordResetSuccess": "Password reset successful",
+  "passwordResetFailed": "Password reset failed",
+  "passwordResetEmailSent": "Password reset email sent",
   "welcome": "Welcome to Property",
   "welcomeCompany": "Welcome to Property Business",
   "loginSubtitle": "Enter your email & password to continue as Customer",

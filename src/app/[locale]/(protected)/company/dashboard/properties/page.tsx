@@ -10,6 +10,8 @@ import MyPropertiesTable from "./components/myPropertiesTable";
 import { useQuery } from "@tanstack/react-query";
 import { companiesProperties } from "@/services/protected/properties";
 import { Loader } from "@/components/loader";
+import { PERMISSIONS } from "@/constants/rbac";
+import { useRBAC } from "@/lib/hooks/useRBAC";
 
 export default function PropertiesListing() {
   const {
@@ -21,6 +23,8 @@ export default function PropertiesListing() {
     queryFn: () => companiesProperties("self"),
   });
 
+  const { hasPermission } = useRBAC();
+
   return (
     <>
       <Loader
@@ -29,9 +33,11 @@ export default function PropertiesListing() {
       ></Loader>
       <div className="flex justify-between items-center mb-5">
         <h3>Property Data</h3>
-        <Link className="cursor-pointer" href={COMPANY_PATHS.addNewProperty}>
-          <Button>+Add New Property</Button>
-        </Link>
+        {hasPermission(PERMISSIONS.CREATE_PROPERTY) && (
+          <Link className="cursor-pointer" href={COMPANY_PATHS.addNewProperty}>
+            <Button>+Add New Property</Button>
+          </Link>
+        )}
       </div>
       {dataCompaniesProperties && (
         <MyPropertiesTable {...dataCompaniesProperties} />

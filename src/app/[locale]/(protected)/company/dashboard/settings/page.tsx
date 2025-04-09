@@ -112,7 +112,10 @@ export default function SettingsPage() {
         >
           {t("button.cancel") || "Cancel"}
         </Button>
-        <Button onClick={handleSave} disabled={isLoading || isSaving}>
+        <Button
+          onClick={handleSave}
+          disabled={personalFormRef.current?.isDirty?.() || companyFormRef.current?.isDirty?.()}
+        >
           {isSaving ? "Saving..." : t("button.save") || "Save"}
         </Button>
       </div>

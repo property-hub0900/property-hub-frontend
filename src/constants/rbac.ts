@@ -18,6 +18,7 @@ export const PERMISSIONS = {
     PUBLISH_PROPERTY: "publish:property",
 
     // User management
+    MANAGE_USERS: "manage:users",
     VIEW_USERS: "view:users",
     CREATE_USER: "create:user",
     EDIT_USER: "edit:user",
@@ -62,6 +63,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
         PERMISSIONS.CREATE_USER,
         PERMISSIONS.EDIT_USER,
         PERMISSIONS.DELETE_USER,
+        PERMISSIONS.MANAGE_USERS,
         PERMISSIONS.VIEW_COMPANY,
         PERMISSIONS.EDIT_COMPANY,
         PERMISSIONS.ACCESS_CUSTOMER_DASHBOARD,
@@ -97,7 +99,6 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     [USER_ROLES.AGENT]: [
         // Property management
         PERMISSIONS.VIEW_PROPERTIES,
-        PERMISSIONS.CREATE_PROPERTY,
         PERMISSIONS.EDIT_PROPERTY,
         PERMISSIONS.ACCESS_COMPANY_DASHBOARD,
         PERMISSIONS.VIEW_INQUIRIES,
@@ -124,6 +125,7 @@ export const ROUTE_PERMISSIONS: Record<string, Permission[]> = {
     "/properties/create": [PERMISSIONS.CREATE_PROPERTY],
     "/properties/edit": [PERMISSIONS.EDIT_PROPERTY],
     "/properties/delete": [PERMISSIONS.DELETE_PROPERTY],
+    "/company/dashboard/properties/add-new-property": [PERMISSIONS.CREATE_PROPERTY],
 
     // User management
     "/user/management": [PERMISSIONS.VIEW_USERS],

@@ -165,7 +165,6 @@ export const CompanySettingsForm = forwardRef<any, CompanySettingsFormProps>(
       setIsDeleting(true);
       setCompanyLogo(null);
       setCompanyLogoFile(null);
-      debugger;
       company = {
         ...company,
         logo: null,
@@ -183,7 +182,7 @@ export const CompanySettingsForm = forwardRef<any, CompanySettingsFormProps>(
         <div className="flex items-center gap-6 mb-8 ">
           <div className="relative">
             <UserAvatar
-              src={companyLogo || company.logo || "placeholder.svg"}
+              src={companyLogo || "placeholder.svg"}
               firstName={company.name}
               lastName={company.name}
               size="xl"

@@ -1,11 +1,8 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import Pagination from "@/components/pagination";
 import { PropertyListCard } from "@/components/property/property-list-card";
 import { PropertySearchFilters } from "@/components/property/property-search-filters";
-import Pagination from "@/components/pagination";
-
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { propertyServices } from "@/services/public/properties";
@@ -13,6 +10,8 @@ import type { IPropertyFilters } from "@/types/public/properties";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle } from "lucide-react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function PropertiesPage() {
   const searchParams = useSearchParams();

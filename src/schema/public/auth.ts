@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
-import { commonValidations } from "./commonValidations";
+import { commonValidations } from "../commonValidations";
 
 export const userAuthStaffRegisterSchema = (t: (key: string) => string) =>
   z
