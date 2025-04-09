@@ -20,7 +20,7 @@ export default function Header() {
   return (
     <>
       {/* Main Header */}
-      <header className="bg-white w-full py-1 shadow-md">
+      <header className="bg-white w-full py-1 shadow-md ">
         <div className="container mx-auto">
           <DesktopHeader />
           <MobileHeader />

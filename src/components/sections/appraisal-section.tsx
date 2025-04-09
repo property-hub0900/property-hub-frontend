@@ -7,9 +7,9 @@ export default function InvestSectionAlternative() {
   const t = useTranslations();
 
   return (
-    <section className="py-20 w-full bg-background overflow-hidden">
+    <section className="py-12 md:py-20 w-full bg-background overflow-hidden">
       <div className="container mx-auto">
-        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+        <div className="flex flex-col lg:flex-row items-center gap-8 xl:gap-16">
           <div className="w-full lg:w-[55%]">
             {/* <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-16 bg-blue-400 rounded-r-md z-10" /> */}
 
@@ -26,7 +26,7 @@ export default function InvestSectionAlternative() {
             <div className="text-base font-semibold uppercase tracking-wider mb-2">
               {t("title.investIn")}
             </div>
-            <h2 className="h1 font-normal mb-8 ">
+            <h2 className="h1 font-normal mb-5 md:mb-8">
               {t.rich("title.qatarBloomingRealEstateMarket", {
                 highlight: (chunks) => (
                   <span className="text-primary">{chunks}</span>

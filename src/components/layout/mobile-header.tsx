@@ -49,7 +49,7 @@ export default function MobileHeader() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="fixed inset-0 top-[82px] h-screen w-full px-8 z-50 md:hidden bg-white border-t border-gray-200">
+        <div className="fixed inset-0 top-[72px] h-screen w-full px-8 z-50 md:hidden bg-white border-t border-gray-200">
           <div className="py-8 space-y-3 [&>a]:block [&>a]:text-base">
             <HeaderNavLinks />
             <Link
@@ -62,8 +62,9 @@ export default function MobileHeader() {
             {!isAuthenticated && (
               <Link
                 href={`${PUBLIC_ROUTES.login}`}
-                className="transition-colors text-sm font-medium hover:text-primary"
+                className="transition-colors text-sm font-medium !flex items-center gap-1 hover:text-primary "
               >
+                <User className="size-5" />
                 {t("button.loginRegister")}
               </Link>
             )}

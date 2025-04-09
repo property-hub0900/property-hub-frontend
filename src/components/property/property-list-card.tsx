@@ -27,8 +27,11 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { formatAmountToQAR } from "@/utils/utils";
 import { PUBLIC_ROUTES } from "@/constants/paths";
+import { useTranslations } from "next-intl";
 
 export const PropertyListCard = ({ data }: { data: IProperty }) => {
+  const t = useTranslations();
+
   const {
     title,
     propertyType,
@@ -52,35 +55,37 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
   );
 
   return (
-    <Card className="overflow-hidden flex flex-col lg:flex-row">
-      <div className="relative  lg:w-[300px]">
-        {images.length > 0 && (
-          <Swiper
-            modules={[Pagination, Navigation]}
-            pagination={{ clickable: true }}
-            navigation
-            className="h-full"
-          >
-            {images.map((image, index) => (
-              <SwiperSlide key={index}>
-                <div className="relative h-full w-full select-none">
-                  <Image
-                    src={image}
-                    width={500}
-                    height={300}
-                    alt={`${propertyType} property`}
-                    className="object-cover h-full"
-                  />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        )}
+    <Card className="overflow-hidden flex flex-col md:flex-row">
+      <div className="relative  md:w-[300px]">
+        <Link href={`${PUBLIC_ROUTES.properties}/${data.propertyId}`}>
+          {images.length > 0 && (
+            <Swiper
+              modules={[Pagination, Navigation]}
+              pagination={{ clickable: true }}
+              navigation
+              className="h-full"
+            >
+              {images.map((image, index) => (
+                <SwiperSlide key={index}>
+                  <div className="relative h-full w-full select-none">
+                    <Image
+                      src={image}
+                      width={500}
+                      height={300}
+                      alt={`${propertyType} property`}
+                      className="object-cover h-full"
+                    />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
 
-        <div className="absolute z-10 bottom-2 left-2 flex items-center text-primary gap-1 bg-white/90 rounded-sm px-2 py-1">
-          <Camera className="size-4"></Camera>
-          <span className="text-sm">{PropertyImages.length}</span>
-        </div>
+          <div className="absolute z-10 bottom-2 left-2 flex items-center text-primary gap-1 bg-white/90 rounded-sm px-2 py-1">
+            <Camera className="size-4"></Camera>
+            <span className="text-sm">{PropertyImages.length}</span>
+          </div>
+        </Link>
       </div>
       <CardContent className="p-4 grow">
         <Link href={`${PUBLIC_ROUTES.properties}/${data.propertyId}`}>
@@ -99,7 +104,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
                     alt="Featured"
                   />
                 </span>
-                <span className="text-primary">Featured</span>
+                <span className="text-primary">{t("text.featured")}</span>
               </div>
             )}
           </div>
@@ -126,7 +131,9 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             </div>
             <div className="flex items-center gap-1">
               <Ruler className="h-4 w-4" />
-              <span>{propertySize.toLocaleString()} Sqf</span>
+              <span>
+                {propertySize.toLocaleString()} {t("text.sqft")}
+              </span>
             </div>
           </div>
         </Link>
@@ -135,13 +142,13 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
           <Link href={`tel:${postedByStaff.phoneNumber}`}>
             <Button variant="outlinePrimary" size="sm">
               <Phone className="h-4 w-4" />
-              Call
+              {t("button.call")}
             </Button>
           </Link>
           <Link href={`mailto:${postedByStaff?.user.email}`}>
             <Button variant="outlinePrimary" size="sm">
               <Mail className="h-4 w-4" />
-              Email
+              {t("button.email")}
             </Button>
           </Link>
           <Link
@@ -150,7 +157,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
           >
             <Button variant="outlinePrimary" size="sm">
               <MessageCircle className="h-4 w-4" />
-              WhatsApp
+              {t("button.whatsApp")}
             </Button>
           </Link>
           {user?.role && user?.role !== "staff" && (
@@ -187,7 +194,10 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             )}
           </div>
           <span className="text-sm text-muted-foreground">
-            Listed {daysAgo} days ago
+            {/* Listed {daysAgo} days ago */}
+            {t.rich("text.listedDaysAgo", {
+              highlight: () => <span>{daysAgo}</span>,
+            })}
           </span>
         </div>
       </CardContent>

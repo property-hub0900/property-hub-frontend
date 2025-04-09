@@ -74,7 +74,7 @@ export default function HeroSection() {
 
       <div className="container mx-auto relative z-10 py-16 lg:py-28">
         <div className="flex flex-col w-full xl:w-2/3">
-          <div className="text-white space-y-5 mb-8 w-full xl:w-2/3">
+          <div className="text-white space-y-5 mb-8 w-full xl:w-3/4">
             <h1 className="text-white">{t("title.landingHeroTitle")}</h1>
             <p className="text-lg">{t("title.landingHeroSubTitle")}</p>
           </div>
@@ -143,16 +143,16 @@ function SearchForm({
   };
 
   return (
-    <div className="flex flex-col bg-card sm:flex-row items-center p-4 rounded-sm rounded-tl-none">
-      <div className="w-full sm:w-1/4 mb-3 sm:mb-0 sm:mr-3">
+    <div className="flex gap-2 md:gap-3 p-3 md:p-4 bg-card items-center  rounded-sm rounded-tl-none">
+      <div className="hidden md:block w-full sm:w-1/4">
         <Select
           value={searchParams.propertyType}
           onValueChange={handlePropertyTypeChange}
         >
-          <SelectTrigger className="border-0 shadow-none !outline-none focus:outline-none focus:ring-0 ">
+          <SelectTrigger className="border-0 shadow-none !outline-none focus:outline-none focus:ring-0 text-base [&>svg]:size-5">
             <SelectValue placeholder={t("form.propertyType.placeholder")} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="text-lg">
             {PROPERTY_TYPES.Commercial.map((item, index) => (
               <SelectItem key={index} value={item}>
                 {t(`form.propertyType.options.${item}`)}
@@ -166,15 +166,15 @@ function SearchForm({
           </SelectContent>
         </Select>
       </div>
-      <div className="w-full mb-3 sm:mb-0 sm:mr-3 relative">
+      <div className="w-full relative">
         <PlacesAutocomplete
           value={searchParams.searchQuery}
           onChange={handleLocationChange}
           onKeyPress={handleKeyPress}
-          className="outline-none shadow-none border-0 focus:border-0 focus:ring-0 focus:outline-none focus-visible:outline-none"
+          className="md:!text-base !outline-none !shadow-none !border-0 !focus:border-0 !focus:ring-0 !focus:outline-none !focus-visible:outline-none"
         />
       </div>
-      <Button className="w-28" onClick={onSearch}>
+      <Button className="w-24 md:w-28" onClick={onSearch}>
         {t("button.search")}
       </Button>
     </div>

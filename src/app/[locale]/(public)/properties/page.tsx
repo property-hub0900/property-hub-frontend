@@ -65,10 +65,10 @@ export default function PropertiesPage() {
     : 0;
 
   return (
-    <div className="container mx-auto py-14">
+    <div className="container mx-auto py-8 md:py-12">
       <PropertySearchFilters />
-      <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-3">
-        <div className="w-full hidden lg:block">
+      <div className="grid grid-cols-1 xl:grid-cols-[200px_1fr_200px] gap-3">
+        <div className="hidden xl:block">
           <Image
             src={"/add1.jpg"}
             width={500}
@@ -77,54 +77,52 @@ export default function PropertiesPage() {
             className="w-full h-auto"
           />
         </div>
-        <div>
-          <div className="space-y-5">
-            {isLoading ? (
-              <>
-                {[...Array(6)].map((_, i) => (
-                  <Skeleton key={i} className="h-72 w-full" />
-                ))}
-              </>
-            ) : error ? (
-              <>
-                <Alert variant="destructive" className="mt-8">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>
-                    Failed to fetch properties. Please try again later.
-                  </AlertDescription>
-                </Alert>
-              </>
-            ) : !data?.results?.length ? (
-              <>
-                <div className="mt-8 flex flex-col items-center justify-center">
-                  <h2 className="text-2xl font-semibold">
-                    No properties found
-                  </h2>
-                  <p className="text-muted-foreground">
-                    Try adjusting your search filters to find more properties.
-                  </p>
-                </div>
-              </>
-            ) : (
-              <>
-                {data.results.map((property) => (
-                  <PropertyListCard key={property.propertyId} data={property} />
-                ))}
 
-                {totalPages > 1 && (
-                  <Pagination
-                    currentPage={Number(filters.page) || 0}
-                    totalPages={totalPages}
-                    totalItems={data.total}
-                    pageSize={Number(filters.pageSize) || 10}
-                  />
-                )}
-              </>
-            )}
-          </div>
+        <div className="space-y-5">
+          {isLoading ? (
+            <>
+              {[...Array(6)].map((_, i) => (
+                <Skeleton key={i} className="h-72 w-full" />
+              ))}
+            </>
+          ) : error ? (
+            <>
+              <Alert variant="destructive" className="mt-8">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  Failed to fetch properties. Please try again later.
+                </AlertDescription>
+              </Alert>
+            </>
+          ) : !data?.results?.length ? (
+            <>
+              <div className="mt-8 flex flex-col items-center justify-center">
+                <h2 className="text-2xl font-semibold">No properties found</h2>
+                <p className="text-muted-foreground">
+                  Try adjusting your search filters to find more properties.
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              {data.results.map((property) => (
+                <PropertyListCard key={property.propertyId} data={property} />
+              ))}
+
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={Number(filters.page) || 0}
+                  totalPages={totalPages}
+                  totalItems={data.total}
+                  pageSize={Number(filters.pageSize) || 10}
+                />
+              )}
+            </>
+          )}
         </div>
-        <div className="w-full hidden lg:block">
+
+        <div className="hidden xl:block">
           <Image
             src={"/add1.jpg"}
             width={500}

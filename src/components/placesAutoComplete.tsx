@@ -7,6 +7,7 @@ import type React from "react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { X, Loader2, Search } from "lucide-react";
+import { cn } from "@/utils/utils";
 
 interface PlacesAutocompleteProps {
   value: string;
@@ -130,7 +131,7 @@ export default function PlacesAutocomplete({
           value={searchInput}
           onChange={handleInputChange}
           onKeyDown={onKeyPress}
-          className={`ps-10 ${className}`}
+          className={cn("ps-10", className)}
           // disabled={isLoading}
           aria-label="Location input"
         />
