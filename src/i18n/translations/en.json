@@ -31,7 +31,8 @@
     "amenities": "Amenities",
     "propertyDetails": "Property details",
     "furnishing": "Furnishing",
-    "keywordSearch": "Keyword Search"
+    "keywordSearch": "Keyword Search",
+    "moreAvailableInSameArea": "More Available in same area"
   },
   "button": {
     "next": "Next",

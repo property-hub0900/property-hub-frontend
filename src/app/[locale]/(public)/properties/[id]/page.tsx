@@ -16,6 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { Loader } from "@/components/loader";
 
 import { propertyServices } from "@/services/public/properties";
+import { SimilarProperties } from "@/components/property/similar-properties";
 
 export default function PropertyPage() {
   const params = useParams<{ id: string }>();
@@ -30,21 +31,6 @@ export default function PropertyPage() {
     queryKey: ["property", params.id],
     queryFn: () => propertyServices.getPropertyById(params.id),
   });
-
-  // Fetch similar properties
-  // const { data: similarProperties = [] } = useQuery({
-  //     queryKey: ["similarProperties", params.id],
-  //     queryFn: async () => {
-  //         try {
-  //             const response = await propertyService.getSimilarProperties(params.id)
-  //             return response || []
-  //         } catch (error) {
-  //             console.log("Failed to fetch similar properties:", error)
-  //             return []
-  //         }
-  //     },
-  //     enabled: !!property,
-  // })
 
   if (isLoading) {
     return (
@@ -71,45 +57,49 @@ export default function PropertyPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 min-h-screen">
-      <PropertyGallery
-        images={property.PropertyImages}
-        title={property.title}
-      />
+    <>
+      <div className="container mx-auto pt-8 min-h-screen">
+        <PropertyGallery
+          images={property.PropertyImages}
+          title={property.title}
+        />
 
-      <PropertyHeader
-        price={property.price}
-        bedrooms={property.bedrooms}
-        bathrooms={property.bathrooms}
-        propertySize={property.propertySize}
-      />
+        <PropertyHeader
+          price={property.price}
+          bedrooms={property.bedrooms}
+          bathrooms={property.bathrooms}
+          propertySize={property.propertySize}
+        />
 
-      <Separator className="my-6" />
+        <Separator className="my-6" />
 
-      <div className="flex gap-8">
-        <div className="grow">
-          <h4 className="font-bold uppercase mb-4">{property.title}</h4>
-          <PropertyDescription description={property.description} />
+        <div className="flex flex-col gap-4 xl:gap-8 xl:flex-row ">
+          <div className="grow">
+            <h4 className="font-bold uppercase mb-4">{property.title}</h4>
+            <PropertyDescription description={property.description} />
 
-          <Separator className="my-6" />
+            <Separator className="my-6" />
 
-          <PropertyDetailFeatures property={property} />
+            <PropertyDetailFeatures property={property} />
 
-          <Separator className="my-6" />
+            <Separator className="my-6" />
 
-          <PropertyAmenities amenities={property?.PropertyAmenities ?? []} />
+            <PropertyAmenities amenities={property?.PropertyAmenities ?? []} />
+
+            <Separator className="my-6 xl:hidden" />
+          </div>
+
+          <div className="w-full md:max-w-[550px] mx-auto shrink-0 xl:max-w-[350px]">
+            <AgentCard
+              postedByStaff={property.postedByStaff}
+              company={property.company}
+            />
+          </div>
         </div>
-
-        <div className="w-[350px] shrink-0">
-          <AgentCard
-            postedByStaff={property.postedByStaff}
-            company={property.company}
-          />
-        </div>
+        <Separator className="my-6" />
       </div>
 
-      {/* Uncomment to enable similar properties */}
-      {/* <SimilarProperties properties={similarProperties} t={t} /> */}
-    </div>
+      <SimilarProperties />
+    </>
   );
 }

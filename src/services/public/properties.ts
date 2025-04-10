@@ -16,7 +16,11 @@ export const propertyServices = {
     return apiClient.get(`/properties/${id}`);
   },
 
-  getSimilarProperties: async (id: string) => {
-    return apiClient.get(`/properties/${id}/similar`);
+  getLandingLatestProperties(): Promise<IPropertyResponse> {
+    return apiClient.get(`/properties?status=published&page=0&pageSize=10`);
+  },
+
+  getSimilarProperties(): Promise<IPropertyResponse> {
+    return apiClient.get(`/properties?status=published&page=0&pageSize=10`);
   },
 };

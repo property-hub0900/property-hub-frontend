@@ -18,18 +18,14 @@ import { propertyServices } from "@/services/public/properties";
 export default function LatestPropertiesSection() {
   const t = useTranslations();
 
-  const { data: latestProperties, isLoading } = useQuery({
+  const { data: latestProperties } = useQuery({
     queryKey: ["properties"],
-    queryFn: () =>
-      propertyServices.fetchProperties({
-        page: "0",
-        pageSize: "10",
-      }),
+    queryFn: () => propertyServices.getLandingLatestProperties(),
   });
 
   return (
     <section className="py-12 md:py-16 w-full overflow-hidden ">
-      <div className="ps-5 lg:ps-24">
+      <div className="ps-5 md:ps-10 xl:ps-24">
         <div className="flex flex-col md:flex-row md:items-center gap-1 justify-between mb-3 md:mb-8 pe-5 lg:pe-24">
           <h2 className="">{t("title.discoverTheLatestProperties")}</h2>
           <Link

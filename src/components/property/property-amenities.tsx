@@ -11,7 +11,7 @@ export function PropertyAmenities({
   const t = useTranslations();
 
   return (
-    <div className="mb-8">
+    <div className="">
       <h4 className="mb-5">{t("title.amenities")}</h4>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-y-4">
         {amenities.map((amenity) => (

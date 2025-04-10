@@ -37,7 +37,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
           <Image
             src={primaryImage.url}
             alt={title}
-            className="object-cover rounded-l-xl"
+            className="object-cover rounded-xl md:rounded-r-none "
             fill
             priority
           />

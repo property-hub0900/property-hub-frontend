@@ -17,7 +17,7 @@ import Image from "next/image";
 export default function PropertiesPage() {
   const searchParams = useSearchParams();
 
-  const [filters, setFilters] = useState<IPropertyFilters>({
+  const searchFilters = {
     searchQuery: searchParams.get("searchQuery") || undefined,
     propertyType: searchParams.get("propertyType") || undefined,
     purpose: searchParams.get("purpose") || undefined,
@@ -33,26 +33,12 @@ export default function PropertiesPage() {
     pageSize: searchParams.get("pageSize") || "10",
     sortBy: searchParams.get("sortBy") || undefined,
     address: searchParams.get("address") || undefined,
-  });
+  };
+
+  const [filters, setFilters] = useState<IPropertyFilters>(searchFilters);
 
   useEffect(() => {
-    setFilters({
-      searchQuery: searchParams.get("searchQuery") || undefined,
-      propertyType: searchParams.get("propertyType") || undefined,
-      purpose: searchParams.get("purpose") || undefined,
-      bedrooms: searchParams.get("bedrooms") || undefined,
-      bathrooms: searchParams.get("bathrooms") || undefined,
-      priceMin: searchParams.get("priceMin") || undefined,
-      priceMax: searchParams.get("priceMax") || undefined,
-      amenitiesIds: searchParams.get("amenitiesIds")?.split(",") || undefined,
-      furnishing: searchParams.get("furnishedType") || undefined,
-      minArea: searchParams.get("propertySizeMin") || undefined,
-      maxArea: searchParams.get("propertySizeMax") || undefined,
-      page: searchParams.get("page") || "0",
-      pageSize: searchParams.get("pageSize") || "10",
-      sortBy: searchParams.get("sortBy") || undefined,
-      address: searchParams.get("address") || undefined,
-    });
+    setFilters(searchFilters);
   }, [searchParams]);
 
   const { data, isLoading, error } = useQuery({
