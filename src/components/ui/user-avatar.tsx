@@ -86,7 +86,7 @@ export function UserAvatar({ src, firstName, lastName, size = "md", className = 
 
     return (
         <Avatar className={`${sizeClasses[size]} ${className}`}>
-            <AvatarImage src={src || ""} alt={`${firstName} ${lastName}`} />
+            {src ? <AvatarImage src={src} alt={`${firstName} ${lastName}`} /> : null}
             <AvatarFallback className={colorClass}>{initials}</AvatarFallback>
         </Avatar>
     )

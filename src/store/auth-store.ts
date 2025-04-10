@@ -180,13 +180,12 @@ export const useAuthStore = create<AuthState>()(
         return true;
       },
 
-      // Get the token if valid
+
       getToken: () => {
         const isAuth = get().checkAuth();
         return isAuth && get().user ? get()?.user?.token : (null as any);
       },
 
-      // Sync user data from API based on role
       syncUserData: async () => {
         try {
           const { user } = get();
@@ -195,13 +194,12 @@ export const useAuthStore = create<AuthState>()(
           let response;
           if (user.role === 'customer') {
             // response = await customerService.getMe();
-          } else if (user.role === 'agent') {
-            // For staff users (admin, agent, etc.)
+          } else {
             response = await companyService.getMe();
           }
 
           if (response) {
-            // Keep the original user properties plus token info
+
             const syncedUser = {
               ...user,
               // Add additional fields from response

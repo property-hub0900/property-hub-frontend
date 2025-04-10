@@ -19,6 +19,7 @@ export const staffFormSchema = z.object({
   biography: z.string().optional(),
   canPublishProperty: z.boolean().default(true),
   canFeatureProperty: z.boolean().default(false),
+  profilePhoto: z.string().optional().nullable(),
 });
 
 export type StaffFormData = z.infer<typeof staffFormSchema>;

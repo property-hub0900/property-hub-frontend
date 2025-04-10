@@ -14,8 +14,8 @@ import { companiesProperties } from "@/services/protected/properties";
 import { useAuthStore } from "@/store/auth-store";
 import { useQuery } from "@tanstack/react-query";
 export default function PropertiesListing() {
-  const { hasPermission } = useRBAC();
   const { user } = useAuthStore();
+  const { hasPermission } = useRBAC();
   const {
     data: dataCompaniesProperties,
     isLoading: isLoadingProperties,
