@@ -16,6 +16,7 @@ export const PERMISSIONS = {
     EDIT_PROPERTY: "edit:property",
     DELETE_PROPERTY: "delete:property",
     PUBLISH_PROPERTY: "publish:property",
+    FEATURE_PROPERTY: "feature:property",
 
     // User management
     MANAGE_USERS: "manage:users",
@@ -67,6 +68,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
         PERMISSIONS.EDIT_PROPERTY,
         PERMISSIONS.DELETE_PROPERTY,
         PERMISSIONS.PUBLISH_PROPERTY,
+        PERMISSIONS.FEATURE_PROPERTY,
         PERMISSIONS.VIEW_USERS,
         PERMISSIONS.CREATE_USER,
         PERMISSIONS.EDIT_USER,

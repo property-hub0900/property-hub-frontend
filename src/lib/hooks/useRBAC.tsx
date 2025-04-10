@@ -1,5 +1,6 @@
 import { useAuthStore } from "@/store/auth-store"
 import { type Permission, ROLE_PERMISSIONS, USER_ROLES, PERMISSIONS, ROUTE_PERMISSIONS, type UserRole } from "@/constants/rbac"
+import { useMemo } from "react"
 
 /**
  * Hook for role-based access control
@@ -8,9 +9,11 @@ import { type Permission, ROLE_PERMISSIONS, USER_ROLES, PERMISSIONS, ROUTE_PERMI
 export const useRBAC = () => {
     const { user, isAuthenticated } = useAuthStore()
 
-    // Get basic roles
-    const roles: UserRole[] =
-        user?.scope?.filter((role): role is UserRole => ["customer", "owner", "admin", "agent"].includes(role)) || []
+    // Memoize roles to avoid recalculating on every render
+    const roles: UserRole[] = useMemo(() => {
+        return user?.scope?.filter((role): role is UserRole =>
+            ["customer", "owner", "admin", "agent"].includes(role)) || []
+    }, [user?.scope]);
 
     // Check if user has a specific role
     const hasRole = (role: UserRole): boolean => {
@@ -27,9 +30,9 @@ export const useRBAC = () => {
         return requiredRoles.every((role) => hasRole(role))
     }
 
-    // Get all permissions for the user based on their roles and API data
-    const getAllPermissions = (): Permission[] => {
-        const permissions = new Set<Permission>()
+    // Memoize the permission list to avoid recalculation
+    const permissions = useMemo(() => {
+        const permissionsSet = new Set<Permission>()
 
         // Add static permissions from constants
         roles.forEach((role) => {
@@ -40,7 +43,7 @@ export const useRBAC = () => {
 
             if (role in ROLE_PERMISSIONS) {
                 ROLE_PERMISSIONS[role].forEach((permission) => {
-                    permissions.add(permission)
+                    permissionsSet.add(permission)
                 })
             }
         })
@@ -51,33 +54,30 @@ export const useRBAC = () => {
 
             // Map API permissions to our Permission type
             if (staffPermission.canAddProperty) {
-                permissions.add(PERMISSIONS.CREATE_PROPERTY);
+                permissionsSet.add(PERMISSIONS.CREATE_PROPERTY);
             }
 
             if (staffPermission.canPublishProperty) {
-
-                permissions.add(PERMISSIONS.PUBLISH_PROPERTY);
+                permissionsSet.add(PERMISSIONS.PUBLISH_PROPERTY);
             }
+
             if (staffPermission.canFeatureProperty) {
                 // Add a corresponding permission if it exists
-                permissions.add("feature:property" as Permission);
+                permissionsSet.add(PERMISSIONS.FEATURE_PROPERTY);
             }
         }
 
-        return Array.from(permissions)
-    }
+        return Array.from(permissionsSet);
+    }, [roles, user?.isOwner, user?.staffPermissions]);
 
     // Check if user has a specific permission
     const hasPermission = (permission: Permission): boolean => {
         if (!isAuthenticated) return false
-        return getAllPermissions().includes(permission)
+        return permissions.includes(permission)
     }
 
     // Check if user has permission for a specific route
     const hasRoutePermission = (routePath: string): boolean => {
-
-        // if (!isAuthenticated) return false
-
         // Normalize the route path (remove locale prefix)
         const normalizedPath = routePath.replace(/^\/[a-z]{2}\//, "/")
 
@@ -93,6 +93,7 @@ export const useRBAC = () => {
 
     return {
         roles,
+        permissions, // Expose permissions for debugging if needed
         isAuthenticated,
         hasRole,
         hasAnyRole,

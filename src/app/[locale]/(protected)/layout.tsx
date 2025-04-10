@@ -6,10 +6,14 @@ import { DashboardHeader } from "@/components/dashboard/header"
 import { ProtectedRoute } from "@/components/rbac/protected-route"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { useAuth } from "@/lib/hooks/useAuth"
+import { useAuthRefresh } from "@/lib/hooks/useAuthRefresh"
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { user } = useAuth()
   const [sidebarOpen, setSidebarOpen] = useState(true)
+
+  // Use the auth refresh hook - this will automatically refresh user data
+  useAuthRefresh()
 
   // Load sidebar state from localStorage on component mount
   useEffect(() => {

@@ -694,7 +694,7 @@ export default function PropertyForm(
                 </FormItem>
               )}
             /> */}
-            <FormField
+            {hasPermission(PERMISSIONS.FEATURE_PROPERTY) && <FormField
               control={form.control}
               name="featured"
               render={({ field }) => (
@@ -710,7 +710,7 @@ export default function PropertyForm(
                   </FormControl>
                 </FormItem>
               )}
-            />
+            />}
           </form>
         </Form>
       </div>
