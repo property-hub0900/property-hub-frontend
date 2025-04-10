@@ -189,6 +189,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
     },
   ]
 
+
   // Select the appropriate navigation items based on user type
   const navItems: any = userType === "company" ? filteredCompanyNavItems : filteredCustomerNavItems
 

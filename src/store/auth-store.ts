@@ -194,8 +194,8 @@ export const useAuthStore = create<AuthState>()(
 
           let response;
           if (user.role === 'customer') {
-            response = await customerService.getMe();
-          } else {
+            // response = await customerService.getMe();
+          } else if (user.role === 'agent') {
             // For staff users (admin, agent, etc.)
             response = await companyService.getMe();
           }

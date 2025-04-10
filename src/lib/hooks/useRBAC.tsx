@@ -73,6 +73,7 @@ export const useRBAC = () => {
     // Check if user has a specific permission
     const hasPermission = (permission: Permission): boolean => {
         if (!isAuthenticated) return false
+
         return permissions.includes(permission)
     }
 

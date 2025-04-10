@@ -7,23 +7,24 @@ import { COMPANY_PATHS } from "@/constants/paths";
 
 import MyPropertiesTable from "./components/myPropertiesTable";
 
-import { useQuery } from "@tanstack/react-query";
-import { companiesProperties } from "@/services/protected/properties";
 import { Loader } from "@/components/loader";
 import { PERMISSIONS } from "@/constants/rbac";
 import { useRBAC } from "@/lib/hooks/useRBAC";
-
+import { companiesProperties } from "@/services/protected/properties";
+import { useAuthStore } from "@/store/auth-store";
+import { useQuery } from "@tanstack/react-query";
 export default function PropertiesListing() {
+  const { hasPermission } = useRBAC();
+  const { user } = useAuthStore();
   const {
     data: dataCompaniesProperties,
     isLoading: isLoadingProperties,
     isFetching: isFetchingProperties,
   } = useQuery({
     queryKey: ["companiesPropertiesSelf"],
-    queryFn: () => companiesProperties("self"),
+    queryFn: () => companiesProperties(user?.isOwner || (user && user?.scope && user?.scope[0] === "admin") ? "" : "self"),
   });
 
-  const { hasPermission } = useRBAC();
 
   return (
     <>
