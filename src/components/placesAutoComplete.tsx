@@ -77,8 +77,6 @@ export default function PlacesAutocomplete({
     );
     autocompleteRef.current = autocompleteInstance;
 
-    console.log("Initializing autocomplete...");
-
     autocompleteInstance.addListener("place_changed", () => {
       const place = autocompleteInstance.getPlace();
       if (place.formatted_address) {
@@ -88,8 +86,6 @@ export default function PlacesAutocomplete({
         console.log("Place selected:", place.formatted_address);
       }
     });
-
-    console.log("Autocomplete instance created.");
   }, [onChange]);
 
   // Use custom hook to load Google Maps API

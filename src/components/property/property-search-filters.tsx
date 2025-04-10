@@ -22,14 +22,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
-import {
-  Bookmark,
-  ChevronDown,
-  Filter,
-  icons,
-  Save,
-  SlidersHorizontal,
-} from "lucide-react";
+import { Bookmark, ChevronDown, SlidersHorizontal } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import {
@@ -45,6 +38,7 @@ import { IPropertyFilters } from "@/types/public/properties";
 import { useTranslations } from "next-intl";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { USER_ROLES } from "@/constants/rbac";
 
 const BEDROOM_OPTIONS = ["1", "2", "3", "4", "5", "6", "7", "7+"];
 const BATHROOM_OPTIONS = ["1", "2", "3", "4", "5", "6", "7", "7+"];
@@ -70,7 +64,7 @@ export const PropertySearchFilters = () => {
   const initialFilters: IPropertyFilters = {
     address: searchParams.get("address") || "",
     searchQuery: searchParams.get("searchQuery") || "",
-    purpose: searchParams.get("purpose") || "",
+    purpose: searchParams.get("purpose") || t("form.propertyPurpose.label"),
     propertyType:
       searchParams.get("propertyType") || t("form.propertyType.label"),
     bedrooms: searchParams.get("bedrooms") || "",
@@ -99,7 +93,8 @@ export const PropertySearchFilters = () => {
         if (
           value &&
           (typeof value === "string" ? value.trim() : value.length > 0) &&
-          !(key === "propertyType" && value === t("form.propertyType.label"))
+          !(key === "propertyType" && value === t("form.propertyType.label")) &&
+          !(key === "purpose" && value === t("form.propertyPurpose.label"))
         ) {
           if (Array.isArray(value)) {
             params.set(key, value.join(","));
@@ -138,7 +133,8 @@ export const PropertySearchFilters = () => {
         if (
           value &&
           (typeof value === "string" ? value.trim() : value.length > 0) &&
-          !(key === "propertyType" && value === t("form.propertyType.label"))
+          !(key === "propertyType" && value === t("form.propertyType.label")) &&
+          !(key === "purpose" && value === t("form.propertyPurpose.label"))
         ) {
           if (Array.isArray(value)) {
             params.set(key, value.join(","));
@@ -173,8 +169,6 @@ export const PropertySearchFilters = () => {
       return { ...prev, [name]: newValues };
     });
   };
-
-  console.log("isMoreFiltersOpen", isMoreFiltersOpen);
 
   const clearAllFilters = useCallback(() => {
     const newFilters = {
@@ -226,6 +220,9 @@ export const PropertySearchFilters = () => {
               <SelectValue placeholder="Purpose" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value={t("form.propertyPurpose.label")}>
+                {t("form.propertyPurpose.label")}
+              </SelectItem>
               {PROPERTY_PURPOSE.map((purpose) => (
                 <SelectItem key={purpose} value={purpose}>
                   {purpose === "For Sale" ? t("button.buy") : t("button.rent")}
@@ -376,7 +373,7 @@ export const PropertySearchFilters = () => {
       </div>
       <div className="flex justify-between mb-10">
         <div>
-          {user?.role && user?.role !== "staff" && (
+          {user?.role && user?.role === USER_ROLES.CUSTOMER && (
             <Button type="button" variant="outlinePrimary">
               <Bookmark className="size-5" />
               {t("button.save")} {t("button.search")}

@@ -7,13 +7,28 @@ import { Heart, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyGalleryPopup } from "./property-gallery-popup";
 import { IPropertyImages } from "@/types/public/properties";
+import { useMutation } from "@tanstack/react-query";
+import { propertyServices } from "@/services/public/properties";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/utils/utils";
+import { useAuth } from "@/lib/hooks/useAuth";
+import { USER_ROLES } from "@/constants/rbac";
 
 interface PropertyGalleryProps {
+  propertyId: number;
   images: IPropertyImages[];
   title: string;
 }
 
-export function PropertyGallery({ images, title }: PropertyGalleryProps) {
+export function PropertyGallery({
+  propertyId,
+  images,
+  title,
+}: PropertyGalleryProps) {
+  const { user } = useAuth();
+
+  const [isFavorite, setIsFavorite] = useState(false);
+
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -25,6 +40,27 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
   const openPopup = (index: number) => {
     setActiveImageIndex(index);
     setIsPopupOpen(true);
+  };
+
+  const postFavoritesMutation = useMutation({
+    mutationKey: ["postFavorites"],
+    mutationFn: propertyServices.postFavorites,
+  });
+
+  const handleCustomerFavorites = async (type: "add" | "remove") => {
+    try {
+      const response = await postFavoritesMutation.mutateAsync({
+        type: type,
+        propertyId: propertyId,
+      });
+
+      setIsFavorite(!isFavorite);
+
+      toast.success(response.message);
+    } catch (error) {
+      setIsFavorite(!isFavorite);
+      toast.error(getErrorMessage(error));
+    }
   };
 
   return (
@@ -46,16 +82,23 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
               <Camera className="size-5"></Camera>
               <span className="">{images.length}</span>
             </div>
-            <Button
-              size="icon"
-              className="bg-white/90 hover:bg-primary text-muted-foreground hover:text-primary-foreground"
-              onClick={(e) => {
-                e.stopPropagation();
-                // Add favorite functionality here
-              }}
-            >
-              <Heart className="h-5 w-5" />
-            </Button>
+            {user?.role && user?.role === USER_ROLES.CUSTOMER && (
+              <Button
+                type="button"
+                size="icon"
+                className={`bg-white/90 hover:bg-primary text-muted-foreground hover:text-primary-foreground ${
+                  isFavorite
+                    ? "bg-primary text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+                    : ""
+                }`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCustomerFavorites(isFavorite ? "remove" : "add");
+                }}
+              >
+                <Heart className={`h-5 w-5`} />
+              </Button>
+            )}
           </div>
         </div>
         <div className="hidden md:grid grid-rows-2 gap-2">

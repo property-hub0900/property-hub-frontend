@@ -60,6 +60,7 @@ export default function PropertyPage() {
     <>
       <div className="container mx-auto pt-8 min-h-screen">
         <PropertyGallery
+          propertyId={property.propertyId}
           images={property.PropertyImages}
           title={property.title}
         />

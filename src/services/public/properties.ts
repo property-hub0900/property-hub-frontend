@@ -5,6 +5,7 @@ import {
   IPropertyFilters,
   IPropertyResponse,
 } from "@/types/public/properties";
+import { ICommonMessageResponse } from "@/types/common";
 
 export const propertyServices = {
   fetchProperties(filters: IPropertyFilters): Promise<IPropertyResponse> {
@@ -22,5 +23,11 @@ export const propertyServices = {
 
   getSimilarProperties(): Promise<IPropertyResponse> {
     return apiClient.get(`/properties?status=published&page=0&pageSize=10`);
+  },
+  postFavorites(payloads: {
+    type: "add" | "remove";
+    propertyId: number;
+  }): Promise<ICommonMessageResponse> {
+    return apiClient.post(`/customers/favorites`, payloads);
   },
 };

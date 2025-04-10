@@ -25,9 +25,12 @@ import { Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { formatAmountToQAR } from "@/utils/utils";
+import { formatAmountToQAR, getErrorMessage } from "@/utils/utils";
 import { PUBLIC_ROUTES } from "@/constants/paths";
 import { useTranslations } from "next-intl";
+import { USER_ROLES } from "@/constants/rbac";
+import { useMutation } from "@tanstack/react-query";
+import { propertyServices } from "@/services/public/properties";
 
 export const PropertyListCard = ({ data }: { data: IProperty }) => {
   const t = useTranslations();
@@ -46,13 +49,35 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
     postedByStaff,
   } = data;
 
-  const [favorite, setFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
   const { user } = useAuth();
 
   const images = PropertyImages.map((img) => img.url);
   const daysAgo = Math.floor(
     (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24)
   );
+
+  const postFavoritesMutation = useMutation({
+    mutationKey: ["postFavorites"],
+    mutationFn: propertyServices.postFavorites,
+  });
+
+  const handleCustomerFavorites = async (
+    type: "add" | "remove",
+    propertyId: number
+  ) => {
+    try {
+      const response = await postFavoritesMutation.mutateAsync({
+        type: type,
+        propertyId: propertyId,
+      });
+      setIsFavorite(!isFavorite);
+      toast.success(response.message);
+    } catch (error) {
+      setIsFavorite(!isFavorite);
+      toast.error(getErrorMessage(error));
+    }
+  };
 
   return (
     <Card className="overflow-hidden flex flex-col md:flex-row">
@@ -110,7 +135,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
           </div>
 
           <div className="mt-4">
-            <h2 className="text-base font-medium">{title}</h2>
+            <h2 className="text-base font-medium capitalize">{title}</h2>
             <p className="mt-1 text-base font-light flex gap-1">
               <MapPin className="h-4 w-4 mt-1" />
               {address}
@@ -160,20 +185,25 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
               {t("button.whatsApp")}
             </Button>
           </Link>
-          {user?.role && user?.role !== "staff" && (
+          {user?.role && user?.role === USER_ROLES.CUSTOMER && (
             <Button
               variant="outlinePrimary"
               size="icon"
-              onClick={() => {
-                setFavorite(!favorite);
-                toast.success(
-                  favorite ? "Removed from favorites" : "Added to favorites"
-                );
-              }}
+              className={`${
+                isFavorite
+                  ? "bg-primary text-primary-foreground hover:!bg-primary-foreground hover:!text-primary hover:[&>svg]:stroke-primary"
+                  : ""
+              }`}
+              onClick={() =>
+                handleCustomerFavorites(
+                  isFavorite ? "remove" : "add",
+                  data.propertyId
+                )
+              }
             >
               <Heart
                 className="h-4 w-4"
-                fill={favorite ? "currentColor" : "none"}
+                // fill={isFavorite ? "currentColor" : "none"}
               />
             </Button>
           )}
