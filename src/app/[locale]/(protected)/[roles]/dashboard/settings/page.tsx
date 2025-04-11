@@ -10,13 +10,17 @@ import { Loader } from "@/components/loader";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/utils";
 import { Button } from "@/components/ui/button";
-
+import { useAuthStore } from "@/store/auth-store";
+import { PERMISSIONS } from "@/constants/rbac";
+import { useRBAC } from "@/lib/hooks/useRBAC";
 export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("personal-details");
   const t = useTranslations();
+  const { user } = useAuthStore();
+  const { hasPermission } = useRBAC()
 
   // Refs to access form methods from child components
   const personalFormRef = useRef<any>(null);
@@ -66,9 +70,9 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <Loader isLoading={isLoading} />
 
-      <h1 className="text-2xl font-bold">
+      {hasPermission(PERMISSIONS.EDIT_COMPANY) && (<h1 className="text-2xl font-bold">
         {t("title.companySettings") || "Company Settings"}
-      </h1>
+      </h1>)}
 
       <Tabs
         defaultValue="personal-details"
@@ -79,9 +83,9 @@ export default function SettingsPage() {
           <TabsTrigger value="personal-details">
             {t("tabs.personalDetails") || "Personal Details"}
           </TabsTrigger>
-          <TabsTrigger value="company-details">
+          {hasPermission(PERMISSIONS.EDIT_COMPANY) && <TabsTrigger value="company-details">
             {t("tabs.companyDetails") || "Company Details"}
-          </TabsTrigger>
+          </TabsTrigger>}
         </TabsList>
 
         <TabsContent
@@ -112,7 +116,10 @@ export default function SettingsPage() {
         >
           {t("button.cancel") || "Cancel"}
         </Button>
-        <Button onClick={handleSave} disabled={isLoading || isSaving}>
+        <Button
+          onClick={handleSave}
+          disabled={personalFormRef.current?.isDirty?.() || companyFormRef.current?.isDirty?.()}
+        >
           {isSaving ? "Saving..." : t("button.save") || "Save"}
         </Button>
       </div>

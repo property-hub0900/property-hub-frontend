@@ -32,6 +32,16 @@ import {
 import { useAuth } from "@/lib/hooks/useAuth";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+// Import the Tooltip components at the top with the other imports
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+// Import RBAC hook and permissions
+import { useRBAC } from "@/lib/hooks/useRBAC";
+import { PERMISSIONS } from "@/constants/rbac";
 
 interface SidebarProps {
   userType?: "company" | "customer";
@@ -43,6 +53,8 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   const { logOut } = useAuth();
   const [isMobile, setIsMobile] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  // Use RBAC hook
+  const { hasPermission, hasRoutePermission } = useRBAC();
 
   // Determine if the screen size is mobile or tablet
   useEffect(() => {
@@ -94,7 +106,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
     );
   };
 
-  // Company navigation items
+  // Company navigation items with RBAC permissions
   const companyNavItems = [
     {
       title: "Dashboard",
@@ -133,6 +145,12 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
     },
   ];
 
+  // Filter navigation items based on route permissions
+  const filteredCompanyNavItems = companyNavItems.filter((item) => {
+    // Check if user has permission to access this route
+    return hasRoutePermission(item.href);
+  });
+
   // Customer navigation items
   const customerNavItems = [
     {
@@ -154,9 +172,14 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       title: "Saved Properties",
       href: CUSTOMER_PATHS.savedProperties,
       icon: Heart,
-      badge: 5,
     },
   ];
+
+  // Filter navigation items based on route permissions
+  const filteredCustomerNavItems = customerNavItems.filter((item) => {
+    // Check if user has permission to access this route
+    return hasRoutePermission(item.href);
+  });
 
   // Footer items are the same for both user types
   const footerItems = [
@@ -169,11 +192,11 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
 
   // Select the appropriate navigation items based on user type
   const navItems: any =
-    userType === "company" ? companyNavItems : customerNavItems;
+    userType === "company" ? filteredCompanyNavItems : filteredCustomerNavItems;
 
   // Determine the dashboard base path for the logo link
-  // const dashboardBasePath =
-  //   userType === "company" ? "/company/dashboard" : "/customer/dashboard";
+  const dashboardBasePath =
+    userType === "company" ? "/company/dashboard" : "/customer/dashboard";
 
   return (
     <div
@@ -205,7 +228,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
           open ? "justify-start" : "justify-center"
         )}
       >
-        <Link href={"/"} className="flex items-center gap-2">
+        <Link href={dashboardBasePath} className="flex items-center gap-2">
           {open ? (
             <>
               <Image
@@ -218,7 +241,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
           ) : (
             <>
               <Image
-                src="/logo.svg"
+                src="/logo-without-text.svg"
                 alt="PropertyExplorer"
                 width={48}
                 height={48}
@@ -236,26 +259,23 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
             console.log(
               `Menu item ${item.title}: ${active ? "active" : "inactive"}`
             );
-            return (
-              <Link
-                key={index}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
-                  active
-                    ? "text-primary font-medium bg-primary/10"
-                    : "text-gray-500 hover:bg-gray-100",
-                  !open && "justify-center"
-                )}
-              >
-                <item.icon
+
+            // When sidebar is open, render Link without Tooltip
+            if (open) {
+              return (
+                <Link
+                  key={index}
+                  href={item.href}
                   className={cn(
-                    "h-5 w-5",
-                    !open && "h-6 w-6",
-                    active && "text-primary"
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
+                    active
+                      ? "text-primary font-medium bg-primary/10"
+                      : "text-gray-500 hover:bg-gray-100"
                   )}
-                />
-                {open && (
+                >
+                  <item.icon
+                    className={cn("h-5 w-5", active && "text-primary")}
+                  />
                   <div className="flex flex-1 items-center justify-between">
                     <span>{item.title}</span>
                     {item?.badge && (
@@ -264,13 +284,37 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                       </span>
                     )}
                   </div>
-                )}
-                {!open && item?.badge && (
-                  <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-white">
-                    {item?.badge}
-                  </span>
-                )}
-              </Link>
+                </Link>
+              );
+            }
+
+            // When sidebar is collapsed, render Link with Tooltip
+            return (
+              <TooltipProvider key={index} delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        "flex items-center justify-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
+                        active
+                          ? "text-primary font-medium bg-primary/10"
+                          : "text-gray-500 hover:bg-gray-100"
+                      )}
+                    >
+                      <item.icon
+                        className={cn("h-6 w-6", active && "text-primary")}
+                      />
+                      {item?.badge && (
+                        <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-white">
+                          {item?.badge}
+                        </span>
+                      )}
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">{item.title}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             );
           })}
         </nav>
@@ -281,27 +325,50 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
         <nav className="grid gap-1">
           {footerItems.map((item, index) => {
             const active = isActive(item.href);
-            return (
-              <Link
-                key={index}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
-                  active
-                    ? "text-primary font-medium bg-primary/10"
-                    : "text-gray-500 hover:bg-gray-100",
-                  !open && "justify-center"
-                )}
-              >
-                <item.icon
+
+            // When sidebar is open, render Link without Tooltip
+            if (open) {
+              return (
+                <Link
+                  key={index}
+                  href={item.href}
                   className={cn(
-                    "h-5 w-5",
-                    !open && "h-6 w-6",
-                    active && "text-primary"
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
+                    active
+                      ? "text-primary font-medium bg-primary/10"
+                      : "text-gray-500 hover:bg-gray-100"
                   )}
-                />
-                {open && <span>{item.title}</span>}
-              </Link>
+                >
+                  <item.icon
+                    className={cn("h-5 w-5", active && "text-primary")}
+                  />
+                  <span>{item.title}</span>
+                </Link>
+              );
+            }
+
+            // When sidebar is collapsed, render Link with Tooltip
+            return (
+              <TooltipProvider key={index} delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        "flex items-center justify-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
+                        active
+                          ? "text-primary font-medium bg-primary/10"
+                          : "text-gray-500 hover:bg-gray-100"
+                      )}
+                    >
+                      <item.icon
+                        className={cn("h-6 w-6", active && "text-primary")}
+                      />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">{item.title}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             );
           })}
         </nav>
@@ -309,17 +376,31 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
 
       {/* Logout button */}
       <div className={cn("border-t p-4", !open && "flex justify-center")}>
-        <Button
-          variant="ghost"
-          onClick={logOut}
-          className={cn(
-            "w-full justify-start text-red-500 hover:bg-red-50 hover:text-red-600",
-            !open && "justify-center px-0"
-          )}
-        >
-          <LogOut className="mr-2 h-5 w-5" />
-          {open && <span>Log out</span>}
-        </Button>
+        {open ? (
+          <Button
+            variant="ghost"
+            onClick={logOut}
+            className="w-full justify-start text-red-500 hover:bg-red-50 hover:text-red-600"
+          >
+            <LogOut className="mr-2 h-5 w-5" />
+            <span>Log out</span>
+          </Button>
+        ) : (
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  onClick={logOut}
+                  className="justify-center px-0 text-red-500 hover:bg-red-50 hover:text-red-600"
+                >
+                  <LogOut className="h-5 w-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">Log out</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
     </div>
   );

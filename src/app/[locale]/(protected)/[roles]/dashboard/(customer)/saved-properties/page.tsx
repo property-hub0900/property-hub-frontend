@@ -3,7 +3,7 @@
 export default function Page() {
   return (
     <div>
-      <h1>Saved Properties</h1>
+      <h2>Saved Properties</h2>
     </div>
   );
 }

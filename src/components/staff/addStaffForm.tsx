@@ -304,7 +304,7 @@ export function AddStaffForm({
                       htmlFor="edit-canPublishProperty"
                       className="text-xm"
                     >
-                      {t("form.permissions.requiresApproval") ||
+                      {t("form.permissions.canPublishProperty") ||
                         "Requires Approval for Listings"}
                     </label>
                     <FormControl>

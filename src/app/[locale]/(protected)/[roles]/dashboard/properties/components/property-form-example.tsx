@@ -44,7 +44,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 interface PropertyFormProps {
   initialImages?: PropertyImage[];
-  onSubmit: (images: PropertyImage[]) => Promise<void>;
+  onSubmit: any;
   isLoading?: boolean;
 }
 
