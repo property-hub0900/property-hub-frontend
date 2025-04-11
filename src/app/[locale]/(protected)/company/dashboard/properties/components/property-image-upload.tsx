@@ -28,7 +28,7 @@ export type PropertyImage = {
 
 interface PropertyImageUploadProps {
   value: PropertyImage[];
-  onChange: (images: PropertyImage[]) => void;
+  onChange: any;
   maxFiles?: number;
   maxFileSize?: string; // in MB, e.g., "5MB"
   disabled?: boolean;
@@ -168,7 +168,7 @@ export const PropertyImageUpload = ({
             load,
             error,
             progress,
-            abort
+            // abort
           ) => {
             // Double-check if we've reached the maximum number of files
             if (value.length >= maxFiles) {
@@ -176,7 +176,7 @@ export const PropertyImageUpload = ({
               if (onMaxFilesError) {
                 onMaxFilesError();
               }
-              return { abort: () => {} };
+              return { abort: () => { } };
             }
 
             const fileName = `${Date.now()}-${file.name}`;

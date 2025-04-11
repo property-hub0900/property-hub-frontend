@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { userAuthStaffRegisterSchema } from "@/schema/auth";
+import { userAuthStaffRegisterSchema } from "@/schema/public/auth";
 
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
@@ -132,7 +132,7 @@ export default function CompanyRegisterPage() {
                   <Input
                     placeholder={t("form.phoneNumber.label")}
                     {...field}
-                    //value={field.value.toString()}
+                  //value={field.value.toString()}
                   />
                 </FormControl>
                 <FormMessage />

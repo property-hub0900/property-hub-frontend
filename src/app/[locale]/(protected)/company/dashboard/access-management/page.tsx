@@ -189,7 +189,7 @@ export default function AccessManagementPage() {
     if (!selectedStaff) return;
     updateStaffMutation.mutate({
       id: selectedStaff.staffId,
-      ...data,
+      ...data as any,
     });
   };
 

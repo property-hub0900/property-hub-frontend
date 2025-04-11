@@ -52,7 +52,7 @@ const archivedPropertiesData = [
 ]
 
 export default function PointsPage() {
-    const t = useTranslations()
+    // const t = useTranslations()
     const [pointsHistorySorting, setPointsHistorySorting] = useState<SortingState>([])
     const [archivedSorting, setArchivedSorting] = useState<SortingState>([])
 
