@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/lib/hooks/useAuth";
-import { IProperty } from "@/types/client/properties";
+import { IProperty } from "@/types/public/properties";
 import {
   Heart,
   Mail,
@@ -25,10 +25,16 @@ import { Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { formatAmountToQAR } from "@/utils/utils";
+import { formatAmountToQAR, getErrorMessage } from "@/utils/utils";
 import { PUBLIC_ROUTES } from "@/constants/paths";
+import { useTranslations } from "next-intl";
+import { USER_ROLES } from "@/constants/rbac";
+import { useMutation } from "@tanstack/react-query";
+import { propertyServices } from "@/services/public/properties";
 
 export const PropertyListCard = ({ data }: { data: IProperty }) => {
+  const t = useTranslations();
+
   const {
     title,
     propertyType,
@@ -43,7 +49,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
     postedByStaff,
   } = data;
 
-  const [favorite, setFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
   const { user } = useAuth();
 
   const images = PropertyImages.map((img) => img.url);
@@ -51,36 +57,60 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
     (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24)
   );
 
-  return (
-    <Card className="overflow-hidden flex flex-col lg:flex-row">
-      <div className="relative  lg:w-[300px]">
-        {images.length > 0 && (
-          <Swiper
-            modules={[Pagination, Navigation]}
-            pagination={{ clickable: true }}
-            navigation
-            className="h-full"
-          >
-            {images.map((image, index) => (
-              <SwiperSlide key={index}>
-                <div className="relative h-full w-full select-none">
-                  <Image
-                    src={image}
-                    width={500}
-                    height={300}
-                    alt={`${propertyType} property`}
-                    className="object-cover h-full"
-                  />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        )}
+  const postFavoritesMutation = useMutation({
+    mutationKey: ["postFavorites"],
+    mutationFn: propertyServices.postFavorites,
+  });
 
-        <div className="absolute z-10 bottom-2 left-2 flex items-center text-primary gap-1 bg-white/90 rounded-sm px-2 py-1">
-          <Camera className="size-4"></Camera>
-          <span className="text-sm">{PropertyImages.length}</span>
-        </div>
+  const handleCustomerFavorites = async (
+    type: "add" | "remove",
+    propertyId: number
+  ) => {
+    try {
+      const response = await postFavoritesMutation.mutateAsync({
+        type: type,
+        propertyId: propertyId,
+      });
+      setIsFavorite(!isFavorite);
+      toast.success(response.message);
+    } catch (error) {
+      setIsFavorite(!isFavorite);
+      toast.error(getErrorMessage(error));
+    }
+  };
+
+  return (
+    <Card className="overflow-hidden flex flex-col md:flex-row">
+      <div className="relative  md:w-[300px]">
+        <Link href={`${PUBLIC_ROUTES.properties}/${data.propertyId}`}>
+          {images.length > 0 && (
+            <Swiper
+              modules={[Pagination, Navigation]}
+              pagination={{ clickable: true }}
+              navigation
+              className="h-full"
+            >
+              {images.map((image, index) => (
+                <SwiperSlide key={index}>
+                  <div className="relative h-full w-full select-none">
+                    <Image
+                      src={image}
+                      width={500}
+                      height={300}
+                      alt={`${propertyType} property`}
+                      className="object-cover h-full"
+                    />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
+
+          <div className="absolute z-10 bottom-2 left-2 flex items-center text-primary gap-1 bg-white/90 rounded-sm px-2 py-1">
+            <Camera className="size-4"></Camera>
+            <span className="text-sm">{PropertyImages.length}</span>
+          </div>
+        </Link>
       </div>
       <CardContent className="p-4 grow">
         <Link href={`${PUBLIC_ROUTES.properties}/${data.propertyId}`}>
@@ -99,15 +129,15 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
                     alt="Featured"
                   />
                 </span>
-                <span className="text-primary">Featured</span>
+                <span className="text-primary">{t("text.featured")}</span>
               </div>
             )}
           </div>
 
           <div className="mt-4">
-            <h2 className="text-base font-medium">{title}</h2>
-            <p className="mt-1 text-base font-light flex items-center gap-1">
-              <MapPin className="h-4 w-4" />
+            <h2 className="text-base font-medium capitalize">{title}</h2>
+            <p className="mt-1 text-base font-light flex gap-1">
+              <MapPin className="h-4 w-4 mt-1" />
               {address}
             </p>
           </div>
@@ -126,7 +156,9 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             </div>
             <div className="flex items-center gap-1">
               <Ruler className="h-4 w-4" />
-              <span>{propertySize.toLocaleString()} Sqf</span>
+              <span>
+                {propertySize.toLocaleString()} {t("text.sqft")}
+              </span>
             </div>
           </div>
         </Link>
@@ -135,13 +167,13 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
           <Link href={`tel:${postedByStaff.phoneNumber}`}>
             <Button variant="outlinePrimary" size="sm">
               <Phone className="h-4 w-4" />
-              Call
+              {t("button.call")}
             </Button>
           </Link>
           <Link href={`mailto:${postedByStaff?.user.email}`}>
             <Button variant="outlinePrimary" size="sm">
               <Mail className="h-4 w-4" />
-              Email
+              {t("button.email")}
             </Button>
           </Link>
           <Link
@@ -150,23 +182,28 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
           >
             <Button variant="outlinePrimary" size="sm">
               <MessageCircle className="h-4 w-4" />
-              WhatsApp
+              {t("button.whatsApp")}
             </Button>
           </Link>
-          {user?.role && user?.role !== "staff" && (
+          {user?.role && user?.role === USER_ROLES.CUSTOMER && (
             <Button
               variant="outlinePrimary"
               size="icon"
-              onClick={() => {
-                setFavorite(!favorite);
-                toast.success(
-                  favorite ? "Removed from favorites" : "Added to favorites"
-                );
-              }}
+              className={`${
+                isFavorite
+                  ? "bg-primary text-primary-foreground hover:!bg-primary-foreground hover:!text-primary hover:[&>svg]:stroke-primary"
+                  : ""
+              }`}
+              onClick={() =>
+                handleCustomerFavorites(
+                  isFavorite ? "remove" : "add",
+                  data.propertyId
+                )
+              }
             >
               <Heart
                 className="h-4 w-4"
-                fill={favorite ? "currentColor" : "none"}
+                // fill={isFavorite ? "currentColor" : "none"}
               />
             </Button>
           )}
@@ -187,7 +224,10 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             )}
           </div>
           <span className="text-sm text-muted-foreground">
-            Listed {daysAgo} days ago
+            {/* Listed {daysAgo} days ago */}
+            {t.rich("text.listedDaysAgo", {
+              highlight: () => <span>{daysAgo}</span>,
+            })}
           </span>
         </div>
       </CardContent>

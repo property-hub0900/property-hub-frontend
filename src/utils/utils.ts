@@ -59,7 +59,7 @@ export const formatAmountToQAR = (amount: number): string => {
 // Helper function to build query string from filters
 export function buildQueryString(params: Record<string, any>): string {
   const filtered = Object.entries(params)
-    .filter(([_, value]) => value !== undefined && value !== null)
+    .filter(([, value]) => value !== undefined && value !== null)
     .map(
       ([key, value]) =>
         `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
@@ -68,6 +68,7 @@ export function buildQueryString(params: Record<string, any>): string {
 
   return filtered;
 }
+
 export function formatDate(dateString: string): string {
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",

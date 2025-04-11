@@ -45,15 +45,14 @@ export const PROPERTY_STATUSES = {
   closed: "closed",
   archived: "archived",
 } as const;
-// export type TPropertyStatuses =
-//   (typeof PROPERTY_STATUSES)[keyof typeof PROPERTY_STATUSES][number];
+
 export type TPropertyStatuses = keyof typeof PROPERTY_STATUSES;
 
-// export const PROPERTY_STATUSES = [
-//   "draft",
-//   "published",
-//   "pending",
-//   "closed",
-//   "archived",
-// ] as const;
-// export type TPropertyStatuses = (typeof PROPERTY_STATUSES)[number];
+export const PROPERTY_SORT_BY = {
+  featured: "featured",
+  newest: "newest",
+  priceLow: "priceLow",
+  priceHigh: "priceHigh",
+} as const;
+
+export type TPropertySortBy = keyof typeof PROPERTY_SORT_BY;

@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { authService } from "@/services/auth";
+import { authService } from "@/services/public/auth";
 import { Loader } from "../loader";
 
 // Define OTP length as a constant for easy modification

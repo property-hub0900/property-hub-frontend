@@ -1,24 +1,19 @@
-import Footer from "@/components/footer";
-import Header from "@/components/header";
 import { Toaster } from "@/components/ui/sonner";
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { inter } from "@/lib/fonts";
+import { ReactQueryProvider } from "@/providers/reactQueryProvider";
+import { getDirection } from "@/utils/rtl";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import Script from "next/script";
 import type React from "react";
 import "../globals.css";
-
-import { inter } from "@/lib/fonts";
-
-import { ReactQueryProvider } from "@/providers/reactQueryProvider";
-import Script from "next/script";
-import { getDirection } from "@/utils/rtl";
 
 export async function generateMetadata(): Promise<Metadata> {
   const messages: any = await getMessages();
   //const locale = await getLocale();
-  // 
-  // 
+  //
+  //
 
   return {
     title: messages.seo.title,
@@ -54,18 +49,14 @@ export default async function RootLayout({
           messages={messages}
           timeZone="UTC"
         >
-          <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID || ""}>
-            <ReactQueryProvider>
-              <Script
-                src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
-                strategy="beforeInteractive"
-              />
-              <Header />
-              <Toaster closeButton richColors theme="light" />
-              {children}
-              <Footer />
-            </ReactQueryProvider>
-          </GoogleOAuthProvider>
+          <ReactQueryProvider>
+            <Script
+              src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+              strategy="beforeInteractive"
+            />
+            <Toaster closeButton richColors theme="light" />
+            {children}
+          </ReactQueryProvider>
         </NextIntlClientProvider>
       </body>
     </html>

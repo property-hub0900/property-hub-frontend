@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/ui/user-avatar";
-import { IPostedByStaff, IPropertyCompany } from "@/types/client/properties";
+import { IPostedByStaff, IPropertyCompany } from "@/types/public/properties";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,7 +28,7 @@ export function AgentCard({ postedByStaff, company }: AgentCardProps) {
         <h5 className="font-semibold text-center">{agentName}</h5>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-3">
+      <div className="grid grid-cols-2 gap-3 mb-3">
         <Link href={`tel:${postedByStaff.phoneNumber}`}>
           <Button className="w-full">{t("button.call")}</Button>
         </Link>
@@ -36,7 +36,9 @@ export function AgentCard({ postedByStaff, company }: AgentCardProps) {
           target="_blank"
           href={`https://wa.me/${postedByStaff.phoneNumber}`}
         >
-          <Button variant="outline">{t("button.whatsApp")}</Button>
+          <Button className="w-full" variant="outline">
+            {t("button.whatsApp")}
+          </Button>
         </Link>
         <Link
           className="col-span-2"

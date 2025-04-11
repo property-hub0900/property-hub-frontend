@@ -4,9 +4,9 @@ import { useTranslations } from "next-intl";
 export default function CtaSection() {
   const t = useTranslations();
   return (
-    <section className="bg-primary py-14 w-full">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-        <h3 className="text-primary-foreground mb-4 md:mb-0">
+    <section className="w-full bg-primary py-8 md:py-14 ">
+      <div className="container mx-auto flex flex-col justify-between items-center gap-3 md:flex-row">
+        <h3 className="text-primary-foreground text-center md:text-left">
           {t("title.lookingToAdvertiseAProperty")}
         </h3>
         <Button

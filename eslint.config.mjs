@@ -27,7 +27,7 @@ const eslintConfig = [
     rules: {
       // Turn off specific rules that might cause errors
       "@typescript-eslint/no-explicit-any": "off", // Already in your config
-      "no-unused-vars": "warn", // Downgrade to warning
+      "no-unused-vars": "ignore", // Downgrade to warning
       "@typescript-eslint/no-unused-vars": "warn", // Downgrade to warning
       "react/no-unescaped-entities": "off", // Ignore React entity errors
 

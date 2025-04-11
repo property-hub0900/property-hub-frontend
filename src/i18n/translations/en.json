@@ -16,6 +16,7 @@
     "editUser": "Edit User",
     "editAgent": "Edit Agent",
     "deleteAgent": "Delete Agent",
+    "deletePhoto": "Delete Photo",
     "permissionsAccess": "Permissions & Access",
     "permissions": "Permissions",
     "addNewProperty": "Add New Property",
@@ -29,7 +30,10 @@
     "investIn": "Invest In",
     "qatarBloomingRealEstateMarket": "Qatar's Blooming <highlight>Real Estate</highlight> Market",
     "amenities": "Amenities",
-    "propertyDetails": "Property details"
+    "propertyDetails": "Property details",
+    "furnishing": "Furnishing",
+    "keywordSearch": "Keyword Search",
+    "moreAvailableInSameArea": "More Available in same area"
   },
   "button": {
     "next": "Next",
@@ -67,7 +71,15 @@
     "amenities": "Amenities",
     "call": "Call",
     "whatsApp": "WhatsApp",
-    "email": "Email"
+    "email": "Email",
+    "loginRegister": "Login/Register",
+    "bed": "Bed",
+    "bath": "Bath",
+    "bedsAndBaths": "Beds & Baths",
+    "moreFilters": "More Filters",
+    "showResults": "Show Results",
+    "reset": "Reset",
+    "find": "Find"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -80,14 +92,22 @@
     "forgotPasswordText": "Enter your email address to reset your password",
     "enterNewPassword": "Enter your new password",
     "loadingStaff": "Loading staff members...",
-    "deleteConfirmation": "Are you sure you want to delete this agent? This action cannot be undone.",
+    "deleteAgentConfirmation": "Are you sure you want to delete this agent? This action cannot be undone.",
+    "deletePhotoConfirmation": "Are you sure you want to delete this photo? This action cannot be undone.",
     "loadStaffFailed": "Failed to load staff members",
     "staffDeleted": "Staff member deleted successfully",
     "deleteFailed": "Failed to delete staff member",
     "hidePriceFromListing": "Hide price from the listing",
     "wantToFeatureProperty": "Want to feature this property?",
     "monthly": "Monthly",
-    "sqft": "Sqft"
+    "sqft": "Sqft",
+    "featured": "Featured",
+    "listedDaysAgo": "Listed <highlight></highlight> days ago",
+    "any": "Any",
+    "min": "Min",
+    "max": "Max",
+    "minArea": "Min Area",
+    "maxArea": "Max Area"
   },
   "table": {
     "notFound": "No Record found...",
@@ -353,7 +373,7 @@
     },
     "permissions": {
       "canPostListings": "Can Post Listings",
-      "requiresApproval": "Requires Approval for Listings",
+      "canPublishProperty": "Can Publish Property",
       "canFeatureProperty": "Can Feature Property"
     },
     "propertyStatuses": {
@@ -409,6 +429,16 @@
     },
     "businessNumber": {
       "label": "Business Number"
+    },
+    "sortBy": {
+      "label": "Sort By",
+      "placeholder": "",
+      "options": {
+        "featured": "Featured",
+        "newest": "Newest",
+        "priceLow": "Price (Low)",
+        "priceHigh": "Price (High)"
+      }
     }
   },
   "seo": {
@@ -458,10 +488,14 @@
     "similarProperties": "More available in same area",
     "propertyDescription": "Paragon Properties is proud to present this fully renovated {bedrooms}-bedroom {type} in {location}. Set within a serene gated community, this spacious home features modern architecture, high-quality finishes, and a thoughtful layout that maximizes natural light and privacy. Perfect for families or professionals, the property provides a peaceful retreat while being close to key amenities."
   },
+  "passwordResetSuccess": "Password reset successful",
+  "passwordResetFailed": "Password reset failed",
+  "passwordResetEmailSent": "Password reset email sent",
   "welcome": "Welcome to Property",
   "welcomeCompany": "Welcome to Property Business",
   "loginSubtitle": "Enter your email & password to continue as Customer",
   "loginSubtitleCompany": "Enter your email & password to continue as Agent",
+  "POST": "POST",
   "email": "Email Address",
   "password": "Password",
   "showPassword": "Show Password",

@@ -3,7 +3,7 @@
 import { type ReactNode, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useRBAC } from "@/lib/hooks/useRBAC"
-import type { Permission, UserRole } from "@/types/rbac"
+import type { Permission, UserRole } from "@/constants/rbac"
 
 interface ProtectedRouteProps {
     children: ReactNode
@@ -43,7 +43,6 @@ export const ProtectedRoute = ({
             const hasPermissions = requireAll
                 ? requiredPermissions.every((permission) => hasPermission(permission))
                 : requiredPermissions.some((permission) => hasPermission(permission))
-
             if (!hasPermissions) {
                 router.push(redirectTo)
                 return

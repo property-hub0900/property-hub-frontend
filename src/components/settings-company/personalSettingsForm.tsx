@@ -27,11 +27,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { companyService } from "@/services/company";
+import { companyService } from "@/services/protected/company";
 import { Loader } from "@/components/loader";
 import { getErrorMessage } from "@/utils/utils";
 import { uploadImageToFirebase } from "@/lib/firebaseUtil";
 import { UserAvatar } from "../ui/user-avatar";
+import { DeleteDialog } from "../delete-dailog";
+// import { DeleteDialog } from "./delete-dailog";
 
 const personalSettingsSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -59,6 +61,8 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
       userData.profilePhoto || null
     );
     const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
 
     const form = useForm<PersonalSettingsFormValues>({
       resolver: zodResolver(personalSettingsSchema),
@@ -147,10 +151,14 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
     };
 
     const handleRemoveImage = () => {
-      setProfileImage(null)
-      setProfileImageFile(null)
-      form.setValue("profilePhoto", "", { shouldDirty: true })
-    }
+      setIsDeleting(true);
+      setProfileImage(null);
+      setProfileImageFile(null);
+      form.setValue("profilePhoto", "", { shouldDirty: true });
+      setIsDeleting(false);
+      setIsDeleteDialogOpen(false);
+      return;
+    };
 
     return (
       <div className="p-14">
@@ -201,7 +209,7 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleRemoveImage}
+                onClick={() => setIsDeleteDialogOpen(true)}
                 className="text-destructive hover:text-destructive"
                 disabled={isUploading}
               >
@@ -368,6 +376,15 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
             />
           </form>
         </Form>
+        {/* make dialogue */}
+        <DeleteDialog
+          title={t("title.deletePhoto") || "Delete Photo"}
+          deleteConfirmation={t("text.deletePhotoConfirmation") || "Are you sure you want to delete this agent? This action cannot be undone."}
+          isOpen={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          onDelete={handleRemoveImage}
+          isSubmitting={isSubmitting}
+        />
       </div>
     );
   }

@@ -4,7 +4,7 @@ export const COMPANY_PATHS = {
   dashboard: "/company/dashboard",
   accessManagement: "/company/dashboard/access-management",
   agents: "/company/dashboard/agents",
-  walletPoints: "/company/dashboard/wallet-points",
+  walletPoints: "/company/dashboard/points",
   subscriptionPlans: "/company/dashboard/subscription-plans",
   topUp: "/company/dashboard/top-up",
   settings: "/company/dashboard/settings",
@@ -23,4 +23,6 @@ export const PUBLIC_ROUTES = {
   properties: "/properties",
   help: "/help",
   contact: "/contact",
+  login: "/customer/login",
+  register: "/customer/register",
 };

@@ -7,6 +7,7 @@ import type React from "react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Input } from "@/components/ui/input";
 import { X, Loader2, Search } from "lucide-react";
+import { cn } from "@/utils/utils";
 
 interface PlacesAutocompleteProps {
   value: string;
@@ -76,8 +77,6 @@ export default function PlacesAutocomplete({
     );
     autocompleteRef.current = autocompleteInstance;
 
-    console.log("Initializing autocomplete...");
-
     autocompleteInstance.addListener("place_changed", () => {
       const place = autocompleteInstance.getPlace();
       if (place.formatted_address) {
@@ -87,8 +86,6 @@ export default function PlacesAutocomplete({
         console.log("Place selected:", place.formatted_address);
       }
     });
-
-    console.log("Autocomplete instance created.");
   }, [onChange]);
 
   // Use custom hook to load Google Maps API
@@ -130,7 +127,7 @@ export default function PlacesAutocomplete({
           value={searchInput}
           onChange={handleInputChange}
           onKeyDown={onKeyPress}
-          className={`ps-10 ${className}`}
+          className={cn("ps-10", className)}
           // disabled={isLoading}
           aria-label="Location input"
         />
