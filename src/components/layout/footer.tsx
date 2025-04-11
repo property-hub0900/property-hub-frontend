@@ -6,10 +6,12 @@ import type React from "react";
 export default function Footer() {
   const t = useTranslations("landingPage");
 
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="bg-primary text-primary-foreground pt-16 pb-8 w-full">
+    <footer className="bg-primary text-primary-foreground w-full pt-12 pb-4 md:pt-16 md:pb-8">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-16 mb-12">
+        <div className="flex flex-col md:grid grid-cols-1 md:grid-cols-5 gap-8 mb-5 md:gap-16 md:mb-12">
           <FooterBrand t={t} />
           <FooterLinks
             title={t("footer.product")}
@@ -42,9 +44,9 @@ export default function Footer() {
           />
         </div>
 
-        <div className="border-t border-primary-foreground/40 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <div className="border-t border-primary-foreground/40 pt-5 flex flex-col md:flex-row justify-between items-center md:pt-8">
           <p className=" text-sm">
-            © 2025 PropertyExplorer. {t("footer.allRightsReserved")}
+            © {currentYear} PropertyExplorer. {t("footer.allRightsReserved")}
           </p>
           <p className="text-primary-foreground hover:underline text-sm mt-2 md:mt-0">
             <a href="#" className="hover:text-primary-foreground">

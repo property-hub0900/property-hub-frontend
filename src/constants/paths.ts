@@ -23,4 +23,6 @@ export const PUBLIC_ROUTES = {
   properties: "/properties",
   help: "/help",
   contact: "/contact",
+  login: "/customer/login",
+  register: "/customer/register",
 };

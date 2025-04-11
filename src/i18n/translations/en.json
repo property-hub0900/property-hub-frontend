@@ -30,7 +30,10 @@
     "investIn": "Invest In",
     "qatarBloomingRealEstateMarket": "Qatar's Blooming <highlight>Real Estate</highlight> Market",
     "amenities": "Amenities",
-    "propertyDetails": "Property details"
+    "propertyDetails": "Property details",
+    "furnishing": "Furnishing",
+    "keywordSearch": "Keyword Search",
+    "moreAvailableInSameArea": "More Available in same area"
   },
   "button": {
     "next": "Next",
@@ -69,7 +72,14 @@
     "call": "Call",
     "whatsApp": "WhatsApp",
     "email": "Email",
-    "POST": "POST"
+    "loginRegister": "Login/Register",
+    "bed": "Bed",
+    "bath": "Bath",
+    "bedsAndBaths": "Beds & Baths",
+    "moreFilters": "More Filters",
+    "showResults": "Show Results",
+    "reset": "Reset",
+    "find": "Find"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -90,7 +100,14 @@
     "hidePriceFromListing": "Hide price from the listing",
     "wantToFeatureProperty": "Want to feature this property?",
     "monthly": "Monthly",
-    "sqft": "Sqft"
+    "sqft": "Sqft",
+    "featured": "Featured",
+    "listedDaysAgo": "Listed <highlight></highlight> days ago",
+    "any": "Any",
+    "min": "Min",
+    "max": "Max",
+    "minArea": "Min Area",
+    "maxArea": "Max Area"
   },
   "table": {
     "notFound": "No Record found...",
@@ -412,6 +429,16 @@
     },
     "businessNumber": {
       "label": "Business Number"
+    },
+    "sortBy": {
+      "label": "Sort By",
+      "placeholder": "",
+      "options": {
+        "featured": "Featured",
+        "newest": "Newest",
+        "priceLow": "Price (Low)",
+        "priceHigh": "Price (High)"
+      }
     }
   },
   "seo": {
@@ -468,6 +495,7 @@
   "welcomeCompany": "Welcome to Property Business",
   "loginSubtitle": "Enter your email & password to continue as Customer",
   "loginSubtitleCompany": "Enter your email & password to continue as Agent",
+  "POST": "POST",
   "email": "Email Address",
   "password": "Password",
   "showPassword": "Show Password",

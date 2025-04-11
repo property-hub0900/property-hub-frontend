@@ -318,7 +318,9 @@ export default function PropertyForm(
                   <FormLabel>
                     {t("form.propertySize.label")}
                     <span>*</span>
-                    <small className="text-muted-foreground"> (Sqft)</small>
+                    <small className="text-muted-foreground">
+                      ({t("text.sqft")})
+                    </small>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} />

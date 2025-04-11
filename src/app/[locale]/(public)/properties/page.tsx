@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 export default function PropertiesPage() {
   const searchParams = useSearchParams();
 
-  const [filters, setFilters] = useState<IPropertyFilters>({
+  const searchFilters = {
     searchQuery: searchParams.get("searchQuery") || undefined,
     propertyType: searchParams.get("propertyType") || undefined,
     purpose: searchParams.get("purpose") || undefined,
@@ -32,26 +32,12 @@ export default function PropertiesPage() {
     pageSize: searchParams.get("pageSize") || "10",
     sortBy: searchParams.get("sortBy") || undefined,
     address: searchParams.get("address") || undefined,
-  });
+  };
+
+  const [filters, setFilters] = useState<IPropertyFilters>(searchFilters);
 
   useEffect(() => {
-    setFilters({
-      searchQuery: searchParams.get("searchQuery") || undefined,
-      propertyType: searchParams.get("propertyType") || undefined,
-      purpose: searchParams.get("purpose") || undefined,
-      bedrooms: searchParams.get("bedrooms") || undefined,
-      bathrooms: searchParams.get("bathrooms") || undefined,
-      priceMin: searchParams.get("priceMin") || undefined,
-      priceMax: searchParams.get("priceMax") || undefined,
-      amenitiesIds: searchParams.get("amenitiesIds")?.split(",") || undefined,
-      furnishing: searchParams.get("furnishedType") || undefined,
-      minArea: searchParams.get("propertySizeMin") || undefined,
-      maxArea: searchParams.get("propertySizeMax") || undefined,
-      page: searchParams.get("page") || "0",
-      pageSize: searchParams.get("pageSize") || "10",
-      sortBy: searchParams.get("sortBy") || undefined,
-      address: searchParams.get("address") || undefined,
-    });
+    setFilters(searchFilters);
   }, [searchParams]);
 
   const { data, isLoading, error } = useQuery({
@@ -64,10 +50,10 @@ export default function PropertiesPage() {
     : 0;
 
   return (
-    <div className="container mx-auto py-14">
+    <div className="container mx-auto py-8 md:py-12">
       <PropertySearchFilters />
-      <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr_200px] gap-3">
-        <div className="w-full hidden lg:block">
+      <div className="grid grid-cols-1 xl:grid-cols-[200px_1fr_200px] gap-3">
+        <div className="hidden xl:block">
           <Image
             src={"/add1.jpg"}
             width={500}
@@ -76,54 +62,52 @@ export default function PropertiesPage() {
             className="w-full h-auto"
           />
         </div>
-        <div>
-          <div className="space-y-5">
-            {isLoading ? (
-              <>
-                {[...Array(6)].map((_, i) => (
-                  <Skeleton key={i} className="h-72 w-full" />
-                ))}
-              </>
-            ) : error ? (
-              <>
-                <Alert variant="destructive" className="mt-8">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>
-                    Failed to fetch properties. Please try again later.
-                  </AlertDescription>
-                </Alert>
-              </>
-            ) : !data?.results?.length ? (
-              <>
-                <div className="mt-8 flex flex-col items-center justify-center">
-                  <h2 className="text-2xl font-semibold">
-                    No properties found
-                  </h2>
-                  <p className="text-muted-foreground">
-                    Try adjusting your search filters to find more properties.
-                  </p>
-                </div>
-              </>
-            ) : (
-              <>
-                {data.results.map((property) => (
-                  <PropertyListCard key={property.propertyId} data={property} />
-                ))}
 
-                {totalPages > 1 && (
-                  <Pagination
-                    currentPage={Number(filters.page) || 0}
-                    totalPages={totalPages}
-                    totalItems={data.total}
-                    pageSize={Number(filters.pageSize) || 10}
-                  />
-                )}
-              </>
-            )}
-          </div>
+        <div className="space-y-5">
+          {isLoading ? (
+            <>
+              {[...Array(6)].map((_, i) => (
+                <Skeleton key={i} className="h-72 w-full" />
+              ))}
+            </>
+          ) : error ? (
+            <>
+              <Alert variant="destructive" className="mt-8">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  Failed to fetch properties. Please try again later.
+                </AlertDescription>
+              </Alert>
+            </>
+          ) : !data?.results?.length ? (
+            <>
+              <div className="mt-8 flex flex-col items-center justify-center">
+                <h2 className="text-2xl font-semibold">No properties found</h2>
+                <p className="text-muted-foreground">
+                  Try adjusting your search filters to find more properties.
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              {data.results.map((property) => (
+                <PropertyListCard key={property.propertyId} data={property} />
+              ))}
+
+              {totalPages > 1 && (
+                <Pagination
+                  currentPage={Number(filters.page) || 0}
+                  totalPages={totalPages}
+                  totalItems={data.total}
+                  pageSize={Number(filters.pageSize) || 10}
+                />
+              )}
+            </>
+          )}
         </div>
-        <div className="w-full hidden lg:block">
+
+        <div className="hidden xl:block">
           <Image
             src={"/add1.jpg"}
             width={500}

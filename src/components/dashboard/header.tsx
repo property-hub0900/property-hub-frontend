@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
-import { Bell, Search } from 'lucide-react'
-import { UserMenu } from "../userMenu"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { Bell, Search } from "lucide-react";
+import { UserMenu } from "../layout/userMenu";
 
 export function DashboardHeader() {
   const { toggleSidebar } = useSidebar();
