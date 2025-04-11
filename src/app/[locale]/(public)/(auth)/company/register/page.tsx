@@ -132,7 +132,7 @@ export default function CompanyRegisterPage() {
                   <Input
                     placeholder={t("form.phoneNumber.label")}
                     {...field}
-                    //value={field.value.toString()}
+                  //value={field.value.toString()}
                   />
                 </FormControl>
                 <FormMessage />

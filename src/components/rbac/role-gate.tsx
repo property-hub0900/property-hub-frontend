@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useRBAC } from "@/lib/hooks/useRBAC";
-import type { Permission, UserRole } from "@/types/rbac";
+import type { Permission, UserRole } from "@/constants/rbac";
 
 interface RoleGateProps {
   children: ReactNode;

@@ -12,6 +12,8 @@ import { Loader } from "@/components/loader";
 import { createProperty } from "@/services/protected/properties";
 import PropertyForm from "../components/propertyForm";
 import { COMPANY_PATHS } from "@/constants/paths";
+import { ProtectedRoute } from "@/components/rbac/protected-route";
+import { PERMISSIONS } from "@/constants/rbac";
 
 export default function CreatePropertyPage() {
   const t = useTranslations();
@@ -33,7 +35,11 @@ export default function CreatePropertyPage() {
   }
 
   return (
-    <>
+    <ProtectedRoute
+      requiredPermissions={[PERMISSIONS.CREATE_PROPERTY]}
+      redirectTo={COMPANY_PATHS.properties}
+      loadingComponent={<Loader isLoading={true} />}
+    >
       <Loader isLoading={createPropertyMutation.isPending}></Loader>
       <div className="flex justify-between items-center mb-5">
         <h3>{t("title.addNewProperty")}</h3>
@@ -43,6 +49,6 @@ export default function CreatePropertyPage() {
           <PropertyForm mode="create" onSubmit={onSubmit as any}></PropertyForm>
         </div>
       </div>
-    </>
+    </ProtectedRoute>
   );
 }

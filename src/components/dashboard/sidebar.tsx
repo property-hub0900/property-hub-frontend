@@ -29,6 +29,9 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 // Import the Tooltip components at the top with the other imports
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+// Import RBAC hook and permissions
+import { useRBAC } from "@/lib/hooks/useRBAC"
+import { PERMISSIONS } from "@/constants/rbac"
 
 interface SidebarProps {
   userType?: "company" | "customer"
@@ -40,6 +43,8 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   const { logOut } = useAuth()
   const [isMobile, setIsMobile] = useState(false)
   const [isInitialized, setIsInitialized] = useState(false)
+  // Use RBAC hook
+  const { hasPermission, hasRoutePermission } = useRBAC()
 
   // Determine if the screen size is mobile or tablet
   useEffect(() => {
@@ -83,7 +88,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
     return normalizedPathname === path || normalizedPathname.startsWith(`${path}/`)
   }
 
-  // Company navigation items
+  // Company navigation items with RBAC permissions
   const companyNavItems = [
     {
       title: "Dashboard",
@@ -122,6 +127,12 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
     },
   ]
 
+  // Filter navigation items based on route permissions
+  const filteredCompanyNavItems = companyNavItems.filter(item => {
+    // Check if user has permission to access this route
+    return hasRoutePermission(item.href);
+  })
+
   // Customer navigation items
   const customerNavItems = [
     {
@@ -158,6 +169,12 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
     },
   ]
 
+  // Filter customer navigation items based on route permissions
+  const filteredCustomerNavItems = customerNavItems.filter(item => {
+    // Check if user has permission to access this route
+    return hasRoutePermission(item.href);
+  })
+
   // Footer items are the same for both user types
   const footerItems = [
     {
@@ -172,8 +189,9 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
     },
   ]
 
+
   // Select the appropriate navigation items based on user type
-  const navItems: any = userType === "company" ? companyNavItems : customerNavItems
+  const navItems: any = userType === "company" ? filteredCompanyNavItems : filteredCustomerNavItems
 
   // Determine the dashboard base path for the logo link
   const dashboardBasePath = userType === "company" ? "/company/dashboard" : "/customer/dashboard"

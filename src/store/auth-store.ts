@@ -5,6 +5,8 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
+import { companyService } from "@/services/protected/company";
+import { customerService } from "@/services/protected/customer";
 
 // Define the user data structure
 interface UserData {
@@ -17,6 +19,22 @@ interface UserData {
   scope?: string[];
   loginMethod: string;
   imageUrl?: string;
+  // Add staff-specific properties
+  isOwner?: boolean;
+  staffPermissions?: Array<{
+    permissionId: number;
+    staffId: number;
+    canAddProperty: boolean;
+    canPublishProperty: boolean;
+    canFeatureProperty: boolean;
+  }>;
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  staffId?: number;
+  companyId?: number;
+  profilePhoto?: string | null;
+  company?: any;
 }
 
 // Define the auth store state
@@ -29,6 +47,7 @@ interface AuthState {
   logout: () => void;
   checkAuth: () => boolean;
   getToken: () => string | null;
+  syncUserData: () => Promise<void>;
 }
 
 // Custom storage for Zustand that uses both cookies and localStorage
@@ -98,6 +117,15 @@ export const useAuthStore = create<AuthState>()(
               scope: userData.scope || [],
               loginMethod: decoded.loginWith,
               imageUrl: userData.imageUrl,
+              isOwner: userData.isOwner,
+              staffPermissions: userData.staffPermissions,
+              firstName: userData.firstName,
+              lastName: userData.lastName,
+              phoneNumber: userData.phoneNumber,
+              staffId: userData.staffId,
+              companyId: userData.companyId,
+              profilePhoto: userData.profilePhoto,
+              company: userData.company,
             };
 
             // Set the state
@@ -113,6 +141,9 @@ export const useAuthStore = create<AuthState>()(
               sameSite: "lax",
               expires: 7, // 7 days expiry
             });
+
+            // Sync user data from API
+            get().syncUserData();
           } else {
             console.error("No token provided in userData");
           }
@@ -142,7 +173,6 @@ export const useAuthStore = create<AuthState>()(
         const now = Math.floor(Date.now() / 1000); // Current time in seconds
         if (now >= user.tokenExpiry) {
           // Token expired, logout
-
           get().logout();
           return false;
         }
@@ -150,10 +180,48 @@ export const useAuthStore = create<AuthState>()(
         return true;
       },
 
-      // Get the token if valid
+
       getToken: () => {
         const isAuth = get().checkAuth();
         return isAuth && get().user ? get()?.user?.token : (null as any);
+      },
+
+      syncUserData: async () => {
+        try {
+          const { user } = get();
+          if (!user) return;
+
+          let response;
+          if (user.role === 'customer') {
+            // response = await customerService.getMe();
+          } else {
+            response = await companyService.getMe();
+          }
+
+          if (response) {
+
+            const syncedUser = {
+              ...user,
+              // Add additional fields from response
+              firstName: response.firstName,
+              lastName: response.lastName,
+              phoneNumber: response.phoneNumber,
+              staffId: response.staffId,
+              companyId: response.companyId,
+              profilePhoto: response.profilePhoto,
+              isOwner: response.isOwner,
+              staffPermissions: response.staffPermissions,
+              company: response.company,
+              // Keep original auth properties
+              token: user.token,
+              tokenExpiry: user.tokenExpiry,
+            };
+
+            set({ user: syncedUser });
+          }
+        } catch (error) {
+          console.error("Failed to sync user data:", error);
+        }
       },
     }),
     {
@@ -169,6 +237,13 @@ export const useAuthStore = create<AuthState>()(
           if (error) {
             console.error("Error rehydrating auth store:", error);
           } else if (rehydratedState) {
+            // Sync user data if we have a user
+            if (rehydratedState.isAuthenticated && rehydratedState.user) {
+              // Need to use setTimeout to ensure the store is fully initialized
+              setTimeout(() => {
+                useAuthStore.getState().syncUserData();
+              }, 0);
+            }
           }
         };
       },

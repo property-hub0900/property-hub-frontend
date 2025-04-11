@@ -35,6 +35,7 @@ import {
 } from "@/constants/constants";
 import { COMPANY_PATHS } from "@/constants/paths";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { useRBAC } from "@/lib/hooks/useRBAC";
 import { createPropertySchema } from "@/schema/protected/properties";
 import { amenities } from "@/services/protected/properties";
 import { TCreatePropertySchema } from "@/types/protected/properties";
@@ -46,6 +47,8 @@ import { useEffect, useRef, useState } from "react";
 import { DefaultValues, useForm } from "react-hook-form";
 import PlacesAutocomplete from "../../../../../../../components/placesAutoComplete";
 import { IFilesUrlPayload, TImages, UploadImages } from "./uploadImages";
+import { PERMISSIONS } from "@/constants/rbac";
+
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
@@ -61,6 +64,7 @@ export default function PropertyForm(
   const t = useTranslations();
   const router = useRouter();
   const { user } = useAuth();
+  const { hasPermission } = useRBAC();
 
   const [filesUrls, setFilesUrls] = useState<IFilesUrlPayload>({ images: [] });
 
@@ -84,32 +88,32 @@ export default function PropertyForm(
       mode === "edit"
         ? defaultValues
         : {
-            title: "",
-            titleAr: "",
-            featured: false,
-            category: undefined,
-            price: 0,
-            propertyType: "",
-            purpose: undefined,
-            bedrooms: 0,
-            bathrooms: 0,
-            status: PROPERTY_STATUSES.draft,
-            furnishedType: "",
-            occupancy: undefined,
-            ownershipStatus: undefined,
-            referenceNo: "",
-            priceVisibilityFlag: false,
-            propertySize: "",
-            serviceCharges: "",
-            buildingFloors: 0,
-            floor: 0,
-            tenure: "",
-            views: "",
-            address: "",
-            amenities: [],
-            description: "",
-            PropertyImages: [],
-          },
+          title: "",
+          titleAr: "",
+          featured: false,
+          category: undefined,
+          price: 0,
+          propertyType: "",
+          purpose: undefined,
+          bedrooms: 0,
+          bathrooms: 0,
+          status: PROPERTY_STATUSES.draft,
+          furnishedType: "",
+          occupancy: undefined,
+          ownershipStatus: undefined,
+          referenceNo: "",
+          priceVisibilityFlag: false,
+          propertySize: "",
+          serviceCharges: "",
+          buildingFloors: 0,
+          floor: 0,
+          tenure: "",
+          views: "",
+          address: "",
+          amenities: [],
+          description: "",
+          PropertyImages: [],
+        },
   });
 
   const category = form.watch("category");
@@ -692,7 +696,7 @@ export default function PropertyForm(
                 </FormItem>
               )}
             /> */}
-            <FormField
+            {hasPermission(PERMISSIONS.FEATURE_PROPERTY) && <FormField
               control={form.control}
               name="featured"
               render={({ field }) => (
@@ -708,19 +712,17 @@ export default function PropertyForm(
                   </FormControl>
                 </FormItem>
               )}
-            />
+            />}
           </form>
         </Form>
       </div>
       <div className="col-span-2 gap-2 flex justify-end mt-6">
-        {(!defaultValues ||
-          defaultValues?.status === PROPERTY_STATUSES.draft) && (
+        {(!defaultValues || defaultValues?.status === PROPERTY_STATUSES.draft) && (
           <>
             <Button
               variant={"outline"}
               type="button"
               onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
-              className=""
             >
               {t("button.saveDraft")}
             </Button>
@@ -728,45 +730,47 @@ export default function PropertyForm(
             {(isOwner || isAdmin) && (
               <Button
                 type="button"
-                onClick={() =>
-                  handleSubmitWithStatus(PROPERTY_STATUSES.published)
-                }
-                className=""
+                onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.published)}
               >
                 {t("button.publish")}
               </Button>
             )}
-            {isAgent && (
-              <Button
-                type="button"
-                onClick={() =>
-                  handleSubmitWithStatus(PROPERTY_STATUSES.pending)
-                }
-                className=""
-              >
-                {t("button.requestForApproval")}
-              </Button>
+
+            {isAgent && hasPermission(PERMISSIONS.CREATE_PROPERTY) && (
+              <>
+                {hasPermission(PERMISSIONS.PUBLISH_PROPERTY) ? (
+                  <Button
+                    type="button"
+                    onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.published)}
+                  >
+                    {t("button.publish")}
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.pending)}
+                  >
+                    {t("button.requestForApproval")}
+                  </Button>
+                )}
+              </>
             )}
           </>
         )}
 
         {defaultValues?.status === PROPERTY_STATUSES.published && (
-          <>
-            <Button
-              type="button"
-              onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.closed)}
-              className=""
-            >
-              {t("button.close")}
-            </Button>
-          </>
+          <Button
+            type="button"
+            onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.closed)}
+          >
+            {t("button.close")}
+          </Button>
         )}
 
         {defaultValues?.status && mode === "edit" && (
           <Button
             type="button"
             onClick={() => handleSubmitWithStatus(`${defaultValues?.status}`)}
-            className=""
           >
             {t("button.update")}
           </Button>
@@ -776,7 +780,6 @@ export default function PropertyForm(
           variant={"secondary"}
           type="button"
           onClick={handleCancel}
-          className=""
         >
           {t("button.cancel")}
         </Button>

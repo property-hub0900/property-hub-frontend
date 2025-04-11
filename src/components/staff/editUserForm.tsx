@@ -28,6 +28,10 @@ import { staffFormSchema } from "@/schema/protected/company";
 import type { StaffMember } from "@/services/protected/company";
 import { useTranslations } from "next-intl";
 import { Separator } from "../ui/separator";
+import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
+import { uploadImageToFirebase } from "@/lib/firebaseUtil";
+import { DeleteDialog } from "../delete-dailog";
 
 interface EditUserFormProps {
   selectedStaff: StaffMember | null;
@@ -43,6 +47,12 @@ export function EditUserForm({
   isSubmitting,
 }: EditUserFormProps) {
   const [showPermissionsSection, setShowPermissionsSection] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | null>(
+    selectedStaff?.profilePhoto || null
+  );
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const t = useTranslations();
 
   const form = useForm<z.infer<typeof staffFormSchema>>({
@@ -59,6 +69,7 @@ export function EditUserForm({
       canPublishProperty: selectedStaff?.canPublishProperty ?? true,
       canFeatureProperty: selectedStaff?.canFeatureProperty ?? false,
       biography: selectedStaff?.biography || "",
+      profilePhoto: selectedStaff?.profilePhoto || null,
     },
   });
 
@@ -93,19 +104,76 @@ export function EditUserForm({
           false,
         // Use biography field if bio is not available
         biography: selectedStaff.biography || selectedStaff.biography || "",
+        profilePhoto: selectedStaff.profilePhoto || null,
       });
+      setProfileImage(selectedStaff.profilePhoto || null);
     }
   }, [selectedStaff, form]);
 
   // Watch role to determine if permissions section should be shown
   const role = form.watch("role");
   useEffect(() => {
-    setShowPermissionsSection(role !== "admin");
-  }, [role]);
+    if (selectedStaff?.isOwner) {
+      setShowPermissionsSection(false);
+    } else {
+      setShowPermissionsSection(role !== "admin");
+    }
+  }, [role, selectedStaff]);
+
+  const handleFormSubmit = async (data: z.infer<typeof staffFormSchema>) => {
+    try {
+      // If there's a new image file to upload
+      if (profileImageFile) {
+        setIsUploading(true);
+        try {
+          const downloadURL = await uploadImageToFirebase(profileImageFile);
+          data.profilePhoto = downloadURL;
+        } catch (error) {
+          console.error("Failed to upload profile image:", error);
+          toast.error("Failed to upload profile image");
+          setIsUploading(false);
+          return;
+        } finally {
+          setIsUploading(false);
+        }
+      } else if (profileImage === null) {
+        // If image was removed
+        data.profilePhoto = null;
+      }
+
+      // Call the original onSubmit function with updated data
+      onSubmit(data);
+
+      // Reset the file state after successful submission
+      setProfileImageFile(null);
+    } catch (error) {
+      console.error("Failed to process form:", error);
+      toast.error("An error occurred while processing your request");
+    }
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Store the file for later upload
+      setProfileImageFile(file);
+
+      // Create a temporary local URL for preview
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImage(imageUrl);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setProfileImage(null);
+    setProfileImageFile(null);
+    form.setValue("profilePhoto", null, { shouldDirty: true });
+    setIsDeleteDialogOpen(false);
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">
             {t("title.editUser") || "Edit User"}
@@ -119,7 +187,7 @@ export function EditUserForm({
             <div className="flex items-center gap-4 mb-6">
               <div className="relative">
                 <UserAvatar
-                  src={selectedStaff?.profilePhoto}
+                  src={profileImage}
                   firstName={selectedStaff?.firstName || ""}
                   lastName={selectedStaff?.lastName || ""}
                   size="lg"
@@ -128,9 +196,8 @@ export function EditUserForm({
               <div>
                 <p className="font-medium">
                   {selectedStaff
-                    ? `${selectedStaff.firstName || ""} ${
-                        selectedStaff.lastName || ""
-                      }`
+                    ? `${selectedStaff.firstName || ""} ${selectedStaff.lastName || ""
+                    }`
                     : ""}
                 </p>
                 <p className="text-sm text-gray-500">
@@ -138,34 +205,33 @@ export function EditUserForm({
                 </p>
               </div>
               <div className="ml-auto flex gap-2">
-                <Button type="button" variant="outline" size="sm">
-                  + {t("button.uploadPhoto") || "Upload Photo"}
-                </Button>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="text-red-500"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-trash-2"
+                <div className="relative">
+                  <Button type="button" variant="outline" size="sm" className="relative text-muted-foreground" disabled={isUploading}>
+                    + {isUploading
+                      ? "Uploading..."
+                      : t("button.uploadPhoto") || "Upload Photo"}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      onChange={handleImageUpload}
+                      disabled={isUploading}
+                    />
+                  </Button>
+                </div>
+
+                {profileImage && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsDeleteDialogOpen(true)}
+                    className="text-destructive hover:text-destructive"
+                    disabled={isUploading}
                   >
-                    <path d="M3 6h18" />
-                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                    <line x1="10" x2="10" y1="11" y2="17" />
-                    <line x1="14" x2="14" y1="11" y2="17" />
-                  </svg>
-                </Button>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -406,8 +472,8 @@ export function EditUserForm({
                       htmlFor="edit-canPublishProperty"
                       className="text-xm"
                     >
-                      {t("form.permissions.requiresApproval") ||
-                        "Requires Approval for Listings"}
+                      {t("form.permissions.canPublishProperty") ||
+                        "Can Publish Property"}
                     </label>
                     <FormControl>
                       <Switch
@@ -451,16 +517,25 @@ export function EditUserForm({
             type="button"
             variant="outline"
             onClick={onCancel}
-            disabled={isSubmitting}
+            disabled={isSubmitting || isUploading}
           >
             {t("button.cancel") || "Cancel"}
           </Button>
-          <Button type="submit" className="bg-primary" disabled={isSubmitting}>
-            {isSubmitting
+          <Button type="submit" className="bg-primary" disabled={isSubmitting || isUploading}>
+            {isSubmitting || isUploading
               ? t("button.updating") || "Updating..."
               : t("button.save") || "Save"}
           </Button>
         </div>
+
+        <DeleteDialog
+          title={t("title.deletePhoto") || "Delete Photo"}
+          deleteConfirmation={t("text.deletePhotoConfirmation") || "Are you sure you want to delete this photo? This action cannot be undone."}
+          isOpen={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          onDelete={handleRemoveImage}
+          isSubmitting={isSubmitting}
+        />
       </form>
     </Form>
   );

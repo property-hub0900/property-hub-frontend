@@ -57,7 +57,6 @@ export default function CompanyLoginPage() {
   const onSubmit = async (values: TUserAuthStaffLoginSchema) => {
     try {
       const response = await userAuthStaffLoginMutation.mutateAsync(values);
-
       useAuthStore.getState().login(response.data);
 
       router.push(pushUserAfterLogin);
