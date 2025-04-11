@@ -1,37 +1,36 @@
 "use client"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/utils/utils"
 import { Button } from "@/components/ui/button"
 import { useSidebar } from "@/components/ui/sidebar"
 import { COMPANY_PATHS, CUSTOMER_PATHS, PUBLIC_ROUTES } from "@/constants/paths"
+import { useAuth } from "@/lib/hooks/useAuth"
+import { cn } from "@/utils/utils"
 import {
   BarChart2,
-  Database,
-  Users,
-  Settings,
-  LogOut,
-  ChevronLeft,
-  ChevronRight,
-  User,
-  Wallet,
-  Package,
   Bell,
   Building,
+  ChevronLeft,
+  ChevronRight,
+  Database,
   Heart,
   HelpCircle,
-  MessageSquare,
-  Search,
   HomeIcon,
+  LogOut,
+  MessageSquare,
+  Package,
+  Search,
+  Settings,
+  Users,
+  Wallet
 } from "lucide-react"
-import { useAuth } from "@/lib/hooks/useAuth"
 import Image from "next/image"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 // Import the Tooltip components at the top with the other imports
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 // Import RBAC hook and permissions
 import { useRBAC } from "@/lib/hooks/useRBAC"
-import { PERMISSIONS } from "@/constants/rbac"
+import { useTranslations } from "next-intl"
 
 interface SidebarProps {
   userType?: "company" | "customer"
@@ -45,6 +44,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   const [isInitialized, setIsInitialized] = useState(false)
   // Use RBAC hook
   const { hasPermission, hasRoutePermission } = useRBAC()
+  const t = useTranslations()
 
   // Determine if the screen size is mobile or tablet
   useEffect(() => {
@@ -91,37 +91,37 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   // Company navigation items with RBAC permissions
   const companyNavItems = [
     {
-      title: "Dashboard",
+      title: t("sidebar.dashboard"),
       href: COMPANY_PATHS.dashboard,
       icon: BarChart2,
     },
     {
-      title: "Property Data",
+      title: t("sidebar.propertyData"),
       href: COMPANY_PATHS.properties,
       icon: Database,
     },
     {
-      title: "Access Management",
+      title: t("sidebar.accessManagement"),
       href: COMPANY_PATHS.accessManagement,
       icon: Users,
     },
     {
-      title: "Points",
+      title: t("sidebar.points"),
       href: COMPANY_PATHS.walletPoints,
       icon: Wallet,
     },
     {
-      title: "Subscription Plans",
+      title: t("sidebar.subscriptionPlans"),
       href: COMPANY_PATHS.subscriptionPlans,
       icon: Package,
     },
     {
-      title: "Top-Up",
+      title: t("sidebar.topUp"),
       href: COMPANY_PATHS.topUp,
       icon: Database,
     },
     {
-      title: "Settings",
+      title: t("sidebar.settings"),
       href: COMPANY_PATHS.settings,
       icon: Settings,
     },
@@ -136,34 +136,34 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   // Customer navigation items
   const customerNavItems = [
     {
-      title: "Home",
+      title: t("sidebar.home"),
       href: CUSTOMER_PATHS.dashboard,
       icon: HomeIcon,
     },
     {
-      title: "Search Properties",
+      title: t("sidebar.searchProperties"),
       href: CUSTOMER_PATHS.search,
       icon: Search,
     },
     {
-      title: "Saved Properties",
+      title: t("sidebar.savedProperties"),
       href: CUSTOMER_PATHS.saved,
       icon: Heart,
       badge: 5,
     },
     {
-      title: "Notifications",
+      title: t("sidebar.notifications"),
       href: CUSTOMER_PATHS.notifications,
       icon: Bell,
       badge: 2,
     },
     {
-      title: "My Inquiries",
+      title: t("sidebar.myInquiries"),
       href: CUSTOMER_PATHS.inquiries,
       icon: Building,
     },
     {
-      title: "Settings",
+      title: t("sidebar.settings"),
       href: CUSTOMER_PATHS.settings,
       icon: Settings,
     },
@@ -178,12 +178,12 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   // Footer items are the same for both user types
   const footerItems = [
     {
-      title: "Help Centre",
+      title: t("sidebar.helpCenter"),
       href: PUBLIC_ROUTES.help,
       icon: HelpCircle,
     },
     {
-      title: "Contact us",
+      title: t("sidebar.contactUs"),
       href: PUBLIC_ROUTES.contact,
       icon: MessageSquare,
     },
@@ -344,7 +344,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
             className="w-full justify-start text-red-500 hover:bg-red-50 hover:text-red-600"
           >
             <LogOut className="mr-2 h-5 w-5" />
-            <span>Log out</span>
+            <span>{t("userMenu.logout")}</span>
           </Button>
         ) : (
           <TooltipProvider delayDuration={0}>
@@ -358,7 +358,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                   <LogOut className="h-5 w-5" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="right">Log out</TooltipContent>
+              <TooltipContent side="right">{t("userMenu.logout")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         )}

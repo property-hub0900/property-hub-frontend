@@ -29,12 +29,12 @@ export function AgentCard({ postedByStaff, company }: AgentCardProps) {
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-3">
-        <Link href={`tel:${postedByStaff.phoneNumber}`}>
+        <Link href={`tel:${postedByStaff?.phoneNumber}`}>
           <Button className="w-full">{t("button.call")}</Button>
         </Link>
         <Link
           target="_blank"
-          href={`https://wa.me/${postedByStaff.phoneNumber}`}
+          href={`https://wa.me/${postedByStaff?.phoneNumber}`}
         >
           <Button className="w-full" variant="outline">
             {t("button.whatsApp")}

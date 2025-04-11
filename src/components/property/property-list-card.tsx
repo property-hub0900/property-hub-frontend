@@ -164,7 +164,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
         </Link>
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <Link href={`tel:${postedByStaff.phoneNumber}`}>
+          <Link href={`tel:${postedByStaff?.phoneNumber}`}>
             <Button variant="outlinePrimary" size="sm">
               <Phone className="h-4 w-4" />
               {t("button.call")}
@@ -178,7 +178,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
           </Link>
           <Link
             target="_blank"
-            href={`https://wa.me/${postedByStaff.phoneNumber}`}
+            href={`https://wa.me/${postedByStaff?.phoneNumber}`}
           >
             <Button variant="outlinePrimary" size="sm">
               <MessageCircle className="h-4 w-4" />
@@ -189,11 +189,10 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             <Button
               variant="outlinePrimary"
               size="icon"
-              className={`${
-                isFavorite
+              className={`${isFavorite
                   ? "bg-primary text-primary-foreground hover:!bg-primary-foreground hover:!text-primary hover:[&>svg]:stroke-primary"
                   : ""
-              }`}
+                }`}
               onClick={() =>
                 handleCustomerFavorites(
                   isFavorite ? "remove" : "add",
@@ -203,7 +202,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             >
               <Heart
                 className="h-4 w-4"
-                // fill={isFavorite ? "currentColor" : "none"}
+              // fill={isFavorite ? "currentColor" : "none"}
               />
             </Button>
           )}

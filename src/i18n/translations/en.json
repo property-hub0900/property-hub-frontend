@@ -33,7 +33,11 @@
     "propertyDetails": "Property details",
     "furnishing": "Furnishing",
     "keywordSearch": "Keyword Search",
-    "moreAvailableInSameArea": "More Available in same area"
+    "moreAvailableInSameArea": "More Available in same area",
+    "addNewProperty": "Add New Property",
+    "companySettings": "Company Settings",
+    "personalDetails": "Personal Details",
+    "companyDetails": "Company Details"
   },
   "button": {
     "next": "Next",
@@ -115,6 +119,9 @@
     "of": "of"
   },
   "form": {
+    "propertyImages": {
+      "label": "Property Images"
+    },
     "fullName": {
       "label": "Full Name",
       "placeholder": "Enter your full name",
@@ -675,7 +682,8 @@
       "propertyTypes": "Property Types",
       "contact": "Contact Us",
       "address": "123 Real Estate Ave, New York, NY 10001",
-      "rights": "All rights reserved."
+      "allRightsReserved": "All rights reserved.",
+      "termsAndConditions": "Term & Condition"
     }
   },
   "landingPage": {
@@ -908,5 +916,40 @@
   "tabs": {
     "personalDetails": "Personal Details",
     "companyDetails": "Company Details"
+  },
+  "footer": {
+    "description": "Property Explorer is your trusted partner in finding the perfect property for your needs.",
+    "quickLinks": "Quick Links",
+    "propertyTypes": "Property Types",
+    "contact": "Contact Us",
+    "address": "123 Real Estate Ave, New York, NY 10001",
+    "allRightsReserved": "All rights reserved.",
+    "termsAndConditions": "Term & Condition"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "propertyData": "Property Data",
+    "accessManagement": "Access Management",
+    "subscriptionPlans": "Subscription Plans",
+    "topUp": "Top-Up",
+    "settings": "Settings",
+    "home": "Home",
+    "searchProperties": "Search Properties",
+    "savedProperties": "Saved Properties",
+    "notifications": "Notifications",
+    "myInquiries": "My Inquiries",
+    "helpCenter": "Help Centre",
+    "contactUs": "Contact us",
+    "myProperties": "My Properties",
+    "points": "Points"
+  },
+  "userMenu": {
+    "logout": "Log out",
+    "dashboard": "Dashboard",
+    "myProperties": "My Properties"
+  },
+  "aria": {
+    "hidePassword": "Hide password",
+    "showPassword": "Show password"
   }
 }

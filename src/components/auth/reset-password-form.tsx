@@ -101,16 +101,6 @@ export function ResetPasswordForm({ t, token, email, redirectPath, authService }
   return (
     <div className="w-full max-w-md mx-auto bg-white rounded-lg shadow-sm p-8">
       <Loader isLoading={resetPasswordMutation.isPending}></Loader>
-
-      <div className="flex justify-center mb-6">
-        <div className="w-16 h-16 bg-white rounded-xl shadow-sm flex items-center justify-center">
-          <Image src="/logo-without-text.svg" alt="Property Explorer" width={64} height={64} />
-        </div>
-      </div>
-
-      <h1 className="text-2xl font-bold text-center mb-1">Create New Password</h1>
-      <p className="text-gray-500 text-center text-sm mb-6">Enter your new password</p>
-
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FormField
@@ -118,12 +108,12 @@ export function ResetPasswordForm({ t, token, email, redirectPath, authService }
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-gray-700">Password</FormLabel>
+                <FormLabel className="text-gray-700">{t("form.password.label")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
+                      placeholder={t("form.password.placeholder")}
                       className="pr-10"
                       {...field}
                     />
@@ -132,7 +122,7 @@ export function ResetPasswordForm({ t, token, email, redirectPath, authService }
                       onClick={togglePasswordVisibility}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
                       tabIndex={-1}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      aria-label={showPassword ? t("hidePassword") : t("showPassword")}
                     >
                       {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
@@ -148,12 +138,12 @@ export function ResetPasswordForm({ t, token, email, redirectPath, authService }
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-gray-700">Confirm Password</FormLabel>
+                <FormLabel className="text-gray-700">{t("form.confirmPassword.label")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showConfirmPassword ? "text" : "password"}
-                      placeholder="••••••••"
+                      placeholder={t("form.confirmPassword.placeholder")}
                       className="pr-10"
                       {...field}
                     />
@@ -162,7 +152,7 @@ export function ResetPasswordForm({ t, token, email, redirectPath, authService }
                       onClick={toggleConfirmPasswordVisibility}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
                       tabIndex={-1}
-                      aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                      aria-label={showConfirmPassword ? t("hidePassword") : t("showPassword")}
                     >
                       {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>
@@ -178,12 +168,12 @@ export function ResetPasswordForm({ t, token, email, redirectPath, authService }
             type="submit"
             className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 h-auto mt-2"
           >
-            Submit
+            {t("button.submit")}
           </Button>
         </form>
       </Form>
 
-      <div className="text-xs text-center text-gray-400 mt-6">© 2025 Property Explorer, Qatar. All Rights Reserved</div>
+      <div className="text-xs text-center text-gray-400 mt-6">{t("footer.allRightsReserved")}</div>
     </div>
   )
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LayoutDashboard, LogOut, Home } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
   DropdownMenu,
@@ -19,6 +20,7 @@ import { COMPANY_PATHS } from "@/constants/paths";
 
 export function UserMenu() {
   const { user, logOut } = useAuth();
+  const t = useTranslations("");
 
   const [open, setOpen] = useState(false);
 
@@ -37,12 +39,12 @@ export function UserMenu() {
 
   const menuItems = [
     {
-      label: "Dashboard",
+      label: t("userMenu.dashboard"),
       icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
       href: `${COMPANY_PATHS.dashboard}`,
     },
     {
-      label: "Properties",
+      label: t("sidebar.myProperties"),
       icon: <Home className="mr-2 h-4 w-4" />,
       href: `${COMPANY_PATHS.properties}`,
     },
@@ -85,7 +87,7 @@ export function UserMenu() {
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
             <LogOut className="mr-2 h-4 w-4" />
-            <span>Log out</span>
+            <span>{t("userMenu.logout")}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

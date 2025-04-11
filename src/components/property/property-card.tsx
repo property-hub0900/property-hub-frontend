@@ -63,7 +63,7 @@ export default function PropertyCard({ data }: { data: IProperty }) {
           </span>
           <Link
             target="_blank"
-            href={`https://wa.me/${data.postedByStaff.phoneNumber}`}
+            href={`https://wa.me/${data.postedByStaff?.phoneNumber}`}
           >
             <Button variant="outlinePrimary" size="sm" className="">
               <MessageCircle className="h-4 w-4" />
