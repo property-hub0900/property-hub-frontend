@@ -2,7 +2,7 @@
 
 import Pagination from "@/components/pagination";
 import { PropertyListCard } from "@/components/property/property-list-card";
-import { customerServices } from "@/services/protected/properties";
+import { customerService } from "@/services/protected/customer";
 import { IPropertyFilters } from "@/types/public/properties";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
@@ -26,7 +26,7 @@ export default function Page() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["properties", filters],
-    queryFn: () => customerServices.getFavoriteProperties(filters),
+    queryFn: () => customerService.getFavoriteProperties(filters),
   });
 
   const totalPages = data?.total

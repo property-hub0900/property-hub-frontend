@@ -32,11 +32,13 @@ import { getErrorMessage } from "@/utils/utils";
 
 export const SaveSearchDialogue = ({
   isDisabled,
-  searchQuery,
+  saveSearchQuery,
 }: {
   isDisabled: boolean;
-  searchQuery: string;
+  saveSearchQuery: string;
 }) => {
+  console.log("saveSearchQuery", saveSearchQuery);
+
   const t = useTranslations();
 
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -57,7 +59,7 @@ export const SaveSearchDialogue = ({
   async function onSubmit(data: TSaveSearchSchema) {
     try {
       const payloads = {
-        searchQuery: searchQuery,
+        searchQuery: saveSearchQuery,
         searchTitle: data.searchTitle,
       };
       const response = await customerSaveSearchMutation.mutateAsync(payloads);

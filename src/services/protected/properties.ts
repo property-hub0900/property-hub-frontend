@@ -1,14 +1,12 @@
 import apiClient from "@/lib/api-client";
 import { ICommonMessageResponse, IUpdate } from "@/types/common";
-import { ISavedSearches } from "@/types/protected/customer";
+
 import {
   IAmenitiesResponse,
   IProperties,
   IProperty,
   TCreatePropertySchema,
 } from "@/types/protected/properties";
-import { IPropertyFilters, IPropertyResponse } from "@/types/public/properties";
-import { buildQueryString } from "@/utils/utils";
 
 export const companiesProperties = (role: string): Promise<IProperties> => {
   return apiClient.get(`/companies/properties?role=${role}`);
@@ -41,20 +39,4 @@ export const deletePropertyById = (
 
 export const amenities = (): Promise<IAmenitiesResponse> => {
   return apiClient.get("/amenities?page=0&pageSize=100000");
-};
-
-export const customerServices = {
-  getFavoriteProperties(filters: IPropertyFilters): Promise<IPropertyResponse> {
-    return apiClient.get(
-      `/customers/favorite-properties?status=published&${buildQueryString(
-        filters
-      )}`
-    );
-  },
-  getSaveSearched(id: number): Promise<ISavedSearches> {
-    return apiClient.get(`/customers/save-search?&page=0&pageSize=100000`);
-  },
-  deleteSaveSearch(id: number): Promise<ICommonMessageResponse> {
-    return apiClient.delete(`/customers/remove-search/${id}`);
-  },
 };

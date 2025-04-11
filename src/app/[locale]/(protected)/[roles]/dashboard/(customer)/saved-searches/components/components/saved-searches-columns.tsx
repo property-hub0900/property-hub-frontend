@@ -2,12 +2,13 @@
 
 import { Loader } from "@/components/loader";
 
-import { COMPANY_PATHS, PUBLIC_ROUTES } from "@/constants/paths";
-import { formatDateAndTime, getErrorMessage } from "@/utils/utils";
+import { PUBLIC_ROUTES } from "@/constants/paths";
 import {
-  customerServices,
-  deletePropertyById,
-} from "@/services/protected/properties";
+  convertSavedSearchToURL,
+  formatDateAndTime,
+  getErrorMessage,
+} from "@/utils/utils";
+import { customerService } from "@/services/protected/customer";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
@@ -16,7 +17,6 @@ import { Edit2, Search, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { ISavedSearch } from "@/types/protected/customer";
-import { customerService } from "@/services/protected/customer";
 
 export const SavedSearchesColumns: ColumnDef<ISavedSearch>[] = [
   {
@@ -50,7 +50,7 @@ const ActionCell = ({ row }) => {
 
   const deleteSaveSearchMutation = useMutation({
     mutationKey: ["deleteSaveSearch"],
-    mutationFn: customerServices.deleteSaveSearch,
+    mutationFn: customerService.deleteSaveSearch,
   });
 
   const onDelete = async (id) => {
@@ -68,7 +68,10 @@ const ActionCell = ({ row }) => {
       <Loader isLoading={deleteSaveSearchMutation.isPending}></Loader>
       <div className="flex gap-3 items-center">
         <Link
-          href={`${PUBLIC_ROUTES.properties}/${searchQuery}`}
+          target="_blank"
+          href={`${PUBLIC_ROUTES.properties}/${convertSavedSearchToURL(
+            searchQuery
+          )}`}
           className="flex items-center gap-1 text-primary"
         >
           <Search className="size-5 text-primary" />

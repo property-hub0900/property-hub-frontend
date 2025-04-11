@@ -18,16 +18,12 @@ export default function SavedSearchesTable(data: ISavedSearches) {
             <h4>Saved Searches</h4>
           </div> */}
 
-          <div className="relative">
-            <div className="mx-auto container py-5">
-              <DataTable
-                columns={SavedSearchesColumns}
-                data={data?.results || []}
-                sorting={sorting}
-                onSortingChange={setSorting}
-              />
-            </div>
-          </div>
+          <DataTable
+            columns={SavedSearchesColumns}
+            data={data?.results || []}
+            sorting={sorting}
+            onSortingChange={setSorting}
+          />
         </div>
       </div>
     </>
