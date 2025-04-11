@@ -12,9 +12,11 @@ import { AlertCircle } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function PropertiesPage() {
   const searchParams = useSearchParams();
+  const t = useTranslations();
 
   const searchFilters = {
     searchQuery: searchParams.get("searchQuery") || undefined,
@@ -74,18 +76,18 @@ export default function PropertiesPage() {
             <>
               <Alert variant="destructive" className="mt-8">
                 <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
+                <AlertTitle>{t("common.error")}</AlertTitle>
                 <AlertDescription>
-                  Failed to fetch properties. Please try again later.
+                  {t("property.loadingError")}
                 </AlertDescription>
               </Alert>
             </>
           ) : !data?.results?.length ? (
             <>
               <div className="mt-8 flex flex-col items-center justify-center">
-                <h2 className="text-2xl font-semibold">No properties found</h2>
+                <h2 className="text-2xl font-semibold">{t("property.notFound")}</h2>
                 <p className="text-muted-foreground">
-                  Try adjusting your search filters to find more properties.
+                  {t("property.notFoundDesc")}
                 </p>
               </div>
             </>

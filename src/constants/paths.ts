@@ -12,11 +12,13 @@ export const COMPANY_PATHS = {
 
 export const CUSTOMER_PATHS = {
   dashboard: "/customer/dashboard",
-  search: "/customer/dashboard/search",
-  saved: "/customer/dashboard/saved",
-  notifications: "/customer/dashboard/notifications",
-  inquiries: "/customer/dashboard/inquiries",
-  settings: "/customer/dashboard/settings",
+  myProfile: "/customer/dashboard/my-profile",
+  savedSearches: "/customer/dashboard/saved-searches",
+  savedProperties: "/customer/dashboard/saved-properties",
+};
+
+export const ADMIN_PATHS = {
+  dashboard: "/super-admin/dashboard",
 };
 
 export const PUBLIC_ROUTES = {

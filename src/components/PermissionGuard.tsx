@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { usePermissions } from '@/hooks/usePermissions';
+import { useRBAC } from '@/lib/hooks/useRBAC';
 import { type Permission, type UserRole } from '@/constants/rbac';
 
 interface PermissionGuardProps {
@@ -39,8 +39,7 @@ export function PermissionGuard({
         hasPermission,
         hasRole,
         hasAnyRole
-    } = usePermissions();
-
+    } = useRBAC();
 
     // Check single permission
     if (permission && !hasPermission(permission)) {

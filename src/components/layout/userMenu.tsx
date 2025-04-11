@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { LayoutDashboard, LogOut } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { LayoutDashboard, LogOut, Home } from "lucide-react";
+import { useState } from "react";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,12 +15,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { ADMIN_PATHS, COMPANY_PATHS, CUSTOMER_PATHS } from "@/constants/paths";
+import { USER_ROLES } from "@/constants/rbac";
 import { useAuth } from "@/lib/hooks/useAuth";
-import { COMPANY_PATHS } from "@/constants/paths";
 
 export function UserMenu() {
+  const t = useTranslations();
+
   const { user, logOut } = useAuth();
 
   const [open, setOpen] = useState(false);
@@ -35,18 +39,36 @@ export function UserMenu() {
       .toUpperCase();
   };
 
-  const menuItems = [
+  const customerMenuItems = [
+    {
+      label: "Dashboard",
+      icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
+      href: `${CUSTOMER_PATHS.dashboard}`,
+    },
+  ];
+
+  const companyMenuItems = [
     {
       label: "Dashboard",
       icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
       href: `${COMPANY_PATHS.dashboard}`,
     },
+  ];
+
+  const adminMenuItems = [
     {
-      label: "Properties",
-      icon: <Home className="mr-2 h-4 w-4" />,
-      href: `${COMPANY_PATHS.properties}`,
+      label: "Dashboard",
+      icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
+      href: `${ADMIN_PATHS.dashboard}`,
     },
   ];
+
+  const menuItems = {
+    [USER_ROLES.CUSTOMER]: customerMenuItems,
+    [USER_ROLES.OWNER]: companyMenuItems,
+    [USER_ROLES.AGENT]: companyMenuItems,
+    [USER_ROLES.ADMIN]: companyMenuItems,
+  };
 
   return (
     <div className="flex items-center gap-2">
@@ -71,7 +93,7 @@ export function UserMenu() {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {menuItems.map((item) => (
+          {menuItems[user?.role as keyof typeof menuItems]?.map((item) => (
             <DropdownMenuItem key={item.href} asChild>
               <Link
                 href={item.href}
@@ -85,7 +107,7 @@ export function UserMenu() {
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
             <LogOut className="mr-2 h-4 w-4" />
-            <span>Log out</span>
+            <span>{t("button.logout")}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

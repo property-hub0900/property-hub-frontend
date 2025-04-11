@@ -11,10 +11,8 @@ type AmenityIconProps = {
 const DynamicIcon = dynamic(
   async () => {
     const mod = await import("lucide-react");
-    return (props: AmenityIconProps) => {
-      const IconComponent = mod[
-        props.iconName as keyof typeof mod
-      ] as LucideIcon;
+    return ({ iconName, ...props }: AmenityIconProps) => {
+      const IconComponent = mod[iconName as keyof typeof mod] as LucideIcon;
       return IconComponent ? (
         <IconComponent {...props} />
       ) : (
