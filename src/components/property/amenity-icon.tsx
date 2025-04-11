@@ -1,4 +1,6 @@
 import { Circle } from "lucide-react";
+import dynamic from "next/dynamic";
+import type { LucideIcon } from "lucide-react";
 
 type AmenityIconProps = {
   iconName: string;
@@ -6,15 +8,21 @@ type AmenityIconProps = {
   size?: number;
 };
 
-export function AmenityIcon({
-  iconName,
-  className,
-  size = 20,
-}: AmenityIconProps) {
-  try {
-    const Icon = require(`lucide-react`)[iconName] || Circle;
-    return <Icon size={size} className={className} />;
-  } catch {
-    return <Circle size={size} className={className} />;
-  }
+const DynamicIcon = dynamic(
+  async () => {
+    const mod = await import("lucide-react");
+    return ({ iconName, ...props }: AmenityIconProps) => {
+      const IconComponent = mod[iconName as keyof typeof mod] as LucideIcon;
+      return IconComponent ? (
+        <IconComponent {...props} />
+      ) : (
+        <Circle {...props} />
+      );
+    };
+  },
+  { ssr: false }
+);
+
+export function AmenityIcon(props: AmenityIconProps) {
+  return <DynamicIcon {...props} />;
 }

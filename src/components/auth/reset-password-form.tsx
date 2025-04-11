@@ -166,7 +166,7 @@ export function ResetPasswordForm({ t, token, email, redirectPath, authService }
           <Button
             disabled={isSubmitting}
             type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 h-auto mt-2"
+            className="w-full"
           >
             {t("button.submit")}
           </Button>

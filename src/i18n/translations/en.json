@@ -83,7 +83,8 @@
     "moreFilters": "More Filters",
     "showResults": "Show Results",
     "reset": "Reset",
-    "find": "Find"
+    "find": "Find",
+    "logout": "Log out"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -749,18 +750,10 @@
         "agents": "Agents"
       }
     },
-    "userMenu": {
-      "myAccount": "My Account",
-      "profile": "Profile",
-      "savedProperties": "Saved Properties",
-      "savedSearches": "Saved Searches",
-      "messages": "Messages",
-      "settings": "Settings",
-      "logout": "Log out"
-    },
     "sidebar": {
       "viewProfile": "View Profile",
       "dashboard": "Dashboard",
+      "myProfile": "My Profile",
       "savedProperties": "Saved Properties",
       "savedSearches": "Saved Searches",
       "messages": "Messages",
@@ -941,7 +934,9 @@
     "helpCenter": "Help Centre",
     "contactUs": "Contact us",
     "myProperties": "My Properties",
-    "points": "Points"
+    "points": "Points",
+    "myProfile": "My Profile",
+    "savedSearches": "Saved Searches"
   },
   "userMenu": {
     "logout": "Log out",

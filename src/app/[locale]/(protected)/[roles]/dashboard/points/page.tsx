@@ -7,8 +7,8 @@ import { DataTable } from "@/components/dataTable/data-table"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { SortingState } from "@tanstack/react-table"
-import { pointsHistoryColumns } from "./components/points-history-columns"
-import { archivedPropertiesColumns } from "./components/archived-properties-columns"
+import { pointsHistoryColumns } from "@/components/points-history-columns"
+import { archivedPropertiesColumns } from "@/components/archived-properties-columns"
 
 // Mock data for points history
 const pointsHistoryData = [
