@@ -68,6 +68,15 @@ const clearAuthAndLogout = () => {
   // Clear tokens
   localStorage.removeItem("token");
   sessionStorage.removeItem("token");
+  localStorage.removeItem("auth-storage");
+  localStorage.removeItem("user-storage");
+  localStorage.removeItem("user");
+
+  // Clear cookies
+  if (typeof document !== "undefined") {
+    document.cookie = "auth-check=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "auth-storage=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
 
   // Also clear auth store if available
   if (useAuthStore?.getState) {
@@ -163,13 +172,22 @@ apiClient.interceptors.response.use(
 
         // For 403 (Forbidden), we don't redirect but we log it
         // This allows the component to handle the error appropriately
-        if (status === 403) {
+        if (status === 403 || status === 401) {
           console.log(
             "Forbidden access detected. User doesn't have permission."
           );
-          // take it to "/"
-          window.location.href = "/";
-          localStorage.clear();
+          // Clear auth data and wait to ensure it completes before redirecting
+          clearAuthAndLogout();
+          // Add a small delay before redirecting to ensure auth state is cleared
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 100);
+          return Promise.reject({
+            data: null,
+            message: "Forbidden access. User doesn't have permission.",
+            success: false,
+            status: 403,
+          });
         }
       } else if (error.code === "ECONNABORTED") {
         // Handle timeout errors
