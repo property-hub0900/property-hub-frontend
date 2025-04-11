@@ -27,6 +27,7 @@ import {
   MessageSquare,
   Search,
   HomeIcon,
+  User2,
 } from "lucide-react";
 import { useAuth } from "@/lib/hooks/useAuth";
 import Image from "next/image";
@@ -135,46 +136,30 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   // Customer navigation items
   const customerNavItems = [
     {
-      title: "Home",
+      title: "Dashboard",
       href: CUSTOMER_PATHS.dashboard,
       icon: HomeIcon,
     },
     {
-      title: "Search Properties",
-      href: CUSTOMER_PATHS.search,
+      title: "My Profile",
+      href: CUSTOMER_PATHS.myProfile,
+      icon: User2,
+    },
+    {
+      title: "Saved Searched",
+      href: CUSTOMER_PATHS.savedSearches,
       icon: Search,
     },
     {
       title: "Saved Properties",
-      href: CUSTOMER_PATHS.saved,
+      href: CUSTOMER_PATHS.savedProperties,
       icon: Heart,
       badge: 5,
-    },
-    {
-      title: "Notifications",
-      href: CUSTOMER_PATHS.notifications,
-      icon: Bell,
-      badge: 2,
-    },
-    {
-      title: "My Inquiries",
-      href: CUSTOMER_PATHS.inquiries,
-      icon: Building,
-    },
-    {
-      title: "Settings",
-      href: CUSTOMER_PATHS.settings,
-      icon: Settings,
     },
   ];
 
   // Footer items are the same for both user types
   const footerItems = [
-    {
-      title: "Help Centre",
-      href: PUBLIC_ROUTES.help,
-      icon: HelpCircle,
-    },
     {
       title: "Contact us",
       href: PUBLIC_ROUTES.contact,

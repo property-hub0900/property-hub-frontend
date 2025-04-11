@@ -17,10 +17,8 @@ export const SimilarProperties = () => {
 
   return (
     <section className="pt-2 lg:pt-8 pb-10 lg:pb-16 w-full overflow-hidden ">
-      <div className="container mx-auto">
-        <h3 className="mb-3 md:mb-5">{t("title.moreAvailableInSameArea")}</h3>
-      </div>
       <div className="ps-5 md:ps-10 xl:ps-24">
+        <h3 className="mb-3 md:mb-5">{t("title.moreAvailableInSameArea")}</h3>
         {similarProperties?.results &&
           similarProperties?.results.length > 0 && (
             <Swiper
