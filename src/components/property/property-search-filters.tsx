@@ -12,6 +12,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -24,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Bookmark, ChevronDown, SlidersHorizontal } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import {
   PROPERTY_FURNISHED_TYPE,
   PROPERTY_PURPOSE,
@@ -202,6 +203,16 @@ export const PropertySearchFilters = () => {
       router.push("?");
     }, 500);
   }, [router]);
+
+  // Use this in your PropertySearchFilters component
+  const saveSearchQuery = useMemo(() => {
+    const activeParams = {};
+    searchParams.forEach((value, key) => {
+      activeParams[key] = value;
+    });
+
+    return JSON.stringify(activeParams);
+  }, [searchParams]);
 
   return (
     <form onSubmit={handleSearch} className="">
@@ -382,7 +393,7 @@ export const PropertySearchFilters = () => {
           {user?.role && user?.role === USER_ROLES.CUSTOMER && (
             <SaveSearchDialogue
               isDisabled={isSaveSearchDisabled}
-              searchQuery="sasas"
+              saveSearchQuery={saveSearchQuery}
             />
           )}
         </div>
@@ -415,6 +426,7 @@ export const PropertySearchFilters = () => {
           <DialogHeader className="px-10">
             <DialogTitle>{t("button.moreFilters")}</DialogTitle>
           </DialogHeader>
+          <DialogDescription></DialogDescription>
           <Separator />
           <div className="overflow-y-auto h-[65vh] px-10">
             {/* Mobile Only Filters */}
