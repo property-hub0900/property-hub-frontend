@@ -93,17 +93,21 @@ export function UserMenu() {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {menuItems[user?.role as keyof typeof menuItems]?.map((item) => (
-            <DropdownMenuItem key={item.href} asChild>
-              <Link
-                href={item.href}
-                className="flex cursor-pointer items-center"
-              >
-                {item.icon}
-                <span>{item.label}</span>
-              </Link>
-            </DropdownMenuItem>
-          ))}
+          {menuItems[user?.scope?.[0] as keyof typeof menuItems]?.map(
+            (item) => {
+              return (
+                <DropdownMenuItem key={item.href} asChild>
+                  <Link
+                    href={item.href}
+                    className="flex cursor-pointer items-center"
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </Link>
+                </DropdownMenuItem>
+              );
+            }
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
             <LogOut className="mr-2 h-4 w-4" />

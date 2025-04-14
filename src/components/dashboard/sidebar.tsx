@@ -134,11 +134,6 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       icon: Database,
     },
     {
-      title: t("sidebar.dashboard"),
-      href: CUSTOMER_PATHS.dashboard,
-      icon: HomeIcon,
-    },
-    {
       title: t("sidebar.savedSearches"),
       href: CUSTOMER_PATHS.savedSearches,
       icon: Search,
@@ -176,7 +171,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
     <div
       className={cn(
         "relative flex flex-col border-r bg-white transition-all duration-300",
-        open ? "w-92 p-4 md:p-6 lg:p-8" : "w-[78px] p-2"
+        open ? "w-72 p-4 md:p-6 lg:p-8" : "w-[78px] p-2"
       )}
     >
       {/* Toggle button positioned at the edge of the sidebar */}

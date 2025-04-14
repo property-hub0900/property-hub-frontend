@@ -97,7 +97,7 @@ export function RBACExample() {
 
                                     {hasPermission(PERMISSIONS.EDIT_PROPERTY) && (
                                         <button className="bg-blue-100 p-1 rounded-md">
-                                            <Edit className="h-3 w-3 text-blue-600" />
+                                            <Edit className="h-3 w-3 text-primary" />
                                         </button>
                                     )}
 
@@ -201,7 +201,7 @@ export function RBACExample() {
                             </div>
 
                             {/* Dotted border around the role */}
-                            <div className="absolute -inset-2 border-2 border-dashed border-blue-400 rounded-xl"></div>
+                            <div className="absolute -inset-2 border-2 border-dashed border-primary rounded-xl"></div>
                         </div>
                     </div>
 

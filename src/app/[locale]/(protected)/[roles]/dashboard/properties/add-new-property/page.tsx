@@ -35,11 +35,7 @@ export default function CreatePropertyPage() {
   }
 
   return (
-    <ProtectedRoute
-      requiredPermissions={[PERMISSIONS.CREATE_PROPERTY]}
-      redirectTo={COMPANY_PATHS.properties}
-      loadingComponent={<Loader isLoading={true} />}
-    >
+    <>
       <Loader isLoading={createPropertyMutation.isPending}></Loader>
       <div className="flex justify-between items-center mb-5">
         <h3>{t("title.addNewProperty")}</h3>
@@ -49,6 +45,6 @@ export default function CreatePropertyPage() {
           <PropertyForm mode="create" onSubmit={onSubmit as any}></PropertyForm>
         </div>
       </div>
-    </ProtectedRoute>
+    </>
   );
 }

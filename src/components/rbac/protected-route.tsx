@@ -1,9 +1,10 @@
 "use client"
 
-import { type ReactNode, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { type ReactNode, useEffect, useState } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import { useRBAC } from "@/lib/hooks/useRBAC"
 import type { Permission, UserRole } from "@/constants/rbac"
+import { ROUTE_PERMISSIONS } from "@/constants/rbac"
 
 interface ProtectedRouteProps {
     children: ReactNode
@@ -20,13 +21,34 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({
     children,
     allowedRoles,
-    requiredPermissions,
+    requiredPermissions: propPermissions,
     redirectTo = "/",
     requireAll = false,
     loadingComponent = null,
 }: ProtectedRouteProps) => {
     const { hasAnyRole, hasAllRoles, hasPermission, isAuthenticated } = useRBAC()
     const router = useRouter()
+    const pathname = usePathname()
+    const [routePermissions, setRoutePermissions] = useState<Permission[]>([])
+
+    // Use permissions from props if provided, otherwise try to find them from ROUTE_PERMISSIONS
+    useEffect(() => {
+        if (!propPermissions || propPermissions.length === 0) {
+            // Find the most specific matching route pattern
+            const matchingRoutes = Object.keys(ROUTE_PERMISSIONS)
+                .filter(route => pathname.includes(route))
+                .sort((a, b) => b.length - a.length) // Sort by length (most specific first)
+
+            const matchedRoute = matchingRoutes[0]
+            if (matchedRoute) {
+                setRoutePermissions(ROUTE_PERMISSIONS[matchedRoute])
+            } else {
+                setRoutePermissions([])
+            }
+        } else {
+            setRoutePermissions(propPermissions)
+        }
+    }, [pathname, propPermissions])
 
     useEffect(() => {
         // Check roles if specified
@@ -39,10 +61,10 @@ export const ProtectedRoute = ({
         }
 
         // Check permissions if specified
-        if (requiredPermissions && requiredPermissions.length > 0) {
+        if (routePermissions && routePermissions.length > 0) {
             const hasPermissions = requireAll
-                ? requiredPermissions.every((permission) => hasPermission(permission))
-                : requiredPermissions.some((permission) => hasPermission(permission))
+                ? routePermissions.every((permission) => hasPermission(permission))
+                : routePermissions.some((permission) => hasPermission(permission))
             if (!hasPermissions) {
                 router.push(redirectTo)
                 return
@@ -51,7 +73,7 @@ export const ProtectedRoute = ({
     }, [
         isAuthenticated,
         allowedRoles,
-        requiredPermissions,
+        routePermissions,
         redirectTo,
         requireAll,
         hasAnyRole,
@@ -75,10 +97,10 @@ export const ProtectedRoute = ({
     }
 
     // Check permissions if specified
-    if (requiredPermissions && requiredPermissions.length > 0) {
+    if (routePermissions && routePermissions.length > 0) {
         const hasPermissions = requireAll
-            ? requiredPermissions.every((permission) => hasPermission(permission))
-            : requiredPermissions.some((permission) => hasPermission(permission))
+            ? routePermissions.every((permission) => hasPermission(permission))
+            : routePermissions.some((permission) => hasPermission(permission))
 
         if (!hasPermissions) {
             return <>{loadingComponent}</>
