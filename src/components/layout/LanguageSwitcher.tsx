@@ -63,7 +63,7 @@ export function LanguageSwitcher() {
         {LANGUAGES.map((lang, index) => (
           <div key={lang.code} className="flex items-center">
             <button
-              onClick={() => switchLanguage(lang.code === "en" ? "en" : "en")}
+              onClick={() => switchLanguage(lang.code)}
               className={`text-sm font-medium cursor-pointer hover:text-primary ${
                 currentLang === lang.code ? "text-primary" : "text-gray-500"
               }`}

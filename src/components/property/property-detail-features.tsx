@@ -55,13 +55,13 @@ export function PropertyDetailFeatures({ property }: PropertyDetailsProps) {
             {formatNumber(property.propertySize)} {t("text.sqft")}
           </div>
         </div>
-        {property.bedrooms && property.bedrooms > 0 && (
+        {Number(property.bedrooms) > 0 && (
           <div className="grid grid-cols-2 gap-2">
             <div className="flex gap-2 items-center text-muted-foreground">
               <BedDouble className="size-5" />
               {t("form.bedrooms.label")}
             </div>
-            <div className="font-medium">{formatNumber(property.bedrooms)}</div>
+            <div className="font-medium">{property.bedrooms}</div>
           </div>
         )}
 

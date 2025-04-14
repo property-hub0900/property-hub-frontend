@@ -189,10 +189,11 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             <Button
               variant="outlinePrimary"
               size="icon"
-              className={`${isFavorite
+              className={`${
+                isFavorite
                   ? "bg-primary text-primary-foreground hover:!bg-primary-foreground hover:!text-primary hover:[&>svg]:stroke-primary"
                   : ""
-                }`}
+              }`}
               onClick={() =>
                 handleCustomerFavorites(
                   isFavorite ? "remove" : "add",
@@ -202,7 +203,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             >
               <Heart
                 className="h-4 w-4"
-              // fill={isFavorite ? "currentColor" : "none"}
+                // fill={isFavorite ? "currentColor" : "none"}
               />
             </Button>
           )}

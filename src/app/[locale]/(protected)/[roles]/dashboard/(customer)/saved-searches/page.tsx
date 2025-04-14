@@ -8,9 +8,11 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import { customerService } from "@/services/protected/customer";
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 
 export default function Page() {
   const { user } = useAuth();
+  const t = useTranslations();
 
   const {
     data: dataSaveSearches,
@@ -26,7 +28,7 @@ export default function Page() {
     <>
       <Loader variant="inline" isLoading={isLoading || isFetching}></Loader>
       <div className="flex justify-between items-center mb-5">
-        <h3>Saved Properties</h3>
+        <h3>{t("sidebar.savedSearches")}</h3>
       </div>
 
       {dataSaveSearches && <SavedSearchesTable {...dataSaveSearches} />}

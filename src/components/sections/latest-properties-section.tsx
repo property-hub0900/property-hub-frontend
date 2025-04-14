@@ -47,7 +47,7 @@ export default function LatestPropertiesSection() {
           >
             {latestProperties.results.map((property) => (
               <SwiperSlide
-                className="!w-[340px] md:!w-[400px] md:me-2"
+                className="!w-[340px] md:!w-[400px]"
                 key={property.propertyId}
               >
                 <PropertyCard data={property} />

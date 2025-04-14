@@ -41,7 +41,7 @@ export function UserMenu() {
 
   const customerMenuItems = [
     {
-      label: "My Profile",
+      label: t("sidebar.myProfile"),
       icon: <User className="mr-2 h-4 w-4" />,
       href: `${CUSTOMER_PATHS.myProfile}`,
     },
@@ -70,8 +70,6 @@ export function UserMenu() {
     [USER_ROLES.ADMIN]: companyMenuItems,
   };
 
-
-
   return (
     <div className="flex items-center gap-2">
       <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -95,19 +93,21 @@ export function UserMenu() {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {menuItems[user?.scope?.[0] as keyof typeof menuItems]?.map((item) => {
-            return (
-              <DropdownMenuItem key={item.href} asChild>
-                <Link
-                  href={item.href}
-                  className="flex cursor-pointer items-center"
-                >
-                  {item.icon}
-                  <span>{item.label}</span>
-                </Link>
-              </DropdownMenuItem>
-            )
-          })}
+          {menuItems[user?.scope?.[0] as keyof typeof menuItems]?.map(
+            (item) => {
+              return (
+                <DropdownMenuItem key={item.href} asChild>
+                  <Link
+                    href={item.href}
+                    className="flex cursor-pointer items-center"
+                  >
+                    {item.icon}
+                    <span>{item.label}</span>
+                  </Link>
+                </DropdownMenuItem>
+              );
+            }
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
             <LogOut className="mr-2 h-4 w-4" />
