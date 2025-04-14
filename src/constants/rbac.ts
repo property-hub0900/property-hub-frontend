@@ -50,6 +50,7 @@ export const PERMISSIONS = {
 
   // Sidebar menu access
   ACCESS_PROPERTIES_MENU: "access:menu:properties",
+
   ACCESS_USERS_MENU: "access:menu:users",
   ACCESS_WALLET_MENU: "access:menu:wallet",
   ACCESS_SUBSCRIPTION_MENU: "access:menu:subscription",
@@ -137,9 +138,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   ],
 
   [USER_ROLES.CUSTOMER]: [
-    // Customer permissions - Ensure ACCESS_CUSTOMER_DASHBOARD is included
-
-    PERMISSIONS.ACCESS_CUSTOMER_DASHBOARD, // Crucial permission for customer dashboard
+    PERMISSIONS.ACCESS_MY_PROFILE_MENU,
     PERMISSIONS.MANAGE_SAVED_PROPERTIES,
     PERMISSIONS.MANAGE_SAVED_SEARCHES,
   ],
@@ -148,7 +147,6 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 // Route permission mappings - which permissions are required for specific routes
 export const ROUTE_PERMISSIONS: Record<string, Permission[]> = {
   // Dashboard routes
-  "/customer/dashboard": [PERMISSIONS.ACCESS_CUSTOMER_DASHBOARD],
   "/company/dashboard": [PERMISSIONS.ACCESS_COMPANY_DASHBOARD],
   "/admin": [PERMISSIONS.ACCESS_ADMIN_DASHBOARD],
 

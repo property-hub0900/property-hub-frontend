@@ -6,9 +6,16 @@ import { DashboardView } from "@/components/dashboard/dashboard-view"
 import { AgentsInsightsView } from "@/components/dashboard/agents-insights-view"
 import { LeadsInsightsView } from "@/components/dashboard/leads-insights-view"
 import { PropertiesInsightsView } from "@/components/dashboard/properties-insights-view"
+import { useAuth } from "@/lib/hooks/useAuth"
+import { USER_ROLES } from "@/constants/rbac"
 
 export default function DashboardPage() {
-    const [activeView, setActiveView] = useState("dashboard") // dashboard, properties, agents, leads
+    const [activeView, setActiveView] = useState("dashboard");
+    const { user } = useAuth()
+
+    if (user?.role === USER_ROLES.CUSTOMER) {
+        return null;
+    }
 
     return (
         <div>
