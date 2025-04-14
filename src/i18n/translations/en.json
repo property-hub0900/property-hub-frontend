@@ -462,6 +462,30 @@
     "twitterTitle": "PropertyExplorer",
     "twitterDescription": "Find your dream property on PropertyExplorer."
   },
+  "landingPage": {
+    "footer": {
+      "tagline": "Our experts can provide valuable insights and assist you in identifying properties.",
+      "product": "Product",
+      "features": "Features",
+      "pricing": "Pricing",
+      "listings": "Listings",
+      "customers": "Customers",
+      "brand": "Brand",
+      "company": "Company",
+      "aboutUs": "About us",
+      "blog": "Blog",
+      "careers": "Careers",
+      "contact": "Contact",
+      "resources": "Resources",
+      "community": "Community",
+      "help": "Help Center",
+      "faq": "FAQ",
+      "dpa": "DPA",
+      "terms": "Terms of services",
+      "allRightsReserved": "All rights reserved.",
+      "termsAndConditions": "Term & Condition"
+    }
+  },
   "passwordResetSuccess": "Password reset successful",
   "passwordResetFailed": "Password reset failed",
   "passwordResetEmailSent": "Password reset email sent",
