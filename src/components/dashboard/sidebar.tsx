@@ -134,11 +134,6 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       icon: Database,
     },
     {
-      title: t("sidebar.dashboard"),
-      href: CUSTOMER_PATHS.dashboard,
-      icon: HomeIcon,
-    },
-    {
       title: t("sidebar.savedSearches"),
       href: CUSTOMER_PATHS.savedSearches,
       icon: Search,

@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutDashboard, LogOut } from "lucide-react";
+import { LayoutDashboard, LogOut, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
@@ -41,9 +41,9 @@ export function UserMenu() {
 
   const customerMenuItems = [
     {
-      label: "Dashboard",
-      icon: <LayoutDashboard className="mr-2 h-4 w-4" />,
-      href: `${CUSTOMER_PATHS.dashboard}`,
+      label: "My Profile",
+      icon: <User className="mr-2 h-4 w-4" />,
+      href: `${CUSTOMER_PATHS.myProfile}`,
     },
   ];
 
