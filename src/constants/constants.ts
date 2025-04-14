@@ -56,3 +56,5 @@ export const PROPERTY_SORT_BY = {
 } as const;
 
 export type TPropertySortBy = keyof typeof PROPERTY_SORT_BY;
+
+export const COLOR_DASHBOARD = "rgba(74, 160, 217, 1)"

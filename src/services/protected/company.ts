@@ -87,6 +87,12 @@ export const companyService = {
     payload: InviteStaffRequest
   ): Promise<IResponse<StaffMember>> => {
     try {
+      if (payload.status === "active") {
+        payload["active"] = true;
+      } else {
+        payload["active"] = false;
+      }
+
       return apiClient.post("/staff/invite", payload);
     } catch (error: any) {
       console.error("Failed to invite staff:", error);

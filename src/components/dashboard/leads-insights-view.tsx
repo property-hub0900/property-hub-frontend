@@ -4,18 +4,19 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft, ChevronDown, ArrowRight } from "lucide-react"
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+import { COLOR_DASHBOARD } from "@/constants/constants"
 
 export function LeadsInsightsView({ onBack }) {
     const [timeframe, setTimeframe] = useState("weekly")
 
-    // Sample data for WhatsApp leads chart
+    // Sample data for WhatsApp leads chart with topLine values for the outline
     const whatsappData = [
-        { day: "Mon", value: 30, date: "10" },
-        { day: "Tue", value: 40, date: "11" },
-        { day: "Wed", value: 35, date: "12" },
-        { day: "Thu", value: 50, date: "13" },
-        { day: "Fri", value: 45, date: "14" },
-        { day: "Sat", value: 60, date: "15" },
+        { day: "Mon", value: 30, topLine: 50, date: "10" },
+        { day: "Tue", value: 40, topLine: 60, date: "11" },
+        { day: "Wed", value: 35, topLine: 55, date: "12" },
+        { day: "Thu", value: 50, topLine: 70, date: "13" },
+        { day: "Fri", value: 45, topLine: 65, date: "14" },
+        { day: "Sat", value: 60, topLine: 80, date: "15" },
     ]
 
     // Sample data for calls per hour chart
@@ -42,7 +43,7 @@ export function LeadsInsightsView({ onBack }) {
                         <div className="relative w-40 h-40">
                             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
                                 <div className="text-xs text-gray-500">Total Leads</div>
-                                <div className="text-4xl font-bold mt-1">350</div>
+                                <h4>350</h4>
                             </div>
                             <svg className="w-full h-full" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="40" fill="none" stroke="#f0f0f0" strokeWidth="12" />
@@ -51,7 +52,7 @@ export function LeadsInsightsView({ onBack }) {
                                     cy="50"
                                     r="40"
                                     fill="none"
-                                    stroke="#3b82f6"
+                                    stroke={COLOR_DASHBOARD}
                                     strokeWidth="12"
                                     strokeDasharray="251.2"
                                     strokeDashoffset="62.8"
@@ -96,17 +97,29 @@ export function LeadsInsightsView({ onBack }) {
                             <AreaChart data={whatsappData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="colorWhatsapp" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.1} />
-                                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.8} />
+                                        <stop offset="10%" stopColor="rgba(74, 160, 217, 1)" stopOpacity={0.1} />
+                                        <stop offset="95%" stopColor="white" stopOpacity={0.8} />
                                     </linearGradient>
                                 </defs>
                                 <CartesianGrid vertical={false} stroke="#f0f0f0" />
                                 <XAxis dataKey="day" hide />
                                 <YAxis hide domain={[0, 100]} />
+
+                                {/* Top line with no fill */}
+                                <Area
+                                    type="monotone"
+                                    dataKey="topLine"
+                                    stroke={COLOR_DASHBOARD}
+                                    strokeWidth={2}
+                                    fillOpacity={0}
+                                    fill="transparent"
+                                />
+
+                                {/* Bottom area with gradient fill */}
                                 <Area
                                     type="monotone"
                                     dataKey="value"
-                                    stroke="#3b82f6"
+                                    stroke={COLOR_DASHBOARD}
                                     strokeWidth={2}
                                     fillOpacity={1}
                                     fill="url(#colorWhatsapp)"
@@ -158,7 +171,7 @@ export function LeadsInsightsView({ onBack }) {
                                     domain={[0, 100]}
                                     ticks={[0, 20, 40, 60, 80, 100]}
                                 />
-                                <Bar dataKey="calls" fill="#3b82f6" radius={[2, 2, 0, 0]} />
+                                <Bar dataKey="calls" fill={COLOR_DASHBOARD} radius={[4, 4, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
