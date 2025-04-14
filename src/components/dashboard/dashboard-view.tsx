@@ -49,13 +49,13 @@ export function DashboardView() {
         <>
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-                <MetricCard value="760" label="Points Spent" icon={<Wallet className="h-5 w-5 text-blue-400" />} />
-                <MetricCard value="900" label="Published Listings" icon={<FileText className="h-5 w-5 text-blue-400" />} />
-                <MetricCard value="13000" label="Leads" icon={<Users className="h-5 w-5 text-blue-400" />} />
+                <MetricCard value="760" label="Points Spent" icon={<Wallet className="h-5 w-5 text-primary" />} />
+                <MetricCard value="900" label="Published Listings" icon={<FileText className="h-5 w-5 text-primary" />} />
+                <MetricCard value="13000" label="Leads" icon={<Users className="h-5 w-5 text-primary" />} />
                 <MetricCard
                     value="20,004"
                     label="Property View Impressions"
-                    icon={<CheckCircle className="h-5 w-5 text-blue-400" />}
+                    icon={<CheckCircle className="h-5 w-5 text-primary" />}
                 />
             </div>
 
@@ -73,7 +73,7 @@ export function DashboardView() {
                                 <span className="text-xs">WhatsApp</span>
                             </div>
                             <div className="flex items-center mr-4">
-                                <div className="w-2 h-2 rounded-full bg-[#3b82f6] mr-1.5"></div>
+                                <div className="w-2 h-2 rounded-full bg-primary mr-1.5"></div>
                                 <span className="text-xs">Email</span>
                             </div>
                             <div className="flex items-center">
