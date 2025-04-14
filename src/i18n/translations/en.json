@@ -112,7 +112,12 @@
     "min": "Min",
     "max": "Max",
     "minArea": "Min Area",
-    "maxArea": "Max Area"
+    "maxArea": "Max Area",
+    "failedToFetch": "Failed to fetch. Please try again later.",
+    "error": "Error",
+    "notRecordFound": "No Record found.",
+    "noPropertyFound": "No Property found.",
+    "noPropertyFoundDesc": "No properties available based on your criteria."
   },
   "table": {
     "notFound": "No Record found...",
@@ -457,45 +462,6 @@
     "twitterTitle": "PropertyExplorer",
     "twitterDescription": "Find your dream property on PropertyExplorer."
   },
-  "property": {
-    "loading": "Loading property details...",
-    "notFound": "Property Not Found",
-    "notFoundDesc": "We couldn't find the property you're looking for.",
-    "goBack": "Go Back",
-    "monthly": "/Monthly",
-    "sqm": "Sqft",
-    "sqf": "Sqft",
-    "for": "FOR",
-    "in": "IN",
-    "keyFeatures": "Key Features:",
-    "features": {
-      "bedrooms": "{count} well-appointed bedrooms with built-in wardrobes",
-      "openPlan": "Open-plan living and dining areas, perfect for entertaining",
-      "furnishing": "{type} with high-quality fixtures and fittings",
-      "views": "Beautiful {view} for a relaxing atmosphere",
-      "reference": "Reference number: {number}"
-    },
-    "seeFullDescription": "See full description",
-    "propertyDetails": "Property details",
-    "details": {
-      "propertyType": "Property Type",
-      "propertySize": "Property Size",
-      "bedrooms": "Bedrooms",
-      "bathrooms": "Bathrooms",
-      "furnishing": "Furnishing",
-      "purpose": "Purpose",
-      "category": "Category",
-      "referenceNo": "Reference No."
-    },
-    "amenities": "Amenities",
-    "contact": {
-      "call": "Call",
-      "whatsApp": "WhatsApp",
-      "email": "Email"
-    },
-    "similarProperties": "More available in same area",
-    "propertyDescription": "Paragon Properties is proud to present this fully renovated {bedrooms}-bedroom {type} in {location}. Set within a serene gated community, this spacious home features modern architecture, high-quality finishes, and a thoughtful layout that maximizes natural light and privacy. Perfect for families or professionals, the property provides a peaceful retreat while being close to key amenities."
-  },
   "passwordResetSuccess": "Password reset successful",
   "passwordResetFailed": "Password reset failed",
   "passwordResetEmailSent": "Password reset email sent",
@@ -591,203 +557,7 @@
     "submit": "Submit",
     "tryAgain": "Try Again"
   },
-  "PropertyExplorer": {
-    "brandName": "Property Explorer",
-    "nav": {
-      "home": "Home",
-      "properties": "Properties",
-      "agents": "Agents",
-      "about": "About",
-      "contact": "Contact",
-      "getStarted": "Get Started"
-    },
-    "hero": {
-      "title": "Find Your Dream Property",
-      "subtitle": "Discover the perfect property that matches your lifestyle and preferences with our extensive listings."
-    },
-    "search": {
-      "location": "Location",
-      "locationPlaceholder": "Where do you want to live?",
-      "propertyType": "Property Type",
-      "allTypes": "All Types",
-      "house": "House",
-      "apartment": "Apartment",
-      "villa": "Villa",
-      "button": "Search"
-    },
-    "featured": {
-      "title": "Featured Properties",
-      "subtitle": "Explore our handpicked selection of premium properties available for sale and rent.",
-      "viewAll": "View All Properties"
-    },
-    "categories": {
-      "all": "All Properties",
-      "house": "Houses",
-      "apartment": "Apartments",
-      "villa": "Villas",
-      "office": "Offices",
-      "commercial": "Commercial"
-    },
-    "property": {
-      "beds": "Beds",
-      "baths": "Baths",
-      "sqft": "sq ft",
-      "perMonth": "/month",
-      "viewDetails": "View Details"
-    },
-    "showcase": {
-      "title": "Experience Properties in 3D",
-      "description": "Take virtual tours of our properties from the comfort of your home with our cutting-edge 3D visualization technology.",
-      "button": "Try Virtual Tour",
-      "feature1": {
-        "title": "Immersive 3D Tours",
-        "description": "Explore every corner of the property as if you were there in person."
-      },
-      "feature2": {
-        "title": "Interactive Floor Plans",
-        "description": "Navigate through detailed floor plans and understand the layout better."
-      },
-      "feature3": {
-        "title": "AR Furniture Placement",
-        "description": "Visualize how your furniture would look in the space before moving in."
-      }
-    },
-    "testimonials": {
-      "title": "What Our Clients Say",
-      "subtitle": "Hear from our satisfied clients about their experience with Property Explorer.",
-      "client1": {
-        "name": "Emma Thompson",
-        "location": "New York",
-        "quote": "Property Explorer made finding my dream apartment so easy. Their 3D tours saved me so much time!"
-      },
-      "client2": {
-        "name": "James Wilson",
-        "location": "Los Angeles",
-        "quote": "The team at Property Explorer went above and beyond to help me sell my house at the best price."
-      },
-      "client3": {
-        "name": "Sophia Garcia",
-        "location": "Miami",
-        "quote": "I was impressed by the quality of properties and the professional service from the agents."
-      }
-    },
-    "cta": {
-      "title": "Ready to Find Your Perfect Property?",
-      "description": "Join thousands of satisfied customers who found their dream homes with Property Explorer.",
-      "primaryButton": "Browse Properties",
-      "secondaryButton": "Contact an Agent"
-    },
-    "footer": {
-      "description": "Property Explorer is your trusted partner in finding the perfect property for your needs.",
-      "quickLinks": "Quick Links",
-      "propertyTypes": "Property Types",
-      "contact": "Contact Us",
-      "address": "123 Real Estate Ave, New York, NY 10001",
-      "allRightsReserved": "All rights reserved.",
-      "termsAndConditions": "Term & Condition"
-    }
-  },
-  "landingPage": {
-    "property": {
-      "imageAlt": "Property image",
-      "newYork": "New York",
-      "sqft": "sq ft",
-      "viewDetails": "View Details",
-      "contactNow": "Contact Now"
-    },
-    "appraisal": {
-      "ourValue": "OUR VALUE",
-      "title": "Unlocking Real Appraisal",
-      "services": "Services",
-      "description": "Our experts can provide valuable insights and assist you in identifying properties.",
-      "button": "Get Started Free",
-      "imageAlt1": "Modern house exterior",
-      "imageAlt2": "Luxury property interior"
-    },
-    "footer": {
-      "tagline": "Our experts can provide valuable insights and assist you in identifying properties.",
-      "product": "Product",
-      "features": "Features",
-      "pricing": "Pricing",
-      "listings": "Listings",
-      "customers": "Customers",
-      "brand": "Brand",
-      "company": "Company",
-      "aboutUs": "About us",
-      "blog": "Blog",
-      "careers": "Careers",
-      "contact": "Contact",
-      "resources": "Resources",
-      "community": "Community",
-      "help": "Help Center",
-      "faq": "FAQ",
-      "dpa": "DPA",
-      "terms": "Terms of services",
-      "allRightsReserved": "All rights reserved.",
-      "termsAndConditions": "Term & Condition"
-    }
-  },
-  "header": {
-    "buy": "Buy",
-    "rent": "Rent",
-    "explore": "Explore Properties",
-    "properties": "Properties",
-    "propertiesDescription": "Browse our exclusive collection of luxury properties.",
-    "agents": "Agents",
-    "agentsDescription": "Connect with our professional real estate agents.",
-    "language": "Language",
-    "contactUs": "Contact Us",
-    "loginRegister": "Login/Register"
-  },
-  "customerDashboard": {
-    "header": {
-      "title": "PropertyFinder",
-      "navigation": {
-        "home": "Home",
-        "buy": "Buy",
-        "rent": "Rent",
-        "sell": "Sell",
-        "agents": "Agents"
-      }
-    },
-    "sidebar": {
-      "viewProfile": "View Profile",
-      "dashboard": "Dashboard",
-      "myProfile": "My Profile",
-      "savedProperties": "Saved Properties",
-      "savedSearches": "Saved Searches",
-      "messages": "Messages",
-      "myProperties": "My Properties",
-      "settings": "Settings"
-    },
-    "dashboard": {
-      "title": "My Dashboard",
-      "tabs": {
-        "savedProperties": "Saved Properties",
-        "savedSearches": "Saved Searches"
-      }
-    },
-    "savedProperties": {
-      "title": "Your Saved Properties",
-      "propertiesCount": "Properties",
-      "property": {
-        "beds": "Beds",
-        "baths": "Baths",
-        "sqft": "sqft",
-        "viewDetails": "View Details",
-        "contactAgent": "Contact Agent"
-      }
-    },
-    "savedSearches": {
-      "title": "Your Saved Searches",
-      "searchesCount": "Searches",
-      "search": {
-        "matches": "matches",
-        "editSearch": "Edit Search",
-        "viewResults": "View Results"
-      }
-    }
-  },
+
   "subscriptionRenewal": "Subscription Renewal",
   "reviewAndUpdatePayment": "Please Enter your Payment details.",
   "subscriptionPlan": "Subscription Plan",

@@ -30,7 +30,7 @@ export function PropertyHeader({
         </h2>
 
         <div className="w-fit flex items-center justify-center  text-primary shadow-md px-5 py-3 gap-3 text-base  md:py-4 md:text-lg">
-          {bedrooms && bedrooms > 0 && (
+          {Number(bedrooms) > 0 && (
             <>
               <div className="flex items-center gap-1">
                 <BedDouble className="size-4 md:size-5" />

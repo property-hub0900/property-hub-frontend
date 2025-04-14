@@ -76,18 +76,18 @@ export default function PropertiesPage() {
             <>
               <Alert variant="destructive" className="mt-8">
                 <AlertCircle className="h-4 w-4" />
-                <AlertTitle>{t("common.error")}</AlertTitle>
-                <AlertDescription>
-                  {t("property.loadingError")}
-                </AlertDescription>
+                <AlertTitle>{t("text.error")}</AlertTitle>
+                <AlertDescription>{t("text.failedToFetch")}</AlertDescription>
               </Alert>
             </>
           ) : !data?.results?.length ? (
             <>
               <div className="mt-8 flex flex-col items-center justify-center">
-                <h2 className="text-2xl font-semibold">{t("property.notFound")}</h2>
+                <h2 className="text-2xl font-semibold">
+                  {t("text.noPropertyFound")}
+                </h2>
                 <p className="text-muted-foreground">
-                  {t("property.notFoundDesc")}
+                  {t("text.noPropertyFoundDesc")}
                 </p>
               </div>
             </>

@@ -28,7 +28,7 @@ export const SimilarProperties = () => {
             >
               {similarProperties.results.map((property) => (
                 <SwiperSlide
-                  className="!w-[340px] md:!w-[400px] md:me-2"
+                  className="!w-[340px] lg:!w-[400px]"
                   key={property.propertyId}
                 >
                   <PropertyCard data={property} />

@@ -10,8 +10,11 @@ import { useEffect, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function Page() {
+  const t = useTranslations();
+
   const searchParams = useSearchParams();
   const searchFilters = {
     page: searchParams.get("page") || "0",
@@ -35,11 +38,11 @@ export default function Page() {
 
   return (
     <div>
-      <h3 className="mb-5">Saved Properties</h3>
+      <h3 className="mb-5">{t("sidebar.savedProperties")}</h3>
       <div className="space-y-5 max-w-5xl">
         {isLoading ? (
           <>
-            {[...Array(6)].map((_, i) => (
+            {[...Array(3)].map((_, i) => (
               <Skeleton key={i} className="h-72 w-full" />
             ))}
           </>
@@ -47,19 +50,14 @@ export default function Page() {
           <>
             <Alert variant="destructive" className="mt-8">
               <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>
-                Failed to fetch properties. Please try again later.
-              </AlertDescription>
+              <AlertTitle>{t("text.error")}</AlertTitle>
+              <AlertDescription>{t("text.failedToFetch")}</AlertDescription>
             </Alert>
           </>
         ) : !data?.results?.length ? (
           <>
-            <div className="mt-8 flex flex-col items-center justify-center">
-              <h2 className="text-2xl font-semibold">No properties found</h2>
-              <p className="text-muted-foreground">
-                Try adjusting your search filters to find more properties.
-              </p>
+            <div className="mt-8">
+              <p className="">{t("text.notRecordFound")}</p>
             </div>
           </>
         ) : (

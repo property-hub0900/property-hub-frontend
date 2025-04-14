@@ -14,7 +14,7 @@ export default function PropertyCard({ data }: { data: IProperty }) {
 
   return (
     <Card className="overflow-hidden border-0 rounded-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 m-3 mb-5">
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden h-48 md:h-64">
         <Link href={`${PUBLIC_ROUTES.properties}/${data.propertyId}`}>
           <Image
             src={data?.PropertyImages[0].url}
@@ -27,7 +27,7 @@ export default function PropertyCard({ data }: { data: IProperty }) {
       </div>
       <div className="p-4">
         <Link href={`${PUBLIC_ROUTES.properties}/${data.propertyId}`}>
-          <h6 className="text-base font-semibold mb-0.5 truncate">
+          <h6 className="text-base font-semibold mb-0.5 truncate capitalize">
             {data.title}
           </h6>
           <div className="flex items-center gap-1 mb-1">
@@ -37,14 +37,16 @@ export default function PropertyCard({ data }: { data: IProperty }) {
         </Link>
 
         <div className="text-muted-foreground flex items-center py-2 gap-2 mb-1">
-          {data.bedrooms && data.bedrooms > 0 && (
-            <div className="flex items-center gap-1.5 ">
-              <BedDouble className="size-4"></BedDouble>
-              <span className="text-sm">{data.bedrooms}</span>
-            </div>
+          {Number(data.bedrooms) > 0 && (
+            <>
+              <div className="flex items-center gap-1.5 ">
+                <BedDouble className="size-4"></BedDouble>
+                <span className="text-sm">{data.bedrooms}</span>
+              </div>
+              <span className="text-gray-300">|</span>
+            </>
           )}
 
-          <span className="text-gray-300">|</span>
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Bath className="size-4"></Bath>
             <span className="text-sm">{data.bathrooms}</span>
