@@ -46,11 +46,10 @@ export function StaffTable({
       cell: ({ row }: { row: any }) => {
         return (
           <span
-            className={`capitalize px-2 py-1 rounded-full text-xs ${
-              row.original.active
+            className={`capitalize px-2 py-1 rounded-full text-xs ${row.original.active
                 ? "bg-green-100 text-green-800"
                 : "bg-red-100 text-red-800"
-            }`}
+              }`}
           >
             {row.original.active ? "Active" : "In-active"}
           </span>
@@ -68,7 +67,7 @@ export function StaffTable({
             onClick={() => onEdit(row.original)}
             aria-label="Edit staff member"
           >
-            <Pencil className="h-4 w-4 text-blue-500" />
+            <Pencil className="h-4 w-4 text-primary" />
           </Button>
           <Button
             variant="ghost"

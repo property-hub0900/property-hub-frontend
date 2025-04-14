@@ -63,7 +63,7 @@ export function LeadsInsightsView({ onBack }) {
                     </div>
 
                     <div className="mt-4 text-center">
-                        <Button variant="link" className="text-blue-500 text-sm p-0">
+                        <Button variant="link" className="text-primary text-sm p-0">
                             View Per Agent <ArrowRight className="h-3 w-3 ml-1 inline" />
                         </Button>
                     </div>
@@ -127,16 +127,16 @@ export function LeadsInsightsView({ onBack }) {
 
                     <div className="mt-6">
                         <div className="text-xs text-gray-500">Total Calls</div>
-                        <div className="text-4xl font-bold text-blue-500">350</div>
+                        <div className="text-4xl font-bold text-primary">350</div>
                     </div>
 
                     <div className="mt-6">
                         <div className="text-xs text-gray-500">Today's Calls</div>
-                        <div className="text-4xl font-bold text-blue-500">10</div>
+                        <div className="text-4xl font-bold text-primary">10</div>
                     </div>
 
                     <div className="mt-6 text-center">
-                        <Button variant="link" className="text-blue-500 text-sm p-0">
+                        <Button variant="link" className="text-primary text-sm p-0">
                             View Per Agent <ArrowRight className="h-3 w-3 ml-1 inline" />
                         </Button>
                     </div>

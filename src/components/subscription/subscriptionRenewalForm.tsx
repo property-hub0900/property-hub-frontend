@@ -244,11 +244,11 @@ export function SubscriptionRenewalForm({
               <div className="rounded-md bg-blue-50 p-4">
                 <div className="flex flex-col sm:flex-row">
                   <div className="flex-shrink-0 mb-2 sm:mb-0">
-                    <BanknoteIcon className="h-5 w-5 text-blue-400" aria-hidden="true" />
+                    <BanknoteIcon className="h-5 w-5 text-primary" aria-hidden="true" />
                   </div>
                   <div className="sm:ml-3">
-                    <h3 className="text-sm font-medium text-blue-800">{t("bankTransferInfo")}</h3>
-                    <div className="mt-2 text-sm text-blue-700">
+                    <h3 className="text-sm font-medium text-primary">{t("bankTransferInfo")}</h3>
+                    <div className="mt-2 text-sm text-primary">
                       <p>{t("bankTransferInstructions")}</p>
                       <p>{t("bankName")}: National Bank</p>
                       <p>{t("accountName")}: Property Explorer LLC</p>
