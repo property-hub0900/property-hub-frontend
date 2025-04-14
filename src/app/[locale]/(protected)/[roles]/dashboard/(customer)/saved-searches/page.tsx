@@ -5,7 +5,7 @@ import SavedSearchesTable from "./components/components/saved-searches-table";
 import { Loader } from "@/components/loader";
 import { useAuth } from "@/lib/hooks/useAuth";
 
-import { customerService } from "@/services/protected/customer";
+import { getSaveSearched } from "@/services/protected/properties";
 
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
@@ -20,7 +20,7 @@ export default function Page() {
     isFetching,
   } = useQuery({
     queryKey: ["savedSearches", user?.userId],
-    queryFn: () => customerService.getSaveSearched(Number(user?.userId)),
+    queryFn: () => getSaveSearched(Number(user?.userId)),
     enabled: !!user?.userId,
   });
 

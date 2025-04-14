@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { COMPANY_PATHS } from "@/constants/paths";
 
-import MyPropertiesTable from "./components/myPropertiesTable";
+import { PropertiesTable } from "./components/properties-table";
 
 import { Loader } from "@/components/loader";
 import { PERMISSIONS } from "@/constants/rbac";
@@ -25,9 +25,8 @@ export default function PropertiesListing() {
     isFetching: isFetchingProperties,
   } = useQuery({
     queryKey: ["companiesPropertiesSelf"],
-    queryFn: () => companiesProperties(user?.isOwner || (user && user?.scope && user?.scope[0] === "admin") ? "" : "self"),
+    queryFn: () => companiesProperties(""),
   });
-
 
   return (
     <>
@@ -44,7 +43,7 @@ export default function PropertiesListing() {
         )}
       </div>
       {dataCompaniesProperties && (
-        <MyPropertiesTable {...dataCompaniesProperties} />
+        <PropertiesTable {...dataCompaniesProperties} />
       )}
     </>
   );

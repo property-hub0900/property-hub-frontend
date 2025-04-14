@@ -15,12 +15,12 @@ import {
 import { IProperty } from "@/types/protected/properties";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit2, Trash2 } from "lucide-react";
+import { Edit, Edit2, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 
-export const myPropertiesTableColumns: ColumnDef<IProperty>[] = [
+export const propertiesTableColumns: ColumnDef<IProperty>[] = [
   {
     accessorKey: "referenceNo",
     header: "Ref ID",
@@ -83,7 +83,7 @@ export const myPropertiesTableColumns: ColumnDef<IProperty>[] = [
   },
   {
     accessorKey: "featured",
-    header: "Featured",
+    header: "Upgrade Property",
     enableSorting: true,
     cell: ({ row }) => <FeaturedCell row={row} />,
   },
@@ -163,7 +163,7 @@ const ActionCell = ({ row }) => {
       <Loader isLoading={deletePropertyByIdMutation.isPending}></Loader>
       <div className="flex gap-3 items-center">
         <Link href={`${COMPANY_PATHS.properties}/${propertyId}`}>
-          <Edit2 className="size-5 text-primary" />
+          <Edit className="size-5 text-primary" />
         </Link>
         <Trash2
           onClick={() => onDelete(propertyId)}
