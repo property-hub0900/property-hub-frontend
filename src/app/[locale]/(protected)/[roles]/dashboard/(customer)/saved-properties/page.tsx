@@ -11,6 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { getFavoriteProperties } from "@/services/protected/properties";
 
 export default function Page() {
   const t = useTranslations();
@@ -28,8 +29,8 @@ export default function Page() {
   }, [searchParams]);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["properties", filters],
-    queryFn: () => customerService.getFavoriteProperties(filters),
+    queryKey: ["getFavoriteProperties", filters],
+    queryFn: () => getFavoriteProperties(filters),
   });
 
   const totalPages = data?.total

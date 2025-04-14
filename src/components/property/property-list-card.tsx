@@ -29,7 +29,7 @@ import { formatAmountToQAR, getErrorMessage } from "@/utils/utils";
 import { PUBLIC_ROUTES } from "@/constants/paths";
 import { useTranslations } from "next-intl";
 import { USER_ROLES } from "@/constants/rbac";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { propertyServices } from "@/services/public/properties";
 
 export const PropertyListCard = ({ data }: { data: IProperty }) => {
@@ -52,6 +52,8 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const { user } = useAuth();
 
+  const queryClient = useQueryClient();
+
   const images = PropertyImages.map((img) => img.url);
   const daysAgo = Math.floor(
     (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24)
@@ -71,6 +73,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
         type: type,
         propertyId: propertyId,
       });
+      queryClient.invalidateQueries({ queryKey: ["getFavoriteProperties"] });
       setIsFavorite(!isFavorite);
       toast.success(response.message);
     } catch (error) {

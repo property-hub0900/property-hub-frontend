@@ -22,7 +22,7 @@ import {
   Settings,
   User2,
   Users,
-  Wallet
+  Wallet,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -50,7 +50,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   const { logOut } = useAuth();
   const [isMobile, setIsMobile] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
-  const t = useTranslations()
+  const t = useTranslations();
 
   // Determine if the screen size is mobile or tablet
   useEffect(() => {
@@ -225,9 +225,9 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
         <nav className="grid gap-1 px-2">
           {filteredNavItems.map((item, index) => {
             const active = isActive(item.href);
-            console.log(
-              `Menu item ${item.title}: ${active ? "active" : "inactive"}`
-            );
+            // console.log(
+            //   `Menu item ${item.title}: ${active ? "active" : "inactive"}`
+            // );
 
             // When sidebar is open, render Link without Tooltip
             if (open) {
@@ -366,7 +366,9 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                   <LogOut className="h-5 w-5" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="right">{t("userMenu.logout")}</TooltipContent>
+              <TooltipContent side="right">
+                {t("userMenu.logout")}
+              </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         )}

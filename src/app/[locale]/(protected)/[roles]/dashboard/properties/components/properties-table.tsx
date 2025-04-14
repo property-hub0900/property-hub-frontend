@@ -4,9 +4,9 @@ import { useState } from "react";
 import { DataTable } from "@/components/dataTable/data-table";
 import type { SortingState } from "@tanstack/react-table";
 import type { IProperties } from "@/types/protected/properties";
-import { myPropertiesTableColumns } from "./myPropertiesTableColumns";
+import { propertiesTableColumns } from "./properties-table-columns";
 
-export default function MyPropertiesTable(data: IProperties) {
+export const PropertiesTable = (data: IProperties) => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   return (
@@ -14,13 +14,13 @@ export default function MyPropertiesTable(data: IProperties) {
       <div className="bg-white rounded-md shadow mb-10">
         <div className="p-6">
           <div className="flex justify-between items-center">
-            <h4>My Properties</h4>
+            <h4>Properties</h4>
             {/* <Button>Filters</Button> */}
           </div>
           <div className="relative">
             <div className="mx-auto container py-5">
               <DataTable
-                columns={myPropertiesTableColumns}
+                columns={propertiesTableColumns}
                 data={data?.results || []}
                 sorting={sorting}
                 onSortingChange={setSorting}
@@ -31,4 +31,4 @@ export default function MyPropertiesTable(data: IProperties) {
       </div>
     </>
   );
-}
+};

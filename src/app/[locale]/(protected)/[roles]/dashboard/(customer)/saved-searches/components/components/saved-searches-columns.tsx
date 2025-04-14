@@ -8,15 +8,15 @@ import {
   formatDateAndTime,
   getErrorMessage,
 } from "@/utils/utils";
-import { customerService } from "@/services/protected/customer";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit2, Search, Trash2 } from "lucide-react";
+import { Search, Trash2 } from "lucide-react";
 
 import Link from "next/link";
 import { toast } from "sonner";
 import { ISavedSearch } from "@/types/protected/customer";
+import { deleteSaveSearch } from "@/services/protected/properties";
 
 export const SavedSearchesColumns: ColumnDef<ISavedSearch>[] = [
   {
@@ -50,7 +50,7 @@ const ActionCell = ({ row }) => {
 
   const deleteSaveSearchMutation = useMutation({
     mutationKey: ["deleteSaveSearch"],
-    mutationFn: customerService.deleteSaveSearch,
+    mutationFn: deleteSaveSearch,
   });
 
   const onDelete = async (id) => {

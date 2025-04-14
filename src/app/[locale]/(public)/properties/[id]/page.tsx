@@ -17,10 +17,12 @@ import { Loader } from "@/components/loader";
 
 import { propertyServices } from "@/services/public/properties";
 import { SimilarProperties } from "@/components/property/similar-properties";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export default function PropertyPage() {
   const params = useParams<{ id: string }>();
-  const t = useTranslations("property");
+  const t = useTranslations();
 
   // Fetch property data
   const {
@@ -46,10 +48,13 @@ export default function PropertyPage() {
     return (
       <div className="container mx-auto py-8 flex justify-center items-center min-h-[50vh]">
         <div className="text-center">
-          <h2 className="text-2xl font-bold">{t("notFound")}</h2>
-          <p className="mt-2 text-muted-foreground">{t("notFoundDesc")}</p>
+          <Alert variant="destructive" className="mt-8">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>{t("text.error")}</AlertTitle>
+            <AlertDescription>{t("text.failedToFetch")}</AlertDescription>
+          </Alert>
           <Button className="mt-4" onClick={() => window.history.back()}>
-            {t("goBack")}
+            {t("button.goBack")}
           </Button>
         </div>
       </div>

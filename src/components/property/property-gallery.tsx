@@ -7,7 +7,7 @@ import { Heart, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PropertyGalleryPopup } from "./property-gallery-popup";
 import { IPropertyImages } from "@/types/public/properties";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { propertyServices } from "@/services/public/properties";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/utils";
@@ -26,6 +26,8 @@ export function PropertyGallery({
   title,
 }: PropertyGalleryProps) {
   const { user } = useAuth();
+
+  const queryClient = useQueryClient();
 
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -53,7 +55,7 @@ export function PropertyGallery({
         type: type,
         propertyId: propertyId,
       });
-
+      queryClient.invalidateQueries({ queryKey: ["getFavoriteProperties"] });
       setIsFavorite(!isFavorite);
 
       toast.success(response.message);

@@ -33,11 +33,7 @@
     "propertyDetails": "Property details",
     "furnishing": "Furnishing",
     "keywordSearch": "Keyword Search",
-    "moreAvailableInSameArea": "More Available in same area",
-    "addNewProperty": "Add New Property",
-    "companySettings": "Company Settings",
-    "personalDetails": "Personal Details",
-    "companyDetails": "Company Details"
+    "moreAvailableInSameArea": "More Available in same area"
   },
   "button": {
     "next": "Next",
@@ -84,7 +80,8 @@
     "showResults": "Show Results",
     "reset": "Reset",
     "find": "Find",
-    "logout": "Log out"
+    "logout": "Log out",
+    "goBack": "Go back"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
