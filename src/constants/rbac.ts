@@ -17,6 +17,7 @@ export const PERMISSIONS = {
   DELETE_PROPERTY: "delete:property",
   PUBLISH_PROPERTY: "publish:property",
   FEATURE_PROPERTY: "feature:property",
+  APPROVE_PROPERTY: "approve:property",
 
   // User management
   MANAGE_USERS: "manage:users",
@@ -56,7 +57,7 @@ export const PERMISSIONS = {
   ACCESS_SUBSCRIPTION_MENU: "access:menu:subscription",
   ACCESS_TOPUP_MENU: "access:menu:topup",
   ACCESS_SETTINGS_MENU: "access:menu:settings",
-  ACCESS_MY_PROFILE_MENU: "access:menu:myporfile"
+  ACCESS_MY_PROFILE_MENU: "access:menu:myporfile",
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -71,6 +72,8 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     PERMISSIONS.DELETE_PROPERTY,
     PERMISSIONS.PUBLISH_PROPERTY,
     PERMISSIONS.FEATURE_PROPERTY,
+    PERMISSIONS.APPROVE_PROPERTY,
+
     PERMISSIONS.VIEW_USERS,
     PERMISSIONS.CREATE_USER,
     PERMISSIONS.EDIT_USER,
@@ -102,6 +105,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     PERMISSIONS.DELETE_PROPERTY,
     PERMISSIONS.PUBLISH_PROPERTY,
     PERMISSIONS.FEATURE_PROPERTY,
+    PERMISSIONS.APPROVE_PROPERTY,
     PERMISSIONS.VIEW_USERS,
     PERMISSIONS.CREATE_USER,
     PERMISSIONS.EDIT_USER,
@@ -123,7 +127,6 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     PERMISSIONS.ACCESS_TOPUP_MENU,
     PERMISSIONS.ACCESS_SETTINGS_MENU,
     PERMISSIONS.ACCESS_MY_PROFILE_MENU,
-
   ],
 
   [USER_ROLES.AGENT]: [

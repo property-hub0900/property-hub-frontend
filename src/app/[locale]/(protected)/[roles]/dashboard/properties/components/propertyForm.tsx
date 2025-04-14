@@ -49,7 +49,6 @@ import PlacesAutocomplete from "../../../../../../../components/placesAutoComple
 import { IFilesUrlPayload, TImages, UploadImages } from "./uploadImages";
 import { PERMISSIONS } from "@/constants/rbac";
 
-
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
   onSubmit: () => Promise<void> | void;
@@ -68,10 +67,6 @@ export default function PropertyForm(
 
   const [filesUrls, setFilesUrls] = useState<IFilesUrlPayload>({ images: [] });
 
-  const isOwner = user?.scope[0] === "owner";
-  const isAdmin = user?.scope[0] === "admin";
-  const isAgent = user?.scope[0] === "agent";
-
   const { data: amenitiesData, isLoading: isLoadingAmenities } = useQuery({
     queryKey: ["amenities"],
     queryFn: amenities,
@@ -88,32 +83,32 @@ export default function PropertyForm(
       mode === "edit"
         ? defaultValues
         : {
-          title: "",
-          titleAr: "",
-          featured: false,
-          category: undefined,
-          price: 0,
-          propertyType: "",
-          purpose: undefined,
-          bedrooms: 0,
-          bathrooms: 0,
-          status: PROPERTY_STATUSES.draft,
-          furnishedType: "",
-          occupancy: undefined,
-          ownershipStatus: undefined,
-          referenceNo: "",
-          priceVisibilityFlag: false,
-          propertySize: "",
-          serviceCharges: "",
-          buildingFloors: 0,
-          floor: 0,
-          tenure: "",
-          views: "",
-          address: "",
-          amenities: [],
-          description: "",
-          PropertyImages: [],
-        },
+            title: "",
+            titleAr: "",
+            featured: false,
+            category: undefined,
+            price: 0,
+            propertyType: "",
+            purpose: undefined,
+            bedrooms: 0,
+            bathrooms: 0,
+            status: PROPERTY_STATUSES.draft,
+            furnishedType: "",
+            occupancy: undefined,
+            ownershipStatus: undefined,
+            referenceNo: "",
+            priceVisibilityFlag: false,
+            propertySize: "",
+            serviceCharges: "",
+            buildingFloors: 0,
+            floor: 0,
+            tenure: "",
+            views: "",
+            address: "",
+            amenities: [],
+            description: "",
+            PropertyImages: [],
+          },
   });
 
   const category = form.watch("category");
@@ -696,94 +691,87 @@ export default function PropertyForm(
                 </FormItem>
               )}
             /> */}
-            {hasPermission(PERMISSIONS.FEATURE_PROPERTY) && <FormField
-              control={form.control}
-              name="featured"
-              render={({ field }) => (
-                <FormItem className="col-span-2 flex justify-between items-center">
-                  <FormLabel className="text-lg">
-                    {t("text.wantToFeatureProperty")}
-                  </FormLabel>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />}
+            {hasPermission(PERMISSIONS.FEATURE_PROPERTY) && (
+              <FormField
+                control={form.control}
+                name="featured"
+                render={({ field }) => (
+                  <FormItem className="col-span-2 flex justify-between items-center">
+                    <FormLabel className="text-lg">
+                      {t("text.wantToFeatureProperty")}
+                    </FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            )}
           </form>
         </Form>
       </div>
-      <div className="col-span-2 gap-2 flex justify-end mt-6">
-        {(!defaultValues || defaultValues?.status === PROPERTY_STATUSES.draft) && (
-          <>
-            <Button
-              variant={"outline"}
-              type="button"
-              onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
-            >
-              {t("button.saveDraft")}
-            </Button>
-
-            {(isOwner || isAdmin) && (
+      {hasPermission(PERMISSIONS.CREATE_PROPERTY) && (
+        <div className="col-span-2 gap-2 flex justify-end mt-6">
+          {(!defaultValues ||
+            defaultValues?.status === PROPERTY_STATUSES.draft) && (
+            <>
               <Button
+                variant={"outline"}
                 type="button"
-                onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.published)}
+                onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
               >
-                {t("button.publish")}
+                {t("button.saveDraft")}
               </Button>
-            )}
 
-            {isAgent && hasPermission(PERMISSIONS.CREATE_PROPERTY) && (
-              <>
-                {hasPermission(PERMISSIONS.PUBLISH_PROPERTY) ? (
-                  <Button
-                    type="button"
-                    onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.published)}
-                  >
-                    {t("button.publish")}
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.pending)}
-                  >
-                    {t("button.requestForApproval")}
-                  </Button>
-                )}
-              </>
-            )}
-          </>
-        )}
+              {hasPermission(PERMISSIONS.PUBLISH_PROPERTY) ? (
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitWithStatus(PROPERTY_STATUSES.published)
+                  }
+                >
+                  {t("button.publish")}
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitWithStatus(PROPERTY_STATUSES.pending)
+                  }
+                >
+                  {t("button.requestForApproval")}
+                </Button>
+              )}
+            </>
+          )}
 
-        {defaultValues?.status === PROPERTY_STATUSES.published && (
-          <Button
-            type="button"
-            onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.closed)}
-          >
-            {t("button.close")}
+          {defaultValues?.status === PROPERTY_STATUSES.published && (
+            <Button
+              type="button"
+              variant={"outline"}
+              onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.closed)}
+            >
+              {t("button.close")}
+            </Button>
+          )}
+
+          {defaultValues?.status && mode === "edit" && (
+            <Button
+              type="button"
+              onClick={() => handleSubmitWithStatus(`${defaultValues?.status}`)}
+            >
+              {t("button.update")}
+            </Button>
+          )}
+
+          <Button variant={"secondary"} type="button" onClick={handleCancel}>
+            {t("button.cancel")}
           </Button>
-        )}
-
-        {defaultValues?.status && mode === "edit" && (
-          <Button
-            type="button"
-            onClick={() => handleSubmitWithStatus(`${defaultValues?.status}`)}
-          >
-            {t("button.update")}
-          </Button>
-        )}
-
-        <Button
-          variant={"secondary"}
-          type="button"
-          onClick={handleCancel}
-        >
-          {t("button.cancel")}
-        </Button>
-      </div>
+        </div>
+      )}
     </>
   );
 }

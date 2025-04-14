@@ -24,7 +24,7 @@ export default function PropertiesListing() {
     isLoading: isLoadingProperties,
     isFetching: isFetchingProperties,
   } = useQuery({
-    queryKey: ["companiesPropertiesSelf"],
+    queryKey: ["companiesProperties"],
     queryFn: () => companiesProperties(""),
   });
 

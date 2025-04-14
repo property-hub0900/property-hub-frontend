@@ -197,7 +197,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
           open ? "justify-start" : "justify-center"
         )}
       >
-        <Link href={dashboardBasePath} className="flex items-center gap-2">
+        <Link href={"/"} className="flex items-center gap-2">
           {open ? (
             <>
               <Image

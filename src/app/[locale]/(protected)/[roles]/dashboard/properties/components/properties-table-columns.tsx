@@ -19,6 +19,9 @@ import { Edit, Edit2, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
+import { PROPERTY_STATUSES } from "@/constants/constants";
+import { useRBAC } from "@/lib/hooks/useRBAC";
+import { PERMISSIONS } from "@/constants/rbac";
 
 export const propertiesTableColumns: ColumnDef<IProperty>[] = [
   {
@@ -43,6 +46,7 @@ export const propertiesTableColumns: ColumnDef<IProperty>[] = [
     header: "Title",
     enableSorting: true,
   },
+
   {
     accessorKey: "propertyType",
     header: "Type",
@@ -57,7 +61,6 @@ export const propertiesTableColumns: ColumnDef<IProperty>[] = [
     enableSorting: true,
     cell: ({ row }) => {
       const { price } = row.original;
-
       return <>{formatAmountToQAR(price)}</>;
     },
   },
@@ -75,11 +78,7 @@ export const propertiesTableColumns: ColumnDef<IProperty>[] = [
     accessorKey: "status",
     header: "Status",
     enableSorting: true,
-    cell: ({ row }) => {
-      const rowData = row.original;
-      const { status } = rowData;
-      return <div className="capitalize">{status}</div>;
-    },
+    cell: ({ row }) => <StatusCell row={row} />,
   },
   {
     accessorKey: "featured",
@@ -94,7 +93,54 @@ export const propertiesTableColumns: ColumnDef<IProperty>[] = [
   },
 ];
 
+const StatusCell = ({ row }) => {
+  const { hasPermission } = useRBAC();
+
+  const rowData = row.original;
+  const { propertyId, status } = rowData;
+
+  const queryClient = useQueryClient();
+
+  const updatePropertyByIdMutation = useMutation({
+    mutationKey: ["updatePropertyById"],
+    mutationFn: updatePropertyById,
+  });
+
+  const handleApproveStatus = async () => {
+    try {
+      const updatedObj = {
+        id: String(propertyId),
+        payload: { status: PROPERTY_STATUSES.published },
+      };
+
+      const response = await updatePropertyByIdMutation.mutateAsync(updatedObj);
+      toast.success(response.message);
+      queryClient.refetchQueries({ queryKey: ["companiesProperties"] });
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+  };
+
+  return (
+    <div className="flex">
+      {status === PROPERTY_STATUSES.pending &&
+      hasPermission(PERMISSIONS.APPROVE_PROPERTY) ? (
+        <Button
+          disabled={updatePropertyByIdMutation.isPending}
+          onClick={handleApproveStatus}
+          size={"sm"}
+        >
+          Approve
+        </Button>
+      ) : (
+        <div className="capitalize">{status}</div>
+      )}
+    </div>
+  );
+};
+
 const FeaturedCell = ({ row }) => {
+  const { hasPermission } = useRBAC();
   const rowData = row.original;
   const { propertyId, featured } = rowData;
 
@@ -121,17 +167,24 @@ const FeaturedCell = ({ row }) => {
   };
 
   return (
-    <div className="flex justify-center w-[80px]">
+    <div className="flex">
       {featured ? (
-        <Image width={20} height={20} src="/star.svg" alt="PropertyHub" />
-      ) : (
-        <Button
-          disabled={updatePropertyByIdMutation.isPending}
-          onClick={handleUpgradeFeatured}
-          size={"sm"}
-        >
-          Upgrade
+        <Button disabled variant={"outline"} size={"sm"}>
+          <Image width={20} height={20} src="/star.svg" alt="Featured" />
+          Featured
         </Button>
+      ) : (
+        <>
+          {hasPermission(PERMISSIONS.FEATURE_PROPERTY) && (
+            <Button
+              disabled={updatePropertyByIdMutation.isPending}
+              onClick={handleUpgradeFeatured}
+              size={"sm"}
+            >
+              Feature
+            </Button>
+          )}
+        </>
       )}
     </div>
   );

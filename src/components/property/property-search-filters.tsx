@@ -76,8 +76,8 @@ export const PropertySearchFilters = () => {
     priceMin: searchParams.get("priceMin") || "",
     priceMax: searchParams.get("priceMax") || "",
     furnishedType: searchParams.get("furnishedType")?.split(",") || [],
-    minArea: searchParams.get("minArea") || "",
-    maxArea: searchParams.get("maxArea") || "",
+    propertySizeMin: searchParams.get("propertySizeMin") || "",
+    propertySizeMax: searchParams.get("propertySizeMax") || "",
     amenitiesIds: searchParams.get("amenitiesIds")?.split(",") || [],
     page: searchParams.get("page") || "0",
     pageSize: searchParams.get("pageSize") || "10",
@@ -188,8 +188,8 @@ export const PropertySearchFilters = () => {
       priceMin: "",
       priceMax: "",
       furnishedType: [],
-      minArea: "",
-      maxArea: "",
+      propertySizeMin: "",
+      propertySizeMax: "",
       amenitiesIds: [],
       page: "0",
       pageSize: "10",
@@ -576,16 +576,16 @@ export const PropertySearchFilters = () => {
               <div className="flex gap-4">
                 <Input
                   type="number"
-                  name="minArea"
+                  name="propertySizeMin"
                   placeholder={t("text.minArea")}
-                  value={filters.minArea}
+                  value={filters.propertySizeMin}
                   onChange={handleInputChange}
                 />
                 <Input
                   type="number"
-                  name="maxArea"
+                  name="propertySizeMax"
                   placeholder={t("text.maxArea")}
-                  value={filters.maxArea}
+                  value={filters.propertySizeMax}
                   onChange={handleInputChange}
                 />
               </div>
