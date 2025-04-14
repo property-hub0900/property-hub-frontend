@@ -1,5 +1,6 @@
 import apiClient from "@/lib/api-client";
 import { ICommonMessageResponse, IUpdate } from "@/types/common";
+
 import {
   IAmenitiesResponse,
   IProperties,

@@ -24,10 +24,18 @@ export const propertyServices = {
   getSimilarProperties(): Promise<IPropertyResponse> {
     return apiClient.get(`/properties?status=published&page=0&pageSize=10`);
   },
+
   postFavorites(payloads: {
     type: "add" | "remove";
     propertyId: number;
   }): Promise<ICommonMessageResponse> {
     return apiClient.post(`/customers/favorites`, payloads);
+  },
+
+  customerSaveSearch(payloads: {
+    searchTitle: string;
+    searchQuery: string;
+  }): Promise<ICommonMessageResponse> {
+    return apiClient.post(`/customers/save-search`, payloads);
   },
 };

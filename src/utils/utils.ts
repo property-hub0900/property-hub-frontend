@@ -98,3 +98,28 @@ export const extractFirebaseStoragePath = (url) => {
 export function formatNumber(num: number | string): string {
   return Number(num).toLocaleString(); // defaults to en-US
 }
+
+export const convertSavedSearchToURL = (jsonString: string): string => {
+  try {
+    // Parse the JSON string to an object
+    const filters = JSON.parse(jsonString);
+
+    // Create URL parameters
+    const params = new URLSearchParams();
+
+    // Add each filter parameter to the URL
+    Object.entries(filters).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        // For array values like amenitiesIds or furnishedType, join with commas
+        params.set(key, value.join(","));
+      } else {
+        params.set(key, String(value));
+      }
+    });
+
+    return `?${params.toString()}`;
+  } catch (error) {
+    console.error("Error parsing saved search query:", error);
+    return "";
+  }
+};

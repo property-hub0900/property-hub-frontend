@@ -71,7 +71,7 @@ export default function SettingsPage() {
       <Loader isLoading={isLoading} />
 
       {hasPermission(PERMISSIONS.EDIT_COMPANY) && (<h1 className="text-2xl font-bold">
-        {t("title.companySettings") || "Company Settings"}
+        {t("title.companySettings")}
       </h1>)}
 
       <Tabs
@@ -81,10 +81,10 @@ export default function SettingsPage() {
       >
         <TabsList className="mb-1">
           <TabsTrigger value="personal-details">
-            {t("tabs.personalDetails") || "Personal Details"}
+            {t("title.personalDetails")}
           </TabsTrigger>
           {hasPermission(PERMISSIONS.EDIT_COMPANY) && <TabsTrigger value="company-details">
-            {t("tabs.companyDetails") || "Company Details"}
+            {t("title.companyDetails")}
           </TabsTrigger>}
         </TabsList>
 
@@ -114,13 +114,13 @@ export default function SettingsPage() {
           onClick={handleCancel}
           disabled={isLoading || isSaving}
         >
-          {t("button.cancel") || "Cancel"}
+          {t("button.cancel")}
         </Button>
         <Button
           onClick={handleSave}
           disabled={personalFormRef.current?.isDirty?.() || companyFormRef.current?.isDirty?.()}
         >
-          {isSaving ? "Saving..." : t("button.save") || "Save"}
+          {isSaving ? t("button.saving") : t("button.save")}
         </Button>
       </div>
     </div>

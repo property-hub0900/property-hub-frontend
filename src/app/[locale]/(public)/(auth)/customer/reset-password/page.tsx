@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useParams, useSearchParams } from "next/navigation";
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 import { authService } from "@/services/public/auth";
+import { AuthContainer } from "@/components/auth/auth-container";
 
 export default function CompanyResetPasswordPage() {
   const t = useTranslations();
@@ -13,7 +14,10 @@ export default function CompanyResetPasswordPage() {
   const email = searchParams.get("email") || "";
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <AuthContainer
+      title={t("title.createNewPassword")}
+      subtitle={t("text.enterNewPassword")}
+    >
       <ResetPasswordForm
         t={t}
         token={token}
@@ -21,6 +25,6 @@ export default function CompanyResetPasswordPage() {
         redirectPath={`/${locale}/customer/login`}
         authService={authService}
       />
-    </div>
+    </AuthContainer>
   );
 }

@@ -12,6 +12,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -24,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Bookmark, ChevronDown, SlidersHorizontal } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import {
   PROPERTY_FURNISHED_TYPE,
   PROPERTY_PURPOSE,
@@ -39,6 +40,7 @@ import { useTranslations } from "next-intl";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { USER_ROLES } from "@/constants/rbac";
+import { SaveSearchDialogue } from "./save-search-dialogue";
 
 const BEDROOM_OPTIONS = ["1", "2", "3", "4", "5", "6", "7", "7+"];
 const BATHROOM_OPTIONS = ["1", "2", "3", "4", "5", "6", "7", "7+"];
@@ -50,6 +52,8 @@ export const PropertySearchFilters = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isMoreFiltersOpen, setIsMoreFiltersOpen] = useState(false);
+
+  const [isSaveSearchDisabled, setIsSaveSearchDisabled] = useState(false);
 
   const sortOptions = Object.values(PROPERTY_SORT_BY).map((val) => ({
     label: t(`form.sortBy.options.${val}`),
@@ -83,6 +87,7 @@ export const PropertySearchFilters = () => {
   const [filters, setFilters] = useState<IPropertyFilters>(initialFilters);
 
   useEffect(() => {
+    setIsSaveSearchDisabled(!searchParams.size);
     setFilters(initialFilters);
   }, [searchParams]);
 
@@ -104,7 +109,9 @@ export const PropertySearchFilters = () => {
         }
       });
 
-      router.push(`?${params.toString()}`);
+      const urlParams = `?${params.toString()}`;
+
+      router.push(urlParams);
     },
     [router]
   );
@@ -196,6 +203,16 @@ export const PropertySearchFilters = () => {
       router.push("?");
     }, 500);
   }, [router]);
+
+  // Use this in your PropertySearchFilters component
+  const saveSearchQuery = useMemo(() => {
+    const activeParams = {};
+    searchParams.forEach((value, key) => {
+      activeParams[key] = value;
+    });
+
+    return JSON.stringify(activeParams);
+  }, [searchParams]);
 
   return (
     <form onSubmit={handleSearch} className="">
@@ -374,10 +391,10 @@ export const PropertySearchFilters = () => {
       <div className="flex justify-between mb-10">
         <div>
           {user?.role && user?.role === USER_ROLES.CUSTOMER && (
-            <Button type="button" variant="outlinePrimary">
-              <Bookmark className="size-5" />
-              {t("button.save")} {t("button.search")}
-            </Button>
+            <SaveSearchDialogue
+              isDisabled={isSaveSearchDisabled}
+              saveSearchQuery={saveSearchQuery}
+            />
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -409,6 +426,7 @@ export const PropertySearchFilters = () => {
           <DialogHeader className="px-10">
             <DialogTitle>{t("button.moreFilters")}</DialogTitle>
           </DialogHeader>
+          <DialogDescription></DialogDescription>
           <Separator />
           <div className="overflow-y-auto h-[65vh] px-10">
             {/* Mobile Only Filters */}

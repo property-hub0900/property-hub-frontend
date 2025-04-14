@@ -1,206 +1,182 @@
-"use client"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/utils/utils"
-import { Button } from "@/components/ui/button"
-import { useSidebar } from "@/components/ui/sidebar"
-import { COMPANY_PATHS, CUSTOMER_PATHS, PUBLIC_ROUTES } from "@/constants/paths"
+"use client";
+import { Button } from "@/components/ui/button";
+import { useSidebar } from "@/components/ui/sidebar";
+import {
+  COMPANY_PATHS,
+  CUSTOMER_PATHS,
+  PUBLIC_ROUTES,
+} from "@/constants/paths";
+import { useAuth } from "@/lib/hooks/useAuth";
+import { cn } from "@/utils/utils";
 import {
   BarChart2,
-  Database,
-  Users,
-  Settings,
-  LogOut,
   ChevronLeft,
   ChevronRight,
-  User,
-  Wallet,
-  Package,
-  Bell,
-  Building,
+  Database,
   Heart,
-  HelpCircle,
-  MessageSquare,
-  Search,
   HomeIcon,
-} from "lucide-react"
-import { useAuth } from "@/lib/hooks/useAuth"
-import Image from "next/image"
-import { useEffect, useState } from "react"
+  LogOut,
+  MessageSquare,
+  Package,
+  Search,
+  Settings,
+  User2,
+  Users,
+  Wallet
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 // Import the Tooltip components at the top with the other imports
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 // Import RBAC hook and permissions
-import { useRBAC } from "@/lib/hooks/useRBAC"
-import { PERMISSIONS } from "@/constants/rbac"
+import { useRBAC } from "@/lib/hooks/useRBAC";
+import { useTranslations } from "next-intl";
 
 interface SidebarProps {
-  userType?: "company" | "customer"
+  userType?: "company" | "customer";
 }
 
 export function DashboardSidebar({ userType = "company" }: SidebarProps) {
-  const pathname = usePathname()
-  const { open, setOpen } = useSidebar()
-  const { logOut } = useAuth()
-  const [isMobile, setIsMobile] = useState(false)
-  const [isInitialized, setIsInitialized] = useState(false)
-  // Use RBAC hook
-  const { hasPermission, hasRoutePermission } = useRBAC()
+  const pathname = usePathname();
+  const { hasRoutePermission } = useRBAC();
+  const { open, setOpen } = useSidebar();
+  const { logOut } = useAuth();
+  const [isMobile, setIsMobile] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const t = useTranslations()
 
   // Determine if the screen size is mobile or tablet
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth <= 768
-      setIsMobile(mobile)
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
 
       // Only set the initial state if not already initialized
       if (!isInitialized) {
-        setOpen(!mobile)
-        setIsInitialized(true)
+        setOpen(!mobile);
+        setIsInitialized(true);
       }
-    }
+    };
 
     // Set initial state
-    handleResize()
+    handleResize();
 
     // Add event listener to update isMobile state on resize
-    window.addEventListener("resize", handleResize)
+    window.addEventListener("resize", handleResize);
 
     // Cleanup event listener on component unmount
-    return () => window.removeEventListener("resize", handleResize)
-  }, [isInitialized, setOpen])
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isInitialized, setOpen]);
 
   const handleToggle = () => {
-    setOpen(!open)
-  }
+    setOpen(!open);
+  };
 
   // Check if a path is active (exact match or starts with the path)
   const isActive = (path: string) => {
     // Handle language prefix in pathname (e.g., /en/company/dashboard/top-up)
-    const normalizedPathname = pathname.replace(/^\/[a-z]{2}\//, "/")
+    const normalizedPathname = pathname.replace(/^\/[a-z]{2}\//, "/");
 
-    if (path === "/dashboard" || path === "/company/dashboard" || path === "/customer/dashboard") {
-      return normalizedPathname === path
+    if (
+      path === "/dashboard" ||
+      path === "/company/dashboard" ||
+      path === "/customer/dashboard"
+    ) {
+      return normalizedPathname === path;
     }
-    // Add console log to debug the path matching
-    console.log(
-      `Checking path: ${path}, current pathname: ${pathname}, normalized: ${normalizedPathname}, match: ${normalizedPathname === path || normalizedPathname.startsWith(`${path}/`)}`,
-    )
-    return normalizedPathname === path || normalizedPathname.startsWith(`${path}/`)
-  }
 
-  // Company navigation items with RBAC permissions
-  const companyNavItems = [
+    return (
+      normalizedPathname === path || normalizedPathname.startsWith(`${path}/`)
+    );
+  };
+
+  const NavItems = [
     {
-      title: "Dashboard",
+      title: t("sidebar.dashboard"),
       href: COMPANY_PATHS.dashboard,
       icon: BarChart2,
     },
     {
-      title: "Property Data",
+      title: t("sidebar.myProfile"),
+      href: CUSTOMER_PATHS.myProfile,
+      icon: User2,
+    },
+    {
+      title: t("sidebar.propertyData"),
       href: COMPANY_PATHS.properties,
       icon: Database,
     },
     {
-      title: "Access Management",
+      title: t("sidebar.accessManagement"),
       href: COMPANY_PATHS.accessManagement,
       icon: Users,
     },
     {
-      title: "Points",
+      title: t("sidebar.points"),
       href: COMPANY_PATHS.walletPoints,
       icon: Wallet,
     },
     {
-      title: "Subscription Plans",
+      title: t("sidebar.subscriptionPlans"),
       href: COMPANY_PATHS.subscriptionPlans,
       icon: Package,
     },
     {
-      title: "Top-Up",
+      title: t("sidebar.topUp"),
       href: COMPANY_PATHS.topUp,
       icon: Database,
     },
     {
-      title: "Settings",
-      href: COMPANY_PATHS.settings,
-      icon: Settings,
-    },
-  ]
-
-  // Filter navigation items based on route permissions
-  const filteredCompanyNavItems = companyNavItems.filter(item => {
-    // Check if user has permission to access this route
-    return hasRoutePermission(item.href);
-  })
-
-  // Customer navigation items
-  const customerNavItems = [
-    {
-      title: "Home",
+      title: t("sidebar.dashboard"),
       href: CUSTOMER_PATHS.dashboard,
       icon: HomeIcon,
     },
     {
-      title: "Search Properties",
-      href: CUSTOMER_PATHS.search,
+      title: t("sidebar.savedSearches"),
+      href: CUSTOMER_PATHS.savedSearches,
       icon: Search,
     },
     {
-      title: "Saved Properties",
-      href: CUSTOMER_PATHS.saved,
+      title: t("sidebar.savedProperties"),
+      href: CUSTOMER_PATHS.savedProperties,
       icon: Heart,
-      badge: 5,
     },
     {
-      title: "Notifications",
-      href: CUSTOMER_PATHS.notifications,
-      icon: Bell,
-      badge: 2,
-    },
-    {
-      title: "My Inquiries",
-      href: CUSTOMER_PATHS.inquiries,
-      icon: Building,
-    },
-    {
-      title: "Settings",
-      href: CUSTOMER_PATHS.settings,
+      title: t("sidebar.settings"),
+      href: COMPANY_PATHS.settings,
       icon: Settings,
     },
-  ]
+  ];
 
-  // Filter customer navigation items based on route permissions
-  const filteredCustomerNavItems = customerNavItems.filter(item => {
+  const filteredNavItems: any = NavItems.filter((item) => {
     // Check if user has permission to access this route
     return hasRoutePermission(item.href);
-  })
+  });
 
-  // Footer items are the same for both user types
   const footerItems = [
     {
-      title: "Help Centre",
-      href: PUBLIC_ROUTES.help,
-      icon: HelpCircle,
-    },
-    {
-      title: "Contact us",
+      title: t("sidebar.contactUs"),
       href: PUBLIC_ROUTES.contact,
       icon: MessageSquare,
     },
-  ]
-
-
-  // Select the appropriate navigation items based on user type
-  const navItems: any = userType === "company" ? filteredCompanyNavItems : filteredCustomerNavItems
+  ];
 
   // Determine the dashboard base path for the logo link
-  const dashboardBasePath = userType === "company" ? "/company/dashboard" : "/customer/dashboard"
+  const dashboardBasePath =
+    userType === "company" ? "/company/dashboard" : "/customer/dashboard";
 
   return (
     <div
       className={cn(
         "relative flex flex-col border-r bg-white transition-all duration-300",
-        open ? "w-92 p-4 md:p-6 lg:p-8" : "w-[78px] p-2",
+        open ? "w-72 p-4 md:p-6 lg:p-8" : "w-[78px] p-2"
       )}
     >
       {/* Toggle button positioned at the edge of the sidebar */}
@@ -209,22 +185,41 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
         size="icon"
         onClick={handleToggle}
         className={cn(
-          "absolute -right-4 top-20 z-10 flex h-8 w-8 items-center justify-center rounded-full border bg-white shadow-sm",
+          "absolute -right-4 top-20 z-10 flex h-8 w-8 items-center justify-center rounded-full border bg-white shadow-sm"
         )}
       >
-        {open ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+        {open ? (
+          <ChevronLeft className="h-4 w-4" />
+        ) : (
+          <ChevronRight className="h-4 w-4" />
+        )}
       </Button>
 
       {/* Logo */}
-      <div className={cn("flex h-16 items-center px-4", open ? "justify-start" : "justify-center")}>
+      <div
+        className={cn(
+          "flex h-16 items-center px-4",
+          open ? "justify-start" : "justify-center"
+        )}
+      >
         <Link href={dashboardBasePath} className="flex items-center gap-2">
           {open ? (
             <>
-              <Image src="/logo.svg" alt="PropertyExplorer" width={160} height={160} />
+              <Image
+                src="/logo.svg"
+                alt="PropertyExplorer"
+                width={160}
+                height={160}
+              />
             </>
           ) : (
             <>
-              <Image src="/logo-without-text.svg" alt="PropertyExplorer" width={48} height={48} />
+              <Image
+                src="/logo-without-text.svg"
+                alt="PropertyExplorer"
+                width={48}
+                height={48}
+              />
             </>
           )}
         </Link>
@@ -233,9 +228,11 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       {/* Navigation */}
       <div className="flex-1 overflow-auto py-4">
         <nav className="grid gap-1 px-2">
-          {navItems.map((item, index) => {
-            const active = isActive(item.href)
-            console.log(`Menu item ${item.title}: ${active ? "active" : "inactive"}`)
+          {filteredNavItems.map((item, index) => {
+            const active = isActive(item.href);
+            console.log(
+              `Menu item ${item.title}: ${active ? "active" : "inactive"}`
+            );
 
             // When sidebar is open, render Link without Tooltip
             if (open) {
@@ -245,10 +242,14 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                   href={item.href}
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
-                    active ? "text-primary font-medium bg-primary/10" : "text-gray-500 hover:bg-gray-100",
+                    active
+                      ? "text-primary font-medium bg-primary/10"
+                      : "text-gray-500 hover:bg-gray-100"
                   )}
                 >
-                  <item.icon className={cn("h-5 w-5", active && "text-primary")} />
+                  <item.icon
+                    className={cn("h-5 w-5", active && "text-primary")}
+                  />
                   <div className="flex flex-1 items-center justify-between">
                     <span>{item.title}</span>
                     {item?.badge && (
@@ -258,7 +259,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                     )}
                   </div>
                 </Link>
-              )
+              );
             }
 
             // When sidebar is collapsed, render Link with Tooltip
@@ -270,10 +271,14 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                       href={item.href}
                       className={cn(
                         "flex items-center justify-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
-                        active ? "text-primary font-medium bg-primary/10" : "text-gray-500 hover:bg-gray-100",
+                        active
+                          ? "text-primary font-medium bg-primary/10"
+                          : "text-gray-500 hover:bg-gray-100"
                       )}
                     >
-                      <item.icon className={cn("h-6 w-6", active && "text-primary")} />
+                      <item.icon
+                        className={cn("h-6 w-6", active && "text-primary")}
+                      />
                       {item?.badge && (
                         <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-xs text-white">
                           {item?.badge}
@@ -284,7 +289,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                   <TooltipContent side="right">{item.title}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-            )
+            );
           })}
         </nav>
       </div>
@@ -293,7 +298,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       <div className="px-2 py-4">
         <nav className="grid gap-1">
           {footerItems.map((item, index) => {
-            const active = isActive(item.href)
+            const active = isActive(item.href);
 
             // When sidebar is open, render Link without Tooltip
             if (open) {
@@ -303,13 +308,17 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                   href={item.href}
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
-                    active ? "text-primary font-medium bg-primary/10" : "text-gray-500 hover:bg-gray-100",
+                    active
+                      ? "text-primary font-medium bg-primary/10"
+                      : "text-gray-500 hover:bg-gray-100"
                   )}
                 >
-                  <item.icon className={cn("h-5 w-5", active && "text-primary")} />
+                  <item.icon
+                    className={cn("h-5 w-5", active && "text-primary")}
+                  />
                   <span>{item.title}</span>
                 </Link>
-              )
+              );
             }
 
             // When sidebar is collapsed, render Link with Tooltip
@@ -321,16 +330,20 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                       href={item.href}
                       className={cn(
                         "flex items-center justify-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
-                        active ? "text-primary font-medium bg-primary/10" : "text-gray-500 hover:bg-gray-100",
+                        active
+                          ? "text-primary font-medium bg-primary/10"
+                          : "text-gray-500 hover:bg-gray-100"
                       )}
                     >
-                      <item.icon className={cn("h-6 w-6", active && "text-primary")} />
+                      <item.icon
+                        className={cn("h-6 w-6", active && "text-primary")}
+                      />
                     </Link>
                   </TooltipTrigger>
                   <TooltipContent side="right">{item.title}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-            )
+            );
           })}
         </nav>
       </div>
@@ -344,7 +357,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
             className="w-full justify-start text-red-500 hover:bg-red-50 hover:text-red-600"
           >
             <LogOut className="mr-2 h-5 w-5" />
-            <span>Log out</span>
+            <span>{t("userMenu.logout")}</span>
           </Button>
         ) : (
           <TooltipProvider delayDuration={0}>
@@ -358,12 +371,11 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                   <LogOut className="h-5 w-5" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent side="right">Log out</TooltipContent>
+              <TooltipContent side="right">{t("userMenu.logout")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         )}
       </div>
     </div>
-  )
+  );
 }
-

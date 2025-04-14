@@ -77,7 +77,7 @@ export function ForgotPasswordForm({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <FormLabel className="text-sm">Email</FormLabel>
+            <FormLabel className="text-sm">{t("form.email.label")}</FormLabel>
             <FormField
               control={form.control}
               name="email"
@@ -85,7 +85,7 @@ export function ForgotPasswordForm({
                 <FormItem>
                   <FormControl>
                     <Input
-                      placeholder="example@email.com"
+                      placeholder={t("form.email.placeholder")}
                       type="email"
                       {...field}
                       autoComplete="email"
@@ -108,7 +108,7 @@ export function ForgotPasswordForm({
         </form>
       </Form>
       <div className="text-xs text-center text-gray-500 mt-6">
-        © 2025 Property Explorer, Qatar. All Rights Reserved
+        {t("footer.allRightsReserved")}
       </div>
     </>
   );

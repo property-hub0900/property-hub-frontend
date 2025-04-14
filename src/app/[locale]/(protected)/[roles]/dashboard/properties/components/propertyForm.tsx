@@ -198,7 +198,7 @@ export default function PropertyForm(
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Property Images
+                      {t("form.propertyImages.label")}
                       <span className="text-destructive ml-1">*</span>
                     </FormLabel>
                     <FormControl>

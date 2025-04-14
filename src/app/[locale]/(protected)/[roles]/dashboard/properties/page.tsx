@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { COMPANY_PATHS } from "@/constants/paths";
 
@@ -13,9 +13,12 @@ import { useRBAC } from "@/lib/hooks/useRBAC";
 import { companiesProperties } from "@/services/protected/properties";
 import { useAuthStore } from "@/store/auth-store";
 import { useQuery } from "@tanstack/react-query";
+
 export default function PropertiesListing() {
   const { user } = useAuthStore();
   const { hasPermission } = useRBAC();
+  const t = useTranslations();
+
   const {
     data: dataCompaniesProperties,
     isLoading: isLoadingProperties,
@@ -33,10 +36,10 @@ export default function PropertiesListing() {
         isLoading={isLoadingProperties || isFetchingProperties}
       ></Loader>
       <div className="flex justify-between items-center mb-5">
-        <h3>Property Data</h3>
+        <h3>{t("sidebar.propertyData")}</h3>
         {hasPermission(PERMISSIONS.CREATE_PROPERTY) && (
           <Link className="cursor-pointer" href={COMPANY_PATHS.addNewProperty}>
-            <Button>+Add New Property</Button>
+            <Button>{t("title.addNewProperty")}</Button>
           </Link>
         )}
       </div>

@@ -248,7 +248,7 @@ export default function CustomerLoginPage() {
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
                         tabIndex={-1}
                         aria-label={
-                          showPassword ? "Hide password" : "Show password"
+                          showPassword ? t("hidePassword") : t("showPassword")
                         }
                       >
                         {showPassword ? (
