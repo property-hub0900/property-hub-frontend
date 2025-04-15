@@ -164,7 +164,7 @@
     },
     "email": {
       "label": "Email",
-      "placeholder": "example@xyz.com",
+      "placeholder": "Email",
       "errors": {
         "required": "Email is required.",
         "invalid": "Enter a valid email."
@@ -585,7 +585,6 @@
     "submit": "Submit",
     "tryAgain": "Try Again"
   },
-
   "subscriptionRenewal": "Subscription Renewal",
   "reviewAndUpdatePayment": "Please Enter your Payment details.",
   "subscriptionPlan": "Subscription Plan",
