@@ -172,8 +172,6 @@ export function ResetPasswordForm({ t, token, email, redirectPath, authService }
           </Button>
         </form>
       </Form>
-
-      <div className="text-xs text-center text-gray-400 mt-6">{t("footer.allRightsReserved")}</div>
     </div>
   )
 }

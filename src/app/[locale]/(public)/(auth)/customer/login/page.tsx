@@ -240,6 +240,7 @@ export default function CustomerLoginPage() {
                     <div className="relative">
                       <Input
                         type={showPassword ? "text" : "password"}
+                        placeholder="*********"
                         {...field}
                       />
                       <button

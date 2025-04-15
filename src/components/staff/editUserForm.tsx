@@ -242,12 +242,12 @@ export function EditUserForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {t("form.fullName.label") || "Full Name"}
+                      {t("form.firstName.label") || "First Name"}
                     </FormLabel>
                     <FormControl>
                       <Input
                         placeholder={
-                          t("form.fullName.placeholder") || "Enter full name"
+                          t("form.firstName.placeholder") || "Enter first name"
                         }
                         {...field}
                       />
@@ -256,6 +256,28 @@ export function EditUserForm({
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {t("form.lastName.label") || "Last Name"}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={
+                          t("form.lastName.placeholder") || "Enter last name"
+                        }
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
 
               <FormField
                 control={form.control}
