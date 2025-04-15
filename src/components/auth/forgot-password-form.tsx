@@ -107,9 +107,7 @@ export function ForgotPasswordForm({
           </Button>
         </form>
       </Form>
-      <div className="text-xs text-center text-gray-500 mt-6">
-        {t("footer.allRightsReserved")}
-      </div>
+
     </>
   );
 }
