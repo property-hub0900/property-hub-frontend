@@ -180,7 +180,6 @@ export const useAuthStore = create<AuthState>()(
         return true;
       },
 
-
       getToken: () => {
         const isAuth = get().checkAuth();
         return isAuth && get().user ? get()?.user?.token : (null as any);
@@ -192,14 +191,13 @@ export const useAuthStore = create<AuthState>()(
           if (!user) return;
 
           let response;
-          if (user.role === 'customer') {
-            // response = await customerService.getMe();
+          if (user.role === "customer") {
+            //response = await customerService.getMe();
           } else {
             response = await companyService.getMe();
           }
 
           if (response) {
-
             const syncedUser = {
               ...user,
               // Add additional fields from response

@@ -1,15 +1,16 @@
-export interface ISavedSearches {
-  isError: false;
-  page: 0;
-  pageSize: 20;
-  results: ISavedSearch[];
-  total: 0;
+export interface ICustomerProfile {
+  customerId: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  profilePhoto?: string | null;
+  firebaseToken?: string;
+  userId?: number;
 }
 
-export interface ISavedSearch {
-  searchId: number;
-  customerId: number;
-  searchTitle: string;
-  searchQuery: string;
-  createdAt: string;
+export interface IChangePassword {
+  email: string;
+  currentPassword: string;
+  password: string;
 }

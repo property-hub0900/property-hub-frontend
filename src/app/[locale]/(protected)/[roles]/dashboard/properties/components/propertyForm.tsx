@@ -713,6 +713,7 @@ export default function PropertyForm(
           </form>
         </Form>
       </div>
+
       {hasPermission(PERMISSIONS.CREATE_PROPERTY) && (
         <div className="col-span-2 gap-2 flex justify-end mt-6">
           {(!defaultValues ||

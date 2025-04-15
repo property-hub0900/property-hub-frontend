@@ -60,7 +60,8 @@ export function UserAvatar({
 
   return (
     <Avatar className={`${sizeClasses[size]} ${className}`}>
-      <AvatarImage src={src || ""} alt={`${firstName} ${lastName}`} />
+      {src && <AvatarImage src={src || ""} alt={`${firstName} ${lastName}`} />}
+
       <AvatarFallback className={"bg-primary text-primary-foreground"}>
         {initials}
       </AvatarFallback>

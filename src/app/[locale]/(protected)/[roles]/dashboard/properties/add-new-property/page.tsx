@@ -1,19 +1,15 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-
-import { getErrorMessage } from "@/utils/utils";
+import { Loader } from "@/components/loader";
+import { COMPANY_PATHS } from "@/constants/paths";
+import { createProperty } from "@/services/protected/properties";
 import { TCreatePropertySchema } from "@/types/protected/properties";
+import { getErrorMessage } from "@/utils/utils";
 import { useMutation } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-
-import { Loader } from "@/components/loader";
-import { createProperty } from "@/services/protected/properties";
 import PropertyForm from "../components/propertyForm";
-import { COMPANY_PATHS } from "@/constants/paths";
-import { ProtectedRoute } from "@/components/rbac/protected-route";
-import { PERMISSIONS } from "@/constants/rbac";
 
 export default function CreatePropertyPage() {
   const t = useTranslations();

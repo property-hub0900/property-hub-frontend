@@ -33,7 +33,9 @@
     "propertyDetails": "Property details",
     "furnishing": "Furnishing",
     "keywordSearch": "Keyword Search",
-    "moreAvailableInSameArea": "More Available in same area"
+    "moreAvailableInSameArea": "More Available in same area",
+    "myProfile": "My Profile",
+    "changePassword": "Change Password"
   },
   "button": {
     "next": "Next",
@@ -96,7 +98,7 @@
     "enterNewPassword": "Enter your new password",
     "loadingStaff": "Loading staff members...",
     "deleteAgentConfirmation": "Are you sure you want to delete this agent? This action cannot be undone.",
-    "deletePhotoConfirmation": "Are you sure you want to delete this photo? This action cannot be undone.",
+    "deletePhotoConfirmation": "Are you sure you want to delete this photo?",
     "loadStaffFailed": "Failed to load staff members",
     "staffDeleted": "Staff member deleted successfully",
     "deleteFailed": "Failed to delete staff member",
@@ -123,9 +125,6 @@
     "of": "of"
   },
   "form": {
-    "propertyImages": {
-      "label": "Property Images"
-    },
     "fullName": {
       "label": "Full Name",
       "placeholder": "Enter your full name",
@@ -449,6 +448,13 @@
         "newest": "Newest",
         "priceLow": "Price (Low)",
         "priceHigh": "Price (High)"
+      }
+    },
+    "currentPassword": {
+      "label": "Current Password",
+      "placeholder": "Current Password",
+      "errors": {
+        "required": "Current Password is required."
       }
     }
   },

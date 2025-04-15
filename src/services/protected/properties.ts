@@ -1,11 +1,11 @@
 import apiClient from "@/lib/api-client";
 import { ICommonMessageResponse, IUpdate } from "@/types/common";
-import { ISavedSearches } from "@/types/protected/customer";
 
 import {
   IAmenitiesResponse,
   IProperties,
   IProperty,
+  ISavedSearches,
   TCreatePropertySchema,
 } from "@/types/protected/properties";
 import { IPropertyFilters, IPropertyResponse } from "@/types/public/properties";

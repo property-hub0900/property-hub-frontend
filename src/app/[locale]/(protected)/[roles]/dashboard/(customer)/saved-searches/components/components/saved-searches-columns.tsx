@@ -15,7 +15,7 @@ import { Search, Trash2 } from "lucide-react";
 
 import Link from "next/link";
 import { toast } from "sonner";
-import { ISavedSearch } from "@/types/protected/customer";
+import { ISavedSearch } from "@/types/protected/properties";
 import { deleteSaveSearch } from "@/services/protected/properties";
 
 export const SavedSearchesColumns: ColumnDef<ISavedSearch>[] = [
