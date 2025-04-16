@@ -11,11 +11,10 @@ import { Loader } from "@/components/loader";
 import { PERMISSIONS } from "@/constants/rbac";
 import { useRBAC } from "@/lib/hooks/useRBAC";
 import { companiesProperties } from "@/services/protected/properties";
-import { useAuthStore } from "@/store/auth-store";
+
 import { useQuery } from "@tanstack/react-query";
 
 export default function PropertiesListing() {
-  const { user } = useAuthStore();
   const { hasPermission } = useRBAC();
   const t = useTranslations();
 
@@ -43,7 +42,7 @@ export default function PropertiesListing() {
         )}
       </div>
       {dataCompaniesProperties && (
-        <PropertiesTable {...dataCompaniesProperties} />
+        <PropertiesTable data={dataCompaniesProperties.results || []} />
       )}
     </>
   );

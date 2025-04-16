@@ -15,13 +15,16 @@ import {
 import { IProperty } from "@/types/protected/properties";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit, Edit2, Trash2 } from "lucide-react";
+import { Archive, Edit, Edit2, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import { PROPERTY_STATUSES } from "@/constants/constants";
 import { useRBAC } from "@/lib/hooks/useRBAC";
 import { PERMISSIONS } from "@/constants/rbac";
+import { DeleteDialog } from "@/components/delete-dailog";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 export const propertiesTableColumns: ColumnDef<IProperty>[] = [
   {
@@ -44,6 +47,11 @@ export const propertiesTableColumns: ColumnDef<IProperty>[] = [
   {
     accessorKey: "title",
     header: "Title",
+    enableSorting: true,
+  },
+  {
+    accessorKey: "postedBy",
+    header: "Publisher",
     enableSorting: true,
   },
 
@@ -169,7 +177,7 @@ const FeaturedCell = ({ row }) => {
   return (
     <div className="flex">
       {featured ? (
-        <Button disabled variant={"outline"} size={"sm"}>
+        <Button className="w-28" disabled variant={"outline"} size={"sm"}>
           <Image width={20} height={20} src="/star.svg" alt="Featured" />
           Featured
         </Button>
@@ -177,6 +185,7 @@ const FeaturedCell = ({ row }) => {
         <>
           {hasPermission(PERMISSIONS.FEATURE_PROPERTY) && (
             <Button
+              className="w-28"
               disabled={updatePropertyByIdMutation.isPending}
               onClick={handleUpgradeFeatured}
               size={"sm"}
@@ -191,19 +200,43 @@ const FeaturedCell = ({ row }) => {
 };
 
 const ActionCell = ({ row }) => {
+  const t = useTranslations();
+
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
   const rowData = row.original;
   const { propertyId } = rowData;
 
   const queryClient = useQueryClient();
+
+  const updatePropertyByIdMutation = useMutation({
+    mutationKey: ["updatePropertyById"],
+    mutationFn: updatePropertyById,
+  });
+
+  const handleArchive = async () => {
+    try {
+      const updatedObj = {
+        id: String(propertyId),
+        payload: { status: PROPERTY_STATUSES.archived },
+      };
+
+      const response = await updatePropertyByIdMutation.mutateAsync(updatedObj);
+      toast.success(response.message);
+      queryClient.refetchQueries({ queryKey: ["companiesProperties"] });
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+  };
 
   const deletePropertyByIdMutation = useMutation({
     mutationKey: ["deletePropertyById"],
     mutationFn: deletePropertyById,
   });
 
-  const onDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      const response = await deletePropertyByIdMutation.mutateAsync(id);
+      const response = await deletePropertyByIdMutation.mutateAsync(propertyId);
       toast.success(response.message);
       queryClient.refetchQueries({ queryKey: ["companiesProperties"] });
     } catch (error) {
@@ -218,9 +251,22 @@ const ActionCell = ({ row }) => {
         <Link href={`${COMPANY_PATHS.properties}/${propertyId}`}>
           <Edit className="size-5 text-primary" />
         </Link>
+
+        <Archive
+          onClick={handleArchive}
+          className="size-5 text-muted-foreground cursor-pointer"
+        />
         <Trash2
-          onClick={() => onDelete(propertyId)}
+          onClick={() => setIsDeleteDialogOpen(true)}
           className="size-5 text-destructive cursor-pointer"
+        />
+        <DeleteDialog
+          title={t("title.areYouSure")}
+          deleteConfirmation={t("text.areYouSureText")}
+          isSubmitting={false}
+          isOpen={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          onDelete={handleDelete}
         />
       </div>
     </>

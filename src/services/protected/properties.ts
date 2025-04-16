@@ -6,6 +6,8 @@ import {
   IProperties,
   IProperty,
   ISavedSearches,
+  IStaffList,
+  IStaffListResponse,
   TCreatePropertySchema,
 } from "@/types/protected/properties";
 import { IPropertyFilters, IPropertyResponse } from "@/types/public/properties";
@@ -41,7 +43,7 @@ export const deletePropertyById = (
 };
 
 export const amenities = (): Promise<IAmenitiesResponse> => {
-  return apiClient.get("/amenities?page=0&pageSize=100000");
+  return apiClient.get("/amenities?page=0&pageSize=1000");
 };
 
 export const getFavoriteProperties = (
@@ -55,11 +57,15 @@ export const getFavoriteProperties = (
 };
 
 export const getSaveSearched = (id: number): Promise<ISavedSearches> => {
-  return apiClient.get(`/customers/save-search?&page=0&pageSize=100000`);
+  return apiClient.get(`/customers/save-search?&page=0&pageSize=1000`);
 };
 
 export const deleteSaveSearch = (
   id: number
 ): Promise<ICommonMessageResponse> => {
   return apiClient.delete(`/customers/remove-search/${id}`);
+};
+
+export const staffList = (): Promise<IStaffListResponse> => {
+  return apiClient.get(`/companies/staff?&page=0&pageSize=1000`);
 };

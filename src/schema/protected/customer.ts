@@ -8,6 +8,8 @@ export const customerProfileSchema = (t: (key: string) => string) =>
     email: commonValidations.stringRequired(t("form.required")),
     phoneNumber: commonValidations.stringRequired(t("form.required")),
     profilePhoto: z.string().optional().nullable(),
+    inAppNotification: z.boolean(),
+    emailNotification: z.boolean(),
   });
 
 export type TCustomerProfileSchema = z.infer<

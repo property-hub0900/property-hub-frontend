@@ -33,8 +33,8 @@ export interface IProperty {
   zipCode: string;
   country: string;
   location: string;
-  postedBy: any;
-  companyId: any;
+  postedBy: string;
+  companyId: string;
   createdAt: string;
   PropertyImages: IPropertyImage[];
 }
@@ -75,4 +75,14 @@ export interface ISavedSearch {
   searchTitle: string;
   searchQuery: string;
   createdAt: string;
+}
+
+export interface IStaffListResponse {
+  results: IStaffList[];
+}
+
+export interface IStaffList {
+  staffId: string;
+  firstName: string;
+  lastName: string;
 }

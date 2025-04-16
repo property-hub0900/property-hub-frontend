@@ -1,20 +1,22 @@
 import apiClient from "@/lib/api-client";
 import { ICommonMessageResponse } from "@/types/common";
-import { IChangePassword, ICustomerProfile } from "@/types/protected/customer";
+import {
+  IChangePassword,
+  ICustomerGetMe,
+  IUpdateCustomerProfile,
+} from "@/types/protected/customer";
 
 // Customer service with methods for customer operations
 export const customerService = {
   // Get current customer data
-  getMe: async () => {
-    return apiClient.get("/customer/me");
+  getMe: async (): Promise<ICustomerGetMe> => {
+    return apiClient.get("/customers/me");
   },
-  getCustomerProfile: async (id: number): Promise<ICustomerProfile> => {
-    return apiClient.get(`/customers/${id}`);
-  },
+
   updateCustomerProfile: async (
-    payloads: ICustomerProfile & { id: number }
+    payloads: IUpdateCustomerProfile
   ): Promise<ICommonMessageResponse> => {
-    return apiClient.put(`/customers/${payloads.id}`, payloads);
+    return apiClient.put(`/customers/update-profile`, payloads);
   },
   changePassword: async (
     payloads: IChangePassword

@@ -60,3 +60,15 @@ export const createPropertySchema = (t: (key: string) => string) =>
       .min(1, "At least one image is required")
       .max(20, `Maximum 20 images allowed`),
   });
+
+export const propertyDataFIltersSchema = (t: (key: string) => string) =>
+  z.object({
+    publisher: commonValidations.stringOptional(),
+    featured: commonValidations.stringOptional(),
+    propertyType: commonValidations.stringOptional(),
+    status: commonValidations.stringOptional(),
+  });
+
+export type TPropertyDataFIltersSchema = z.infer<
+  ReturnType<typeof propertyDataFIltersSchema>
+>;
