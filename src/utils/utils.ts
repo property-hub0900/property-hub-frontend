@@ -123,3 +123,20 @@ export const convertSavedSearchToURL = (jsonString: string): string => {
     return "";
   }
 };
+
+
+export function calculateRemainingDays(endDate: string | undefined): number {
+  if (!endDate) return 0; // Return 0 if endDate is undefined or invalid
+
+  const today = new Date();
+  const subscriptionEnd = new Date(endDate);
+
+  // Calculate the difference in milliseconds
+  const differenceInTime = subscriptionEnd.getTime() - today.getTime();
+
+  // Convert to days and round up to include the current day
+  const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
+
+  // Return 0 if the date has passed or is invalid
+  return differenceInDays > 0 ? differenceInDays : 0;
+}

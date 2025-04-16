@@ -1,94 +1,62 @@
 "use client"
 
-import { useState } from "react"
-import { Badge } from "@/components/ui/badge"
-import { useTranslations } from "next-intl"
 import { DataTable } from "@/components/dataTable/data-table"
+import { Badge } from "@/components/ui/badge"
 import type { ColumnDef } from "@tanstack/react-table"
+import { useTranslations } from "next-intl"
+import { useEffect, useState } from "react"
 
-interface Transaction {
-    id: string
-    date: string
-    amount: number
-    status: "successful" | "pending" | "failed"
-    paymentMethod: string
-    invoiceUrl?: string
-}
 
-export function TransactionHistory() {
+
+export function TransactionHistory({ subscription }: { subscription: any }) {
     const t = useTranslations()
     const [sorting, setSorting] = useState([])
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-    const [transactions, setTransactions] = useState<Transaction[]>([
-        {
-            id: "TX123456",
-            date: "2023-12-01",
-            amount: 199.99,
-            status: "successful",
-            paymentMethod: "Visa •••• 4242",
-            invoiceUrl: "#",
-        },
-        {
-            id: "TX123455",
-            date: "2023-11-01",
-            amount: 199.99,
-            status: "successful",
-            paymentMethod: "Visa •••• 4242",
-            invoiceUrl: "#",
-        },
-        {
-            id: "TX123454",
-            date: "2023-10-01",
-            amount: 199.99,
-            status: "successful",
-            paymentMethod: "Visa •••• 4242",
-            invoiceUrl: "#",
-        },
-    ])
+
+    useEffect(() => {
+        setTransactions(subscription?.results || []);
+    }, [subscription]);
 
     const columns: ColumnDef<Transaction>[] = [
         {
-            accessorKey: "id",
-            header: t("transactionId"),
-            cell: ({ row }) => <span className="font-medium">{row.original.id}</span>,
+            accessorKey: "subscriptionDate",
+            header: t("subscriptionDate"),
+            cell: ({ row }) => <span className="font-medium">{formatDate(row?.original?.createdAt as string)}</span>,
         },
         {
-            accessorKey: "date",
-            header: t("date"),
-            cell: ({ row }) => formatDate(row.original.date),
+            accessorKey: "points",
+            header: t("points"),
+            cell: ({ row }) => <span className="font-medium">{row.original.points}</span>,
             enableSorting: true,
         },
         {
-            accessorKey: "amount",
-            header: t("amount"),
-            cell: ({ row }) => formatCurrency(row.original.amount),
+            accessorKey: "method",
+            header: t("method"),
+            cell: ({ row }) => <span className="font-medium">{row.original.method}</span>,
             enableSorting: true,
+        },
+        {
+            accessorKey: "type",
+            header: t("type"),
+            cell: ({ row }) => <span className="font-medium">{row.original.type}</span>,
+            enableSorting: true,
+        },
+        {
+            accessorKey: "endDate",
+            header: t("subscriptionExpiryDate"),
+            cell: ({ row }) => formatDate(row.original.endDate as string),
         },
         {
             accessorKey: "status",
             header: t("status"),
-            cell: ({ row }) => <StatusBadge status={row.original.status} />,
-            enableSorting: true,
-        },
-        {
-            accessorKey: "paymentMethod",
-            header: t("paymentMethod"),
-            cell: ({ row }) => row.original.paymentMethod,
-        },
-        {
-            accessorKey: "invoiceUrl",
-            header: t("invoice"),
-            cell: ({ row }) =>
-                row.original.invoiceUrl && (
-                    <a
-                        href={row.original.invoiceUrl}
-                        className="text-primary hover:underline"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        {t("view")}
-                    </a>
-                ),
+            cell: ({ row }) => {
+                if (row.original?.endDate && new Date(row.original?.endDate) > new Date()) {
+                    return <StatusBadge status={"active"} />
+                } else {
+                    return <StatusBadge status={"expired"} />
+                }
+            },
         },
     ]
 
@@ -106,12 +74,16 @@ function StatusBadge({ status }: { status: Transaction["status"] }) {
         successful: "bg-green-100 text-green-800 hover:bg-green-100",
         pending: "bg-yellow-100 text-yellow-800 hover:bg-yellow-100",
         failed: "bg-red-100 text-red-800 hover:bg-red-100",
+        active: "bg-green-100 text-green-800 hover:bg-green-100",
+        expired: "bg-red-100 text-red-800 hover:bg-red-100",
     }
 
     const labels = {
         successful: t("statusSuccessful"),
         pending: t("statusPending"),
         failed: t("statusFailed"),
+        active: t("statusActive"),
+        expired: t("statusExpired"),
     }
 
     return (
