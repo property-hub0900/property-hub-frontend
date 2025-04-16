@@ -644,6 +644,8 @@
   "previous": "Previous",
   "subscriptionDate": "Subscription Date",
   "points": "Points",
+  "method": "Method",
+  "subscriptionRenewedSuccessfully": "Subscription renewed successfully",
   "expiry": "Expiry",
   "type": "Type",
   "subscriptionExpiryDate": "Subscription Expiry Date",

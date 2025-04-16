@@ -160,4 +160,10 @@ export const companyService = {
   ): Promise<IResponse<any>> => {
     return apiClient.put(`/companies`, payload);
   },
+  getCompanySubscription: async (): Promise<IResponse<any>> => {
+    return apiClient.get("companies/subscriptions");
+  },
+  renewSubscription: async (): Promise<IResponse<any>> => {
+    return apiClient.post("companies/renew-subscription");
+  },
 };
