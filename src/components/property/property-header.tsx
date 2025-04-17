@@ -47,7 +47,7 @@ export function PropertyHeader({
           <span className="text-gray-200">|</span>
           <div className="flex items-center gap-1">
             <Expand className="size-4 md:size-5" />
-            {formatNumber(propertySize)} {t("text.sqft")}
+            {formatNumber(propertySize)} {t("text.sqm")}
           </div>
         </div>
       </div>

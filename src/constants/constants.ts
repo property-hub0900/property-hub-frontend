@@ -53,8 +53,10 @@ export const PROPERTY_SORT_BY = {
   newest: "newest",
   priceLow: "priceLow",
   priceHigh: "priceHigh",
+  bedsLeast: "bedsLeast",
+  bedsMost: "bedsMost",
 } as const;
 
 export type TPropertySortBy = keyof typeof PROPERTY_SORT_BY;
 
-export const COLOR_DASHBOARD = "rgba(74, 160, 217, 1)"
+export const COLOR_DASHBOARD = "rgba(74, 160, 217, 1)";

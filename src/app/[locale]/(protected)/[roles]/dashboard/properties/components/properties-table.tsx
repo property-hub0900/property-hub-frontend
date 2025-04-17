@@ -3,7 +3,7 @@
 import { DataTable } from "@/components/dataTable/data-table";
 import type { IProperty } from "@/types/protected/properties";
 import type { SortingState } from "@tanstack/react-table";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { propertiesTableColumns } from "./properties-table-columns";
 
 import { Input } from "@/components/ui/input";
@@ -19,10 +19,7 @@ export interface IPropertyDataFilters {
   status?: string;
 }
 
-import { useDebounceValue } from "@/lib/hooks/useDebounceValue";
 import { Search } from "lucide-react";
-import { IOption } from "@/types/common";
-import { staffList } from "@/services/protected/properties";
 
 const initFilters = {
   title: "",
@@ -51,18 +48,16 @@ export const PropertiesTable = ({ data }: { data: IProperty[] }) => {
     }));
   };
 
-  const filteredData = useMemo(() => {
-    return data.filter((item) => {
+  const filteredAndSortedData = useMemo(() => {
+    // First apply filters
+    const filteredItems = data.filter((item) => {
       if (
         filters?.title &&
         !item.title.toLowerCase().includes(filters?.title.toLowerCase())
       )
         return false;
 
-      if (
-        filters?.referenceNo &&
-        !item.referenceNo.includes(filters?.referenceNo)
-      )
+      if (filters?.referenceNo && item.referenceNo !== filters?.referenceNo)
         return false;
 
       if (filters?.publisher && filters?.publisher != `publisher`) {
@@ -90,9 +85,37 @@ export const PropertiesTable = ({ data }: { data: IProperty[] }) => {
 
       return true;
     });
-  }, [filters, data]);
 
-  // console.log("filters", filters);
+    // Then apply sorting
+    if (sorting.length > 0) {
+      const { id: sortField, desc } = sorting[0];
+
+      filteredItems.sort((a, b) => {
+        const aValue = a[sortField as keyof IProperty];
+        const bValue = b[sortField as keyof IProperty];
+
+        if (typeof aValue === "string" && typeof bValue === "string") {
+          return desc
+            ? bValue.localeCompare(aValue)
+            : aValue.localeCompare(bValue);
+        }
+
+        if (aValue < bValue) return desc ? 1 : -1;
+        if (aValue > bValue) return desc ? -1 : 1;
+        return 0;
+      });
+    }
+
+    return filteredItems;
+  }, [filters, sorting, data]);
+
+  const handleSortingChange = (
+    updaterOrValue: SortingState | ((prev: SortingState) => SortingState)
+  ) => {
+    setSorting(updaterOrValue);
+  };
+
+  //console.log("filters", filters);
   // console.log("filteredData", filteredData);
 
   return (
@@ -130,9 +153,11 @@ export const PropertiesTable = ({ data }: { data: IProperty[] }) => {
             <div className="py-5">
               <DataTable
                 columns={propertiesTableColumns}
-                data={filteredData}
+                //data={filteredData}
+                //data={getSortedData(filteredData, sorting)}
+                data={filteredAndSortedData || []}
                 sorting={sorting}
-                onSortingChange={setSorting}
+                onSortingChange={handleSortingChange}
               />
             </div>
           </div>

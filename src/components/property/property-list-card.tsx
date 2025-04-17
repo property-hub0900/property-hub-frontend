@@ -161,7 +161,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             <div className="flex items-center gap-1">
               <Ruler className="h-4 w-4" />
               <span>
-                {propertySize.toLocaleString()} {t("text.sqft")}
+                {propertySize.toLocaleString()} {t("text.sqm")}
               </span>
             </div>
           </div>
@@ -213,26 +213,37 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
           )}
         </div>
 
-        <div className="mt-3 flex items-center gap-2">
-          <div className="h-6 w-6 flex items-center justify-center rounded-full bg-gray-200">
-            {postedByStaff?.profilePhoto ? (
-              <Image
-                width={24}
-                height={24}
-                src={postedByStaff.profilePhoto}
-                alt="Profile"
-                className="rounded-full"
-              />
-            ) : (
-              <User className="size-4 text-muted-foreground/50" />
-            )}
+        <div className="mt-3 flex justify-between items-center gap-2">
+          <div className="flex items-center gap-2">
+            <div className="h-6 w-6 flex items-center justify-center rounded-full bg-gray-200">
+              {postedByStaff?.profilePhoto ? (
+                <Image
+                  width={24}
+                  height={24}
+                  src={postedByStaff.profilePhoto}
+                  alt="Profile"
+                  className="rounded-full"
+                />
+              ) : (
+                <User className="size-4 text-muted-foreground/50" />
+              )}
+            </div>
+            <span className="text-sm text-muted-foreground">
+              {/* Listed {daysAgo} days ago */}
+              {t.rich("text.listedDaysAgo", {
+                highlight: () => <span>{daysAgo}</span>,
+              })}
+            </span>
           </div>
-          <span className="text-sm text-muted-foreground">
-            {/* Listed {daysAgo} days ago */}
-            {t.rich("text.listedDaysAgo", {
-              highlight: () => <span>{daysAgo}</span>,
-            })}
-          </span>
+          {/* {postedByStaff?.profilePhoto && (
+            <Image
+              width={24}
+              height={24}
+              src={postedByStaff.profilePhoto}
+              alt="Profile"
+              className="rounded-full"
+            />
+          )} */}
         </div>
       </CardContent>
     </Card>

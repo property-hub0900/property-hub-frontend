@@ -50,9 +50,17 @@ export const propertiesTableColumns: ColumnDef<IProperty>[] = [
     enableSorting: true,
   },
   {
-    accessorKey: "postedBy",
+    accessorKey: "postedByStaff.firstName",
     header: "Publisher",
     enableSorting: true,
+    cell: ({ row }) => {
+      const rowData = row.original;
+      return (
+        <>
+          {rowData.postedByStaff.firstName} {rowData.postedByStaff.lastName}
+        </>
+      );
+    },
   },
 
   {

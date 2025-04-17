@@ -572,7 +572,7 @@ export const PropertySearchFilters = () => {
             {/* Property Size */}
             <div className="space-y-2">
               <h6>
-                {t("form.propertySize.label")} ({t("text.sqft")})
+                {t("form.propertySize.label")} ({t("text.sqm")})
               </h6>
               <div className="flex gap-4">
                 <Input

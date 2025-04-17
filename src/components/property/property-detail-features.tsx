@@ -52,7 +52,7 @@ export function PropertyDetailFeatures({ property }: PropertyDetailsProps) {
             {t("form.propertySize.label")}
           </div>
           <div className="font-medium">
-            {formatNumber(property.propertySize)} {t("text.sqft")}
+            {formatNumber(property.propertySize)} {t("text.sqm")}
           </div>
         </div>
         {Number(property.bedrooms) > 0 && (

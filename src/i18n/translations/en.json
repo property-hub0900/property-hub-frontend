@@ -108,7 +108,7 @@
     "hidePriceFromListing": "Hide price from the listing",
     "wantToFeatureProperty": "Want to feature this property?",
     "monthly": "Monthly",
-    "sqft": "Sqft",
+    "sqm": "sqm",
     "featured": "Featured",
     "listedDaysAgo": "Listed <highlight></highlight> days ago",
     "any": "Any",
@@ -282,7 +282,7 @@
     },
     "propertySize": {
       "label": "Property Size",
-      "placeholder": "Property Size Sqft"
+      "placeholder": "Property Size sqm"
     },
     "tenureOfProperty": {
       "label": "Tenure Of Property",
@@ -451,7 +451,9 @@
         "featured": "Featured",
         "newest": "Newest",
         "priceLow": "Price (Low)",
-        "priceHigh": "Price (High)"
+        "priceHigh": "Price (High)",
+        "bedsLeast": "Beds (Least)",
+        "bedsMost": "Beds (High)"
       }
     },
     "currentPassword": {

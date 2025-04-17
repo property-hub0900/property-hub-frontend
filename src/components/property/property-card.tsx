@@ -55,7 +55,7 @@ export default function PropertyCard({ data }: { data: IProperty }) {
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Ruler className="size-4"></Ruler>
             <span className="text-sm">
-              {formatNumber(data.propertySize)} {t("text.sqft")}
+              {formatNumber(data.propertySize)} {t("text.sqm")}
             </span>
           </div>
         </div>

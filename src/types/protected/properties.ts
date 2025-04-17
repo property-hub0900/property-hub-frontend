@@ -1,6 +1,7 @@
 import { TPropertyStatuses } from "@/constants/constants";
 import { createPropertySchema } from "@/schema/protected/properties";
 import { z } from "zod";
+import { IPostedByStaff } from "../public/properties";
 
 export type TCreatePropertySchema = z.infer<
   ReturnType<typeof createPropertySchema>
@@ -37,6 +38,7 @@ export interface IProperty {
   companyId: string;
   createdAt: string;
   PropertyImages: IPropertyImage[];
+  postedByStaff: IPostedByStaff;
 }
 
 interface IPropertyImage {
