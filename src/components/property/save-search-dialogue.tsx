@@ -37,8 +37,6 @@ export const SaveSearchDialogue = ({
   isDisabled: boolean;
   saveSearchQuery: string;
 }) => {
-  console.log("saveSearchQuery", saveSearchQuery);
-
   const t = useTranslations();
 
   const triggerRef = useRef<HTMLButtonElement | null>(null);

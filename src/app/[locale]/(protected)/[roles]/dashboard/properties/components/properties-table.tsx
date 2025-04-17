@@ -92,8 +92,8 @@ export const PropertiesTable = ({ data }: { data: IProperty[] }) => {
     });
   }, [filters, data]);
 
-  console.log("filters", filters);
-  console.log("filteredData", filteredData);
+  // console.log("filters", filters);
+  // console.log("filteredData", filteredData);
 
   return (
     <>

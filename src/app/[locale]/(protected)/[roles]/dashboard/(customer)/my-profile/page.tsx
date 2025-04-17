@@ -12,19 +12,10 @@ import { ChangePassword } from "./components/change-password";
 export default function Page() {
   const t = useTranslations();
 
-  // const { data: profileData, isLoading: isLoadingProfileData } = useQuery({
-  //   queryKey: ["getCustomerProfile"],
-  //   queryFn: () => customerService.getCustomerProfile(Number(23)),
-  //   //enabled: !!user?.userId,
-  // });
-
   const { data: profileData, isLoading: isLoadingProfileData } = useQuery({
     queryKey: ["getMe"],
     queryFn: () => customerService.getMe(),
-    //enabled: !!user?.userId,
   });
-
-  console.log("profileData", profileData);
 
   return (
     <div>

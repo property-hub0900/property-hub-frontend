@@ -47,7 +47,7 @@ const useGoogleMapsAPI = (initializeAutocomplete) => {
       };
     };
 
-    console.log("Attempting to load Google Maps API...");
+    //console.log("Attempting to load Google Maps API...");
     loadGoogleMapsAPI();
   }, [initializeAutocomplete]);
 };
@@ -83,7 +83,7 @@ export default function PlacesAutocomplete({
         setSearchInput(place.formatted_address);
         onChange(place.formatted_address);
         setIsPlaceSelected(true);
-        console.log("Place selected:", place.formatted_address);
+        //console.log("Place selected:", place.formatted_address);
       }
     });
   }, [onChange]);
