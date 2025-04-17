@@ -41,8 +41,8 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import { USER_ROLES } from "@/constants/rbac";
 import { SaveSearchDialogue } from "./save-search-dialogue";
 
-const BEDROOM_OPTIONS = ["1", "2", "3", "4", "5", "6", "7", "7+"];
-const BATHROOM_OPTIONS = ["1", "2", "3", "4", "5", "6", "7", "7+"];
+const BEDROOM_OPTIONS = ["1", "2", "3", "4", "5", "6", "7", "8"];
+const BATHROOM_OPTIONS = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
 export const PropertySearchFilters = () => {
   const { user } = useAuth();
@@ -275,8 +275,10 @@ export const PropertySearchFilters = () => {
             <PopoverTrigger asChild>
               <Button variant="outline">
                 {filters.bedrooms || filters.bathrooms
-                  ? `${filters.bedrooms} ${t("button.bed")}, ${
-                      filters.bathrooms
+                  ? `${filters.bedrooms === "8" ? "8+" : filters.bedrooms} ${t(
+                      "button.bed"
+                    )}, ${
+                      filters.bathrooms === "8" ? "8+" : filters.bathrooms
                     } ${t("button.bath")}`
                   : `${t("button.bedsAndBaths")}`}{" "}
                 <ChevronDown className="ml-2 h-4 w-4" />
@@ -296,7 +298,7 @@ export const PropertySearchFilters = () => {
                         }
                         onClick={() => handleSelectChange("bedrooms", bed)}
                       >
-                        {bed}
+                        {bed === "8" ? "8+" : bed}
                       </Button>
                     ))}
                   </div>
@@ -313,7 +315,7 @@ export const PropertySearchFilters = () => {
                         }
                         onClick={() => handleSelectChange("bathrooms", bath)}
                       >
-                        {bath}
+                        {bath === "8" ? "8+" : bath}
                       </Button>
                     ))}
                   </div>
@@ -517,7 +519,7 @@ export const PropertySearchFilters = () => {
                         }
                         onClick={() => handleSelectChange("bedrooms", bed)}
                       >
-                        {bed}
+                        {bed === "8" ? "8+" : bed}
                       </Button>
                     ))}
                   </div>
@@ -534,7 +536,7 @@ export const PropertySearchFilters = () => {
                         }
                         onClick={() => handleSelectChange("bathrooms", bath)}
                       >
-                        {bath}
+                        {bath === "8" ? "8+" : bath}
                       </Button>
                     ))}
                   </div>

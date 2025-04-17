@@ -40,11 +40,12 @@ export interface IProperty {
   postedBy: number;
   companyId: number;
   referenceNo: string;
-  createdAt: string;
+  created_at: string;
   PropertyImages: IPropertyImages[];
   postedByStaff: IPostedByStaff;
   company: IPropertyCompany;
   PropertyAmenities: IPropertyAmenities[];
+  is_favorite: boolean;
 }
 
 export interface IPostedByStaff {

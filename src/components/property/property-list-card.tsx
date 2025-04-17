@@ -45,18 +45,19 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
     address,
     bedrooms,
     bathrooms,
-    createdAt,
+    created_at,
     postedByStaff,
+    is_favorite,
   } = data;
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(is_favorite);
   const { user } = useAuth();
 
   const queryClient = useQueryClient();
 
   const images = PropertyImages.map((img) => img.url);
   const daysAgo = Math.floor(
-    (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24)
+    (Date.now() - new Date(created_at).getTime()) / (1000 * 60 * 60 * 24)
   );
 
   const postFavoritesMutation = useMutation({
