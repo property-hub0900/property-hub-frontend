@@ -6,7 +6,6 @@ import {
   IProperties,
   IProperty,
   ISavedSearches,
-  IStaffList,
   IStaffListResponse,
   TCreatePropertySchema,
 } from "@/types/protected/properties";

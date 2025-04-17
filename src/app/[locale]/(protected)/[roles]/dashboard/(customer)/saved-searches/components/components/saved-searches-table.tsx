@@ -5,7 +5,7 @@ import { DataTable } from "@/components/dataTable/data-table";
 import type { SortingState } from "@tanstack/react-table";
 
 import { SavedSearchesColumns } from "./saved-searches-columns";
-import { ISavedSearches } from "@/types/protected/customer";
+import { ISavedSearches } from "@/types/protected/properties";
 
 export default function SavedSearchesTable(data: ISavedSearches) {
   const [sorting, setSorting] = useState<SortingState>([]);
