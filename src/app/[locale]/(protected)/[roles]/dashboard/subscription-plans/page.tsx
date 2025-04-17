@@ -13,6 +13,8 @@ import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Filter, Loader2, Menu } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
+import { navigationEvents, NAVIGATION_EVENTS } from "@/lib/navigation-events"
+
 
 export default function SubscriptionPlansPage() {
     const t = useTranslations()
@@ -27,6 +29,16 @@ export default function SubscriptionPlansPage() {
         queryFn: () => companyService.getCompanySubscription(),
     } as any)
 
+    const resetPageState = () => {
+        setShowRenewalForm(false)
+        setFilteredSubscriptions([])
+        setFilters("all")
+    }
+    useEffect(() => {
+        const unsubscribe = navigationEvents.subscribe(NAVIGATION_EVENTS.RESET_SUBSCRIPTION_PAGE, resetPageState)
+        return unsubscribe
+    }, [])
+
     useEffect(() => {
         if (!subscription || !subscription.results) {
             setFilteredSubscriptions([]);
@@ -35,25 +47,9 @@ export default function SubscriptionPlansPage() {
 
         const today = new Date();
         let filtered: Transaction[] = subscription.results;
-
-        if (filters === "active") {
-            filtered = subscription.results.filter((s) => {
-                const isActive = s.endDate && new Date(s.endDate) > today;
-                console.log(`Subscription ${s.subscriptionId}: endDate=${s.endDate}, isActive=${isActive}`);
-                return isActive;
-            });
-            filtered['results'] = filtered;
-        } else if (filters === "inactive") {
-            filtered = subscription.results.filter((s) => {
-                const isInactive = s.endDate && new Date(s.endDate) <= today;
-                console.log(`Subscription ${s.subscriptionId}: endDate=${s.endDate}, isInactive=${isInactive}`);
-                return isInactive;
-            });
-            filtered['results'] = filtered;
-        }
-        else {
-            filtered = subscription;
-        }
+        if (filters === "active") filtered['results'] = subscription.results.filter((s) => s.endDate && new Date(s.endDate) > today)
+        else if (filters === "inactive") filtered['results'] = subscription.results.filter((s) => s.endDate && new Date(s.endDate) <= today)
+        else filtered = subscription
 
         setFilteredSubscriptions(filtered);
     }, [subscription, filters]);

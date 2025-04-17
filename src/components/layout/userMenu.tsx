@@ -68,6 +68,7 @@ export function UserMenu() {
     [USER_ROLES.OWNER]: companyMenuItems,
     [USER_ROLES.AGENT]: companyMenuItems,
     [USER_ROLES.ADMIN]: companyMenuItems,
+    [USER_ROLES.MANAGER]: companyMenuItems,
   };
 
   return (

@@ -6,6 +6,8 @@ import { Pencil, Trash2 } from "lucide-react";
 import { DataTable } from "@/components/dataTable/data-table";
 import type { StaffMember } from "@/services/protected/company";
 import moment from "moment";
+import { PERMISSIONS } from "@/constants/rbac";
+import { useRBAC } from "@/lib/hooks/useRBAC";
 export function StaffTable({
   staff,
   onEdit,
@@ -15,7 +17,9 @@ export function StaffTable({
   onEdit: (staff: StaffMember) => void;
   onDelete: (staff: StaffMember) => void;
 }) {
-  const columns = [
+
+  const { hasPermission } = useRBAC();
+  let columns = [
     {
       accessorKey: "fullName",
       header: "Full Name",
@@ -29,7 +33,7 @@ export function StaffTable({
       accessorKey: "role",
       header: "Type",
       cell: ({ row }: { row: any }) => (
-        <span className="capitalize">{row.original.role}</span>
+        <span className="capitalize">{row.original.role === "manager" ? "Admin" : row.original.role}</span>
       ),
     },
     {
@@ -47,8 +51,8 @@ export function StaffTable({
         return (
           <span
             className={`capitalize px-2 py-1 rounded-full text-xs ${row.original.active
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
               }`}
           >
             {row.original.active ? "Active" : "In-active"}
@@ -61,26 +65,34 @@ export function StaffTable({
       header: "Actions",
       cell: ({ row }: { row: any }) => (
         <div className="flex space-x-2">
-          <Button
+          {hasPermission(PERMISSIONS.EDIT_USER) && <Button
             variant="ghost"
             size="icon"
             onClick={() => onEdit(row.original)}
             aria-label="Edit staff member"
           >
             <Pencil className="h-4 w-4 text-primary" />
-          </Button>
-          <Button
+          </Button>}
+          {hasPermission(PERMISSIONS.DELETE_USER) && <Button
             variant="ghost"
             size="icon"
             onClick={() => onDelete(row.original)}
             aria-label="Delete staff member"
           >
             <Trash2 className="h-4 w-4 text-red-500" />
-          </Button>
+          </Button>}
         </div>
       ),
     },
   ];
 
+  if (!hasPermission(PERMISSIONS.VIEW_USERS)) {
+    return <div>You do not have permission to view users</div>;
+  }
+
+  if (!hasPermission(PERMISSIONS.EDIT_USER) && !hasPermission(PERMISSIONS.DELETE_USER)) {
+    // remove the actions column
+    columns = columns.filter((column) => column.id !== "actions");
+  }
   return <DataTable columns={columns} data={staff} />;
 }

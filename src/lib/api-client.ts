@@ -148,8 +148,10 @@ apiClient.interceptors.response.use(
       const status = error.response?.status;
 
       // Handle authentication errors (401 Unauthorized, 403 Forbidden)
-      if (status === 401 || status === 403) {
+      if (status === 401) {
         if (process.env.NODE_ENV === "development") {
+          console.log("401 or 403 error");
+
         }
 
         // Check if the current request is for an auth endpoint
@@ -172,7 +174,7 @@ apiClient.interceptors.response.use(
 
         // For 403 (Forbidden), we don't redirect but we log it
         // This allows the component to handle the error appropriately
-        if (status === 403 || status === 401) {
+        if (status === 401) {
           console.log(
             "Forbidden access detected. User doesn't have permission."
           );

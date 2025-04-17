@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import createIntlMiddleware from "next-intl/middleware";
 import { jwtDecode } from "jwt-decode";
+import { UserRole } from "./constants/rbac";
 
 // Define types for better type safety
 interface UserData {
@@ -22,7 +23,6 @@ interface AuthState {
 }
 
 // Define available roles in the system
-type UserRole = "customer" | "owner" | "admin" | "agent";
 
 // Define protected routes and their required roles
 interface ProtectedRouteConfig {
@@ -38,7 +38,7 @@ const protectedRoutes: ProtectedRouteConfig[] = [
   },
   {
     path: "/company/dashboard",
-    roles: ["owner", "admin", "agent"],
+    roles: ["owner", "admin", "agent", "manager"],
   },
   {
     path: "/admin",
