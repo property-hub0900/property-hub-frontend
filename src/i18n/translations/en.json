@@ -629,6 +629,7 @@
   "amount": "Amount",
   "status": "Status",
   "paymentMethod": "Payment Method",
+  "price": "Price",
   "invoice": "Invoice",
   "view": "View",
   "statusSuccessful": "Successful",
@@ -684,6 +685,7 @@
     "selectPointsHelp": "Select the number of points you want to purchase",
     "points": "Points",
     "paymentMethods": "Payment Methods",
+    "type": "Type",
     "total": "Total Amount",
     "card": "Card",
     "contactSalesTeam": "Contact Sales Team",
@@ -708,6 +710,8 @@
       "expires": "Expires In",
       "paymentMethod": "Payment Method",
       "subscriptionExpiryDate": "Subscription Expiry",
+      "price": "Price",
+      "type": "Type",
       "status": "Status"
     }
   },

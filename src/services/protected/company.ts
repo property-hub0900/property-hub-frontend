@@ -1,7 +1,7 @@
 import apiClient from "@/lib/api-client";
 
 // Define types for the API requests and responses
-export type StaffRole = "agent" | "admin";
+export type StaffRole = "agent" | "manager";
 
 export interface StaffMember {
   staffId: string;
@@ -77,6 +77,10 @@ export const companyService = {
     return apiClient.get("companies/staff");
   },
 
+  updateStaffProfile: async (payload: UpdateStaffRequest): Promise<IResponse<StaffMember>> => {
+    return apiClient.put(`/staff/update-profile`, payload);
+  },
+
   // Get a specific staff member by ID
   getStaffById: async (id: string): Promise<IResponse<StaffMember>> => {
     return apiClient.get(`/staff/${id}`);
@@ -93,6 +97,12 @@ export const companyService = {
         payload["active"] = false;
       }
 
+      if (payload.role === "admin" as any) {
+        payload["role"] = "manager";
+      } else {
+        payload["role"] = "agent";
+      }
+
       return apiClient.post("/staff/invite", payload);
     } catch (error: any) {
       console.error("Failed to invite staff:", error);
@@ -104,6 +114,10 @@ export const companyService = {
   updateStaff: async (
     payload: UpdateStaffRequest
   ): Promise<IResponse<StaffMember>> => {
+
+    if (payload.status) {
+      payload["active"] = payload.status === "active";
+    }
     return apiClient.put(`/staff/${payload.id}`, payload);
   },
 
@@ -165,5 +179,9 @@ export const companyService = {
   },
   renewSubscription: async (): Promise<IResponse<any>> => {
     return apiClient.post("companies/renew-subscription");
+  },
+
+  getTopUpHistoryAndPointsTransactions: async (type: string = "topup"): Promise<IResponse<any>> => {
+    return apiClient.get(`companies/points-transaction?type=${type}`);
   },
 };

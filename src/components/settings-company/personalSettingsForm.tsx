@@ -33,6 +33,7 @@ import { getErrorMessage } from "@/utils/utils";
 import { uploadImageToFirebase } from "@/lib/firebaseUtil";
 import { UserAvatar } from "../ui/user-avatar";
 import { DeleteDialog } from "../delete-dailog";
+import { useAuthStore } from "@/store/auth-store";
 // import { DeleteDialog } from "./delete-dailog";
 
 const personalSettingsSchema = z.object({
@@ -55,6 +56,7 @@ interface PersonalSettingsFormProps {
 export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
   ({ userData }, ref) => {
     const t = useTranslations();
+    const { user } = useAuthStore();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [profileImage, setProfileImage] = useState<string | null>(
@@ -114,7 +116,7 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
           data.profilePhoto = null;
         }
 
-        const response = await companyService.updateStaff({
+        const response = await companyService.updateStaffProfile({
           id: userData.staffId,
           firstName: data.firstName,
           lastName: data.lastName,

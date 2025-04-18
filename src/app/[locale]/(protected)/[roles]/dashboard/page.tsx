@@ -14,7 +14,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 export default function DashboardPage() {
     const [activeView, setActiveView] = useState("dashboard")
     const { user } = useAuth()
-
     if (user?.role === USER_ROLES.CUSTOMER) {
         return null
     }

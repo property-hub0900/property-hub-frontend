@@ -12,7 +12,7 @@ export const useRBAC = () => {
     // Memoize roles to avoid recalculating on every render
     const roles: UserRole[] = useMemo(() => {
         return user?.scope?.filter((role): role is UserRole =>
-            ["customer", "owner", "admin", "agent"].includes(role)) || []
+            ["customer", "owner", "admin", "agent", "manager"].includes(role)) || []
     }, [user?.scope]);
 
     // Check if user has a specific role
