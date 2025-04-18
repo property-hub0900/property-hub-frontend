@@ -147,7 +147,6 @@ apiClient.interceptors.response.use(
       const requestUrl = error.config?.url || "";
       const status = error.response?.status;
       const message = error.response?.data?.message || error.message || "An error occurred";
-      debugger;
       if (message === "Invalid credentials") {
         return Promise.reject({
           data: null,
