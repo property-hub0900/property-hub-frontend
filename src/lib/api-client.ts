@@ -146,6 +146,16 @@ apiClient.interceptors.response.use(
       // Get the request URL path
       const requestUrl = error.config?.url || "";
       const status = error.response?.status;
+      const message = error.response?.data?.message || error.message || "An error occurred";
+      debugger;
+      if (message === "Invalid credentials") {
+        return Promise.reject({
+          data: null,
+          message: "Invalid credentials",
+          success: false,
+          status: 401,
+        });
+      }
 
       // Handle authentication errors (401 Unauthorized, 403 Forbidden)
       if (status === 401) {
