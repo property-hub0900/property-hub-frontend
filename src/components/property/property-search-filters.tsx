@@ -552,14 +552,14 @@ export const PropertySearchFilters = () => {
                 {PROPERTY_FURNISHED_TYPE.map((type) => (
                   <div key={type} className="flex items-center space-x-2">
                     <Checkbox
-                      id={`furnishing-${type}`}
+                      id={`furnishedType-${type}`}
                       checked={filters.furnishedType?.includes(type)}
                       onCheckedChange={() =>
                         handleCheckboxChange("furnishedType", type)
                       }
                     />
                     <label
-                      htmlFor={`furnishing-${type}`}
+                      htmlFor={`furnishedType-${type}`}
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       {t(`form.furnishedType.options.${type}`)}

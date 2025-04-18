@@ -53,7 +53,7 @@ export default function MobileHeader() {
           <div className="py-8 space-y-3 [&>a]:block [&>a]:text-base">
             <HeaderNavLinks />
             <Link
-              href="#"
+              href={PUBLIC_ROUTES.contactUs}
               className="transition-colors text-sm font-medium hover:text-primary"
             >
               {t("button.contactUs")}

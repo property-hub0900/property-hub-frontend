@@ -46,7 +46,7 @@ export default function DesktopHeader() {
               {t("button.loginRegister")}
             </Link>
           )}
-          <Link href={`#`} className="hidden lg:block">
+          <Link href={PUBLIC_ROUTES.contactUs} className="hidden lg:block">
             <Button size={"sm"} variant={"outline"}>
               {t("button.contactUs")}
             </Button>

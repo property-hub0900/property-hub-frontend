@@ -108,7 +108,6 @@ export interface IPropertyFilters {
   priceMin?: string;
   priceMax?: string;
   amenitiesIds?: string[];
-  furnishing?: string;
   propertySizeMin?: string;
   propertySizeMax?: string;
   keywords?: string;

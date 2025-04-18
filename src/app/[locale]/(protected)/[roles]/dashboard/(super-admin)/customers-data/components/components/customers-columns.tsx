@@ -5,7 +5,7 @@ import { Loader } from "@/components/loader";
 import { PUBLIC_ROUTES } from "@/constants/paths";
 import {
   convertSavedSearchToURL,
-  formatDate,
+  formatDateAndTime,
   getErrorMessage,
 } from "@/utils/utils";
 
@@ -26,12 +26,12 @@ export const SavedSearchesColumns: ColumnDef<ISavedSearch>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Date",
+    header: "Date & Time",
     enableSorting: true,
     cell: ({ row }) => {
       const rowData = row.original;
       const { createdAt } = rowData;
-      return <div className="capitalize">{formatDate(createdAt)}</div>;
+      return <div className="capitalize">{formatDateAndTime(createdAt)}</div>;
     },
   },
 

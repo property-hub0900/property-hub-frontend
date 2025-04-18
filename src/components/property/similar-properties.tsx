@@ -7,12 +7,16 @@ import { useTranslations } from "next-intl";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-export const SimilarProperties = () => {
+export const SimilarProperties = ({
+  propertyType,
+}: {
+  propertyType: string;
+}) => {
   const t = useTranslations();
 
   const { data: similarProperties } = useQuery({
     queryKey: ["similarProperties"],
-    queryFn: () => propertyServices.getSimilarProperties(),
+    queryFn: () => propertyServices.getSimilarProperties(propertyType),
   });
 
   return (
