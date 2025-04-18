@@ -26,6 +26,7 @@ import { companyService } from "@/services/protected/company";
 
 interface TopUpFormProps {
   onCancel: () => void;
+  onComplete: () => void;
   plans?: any[];
 }
 
