@@ -704,6 +704,8 @@
     "payNow": "Pay Now",
     "paymentSuccessful": "Payment successful! Your points have been added.",
     "paymentFailed": "Payment failed. Please try again.",
+    "purchaseTopUpSuccess": "Purchase Top Up Success",
+    "purchaseTopUpFailed": "Purchase Top Up Failed",
     "columns": {
       "date": "Date",
       "points": "Points",

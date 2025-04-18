@@ -1,77 +1,75 @@
-"use client";
+"use client"
 
-import { DataTable } from "@/components/dataTable/data-table";
-import { Loader } from "@/components/loader";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { getErrorMessage } from "@/utils/utils";
-import { companyService } from "@/services/protected/company";
-import { useQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { Columns } from "./columns";
-import { TopUpForm } from "./top-up-form";
+import { DataTable } from "@/components/dataTable/data-table"
+import { Loader } from "@/components/loader"
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { getErrorMessage } from "@/utils/utils"
+import { companyService } from "@/services/protected/company"
+import { useQuery } from "@tanstack/react-query"
+import { useTranslations } from "next-intl"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
+import { Columns } from "./columns"
+import { TopUpForm } from "./top-up-form"
 import { navigationEvents, NAVIGATION_EVENTS } from "@/lib/navigation-events"
 
-// Sample data for development/fallback
-
-
 export default function TopUpSubscriptionPage() {
-  const t = useTranslations("topUpSubscription");
-  const [statusFilter, setStatusFilter] = useState<string | undefined>(
-    undefined
-  );
-  const [showTopUpForm, setShowTopUpForm] = useState(false);
-  const [topUpHistory, setTopUpHistory] = useState<any[]>([]);
-  const [topUpPlans, setTopUpPlans] = useState<any[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-
-
+  const t = useTranslations("topUpSubscription")
+  const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
+  const [showTopUpForm, setShowTopUpForm] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
 
   // Fetch top-up plans
-  const { isLoading: isLoadingPlans } = useQuery({
+  const { data: topUpPlans = [], isLoading: isLoadingPlans } = useQuery({
     queryKey: ["topUpPlans"],
     queryFn: async () => {
       try {
-        const response: any = await companyService.getTopUpPlans();
-        if (response.results) {
-          setTopUpPlans(response.results);
-        }
-        return response.results;
+        const response: any = await companyService.getTopUpPlans()
+        return response.results || []
       } catch (error) {
-        console.error("Failed to fetch top-up plans:", error);
-        toast.error(getErrorMessage(error));
-        return [];
+        console.error("Failed to fetch top-up plans:", error)
+        toast.error(getErrorMessage(error))
+        return []
       }
     },
-  });
+  })
 
-  const { data: topUpHistoryAndPointsTransactions, isLoading: isLoadingHistoryAndPointsTransactions } = useQuery({
-    queryKey: ["topUpHistoryAndPointsTransactions"],
-    queryFn: () => companyService.getTopUpHistoryAndPointsTransactions("topup")
-  }) as any;
+  // Fetch top-up history using React Query
+  const {
+    data: topUpHistory = [],
+    isLoading: isLoadingHistory,
+    refetch: refetchHistory,
+  } = useQuery({
+    queryKey: ["topUpHistory", statusFilter], // Include statusFilter in the query key
+    queryFn: async () => {
+      try {
+        const response: any = await companyService.getTopUpHistoryAndPointsTransactions("topup")
+        return response.results || []
+      } catch (error) {
+        console.error("Failed to fetch top-up history:", error)
+        toast.error(getErrorMessage(error))
+        return []
+      }
+    },
+    // Enable refetching when component mounts or when dependencies change
+    refetchOnWindowFocus: false,
+  })
 
-  useEffect(() => {
-    if (topUpHistoryAndPointsTransactions) {
-      setTopUpHistory(topUpHistoryAndPointsTransactions.results)
-    }
-  }, [topUpHistoryAndPointsTransactions])
-
-
-  const isLoading = isLoadingPlans;
+  const isLoading = isLoadingPlans || isLoadingHistory
 
   const resetPageState = () => {
     setShowTopUpForm(false)
     setStatusFilter(undefined)
-    setTopUpHistory([])
-    setTopUpPlans([])
+    // Refetch history data when resetting the page
+    refetchHistory()
+  }
+
+  // Handle form completion
+  const handleTopUpComplete = () => {
+    setShowTopUpForm(false)
+    // Refetch history data when a top-up is completed
+    refetchHistory()
   }
 
   useEffect(() => {
@@ -79,7 +77,8 @@ export default function TopUpSubscriptionPage() {
     return unsubscribe
   }, [])
 
-  console.log({ topUpHistory })
+  // Filter the history data based on status if a filter is selected
+  const filteredHistory = statusFilter ? topUpHistory.filter((item: any) => item.status === statusFilter) : topUpHistory
 
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6 max-w-full">
@@ -88,10 +87,7 @@ export default function TopUpSubscriptionPage() {
       <div style={{ display: showTopUpForm ? "none" : "block" }}>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <Button
-            onClick={() => setShowTopUpForm(true)}
-            className="self-start sm:self-auto"
-          >
+          <Button onClick={() => setShowTopUpForm(true)} className="self-start sm:self-auto">
             {t("addNew")}
           </Button>
         </div>
@@ -105,34 +101,24 @@ export default function TopUpSubscriptionPage() {
                   <SelectValue placeholder={t("selectStatus")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={undefined as any}>
-                    {t("allStatuses")}
-                  </SelectItem>
+                  <SelectItem value={undefined as any}>{t("allStatuses")}</SelectItem>
                   <SelectItem value="paid">{t("statusPaid")}</SelectItem>
                   <SelectItem value="pending">{t("statusPending")}</SelectItem>
-                  <SelectItem value="cancelled">
-                    {t("statusCancelled")}
-                  </SelectItem>
+                  <SelectItem value="cancelled">{t("statusCancelled")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
-          <div className="w-full overflow-x-auto ">
-            <DataTable
-              columns={Columns() as any}
-              data={topUpHistory}
-            />
+          <div className="w-full overflow-x-auto">
+            <DataTable columns={Columns() as any} data={filteredHistory} />
           </div>
         </div>
       </div>
 
       <div style={{ display: showTopUpForm ? "block" : "none" }}>
-        <TopUpForm
-          onCancel={() => setShowTopUpForm(false)}
-          plans={topUpPlans}
-        />
+        <TopUpForm onCancel={() => setShowTopUpForm(false)} onComplete={handleTopUpComplete} plans={topUpPlans} />
       </div>
     </div>
-  );
+  )
 }

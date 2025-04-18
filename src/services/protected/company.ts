@@ -181,6 +181,10 @@ export const companyService = {
     return apiClient.post("companies/renew-subscription");
   },
 
+  purchaseTopUp: async (payload: any): Promise<IResponse<any>> => {
+    return apiClient.post(`companies/purchase-points/${payload.id}`, payload);
+  },
+
   getTopUpHistoryAndPointsTransactions: async (type: string = "topup"): Promise<IResponse<any>> => {
     return apiClient.get(`companies/points-transaction?type=${type}`);
   },
