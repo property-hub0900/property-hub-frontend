@@ -18,11 +18,15 @@ export const propertyServices = {
   },
 
   getLandingLatestProperties(): Promise<IPropertyResponse> {
-    return apiClient.get(`/properties?status=published&page=0&pageSize=10`);
+    return apiClient.get(
+      `/properties?status=published&sortBy=newest&page=0&pageSize=10`
+    );
   },
 
-  getSimilarProperties(): Promise<IPropertyResponse> {
-    return apiClient.get(`/properties?status=published&page=0&pageSize=10`);
+  getSimilarProperties(propertyType: string): Promise<IPropertyResponse> {
+    return apiClient.get(
+      `/properties?status=published&propertyType=${propertyType}&sortBy=featured&page=0&pageSize=10`
+    );
   },
 
   postFavorites(payloads: {

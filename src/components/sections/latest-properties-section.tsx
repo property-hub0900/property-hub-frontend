@@ -19,7 +19,7 @@ export default function LatestPropertiesSection() {
   const t = useTranslations();
 
   const { data: latestProperties } = useQuery({
-    queryKey: ["properties"],
+    queryKey: ["latestProperties"],
     queryFn: () => propertyServices.getLandingLatestProperties(),
   });
 

@@ -27,7 +27,7 @@ export default function PropertiesPage() {
     priceMin: searchParams.get("priceMin") || undefined,
     priceMax: searchParams.get("priceMax") || undefined,
     amenitiesIds: searchParams.get("amenitiesIds")?.split(",") || undefined,
-    furnishing: searchParams.get("furnishedType") || undefined,
+    furnishedType: searchParams.get("furnishedType")?.split(",") || undefined,
     propertySizeMin: searchParams.get("propertySizeMin") || undefined,
     propertySizeMax: searchParams.get("propertySizeMax") || undefined,
     page: searchParams.get("page") || "0",

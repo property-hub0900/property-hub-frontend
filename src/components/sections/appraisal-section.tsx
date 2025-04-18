@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { PUBLIC_ROUTES } from "@/constants/paths";
 
 export default function InvestSectionAlternative() {
   const t = useTranslations();
@@ -33,9 +35,11 @@ export default function InvestSectionAlternative() {
                 ),
               })}
             </h2>
-            <Button className="bg-foreground text-background hover:bg-foreground/90">
-              {t("button.contactUs")}
-            </Button>
+            <Link href={PUBLIC_ROUTES.contactUs}>
+              <Button className="bg-foreground text-background hover:bg-foreground/90">
+                {t("button.contactUs")}
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

@@ -158,7 +158,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   const footerItems = [
     {
       title: t("sidebar.contactUs"),
-      href: PUBLIC_ROUTES.contact,
+      href: PUBLIC_ROUTES.contactUs,
       icon: MessageSquare,
     },
   ];

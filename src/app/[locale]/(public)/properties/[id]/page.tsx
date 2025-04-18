@@ -105,7 +105,7 @@ export default function PropertyPage() {
         <Separator className="my-6" />
       </div>
 
-      <SimilarProperties />
+      <SimilarProperties propertyType={property.propertyType} />
     </>
   );
 }
