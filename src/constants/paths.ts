@@ -24,7 +24,7 @@ export const ADMIN_PATHS = {
 export const PUBLIC_ROUTES = {
   properties: "/properties",
   help: "/help",
-  contact: "/contact",
+  contactUs: "/contact-us",
   login: "/customer/login",
   register: "/customer/register",
 };

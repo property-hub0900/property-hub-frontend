@@ -1,5 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import type {
+  IContactUs,
   SocialLoginPayload,
   TCustomerLoginSchema,
   TUseAuthCustomerRegisterSchema,
@@ -7,7 +8,7 @@ import type {
   TUserAuthStaffRegisterSchema,
 } from "@/types/public/auth";
 
-import type { IResponse } from "@/types/common";
+import type { ICommonMessageResponse, IResponse } from "@/types/common";
 
 // Types for the API requests and responses
 export interface RegisterRequest {
@@ -134,5 +135,8 @@ export const authService = {
       email,
       password,
     });
+  },
+  contactUs: async (payloads: IContactUs): Promise<ICommonMessageResponse> => {
+    return apiClient.post("/contactus", payloads);
   },
 };

@@ -44,6 +44,15 @@ import { IOption } from "@/types/common";
 import { RoleGate } from "@/components/rbac/role-gate";
 import { USER_ROLES } from "@/constants/rbac";
 
+const initFilters = {
+  title: "",
+  referenceNo: "",
+  publisher: "",
+  featured: "",
+  propertyType: "",
+  status: "",
+};
+
 export const MoreFiltersDialog = ({
   filters,
   handleFilters,
@@ -81,6 +90,11 @@ export const MoreFiltersDialog = ({
     handleFilters(data);
   }
 
+  const handleReset = () => {
+    handleFilters(initFilters);
+    form.reset();
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -110,7 +124,7 @@ export const MoreFiltersDialog = ({
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger className="capitalize">
                           <SelectValue placeholder={"publisher"} />
                         </SelectTrigger>
                         <SelectContent>
@@ -150,9 +164,7 @@ export const MoreFiltersDialog = ({
                           Featured Status
                         </SelectItem>
                         <SelectItem value={"featured"}>Featured</SelectItem>
-                        <SelectItem value={"Not Featured"}>
-                          Not Featured
-                        </SelectItem>
+                        <SelectItem value={"Standard"}>Standard</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -204,8 +216,9 @@ export const MoreFiltersDialog = ({
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="capitalize">
                         <SelectValue
+                          className="capitalize"
                           placeholder={t("form.propertyStatuses.label")}
                         />
                       </SelectTrigger>
@@ -233,8 +246,12 @@ export const MoreFiltersDialog = ({
 
               <div className="col-span-2 flex gap-2 justify-end">
                 <DialogClose asChild>
-                  <Button variant={"outline"} type="button">
-                    {t("button.cancel")}
+                  <Button
+                    onClick={handleReset}
+                    variant={"outline"}
+                    type="button"
+                  >
+                    {t("button.reset")}
                   </Button>
                 </DialogClose>
                 <DialogClose asChild>

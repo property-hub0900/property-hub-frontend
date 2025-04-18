@@ -71,3 +71,15 @@ export interface SocialLoginPayload {
   firstName: string;
   lastName: string;
 }
+
+export interface IContactUs {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  propertyType: string;
+  locationPreference: string;
+  budget: string;
+  purpose: string;
+  message: string;
+}
