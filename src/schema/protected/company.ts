@@ -9,7 +9,7 @@ export const staffFormSchema = z.object({
     .string()
     .min(2, { message: "Last name must be at least 2 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
-  role: z.enum(["agent", "admin"] as const),
+  role: z.enum(["agent", "admin", "superadmin", "manager"] as const),
   phoneNumber: z
     .string()
     .min(10, { message: "Please enter a valid phone number" }),
