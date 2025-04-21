@@ -2,9 +2,11 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
+import { formatDate } from "@/utils/utils"
 
 // Define the data type for archived properties
 export type ArchivedProperty = {
+    createdAt: string
     id: string
     title: string
     pointsRefundable: number
@@ -25,14 +27,17 @@ export const archivedPropertiesColumns: ColumnDef<ArchivedProperty>[] = [
         enableSorting: true,
     },
     {
-        accessorKey: "pointsRefundable",
+        accessorKey: "points",
         header: "Points Refundable",
         enableSorting: true,
     },
     {
-        accessorKey: "archivedDate",
+        accessorKey: "createdAt",
         header: "Archived Date",
         enableSorting: true,
+        cell: ({ row }) => {
+            return <span>{formatDate(row.original.createdAt)}</span>
+        }
     },
     {
         accessorKey: "afterPublish",
