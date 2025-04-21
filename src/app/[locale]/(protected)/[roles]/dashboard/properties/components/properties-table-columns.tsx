@@ -57,7 +57,7 @@ export const propertiesTableColumns: ColumnDef<IProperty>[] = [
       const rowData = row.original;
       return (
         <>
-          {rowData.postedByStaff.firstName} {rowData.postedByStaff.lastName}
+          {rowData?.postedByStaff?.firstName} {rowData?.postedByStaff?.lastName}
         </>
       );
     },
@@ -140,7 +140,7 @@ const StatusCell = ({ row }) => {
   return (
     <div className="flex">
       {status === PROPERTY_STATUSES.pending &&
-      hasPermission(PERMISSIONS.APPROVE_PROPERTY) ? (
+        hasPermission(PERMISSIONS.APPROVE_PROPERTY) ? (
         <Button
           disabled={updatePropertyByIdMutation.isPending}
           onClick={handleApproveStatus}
