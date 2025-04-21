@@ -94,7 +94,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
     if (
       path === "/dashboard" ||
       path === "/company/dashboard" ||
-      path === "/customer/dashboard"
+      path === "/admin/dashboard"
     ) {
       return normalizedPathname === path;
     }

@@ -1,26 +1,29 @@
 "use client";
 
-import { formatDateAndTime } from "@/utils/utils";
-
+import { formatDate } from "@/utils/utils";
 import { ColumnDef } from "@tanstack/react-table";
+import { IAdminCustomer } from "@/types/protected/admin";
 
-import { ICustomer } from "./customers-table";
-
-export const SavedSearchesColumns: ColumnDef<ICustomer>[] = [
+export const SavedSearchesColumns: ColumnDef<IAdminCustomer>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "firstName",
     header: "Name",
     enableSorting: true,
+    cell: ({ row }) => {
+      const rowData = row.original;
+      const { firstName, lastName } = rowData;
+      return <div className="capitalize">{`${firstName} ${lastName}`}</div>;
+    },
   },
   {
-    accessorKey: "email",
+    accessorKey: "user.email",
     header: "Email",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     accessorKey: "phoneNumber",
     header: "Phone Number",
-    enableSorting: true,
+    enableSorting: false,
   },
   {
     accessorKey: "createdAt",
@@ -29,62 +32,32 @@ export const SavedSearchesColumns: ColumnDef<ICustomer>[] = [
     cell: ({ row }) => {
       const rowData = row.original;
       const { createdAt } = rowData;
-      return <div className="capitalize">{formatDateAndTime(createdAt)}</div>;
+      return <div className="capitalize">{formatDate(createdAt)}</div>;
     },
   },
   {
     accessorKey: "status",
     header: "Status",
-    enableSorting: true,
+    enableSorting: false,
+    cell: ({ row }) => {
+      const rowData = row.original;
+      const { user } = rowData;
+      const { status } = user;
+      return (
+        <div className="capitalize px-4 py-1.5 shadow-md rounded-md inline-flex gap-2 items-center">
+          {status ? (
+            <>
+              <span className="inline-block size-2 bg-primary rounded-full"></span>
+              Active
+            </>
+          ) : (
+            <>
+              <span className="inline-block size-2 bg-muted-foreground/60 rounded-full"></span>
+              InActive
+            </>
+          )}
+        </div>
+      );
+    },
   },
-
-  // {
-  //   accessorKey: "searchId",
-  //   header: "Action",
-  //   cell: ({ row }) => <ActionCell row={row} />,
-  // },
 ];
-
-// const ActionCell = ({ row }) => {
-//   const rowData = row.original;
-//   const { searchId, searchQuery } = rowData;
-
-//   const queryClient = useQueryClient();
-
-//   const deleteSaveSearchMutation = useMutation({
-//     mutationKey: ["deleteSaveSearch"],
-//     mutationFn: deleteSaveSearch,
-//   });
-
-//   const onDelete = async (id) => {
-//     try {
-//       const response = await deleteSaveSearchMutation.mutateAsync(id);
-//       toast.success(response.message);
-//       queryClient.refetchQueries({ queryKey: ["savedSearches"] });
-//     } catch (error) {
-//       toast.error(getErrorMessage(error));
-//     }
-//   };
-
-//   return (
-//     <>
-//       <Loader isLoading={deleteSaveSearchMutation.isPending}></Loader>
-//       <div className="flex gap-3 items-center">
-//         <Link
-//           target="_blank"
-//           href={`${PUBLIC_ROUTES.properties}/${convertSavedSearchToURL(
-//             searchQuery
-//           )}`}
-//           className="flex items-center gap-1 text-primary"
-//         >
-//           <Search className="size-5 text-primary" />
-//           Run
-//         </Link>
-//         <Trash2
-//           onClick={() => onDelete(searchId)}
-//           className="size-5 text-destructive cursor-pointer"
-//         />
-//       </div>
-//     </>
-//   );
-// };

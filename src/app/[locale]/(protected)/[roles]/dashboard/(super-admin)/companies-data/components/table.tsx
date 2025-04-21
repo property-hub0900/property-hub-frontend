@@ -1,12 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import { DataTable } from "@/components/dataTable/data-table";
 import type { SortingState } from "@tanstack/react-table";
+import { useMemo, useState } from "react";
 
-import { SavedSearchesColumns } from "./customers-columns";
-
-import { useTranslations } from "next-intl";
 import {
   Select,
   SelectContent,
@@ -14,13 +11,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IAdminCustomer } from "@/types/protected/admin";
+import { useTranslations } from "next-intl";
+import { Columns } from "./columns";
 
-export default function CustomersDataTable({
-  data,
-}: {
-  data: IAdminCustomer[];
-}) {
+export interface ICustomersData {
+  // isError: false;
+  // page: 0;
+  // pageSize: 20;
+  results: ICustomer[];
+  //total: 0;
+}
+
+export interface ICustomer {
+  id: number;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  listingsCount: number;
+  points: number;
+  leads: number;
+  createdAt: string; // ISO format or display string
+  status: "active" | "inactive" | "pending";
+}
+
+export default function CompaniesDataTable({ data }: { data: ICustomer[] }) {
   const t = useTranslations();
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -28,17 +42,13 @@ export default function CustomersDataTable({
 
   const filteredAndSortedData = useMemo(() => {
     // First apply filters
-
     const filteredItems = data.filter((item) => {
       if (
         filters?.status &&
-        filters?.status !== `${t("form.propertyStatuses.label")}`
-      ) {
-        const statusBoolean = filters?.status.toLowerCase() === "active";
-        if (item.user.status !== statusBoolean) {
-          return false;
-        }
-      }
+        filters?.status != `${t("form.propertyStatuses.label")}` &&
+        item.status.toLowerCase() !== filters?.status.toLowerCase()
+      )
+        return false;
 
       return true;
     });
@@ -48,16 +58,8 @@ export default function CustomersDataTable({
       const { id: sortField, desc } = sorting[0];
 
       filteredItems.sort((a, b) => {
-        const aValue = a[sortField as keyof IAdminCustomer];
-        const bValue = b[sortField as keyof IAdminCustomer];
-
-        // Handle date strings
-        if (sortField.toLowerCase().includes("createdAt")) {
-          const aDate = new Date(aValue as string).getTime();
-          const bDate = new Date(bValue as string).getTime();
-
-          return desc ? bDate - aDate : aDate - bDate;
-        }
+        const aValue = a[sortField as keyof ICustomer];
+        const bValue = b[sortField as keyof ICustomer];
 
         if (typeof aValue === "string" && typeof bValue === "string") {
           return desc
@@ -107,6 +109,7 @@ export default function CustomersDataTable({
                     <SelectItem value={"Status"}>Status</SelectItem>
                     <SelectItem value={"active"}>Active</SelectItem>
                     <SelectItem value={"inactive"}>InActive</SelectItem>
+                    <SelectItem value={"pending"}>Pending</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -114,10 +117,10 @@ export default function CustomersDataTable({
           </div>
 
           <DataTable
-            columns={SavedSearchesColumns}
+            columns={Columns}
             data={filteredAndSortedData || []}
             sorting={sorting}
-            onSortingChange={handleSortingChange}
+            onSortingChange={setSorting}
           />
         </div>
       </div>
