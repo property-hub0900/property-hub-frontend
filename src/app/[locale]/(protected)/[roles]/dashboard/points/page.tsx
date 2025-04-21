@@ -9,19 +9,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { SortingState } from "@tanstack/react-table"
 import { pointsHistoryColumns } from "@/components/points-history-columns"
 import { archivedPropertiesColumns } from "@/components/archived-properties-columns"
+import { useAuthStore } from "@/store/auth-store"
+import { formatDate, getErrorMessage } from "@/utils/utils"
+import { useQuery } from "@tanstack/react-query"
+import { companyService } from "@/services/protected/company"
+import { toast } from "sonner"
 
-// Mock data for points history
-const pointsHistoryData = [
-    { id: "123", title: "High Floor", actionType: "Ad Posting", pointsReceived: 10, date: "Mar 1, 2023" },
-    {
-        id: "456",
-        title: "Villa with Sea View",
-        actionType: "Featured Property",
-        pointsReceived: 100,
-        date: "Mar 2, 2023",
-    },
-    { id: "789", title: "Wakrah", actionType: "Ad Posting", pointsReceived: 30, date: "Mar 4, 2023" },
-]
+
 
 // Mock data for archived properties
 const archivedPropertiesData = [
@@ -55,6 +49,31 @@ export default function PointsPage() {
     // const t = useTranslations()
     const [pointsHistorySorting, setPointsHistorySorting] = useState<SortingState>([])
     const [archivedSorting, setArchivedSorting] = useState<SortingState>([])
+    const { user } = useAuthStore()
+    const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
+
+
+
+    const {
+        data: pointsHistoryData = [],
+        isLoading: isLoadingHistory,
+        refetch: refetchHistory,
+    } = useQuery({
+        queryKey: ["topUpHistory", statusFilter], // Include statusFilter in the query key
+        queryFn: async () => {
+            try {
+                const response: any = await companyService.getTopUpHistoryAndPointsTransactions("topup")
+                return response.results || []
+            } catch (error) {
+                console.error("Failed to fetch top-up history:", error)
+                toast.error(getErrorMessage(error))
+                return []
+            }
+        },
+        // Enable refetching when component mounts or when dependencies change
+        refetchOnWindowFocus: false,
+    })
+
 
     return (
         <div className="space-y-6">
@@ -76,17 +95,17 @@ export default function PointsPage() {
 
                 {/* Points Expiry Card */}
 
-                <Card className="flex justify-around">
+                <Card className="flex justify-around items-center p-1">
                     <div className="flex-col sm:flex-row justify-between items-start sm:items-center mt-2">
                         <p className="text-sm text-muted-foreground">Remaining Points</p>
-                        <div className="text-4xl sm:text-5xl font-bold text-primary">500</div>
+                        <h3 className="text-primary">{user?.company?.sharedPoints}</h3>
                     </div>
                     <div className="lg:col-span-1">
                         <CardHeader className="pb-2">
                             <CardTitle>Points Expiry</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-sm text-muted-foreground">on April 30, 2025</p>
+                            <p className="text-sm text-muted-foreground">on {formatDate(user?.company?.subscriptionEndDate)}</p>
                         </CardContent>
 
                     </div>
@@ -110,6 +129,7 @@ export default function PointsPage() {
                         data={pointsHistoryData}
                         sorting={pointsHistorySorting}
                         onSortingChange={setPointsHistorySorting}
+                        pageSize={10}
                     />
                 </CardContent>
             </Card>
@@ -127,10 +147,11 @@ export default function PointsPage() {
                 </CardHeader>
                 <CardContent>
                     <DataTable
-                        columns={archivedPropertiesColumns as any}
-                        data={archivedPropertiesData}
-                        sorting={archivedSorting}
-                        onSortingChange={setArchivedSorting}
+                        columns={archivedPropertiesColumns}
+                        data={pointsHistoryData}
+                        sorting={pointsHistorySorting}
+                        onSortingChange={setPointsHistorySorting}
+                        pageSize={10}
                     />
                 </CardContent>
             </Card>

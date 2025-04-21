@@ -25,10 +25,12 @@ import {
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
+  pageSize?: number;
 }
 
 export function DataTablePagination<TData>({
   table,
+  pageSize = 10,
 }: DataTablePaginationProps<TData>) {
   const t = useTranslations();
   // const lang = useAppSelector((state) => state.lang);
@@ -36,6 +38,8 @@ export function DataTablePagination<TData>({
 
   const total = table.getPageCount();
   const current = table.getState().pagination.pageIndex + 1;
+  const pageSizes = Array.from({ length: pageSize }, (_, i) => (i + 1) * pageSize);
+
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
@@ -55,7 +59,7 @@ export function DataTablePagination<TData>({
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
-              {[10, 20, 30, 40, 50].map((pageSize) => (
+              {pageSizes.map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>

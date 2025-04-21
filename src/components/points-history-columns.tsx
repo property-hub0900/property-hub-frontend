@@ -1,9 +1,11 @@
 "use client"
 
+import { formatDate } from "@/utils/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 
 // Define the data type for points history
 export type PointsHistory = {
+    createdAt: string
     id: string
     title: string
     actionType: string
@@ -13,7 +15,7 @@ export type PointsHistory = {
 
 export const pointsHistoryColumns: ColumnDef<PointsHistory>[] = [
     {
-        accessorKey: "id",
+        accessorKey: "propertyId",
         header: "Property ID",
         enableSorting: true,
     },
@@ -23,18 +25,21 @@ export const pointsHistoryColumns: ColumnDef<PointsHistory>[] = [
         enableSorting: true,
     },
     {
-        accessorKey: "actionType",
+        accessorKey: "type",
         header: "Action Type",
         enableSorting: true,
     },
     {
-        accessorKey: "pointsReceived",
+        accessorKey: "points",
         header: "Points Received",
         enableSorting: true,
     },
     {
-        accessorKey: "date",
+        accessorKey: "createdAt",
         header: "Date",
         enableSorting: true,
+        cell: ({ row }) => {
+            return <span>{formatDate(row.original.createdAt)}</span>
+        }
     },
 ]
