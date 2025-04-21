@@ -177,15 +177,15 @@ export const companyService = {
   getCompanySubscription: async (): Promise<IResponse<any>> => {
     return apiClient.get("companies/subscriptions");
   },
-  renewSubscription: async (): Promise<IResponse<any>> => {
-    return apiClient.post("companies/renew-subscription");
+  renewSubscription: async (payload: any): Promise<IResponse<any>> => {
+    return apiClient.post("companies/renew-subscription", payload);
   },
 
   purchaseTopUp: async (payload: any): Promise<IResponse<any>> => {
-    return apiClient.post(`companies/purchase-points/${payload.id}`, payload);
+    return apiClient.post(`companies/purchase-points/${payload.topupId}`, payload);
   },
 
-  getTopUpHistoryAndPointsTransactions: async (type: string = "topup"): Promise<IResponse<any>> => {
-    return apiClient.get(`companies/points-transaction?type=${type}`);
+  getTopUpHistoryAndPointsTransactions: async (type: string = "topup", page: number = 0, pageSize: number = 999): Promise<IResponse<any>> => {
+    return apiClient.get(`companies/points-transaction?type=${type}&page=${page}&pageSize=${pageSize}`);
   },
 };

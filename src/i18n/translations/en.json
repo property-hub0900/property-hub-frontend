@@ -775,5 +775,12 @@
   "aria": {
     "hidePassword": "Hide password",
     "showPassword": "Show password"
-  }
+  },
+  "attachScreenshot": "Attach Screenshot",
+  "bankReceiptSlip": "Bank Receipt Slip",
+  "browseFile": "Browse File",
+  "uploading": "Uploading...",
+  "uploadSuccess": "Upload successful",
+  "uploadError": "Upload error",
+  "receiptPreview": "Receipt Preview"
 }

@@ -1,192 +1,171 @@
-"use client";
+"use client"
 
-import { StripeCardForm } from "@/components/stripe/stripeCardForm";
-import { Button } from "@/components/ui/button";
-import {
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { calculateRemainingDays, cn } from "@/utils/utils";
-import { ArrowLeft, BanknoteIcon, CreditCard } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { Separator } from "@/components/ui/separator";
-import { useAuth } from "@/lib/hooks/useAuth";
-import { Switch } from "../ui/switch";
-import { companyService } from "@/services/protected/company";
-import { toast } from "sonner";
+import { Button } from "@/components/ui/button"
+import { CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Separator } from "@/components/ui/separator"
+import { uploadImageToFirebase } from "@/lib/firebaseUtil"
+import { companyService } from "@/services/protected/company"
+import { calculateRemainingDays, cn } from "@/utils/utils"
+import { BanknoteIcon, CreditCard } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useState } from "react"
+import { toast } from "sonner"
+import { Loader } from "../loader"
+import { Switch } from "../ui/switch"
 
 interface SubscriptionRenewalFormProps {
-  onCancel: () => void;
-  subscription: any;
-  user: any;
+  onCancel: () => void
+  subscription: any
+  user: any
 }
 
 // Define the billing details interface to match the one in StripeCardForm
 interface BillingDetails {
-  name?: string;
-  email?: string;
-  phone?: string;
+  name?: string
+  email?: string
+  phone?: string
   address?: {
-    country: string;
-    line1?: string;
-    line2?: string;
-    city?: string;
-    state?: string;
-    postal_code?: string;
-  };
+    country: string
+    line1?: string
+    line2?: string
+    city?: string
+    state?: string
+    postal_code?: string
+  }
 }
 
-export function SubscriptionRenewalForm({
-  onCancel,
-  subscription,
-  user
-}: SubscriptionRenewalFormProps) {
-  const [paymentMethod, setPaymentMethod] = useState("card");
-  const [paymentError, setPaymentError] = useState<string | null>(null);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [developmentMode, setDevelopmentMode] = useState(false);
-  const t = useTranslations();
+export function SubscriptionRenewalForm({ onCancel, subscription, user }: SubscriptionRenewalFormProps) {
+  const [paymentMethod, setPaymentMethod] = useState("card")
+  const [paymentError, setPaymentError] = useState<string | null>(null)
+  const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [developmentMode, setDevelopmentMode] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
+  const [uploadedFileUrl, setUploadedFileUrl] = useState("")
+  const [uploadError, setUploadError] = useState("")
 
-  const handleCardPaymentSubmit = async (
-    paymentMethodId: string,
-    billingDetails: BillingDetails
-  ) => {
-    if (!paymentMethodId) {
-      setPaymentError("Invalid payment method");
-      return;
-    }
+  const t = useTranslations()
 
-    setIsProcessing(true);
-    setPaymentError(null);
+  // const handleCardPaymentSubmit = async (paymentMethodId: string, billingDetails: BillingDetails) => {
+  //   if (!paymentMethodId) {
+  //     setPaymentError("Invalid payment method")
+  //     return
+  //   }
 
-    try {
-      // Use a nonce or CSRF token for additional security
-      const csrfToken = await fetchCsrfToken();
+  //   setIsProcessing(true)
+  //   setPaymentError(null)
 
-      // Create a unique idempotency key to prevent duplicate charges
-      const idempotencyKey = `renewal-${user?.userId || ""
-        }-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+  //   try {
+  //     // Use a nonce or CSRF token for additional security
+  //     const csrfToken = await fetchCsrfToken()
 
-      const response = await fetch("/api/payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
-        },
-        body: JSON.stringify({
-          paymentMethodId,
-          amount: 200,
-          idempotencyKey,
-          userId: user?.userId,
-          billingDetails,
-          metadata: {
-            subscriptionType: "renewal",
-            userId: user?.userId,
-            userEmail: user?.email,
-          },
-        }),
-      });
+  //     // Create a unique idempotency key to prevent duplicate charges
+  //     const idempotencyKey = `renewal-${user?.userId || ""
+  //       }-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.message || `Payment failed with status: ${response.status}`
-        );
-      }
+  //     const response = await fetch("/api/payment", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "X-CSRF-Token": csrfToken,
+  //       },
+  //       body: JSON.stringify({
+  //         paymentMethodId,
+  //         amount: 200,
+  //         idempotencyKey,
+  //         userId: user?.userId,
+  //         billingDetails,
+  //         metadata: {
+  //           subscriptionType: "renewal",
+  //           userId: user?.userId,
+  //           userEmail: user?.email,
+  //         },
+  //       }),
+  //     })
 
-      const result = await response.json();
-      if (result.success) {
-        setPaymentSuccess(true);
-        setPaymentError(null);
-      } else {
-        setPaymentError(result.error || "Payment failed");
-        setPaymentSuccess(false);
-      }
-    } catch (err) {
-      console.error("Payment error:", err);
-      setPaymentError(
-        typeof err === "object" && err !== null && "message" in err
-          ? String(err.message)
-          : "An error occurred during payment processing. Please try again."
-      );
-      setPaymentSuccess(false);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  //     if (!response.ok) {
+  //       const errorData = await response.json().catch(() => ({}))
+  //       throw new Error(errorData.message || `Payment failed with status: ${response.status}`)
+  //     }
+
+  //     const result = await response.json()
+  //     if (result.success) {
+  //       setPaymentSuccess(true)
+  //       setPaymentError(null)
+  //     } else {
+  //       setPaymentError(result.error || "Payment failed")
+  //       setPaymentSuccess(false)
+  //     }
+  //   } catch (err) {
+  //     console.error("Payment error:", err)
+  //     setPaymentError(
+  //       typeof err === "object" && err !== null && "message" in err
+  //         ? String(err.message)
+  //         : "An error occurred during payment processing. Please try again.",
+  //     )
+  //     setPaymentSuccess(false)
+  //   } finally {
+  //     setIsProcessing(false)
+  //   }
+  // }
 
   // Function to fetch CSRF token
-  const fetchCsrfToken = async (): Promise<string> => {
-    try {
-      const response = await fetch("/api/csrf-token");
-      const data = await response.json();
-      return data.csrfToken;
-    } catch (error) {
-      console.error("Failed to fetch CSRF token:", error);
-      return "";
-    }
-  };
+  // const fetchCsrfToken = async (): Promise<string> => {
+  //   try {
+  //     const response = await fetch("/api/csrf-token")
+  //     const data = await response.json()
+  //     return data.csrfToken
+  //   } catch (error) {
+  //     console.error("Failed to fetch CSRF token:", error)
+  //     return ""
+  //   }
+  // }
 
-  const handleBankTransfer = async () => {
-    setIsProcessing(true);
-    setPaymentError(null);
-
-    try {
-      // Record the bank transfer intent in your system
-      const response = await fetch("/api/bank-transfer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: 200,
-          reference: user?.email || t("yourAccountEmail"),
-          userId: user?.userId,
-          metadata: {
-            subscriptionType: "renewal",
-            userId: user?.userId,
-            userEmail: user?.email,
-          },
-        }),
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        setPaymentSuccess(true);
-      } else {
-        setPaymentError(result.error || "Failed to record bank transfer");
-      }
-    } catch (err) {
-      console.error("Bank transfer error:", err);
-      setPaymentError("An error occurred. Please try again.");
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  // companyService.renewSubscription
 
   const handleRenewSubscription = async () => {
-    setIsProcessing(true);
-    setPaymentError(null);
+    setIsProcessing(true)
+    setPaymentError(null)
 
     try {
-      await companyService.renewSubscription();
-      toast.success(t("subscriptionRenewedSuccessfully"));
+      await companyService.renewSubscription({
+        paymentMethod: paymentMethod === "card" ? paymentMethod : "banktransfer",
+        image: uploadedFileUrl ? uploadedFileUrl : null,
+      })
+      toast.success(t("subscriptionRenewedSuccessfully"))
     } catch (err) {
-      console.error("Renew subscription error:", err);
-      setPaymentError("An error occurred. Please try again.");
+      console.error("Renew subscription error:", err)
+      setPaymentError("An error occurred. Please try again.")
     } finally {
-      setIsProcessing(false);
+      setIsProcessing(false)
+    }
+  }
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    // Reset states
+    setUploadError("")
+    setIsUploading(true)
+    setUploadedFile(file)
+
+    try {
+      const downloadURL = await uploadImageToFirebase(file)
+      setUploadedFileUrl(downloadURL)
+      setIsUploading(false)
+    } catch (error) {
+      console.error("Error uploading file:", error)
+      setUploadError(t("uploadError") || "Failed to upload file. Please try again.")
+      setIsUploading(false)
     }
   }
 
   return (
     <div className="w-full">
+      <Loader isLoading={isUploading} />
       <Separator />
       <CardHeader className="flex justify-between items-center px-4 sm:px-6 py-4">
         <div className="flex justify-between items-center w-full">
@@ -197,13 +176,7 @@ export function SubscriptionRenewalForm({
             <p className="text-sm text-muted-foreground">{t("reviewAndUpdatePayment")}</p>
           </div>
           <div>
-            <Button
-              variant="default"
-              size="sm"
-              onClick={onCancel}
-              type="button"
-              aria-label={t("back")}
-            >
+            <Button variant="default" size="sm" onClick={onCancel} type="button" aria-label={t("back")}>
               {t("subscriptionPlan")}
             </Button>
           </div>
@@ -217,28 +190,37 @@ export function SubscriptionRenewalForm({
               <p className="text-sm text-muted-foreground">{t("autoRenewalMessage")}</p>
             </div>
             <div className="flex-1.5 text-xl sm:text-2xl font-bold text-primary">
-              <span>{calculateRemainingDays(user?.company?.subscriptionEndDate)}</span> <span className="text-sm font-normal w-full">/ {t("remainingDays")}</span>
+              <span>{calculateRemainingDays(user?.company?.subscriptionEndDate)}</span>{" "}
+              <span className="text-sm font-normal w-full">/ {t("remainingDays")}</span>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        {paymentMethod === 'card' && <div className="flex items-center gap-2">
           <Label htmlFor="developmentMode">Development Mode</Label>
-          <Switch id="developmentMode" checked={developmentMode} onCheckedChange={() => setDevelopmentMode(!developmentMode)} />
-        </div>
+          <Switch
+            id="developmentMode"
+            checked={developmentMode}
+            onCheckedChange={() => setDevelopmentMode(!developmentMode)}
+          />
+        </div>}
 
-        {developmentMode ?
+        {developmentMode ? (
           <>
             <Button onClick={handleRenewSubscription} variant="outline">
               Renew Subscription 🔁
             </Button>
           </>
-          :
+        ) : (
           <div className="space-y-4">
             <h3 className="text-base font-medium">{t("paymentDetails")}</h3>
             <RadioGroup
               defaultValue={paymentMethod}
-              onValueChange={setPaymentMethod}
+              onValueChange={(value) => {
+                setUploadedFile(null)
+                setUploadedFileUrl("")
+                setPaymentMethod(value)
+              }}
               className="grid grid-cols-2 gap-3 w-full max-w-[400px]"
               disabled={isProcessing}
             >
@@ -247,7 +229,7 @@ export function SubscriptionRenewalForm({
                 className={cn(
                   "flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer",
                   paymentMethod === "card" ? "border-primary" : "border-muted",
-                  isProcessing && "opacity-50 cursor-not-allowed"
+                  isProcessing && "opacity-50 cursor-not-allowed",
                 )}
               >
                 <RadioGroupItem value="card" id="card" className="sr-only" />
@@ -260,7 +242,7 @@ export function SubscriptionRenewalForm({
                 className={cn(
                   "flex flex-col items-center justify-center rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground cursor-pointer",
                   paymentMethod === "bank" ? "border-primary" : "border-muted",
-                  isProcessing && "opacity-50 cursor-not-allowed"
+                  isProcessing && "opacity-50 cursor-not-allowed",
                 )}
               >
                 <RadioGroupItem value="bank" id="bank" className="sr-only" />
@@ -271,7 +253,7 @@ export function SubscriptionRenewalForm({
 
             {paymentMethod === "card" && (
               <div className="space-y-4 pt-2">
-                <StripeCardForm onSubmit={handleCardPaymentSubmit} amount={200} />
+                {/* <StripeCardForm onSubmit={handleCardPaymentSubmit} amount={200} /> */}
               </div>
             )}
 
@@ -298,9 +280,55 @@ export function SubscriptionRenewalForm({
                     </div>
                   </div>
                 </div>
+
+                <div className="rounded-md border border-gray-200 p-4">
+                  <div className="flex flex-col space-y-3">
+                    <h3 className="text-sm font-medium">{t("attachScreenshot") || "Attach Screenshot"}</h3>
+                    <p className="text-sm text-gray-500">{t("bankReceiptSlip") || "Bank Receipt/Slip"}</p>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1 truncate">
+                        {uploadedFile && <p className="text-sm truncate">{uploadedFile?.name}</p>}
+                      </div>
+                      <div className="relative">
+                        <input
+                          type="file"
+                          id="receipt-upload"
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          disabled={isUploading}
+                        />
+                        <Button variant="default" size="sm" className="pointer-events-none" disabled={isUploading}>
+
+                          <span>{t("browseFile") || "Browse File"}</span>
+
+                        </Button>
+                      </div>
+                    </div>
+
+                    {uploadError && <p className="text-sm text-red-500">{uploadError}</p>}
+
+                    {uploadedFileUrl && (
+                      <div className="mt-2">
+                        <p className="text-sm text-green-600 mb-2">
+                          {t("uploadSuccess") || "File uploaded successfully"}
+                        </p>
+                        <div className="border rounded-md overflow-hidden max-w-xs">
+                          <img
+                            src={uploadedFileUrl || "/placeholder.svg"}
+                            alt={t("receiptPreview") || "Receipt preview"}
+                            className="w-full h-auto"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
-          </div>}
+          </div>
+        )}
         {paymentError && (
           <div className="p-3 bg-red-50 border border-red-200 rounded-md">
             <p className="text-sm text-red-600">{paymentError}</p>
@@ -312,17 +340,25 @@ export function SubscriptionRenewalForm({
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex flex-col sm:flex-row justify-between gap-3 border-t bg-muted/50 px-4 sm:px-6 py-4">
-
+      <CardFooter className="flex justify-end sm:flex-row gap-3 border-t bg-muted/50 px-4 sm:px-6 py-4">
         {paymentMethod === "bank" && (
-          <Button
-            onClick={handleBankTransfer}
-            className="w-full sm:w-auto order-1 sm:order-2"
-            type="button"
-            disabled={isProcessing}
-          >
-            {isProcessing ? t("processing") : t("payNow")}
-          </Button>
+          <>
+            <Button
+              onClick={handleRenewSubscription}
+              className="w-full sm:w-auto order-1 sm:order-2"
+              type="button"
+              disabled={isProcessing || uploadedFileUrl === ""}
+            >
+              {isProcessing ? t("processing") : t("button.submit")}
+            </Button>
+            <Button
+              onClick={onCancel}
+              variant="outline"
+              className="w-full sm:w-auto order-2 sm:order-1"
+            >
+              {t("button.cancel")}
+            </Button>
+          </>
         )}
       </CardFooter>
     </div>

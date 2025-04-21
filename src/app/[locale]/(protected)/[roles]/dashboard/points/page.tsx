@@ -62,7 +62,28 @@ export default function PointsPage() {
         queryKey: ["topUpHistory", statusFilter], // Include statusFilter in the query key
         queryFn: async () => {
             try {
-                const response: any = await companyService.getTopUpHistoryAndPointsTransactions("topup")
+                const response: any = await companyService.getTopUpHistoryAndPointsTransactions("topup", 0, 999)
+                return response.results || []
+            } catch (error) {
+                console.error("Failed to fetch top-up history:", error)
+                toast.error(getErrorMessage(error))
+                return []
+            }
+        },
+        // Enable refetching when component mounts or when dependencies change
+        refetchOnWindowFocus: false,
+    })
+
+
+    const {
+        data: archivedPropertiesData = [],
+        isLoading: isLoadingArchivedProperties,
+        refetch: refetchArchivedProperties,
+    } = useQuery({
+        queryKey: ["archivedProperties", statusFilter], // Include statusFilter in the query key
+        queryFn: async () => {
+            try {
+                const response: any = await companyService.getTopUpHistoryAndPointsTransactions("refund", 0, 999)
                 return response.results || []
             } catch (error) {
                 console.error("Failed to fetch top-up history:", error)
@@ -148,9 +169,9 @@ export default function PointsPage() {
                 <CardContent>
                     <DataTable
                         columns={archivedPropertiesColumns}
-                        data={pointsHistoryData}
-                        sorting={pointsHistorySorting}
-                        onSortingChange={setPointsHistorySorting}
+                        data={archivedPropertiesData}
+                        sorting={archivedSorting}
+                        onSortingChange={setArchivedSorting}
                         pageSize={10}
                     />
                 </CardContent>

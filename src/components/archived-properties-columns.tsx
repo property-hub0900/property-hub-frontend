@@ -17,7 +17,7 @@ export type ArchivedProperty = {
 
 export const archivedPropertiesColumns: ColumnDef<ArchivedProperty>[] = [
     {
-        accessorKey: "id",
+        accessorKey: "propertyId",
         header: "Property ID",
         enableSorting: true,
     },

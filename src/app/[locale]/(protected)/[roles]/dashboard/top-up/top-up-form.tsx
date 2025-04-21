@@ -53,7 +53,7 @@ export function TopUpForm({ onCancel, onComplete, plans = [] }: TopUpFormProps) 
       : defaultPointOptions;
 
   // Initialize state with default values that don't depend on props or calculations
-  const [selectedPoints, setSelectedPoints] = useState(pointOptions[0]);
+  const [selectedPoints, setSelectedPoints] = useState<any>(pointOptions[0]);
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [cardDetails, setCardDetails] = useState({
     cardNumber: "",
@@ -90,9 +90,7 @@ export function TopUpForm({ onCancel, onComplete, plans = [] }: TopUpFormProps) 
 
     // Simulate API call
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      // Handle successful payment
-      toast.success(t("paymentSuccessful"));
+      await handlePurchaseTopUp();
       onCancel(); // Return to history view
     } catch (error) {
       console.error("Payment failed:", error);
@@ -111,7 +109,14 @@ export function TopUpForm({ onCancel, onComplete, plans = [] }: TopUpFormProps) 
 
   const handlePurchaseTopUp = async () => {
     try {
-      await companyService.purchaseTopUp(selectedPoints);
+      await companyService.purchaseTopUp({
+        topupId: selectedPoints?.id,
+        points: selectedPoints?.value,
+        paymentMethod: paymentMethod === 'card' ? paymentMethod : "sales-team",
+        email: email,
+        phone: phone,
+        message: message,
+      });
       toast.success(t("purchaseTopUpSuccess"));
     } catch (error) {
       console.error("Purchase Top Up failed:", error);
@@ -163,10 +168,10 @@ export function TopUpForm({ onCancel, onComplete, plans = [] }: TopUpFormProps) 
             ))}
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        {paymentMethod === "card" && <div className="flex items-center gap-2">
           <Label htmlFor="developmentMode">Development Mode</Label>
           <Switch id="developmentMode" checked={developmentMode} onCheckedChange={() => setDevelopmentMode(!developmentMode)} />
-        </div>
+        </div>}
         <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
           <h2 className="text-lg font-medium">{t("paymentMethods")}</h2>
           <div className="text-left sm:text-right">

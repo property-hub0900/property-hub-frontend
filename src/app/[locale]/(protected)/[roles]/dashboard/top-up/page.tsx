@@ -44,7 +44,7 @@ export default function TopUpSubscriptionPage() {
     queryKey: ["topUpHistory", statusFilter], // Include statusFilter in the query key
     queryFn: async () => {
       try {
-        const response: any = await companyService.getTopUpHistoryAndPointsTransactions("topup")
+        const response: any = await companyService.getTopUpHistoryAndPointsTransactions("topup", 0, 999)
         return response.results || []
       } catch (error) {
         console.error("Failed to fetch top-up history:", error)

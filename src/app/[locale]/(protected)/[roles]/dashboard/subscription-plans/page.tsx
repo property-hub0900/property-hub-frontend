@@ -24,15 +24,15 @@ export default function SubscriptionPlansPage() {
     const [filters, setFilters] = useState("all")
     const [filteredSubscriptions, setFilteredSubscriptions] = useState<Transaction[]>([]);
 
-    let { data: subscription, isLoading: isLoadingSubscription }: any = useQuery({
+    let { data: subscription, isLoading: isLoadingSubscription, refetch }: any = useQuery({
         queryKey: ["subscription"],
         queryFn: () => companyService.getCompanySubscription(),
+
     } as any)
 
     const resetPageState = () => {
         setShowRenewalForm(false)
-        setFilteredSubscriptions([])
-        setFilters("all")
+        // refetch()
     }
     useEffect(() => {
         const unsubscribe = navigationEvents.subscribe(NAVIGATION_EVENTS.RESET_SUBSCRIPTION_PAGE, resetPageState)

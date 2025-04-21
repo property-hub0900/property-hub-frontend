@@ -31,10 +31,8 @@ export function TransactionHistory({ subscription }: { subscription: any }) {
             enableSorting: true,
         },
         {
-            accessorKey: "method",
+            accessorKey: "paymentMethod",
             header: t("method"),
-            cell: ({ row }) => <span className="font-medium">{row.original.method}</span>,
-            enableSorting: true,
         },
         {
             accessorKey: "type",
