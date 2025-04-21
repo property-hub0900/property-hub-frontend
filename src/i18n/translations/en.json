@@ -389,7 +389,7 @@
     },
     "permissions": {
       "canPostListings": "Can Post Listings",
-      "canPublishProperty": "Can Publish Property",
+      "canPublishProperty": "Can Publish Property without approval",
       "canFeatureProperty": "Can Feature Property"
     },
     "propertyStatuses": {

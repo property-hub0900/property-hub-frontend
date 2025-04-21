@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -16,20 +17,15 @@ import { getErrorMessage } from "@/utils/utils"
 import { useMutation } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { useAuth } from "@/lib/hooks/useAuth"
-import { useState } from "react"
 import { Eye, EyeOff } from "lucide-react"
 
-export const ChangePassword = ({
-  padding = "p-6",
-  changePasswordMode = false,
-  setChangePasswordMode,
-}: { padding?: string; changePasswordMode?: boolean; setChangePasswordMode?: (boolean: boolean) => void }) => {
+export const ChangePassword = ({ padding = "p-6", company = false }: { padding?: string, company?: boolean }) => {
   const t = useTranslations()
   const { user } = useAuth()
 
-  // Add state for password visibility
+  // State to track password visibility for each field
   const [showCurrentPassword, setShowCurrentPassword] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const changePasswordMutation = useMutation({
@@ -51,22 +47,14 @@ export const ChangePassword = ({
       const payloads = { ...data, email: String(user?.email) }
       const response = await changePasswordMutation.mutateAsync(payloads)
       toast.success(response.message)
-      if (setChangePasswordMode) {
-        setChangePasswordMode(false)
-      }
     } catch (error) {
       toast.error(getErrorMessage(error))
     }
   }
 
-  // Toggle password visibility functions
-  const toggleCurrentPasswordVisibility = () => setShowCurrentPassword(!showCurrentPassword)
-  const togglePasswordVisibility = () => setShowPassword(!showPassword)
-  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword)
-
   return (
     <>
-      <h6 className="mb-3">{t("title.changePassword")}</h6>
+      {!company && <h6 className="mb-3">{t("title.changePassword")}</h6>}
       <Loader isLoading={changePasswordMutation.isPending} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -85,16 +73,14 @@ export const ChangePassword = ({
                           placeholder={t("form.currentPassword.placeholder")}
                           {...field}
                         />
-                        <Button
+                        <button
                           type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                          onClick={toggleCurrentPasswordVisibility}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                          aria-label={showCurrentPassword ? "Hide password" : "Show password"}
                         >
                           {showCurrentPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                          <span className="sr-only">{showCurrentPassword ? "Hide password" : "Show password"}</span>
-                        </Button>
+                        </button>
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -112,20 +98,18 @@ export const ChangePassword = ({
                     <FormControl>
                       <div className="relative">
                         <Input
-                          type={showPassword ? "text" : "password"}
+                          type={showNewPassword ? "text" : "password"}
                           placeholder={t("form.password.placeholder")}
                           {...field}
                         />
-                        <Button
+                        <button
                           type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                          onClick={togglePasswordVisibility}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          onClick={() => setShowNewPassword(!showNewPassword)}
+                          aria-label={showNewPassword ? "Hide password" : "Show password"}
                         >
-                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                          <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
-                        </Button>
+                          {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -146,16 +130,14 @@ export const ChangePassword = ({
                           placeholder={t("form.confirmPassword.placeholder")}
                           {...field}
                         />
-                        <Button
+                        <button
                           type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
-                          onClick={toggleConfirmPasswordVisibility}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                         >
                           {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                          <span className="sr-only">{showConfirmPassword ? "Hide password" : "Show password"}</span>
-                        </Button>
+                        </button>
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -166,7 +148,7 @@ export const ChangePassword = ({
           </div>
 
           <div className="flex justify-end space-x-4 mt-6">
-            <Button type="submit">{!changePasswordMode ? t("button.save") : t("title.changePassword")}</Button>
+            <Button type="submit">{t("button.save")}</Button>
           </div>
         </form>
       </Form>

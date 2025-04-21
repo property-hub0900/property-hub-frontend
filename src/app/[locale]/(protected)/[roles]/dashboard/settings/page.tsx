@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/auth-store";
 import { PERMISSIONS } from "@/constants/rbac";
 import { useRBAC } from "@/lib/hooks/useRBAC";
+import { ChangePassword } from "@/components/change-password";
+import { Separator } from "@/components/ui/separator";
 export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -94,7 +96,9 @@ export default function SettingsPage() {
         >
           {userData && (
             <PersonalSettingsForm userData={userData} ref={personalFormRef} />
+
           )}
+
         </TabsContent>
 
         <TabsContent
@@ -123,6 +127,18 @@ export default function SettingsPage() {
           {isSaving ? t("button.saving") : t("button.save")}
         </Button>
       </div>
+
+      {activeTab === "personal-details" && (
+        <>
+          <Separator className="my-2" />
+          <div className="mt-10">
+            <h6 className="-mb-12 ml-12">{t("title.changePassword")}</h6>
+          </div>
+          <ChangePassword padding="p-14" company={true} />
+
+          <Separator className="my-10" />
+        </>
+      )}
     </div>
   );
 }

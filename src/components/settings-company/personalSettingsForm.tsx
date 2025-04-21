@@ -394,20 +394,10 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
           onDelete={handleRemoveImage}
           isSubmitting={isSubmitting}
         />
-        <Separator className="my-10" />
-        {/* swtich */}
-        {/* <div className="flex items-center gap-2 my-4">
-          <Switch
-            checked={changePasswordMode}
-            onCheckedChange={setChangePasswordMode}
-          />
-          <p className="text-sm text-muted-foreground">
-            {t("title.changePassword") || "Change Password"}
-          </p>
-        </div> */}
 
-        <ChangePassword padding="p-0" changePasswordMode={changePasswordMode} setChangePasswordMode={setChangePasswordMode} />
-        <Separator className="my-10" />
+
+
+
 
       </div>
     );
