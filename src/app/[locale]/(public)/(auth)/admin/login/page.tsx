@@ -3,8 +3,6 @@
 import { AuthContainer } from "@/components/auth/auth-container";
 import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { CustomFacebookButton } from "@/components/facebookLogin";
 import {
   Form,
   FormControl,
@@ -14,26 +12,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { getErrorMessage } from "@/utils/utils";
 import { userAuthCustomerLoginSchema } from "@/schema/public/auth";
 import { authService } from "@/services/public/auth";
 import { useAuthStore } from "@/store/auth-store";
 import { TUserAuthCustomerLoginSchema } from "@/types/public/auth";
+import { getErrorMessage } from "@/utils/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GoogleLogin } from "@react-oauth/google";
 import { useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 export default function AdminLoginPage() {
-  console.log("AdminLoginPage");
-
   const { locale } = useParams();
   const t = useTranslations();
   const router = useRouter();
@@ -53,8 +47,8 @@ export default function AdminLoginPage() {
   });
 
   const userAuthCustomerLoginMutation = useMutation({
-    mutationKey: ["userAuthCustomerLogin"],
-    mutationFn: authService.userAuthCustomerLogin,
+    mutationKey: ["userAuthAdminLogin"],
+    mutationFn: authService.userAuthAdminLogin,
   });
 
   const onSubmit = async (values: TUserAuthCustomerLoginSchema) => {
@@ -73,19 +67,10 @@ export default function AdminLoginPage() {
 
   return (
     <AuthContainer
-      title={t("title.loginCustomerTitle")}
-      subtitle={t("text.loginCustomerText")}
+      title={t("title.loginAdminTitle")}
+      subtitle={t("text.loginAdminText")}
     >
       <Loader isLoading={userAuthCustomerLoginMutation.isPending}></Loader>
-
-      <div className="relative flex items-center justify-center my-4">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <span className="relative bg-background px-3 text-sm text-muted-foreground">
-          {t("text.orContinueWith")}
-        </span>
-      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -149,7 +134,7 @@ export default function AdminLoginPage() {
               )}
             />
 
-            <div className="flex items-center justify-between">
+            {/* <div className="flex items-center justify-between">
               <FormField
                 control={form.control}
                 name="rememberMe"
@@ -177,7 +162,7 @@ export default function AdminLoginPage() {
               >
                 {t("button.forgotPassword")}
               </Link>
-            </div>
+            </div> */}
 
             <Button
               disabled={userAuthCustomerLoginMutation.isPending}

@@ -18,7 +18,10 @@ export const CUSTOMER_PATHS = {
 };
 
 export const ADMIN_PATHS = {
-  dashboard: "/super-admin/dashboard",
+  dashboard: "/admin/dashboard",
+  customersData: "/admin/dashboard/customers-data",
+  companiesData: "/admin/dashboard/companies-data",
+  propertiesData: "/admin/dashboard/properties",
 };
 
 export const PUBLIC_ROUTES = {

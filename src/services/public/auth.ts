@@ -139,4 +139,9 @@ export const authService = {
   contactUs: async (payloads: IContactUs): Promise<ICommonMessageResponse> => {
     return apiClient.post("/contactus", payloads);
   },
+  userAuthAdminLogin: async (
+    payloads: TCustomerLoginSchema
+  ): Promise<IResponse<string>> => {
+    return apiClient.post("/userAuth/admin/login", payloads);
+  },
 };
