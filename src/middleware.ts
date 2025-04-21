@@ -71,46 +71,6 @@ export default async function middleware(request: NextRequest) {
       ? segments[0]
       : "en";
 
-  const isAuthPage =
-    pathname.includes("/login") ||
-    pathname.includes("/register") ||
-    pathname.includes("/forgot-password") ||
-    pathname.includes("/reset-password") ||
-    pathname.includes("/verification");
-
-  // Check authentication status
-  const { isAuthenticated, userRoles } = checkAuthFromCookies(request);
-
-  // If authenticated user tries to access auth pages, redirect to home
-  if (isAuthenticated && isAuthPage) {
-    return NextResponse.redirect(new URL(`/${locale}/`, request.url));
-  }
-
-  // Check if the current path is a protected route
-  const matchedProtectedRoute = findProtectedRoute(pathname);
-
-  // If it's a protected route
-  if (matchedProtectedRoute) {
-    // If not authenticated, redirect to login
-    if (!isAuthenticated) {
-      return redirectToLogin(request, locale, pathname, search);
-    }
-
-    // Check if user has any of the required roles
-    const hasRequiredRole = matchedProtectedRoute.roles.some((role) =>
-      userRoles.includes(role)
-    );
-
-    // If user doesn't have required role, redirect to unauthorized page
-    if (!hasRequiredRole) {
-      return NextResponse.redirect(new URL(`/${locale}/`, request.url));
-    }
-  }
-  // For dashboard routes that aren't explicitly in protectedRoutes but contain "dashboard"
-  else if (pathname.includes("/dashboard") && !isAuthenticated) {
-    return redirectToLogin(request, locale, pathname, search);
-  }
-
   // Continue with the intl middleware
   return intlMiddleware(request);
 }

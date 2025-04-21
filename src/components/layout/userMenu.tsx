@@ -66,9 +66,9 @@ export function UserMenu() {
   const menuItems = {
     [USER_ROLES.CUSTOMER]: customerMenuItems,
     [USER_ROLES.OWNER]: companyMenuItems,
-    [USER_ROLES.AGENT]: companyMenuItems,
-    [USER_ROLES.ADMIN]: companyMenuItems,
     [USER_ROLES.MANAGER]: companyMenuItems,
+    [USER_ROLES.AGENT]: companyMenuItems,
+    [USER_ROLES.ADMIN]: adminMenuItems,
   };
 
   return (
