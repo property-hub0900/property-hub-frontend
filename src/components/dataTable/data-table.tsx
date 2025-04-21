@@ -39,6 +39,7 @@ interface DataTableProps<TData, TValue> {
     updaterOrValue: SortingState | ((prev: SortingState) => SortingState)
   ) => void;
   rowClassName?: (row: TData) => string;
+  pageSize?: number;
 }
 
 export function DataTable<TData, TValue>({
@@ -47,6 +48,7 @@ export function DataTable<TData, TValue>({
   sorting,
   onSortingChange,
   rowClassName,
+  pageSize,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -156,7 +158,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      {data.length > 1 && <DataTablePagination table={table} />}
+      {data.length > 1 && <DataTablePagination table={table} pageSize={pageSize} />}
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { customerService } from "@/services/protected/customer";
 import { useTranslations } from "next-intl";
 import { Loader } from "@/components/loader";
 import { Separator } from "@/components/ui/separator";
-import { ChangePassword } from "./components/change-password";
+import { ChangePassword } from "@/components/change-password";
 
 export default function Page() {
   const t = useTranslations();
