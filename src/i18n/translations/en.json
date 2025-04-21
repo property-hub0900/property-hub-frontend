@@ -761,7 +761,9 @@
     "myProperties": "My Properties",
     "points": "Points",
     "myProfile": "My Profile",
-    "savedSearches": "Saved Searches"
+    "savedSearches": "Saved Searches",
+    "customersData": "Customers Data",
+    "companiesData": "Companies Data"
   },
   "userMenu": {
     "logout": "Log out",
