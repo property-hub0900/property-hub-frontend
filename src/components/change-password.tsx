@@ -66,7 +66,7 @@ export const ChangePassword = ({
 
   return (
     <>
-      {!changePasswordMode && <h6 className="mb-3">{t("title.changePassword")}</h6>}
+      <h6 className="mb-3">{t("title.changePassword")}</h6>
       <Loader isLoading={changePasswordMutation.isPending} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

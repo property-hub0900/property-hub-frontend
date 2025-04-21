@@ -69,7 +69,7 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
     const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
-    const [changePasswordMode, setChangePasswordMode] = useState(false)
+    const [changePasswordMode, setChangePasswordMode] = useState(true)
 
     const form = useForm<PersonalSettingsFormValues>({
       resolver: zodResolver(personalSettingsSchema),
@@ -396,7 +396,7 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
         />
         <Separator className="my-10" />
         {/* swtich */}
-        <div className="flex items-center gap-2 my-4">
+        {/* <div className="flex items-center gap-2 my-4">
           <Switch
             checked={changePasswordMode}
             onCheckedChange={setChangePasswordMode}
@@ -404,8 +404,11 @@ export const PersonalSettingsForm = forwardRef<any, PersonalSettingsFormProps>(
           <p className="text-sm text-muted-foreground">
             {t("title.changePassword") || "Change Password"}
           </p>
-        </div>
-        {changePasswordMode && <ChangePassword padding="p-0" changePasswordMode={changePasswordMode} setChangePasswordMode={setChangePasswordMode} />}
+        </div> */}
+
+        <ChangePassword padding="p-0" changePasswordMode={changePasswordMode} setChangePasswordMode={setChangePasswordMode} />
+        <Separator className="my-10" />
+
       </div>
     );
   }
