@@ -13,28 +13,13 @@ import {
 } from "@/components/ui/select";
 import { useTranslations } from "next-intl";
 import { Columns } from "./columns";
+import { ICompanyAdmin } from "@/types/protected/admin";
 
-export interface ICustomersData {
-  // isError: false;
-  // page: 0;
-  // pageSize: 20;
-  results: ICustomer[];
-  //total: 0;
-}
-
-export interface ICustomer {
-  id: number;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  listingsCount: number;
-  points: number;
-  leads: number;
-  createdAt: string; // ISO format or display string
-  status: "active" | "inactive" | "pending";
-}
-
-export default function CompaniesDataTable({ data }: { data: ICustomer[] }) {
+export default function CompaniesDataTable({
+  data,
+}: {
+  data: ICompanyAdmin[];
+}) {
   const t = useTranslations();
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -58,8 +43,8 @@ export default function CompaniesDataTable({ data }: { data: ICustomer[] }) {
       const { id: sortField, desc } = sorting[0];
 
       filteredItems.sort((a, b) => {
-        const aValue = a[sortField as keyof ICustomer];
-        const bValue = b[sortField as keyof ICustomer];
+        const aValue = a[sortField as keyof ICompanyAdmin];
+        const bValue = b[sortField as keyof ICompanyAdmin];
 
         if (typeof aValue === "string" && typeof bValue === "string") {
           return desc
@@ -95,7 +80,7 @@ export default function CompaniesDataTable({ data }: { data: ICustomer[] }) {
       <div className="bg-white rounded-md shadow mb-10">
         <div className="p-6">
           <div className="flex justify-between items-center mb-5">
-            <h5>Customers Listing</h5>
+            <h5>{t("title.companies")}</h5>
             <div>
               <div className="relative">
                 <Select
@@ -109,7 +94,6 @@ export default function CompaniesDataTable({ data }: { data: ICustomer[] }) {
                     <SelectItem value={"Status"}>Status</SelectItem>
                     <SelectItem value={"active"}>Active</SelectItem>
                     <SelectItem value={"inactive"}>InActive</SelectItem>
-                    <SelectItem value={"pending"}>Pending</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -120,7 +104,7 @@ export default function CompaniesDataTable({ data }: { data: ICustomer[] }) {
             columns={Columns}
             data={filteredAndSortedData || []}
             sorting={sorting}
-            onSortingChange={setSorting}
+            onSortingChange={handleSortingChange}
           />
         </div>
       </div>

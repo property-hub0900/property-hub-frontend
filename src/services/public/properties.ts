@@ -9,23 +9,19 @@ import { ICommonMessageResponse } from "@/types/common";
 
 export const propertyServices = {
   fetchProperties(filters: IPropertyFilters): Promise<IPropertyResponse> {
-    return apiClient.get(
-      `/properties?status=published&${buildQueryString(filters)}`
-    );
+    return apiClient.get(`/properties?${buildQueryString(filters)}`);
   },
   getPropertyById: async (id: string): Promise<IProperty> => {
     return apiClient.get(`/properties/${id}`);
   },
 
   getLandingLatestProperties(): Promise<IPropertyResponse> {
-    return apiClient.get(
-      `/properties?status=published&sortBy=newest&page=0&pageSize=10`
-    );
+    return apiClient.get(`/properties?sortBy=newest&page=0&pageSize=10`);
   },
 
   getSimilarProperties(propertyType: string): Promise<IPropertyResponse> {
     return apiClient.get(
-      `/properties?status=published&propertyType=${propertyType}&sortBy=featured&page=0&pageSize=10`
+      `/properties?propertyType=${propertyType}&sortBy=featured&page=0&pageSize=10`
     );
   },
 

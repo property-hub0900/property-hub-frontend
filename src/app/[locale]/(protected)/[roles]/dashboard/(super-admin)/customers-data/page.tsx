@@ -1,15 +1,11 @@
 "use client";
 
-import CustomersDataTable from "./components/customers-table";
-
-//import { Loader } from "@/components/loader";
-import { useAuth } from "@/lib/hooks/useAuth";
-
-import { useTranslations } from "next-intl";
-
-import { useQuery } from "@tanstack/react-query";
-import { adminServices } from "@/services/protected/admin";
 import { Loader } from "@/components/loader";
+import { useAuth } from "@/lib/hooks/useAuth";
+import { adminServices } from "@/services/protected/admin";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
+import CustomersDataTable from "./components/table";
 
 export default function Page() {
   const { user } = useAuth();

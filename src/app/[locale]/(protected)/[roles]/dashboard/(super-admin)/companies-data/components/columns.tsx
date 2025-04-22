@@ -1,14 +1,13 @@
 "use client";
 
-import { formatDateAndTime } from "@/utils/utils";
-
+import { ADMIN_PATHS } from "@/constants/paths";
+import { ICompanyAdmin } from "@/types/protected/admin";
+import { formatDate } from "@/utils/utils";
 import { ColumnDef } from "@tanstack/react-table";
-
 import { Edit } from "lucide-react";
 import Link from "next/link";
-import { ICustomer } from "./table";
 
-export const Columns: ColumnDef<ICustomer>[] = [
+export const Columns: ColumnDef<ICompanyAdmin>[] = [
   {
     accessorKey: "name",
     header: "Company Name",
@@ -20,22 +19,22 @@ export const Columns: ColumnDef<ICustomer>[] = [
     enableSorting: true,
   },
   {
-    accessorKey: "phoneNumber",
+    accessorKey: "phone",
     header: "Business Number",
     enableSorting: true,
   },
   {
-    accessorKey: "listingsCount",
-    header: "Listings Count",
+    accessorKey: "listingCount",
+    header: "Listing Count",
     enableSorting: true,
   },
   {
-    accessorKey: "points",
+    accessorKey: "sharedPoints",
     header: "Points",
     enableSorting: true,
   },
   {
-    accessorKey: "leads",
+    accessorKey: "leadCount",
     header: "Leads",
     enableSorting: true,
   },
@@ -44,26 +43,38 @@ export const Columns: ColumnDef<ICustomer>[] = [
     header: "Registration Date",
     enableSorting: true,
     cell: ({ row }) => {
-      const rowData = row.original;
-      const { createdAt } = rowData;
-      return <div className="capitalize">{formatDateAndTime(createdAt)}</div>;
+      const { createdAt } = row.original;
+      return <div className="capitalize">{formatDate(createdAt)}</div>;
     },
   },
   {
     accessorKey: "status",
     header: "Status",
     enableSorting: true,
+    cell: ({ row }) => {
+      const status = row.original.status;
+      return (
+        <div className="capitalize px-4 py-1.5 shadow-md rounded-md inline-flex gap-2 items-center">
+          <span
+            className={`inline-block size-2 rounded-full ${
+              status === "active" ? "bg-primary" : "bg-muted-foreground/60"
+            }`}
+          ></span>
+          {status}
+        </div>
+      );
+    },
   },
 
   {
     accessorKey: "searchId",
     header: "Action",
     cell: ({ row }) => {
+      const { companyId } = row.original;
       return (
         <>
           <Link
-            target="_blank"
-            href={`#`}
+            href={`${ADMIN_PATHS.companiesData}/${companyId}`}
             className="flex items-center gap-1 text-primary"
           >
             <Edit className="size-5 text-primary" />

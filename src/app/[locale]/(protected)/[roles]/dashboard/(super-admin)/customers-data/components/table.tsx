@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { DataTable } from "@/components/dataTable/data-table";
 import type { SortingState } from "@tanstack/react-table";
 
-import { SavedSearchesColumns } from "./customers-columns";
+import { Columns } from "./columns";
 
 import { useTranslations } from "next-intl";
 import {
@@ -14,12 +14,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IAdminCustomer } from "@/types/protected/admin";
+import { ICustomerAdmin } from "@/types/protected/admin";
 
 export default function CustomersDataTable({
   data,
 }: {
-  data: IAdminCustomer[];
+  data: ICustomerAdmin[];
 }) {
   const t = useTranslations();
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -48,8 +48,8 @@ export default function CustomersDataTable({
       const { id: sortField, desc } = sorting[0];
 
       filteredItems.sort((a, b) => {
-        const aValue = a[sortField as keyof IAdminCustomer];
-        const bValue = b[sortField as keyof IAdminCustomer];
+        const aValue = a[sortField as keyof ICustomerAdmin];
+        const bValue = b[sortField as keyof ICustomerAdmin];
 
         // Handle date strings
         if (sortField.toLowerCase().includes("createdAt")) {
@@ -114,7 +114,7 @@ export default function CustomersDataTable({
           </div>
 
           <DataTable
-            columns={SavedSearchesColumns}
+            columns={Columns}
             data={filteredAndSortedData || []}
             sorting={sorting}
             onSortingChange={handleSortingChange}

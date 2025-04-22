@@ -16,3 +16,11 @@ export interface IUpdate<T> {
   id: string;
   payload: T;
 }
+
+export interface IListResponse<T> {
+  results: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  isError: boolean;
+}

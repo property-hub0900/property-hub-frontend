@@ -72,3 +72,24 @@ export const propertyDataFIltersSchema = (t: (key: string) => string) =>
 export type TPropertyDataFIltersSchema = z.infer<
   ReturnType<typeof propertyDataFIltersSchema>
 >;
+
+export const adminCompanySchema = (t: (key: string) => string) =>
+  z.object({
+    name: commonValidations.stringRequired(t("form.required")),
+    email: commonValidations.stringRequired(t("form.required")),
+    website: commonValidations.stringOptional(),
+    phone: commonValidations.stringRequired(t("form.required")),
+    status: commonValidations.stringRequired(t("form.required")),
+    street: commonValidations.stringRequired(t("form.required")),
+    city: commonValidations.stringRequired(t("form.required")),
+    state: commonValidations.stringRequired(t("form.required")),
+    postalCode: commonValidations.stringRequired(t("form.required")),
+
+    contractExpiryDate: commonValidations.stringRequired(t("form.required")),
+    pointsPerDuration: commonValidations.stringRequired(t("form.required")),
+    pricePerDuration: commonValidations.stringRequired(t("form.required")),
+  });
+
+export type TAdminCompanySchema = z.infer<
+  ReturnType<typeof adminCompanySchema>
+>;

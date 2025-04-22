@@ -2,16 +2,15 @@
 
 import { formatDate } from "@/utils/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { IAdminCustomer } from "@/types/protected/admin";
+import { ICustomerAdmin } from "@/types/protected/admin";
 
-export const SavedSearchesColumns: ColumnDef<IAdminCustomer>[] = [
+export const Columns: ColumnDef<ICustomerAdmin>[] = [
   {
     accessorKey: "firstName",
     header: "Name",
     enableSorting: true,
     cell: ({ row }) => {
-      const rowData = row.original;
-      const { firstName, lastName } = rowData;
+      const { firstName, lastName } = row.original;
       return <div className="capitalize">{`${firstName} ${lastName}`}</div>;
     },
   },
@@ -30,8 +29,7 @@ export const SavedSearchesColumns: ColumnDef<IAdminCustomer>[] = [
     header: "Registration Date",
     enableSorting: true,
     cell: ({ row }) => {
-      const rowData = row.original;
-      const { createdAt } = rowData;
+      const { createdAt } = row.original;
       return <div className="capitalize">{formatDate(createdAt)}</div>;
     },
   },
@@ -40,22 +38,15 @@ export const SavedSearchesColumns: ColumnDef<IAdminCustomer>[] = [
     header: "Status",
     enableSorting: false,
     cell: ({ row }) => {
-      const rowData = row.original;
-      const { user } = rowData;
-      const { status } = user;
+      const status = row.original.user.status;
       return (
         <div className="capitalize px-4 py-1.5 shadow-md rounded-md inline-flex gap-2 items-center">
-          {status ? (
-            <>
-              <span className="inline-block size-2 bg-primary rounded-full"></span>
-              Active
-            </>
-          ) : (
-            <>
-              <span className="inline-block size-2 bg-muted-foreground/60 rounded-full"></span>
-              InActive
-            </>
-          )}
+          <span
+            className={`inline-block size-2 rounded-full ${
+              status ? "bg-primary" : "bg-muted-foreground/60"
+            }`}
+          ></span>
+          {status ? "Active" : "Inactive"}
         </div>
       );
     },
