@@ -8,6 +8,7 @@ import type { StaffMember } from "@/services/protected/company";
 import moment from "moment";
 import { PERMISSIONS } from "@/constants/rbac";
 import { useRBAC } from "@/lib/hooks/useRBAC";
+import { StatusIndicator } from "./ui/status-indicator";
 export function StaffTable({
   staff,
   onEdit,
@@ -50,15 +51,12 @@ export function StaffTable({
       header: "Status",
       cell: ({ row }: { row: any }) => {
         return (
-          <span
-            className={`capitalize px-2 py-1 rounded-full text-xs ${
-              row.original.active
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
-            }`}
-          >
-            {row.original.active ? "Active" : "In-active"}
-          </span>
+          <StatusIndicator
+            status={row.original.active ? "active" : "inactive"}
+            label={row.original.active ? "Active" : "In-active"}
+            variant={"subtle"}
+            className="capitalize"
+          />
         );
       },
     },

@@ -1,6 +1,6 @@
 "use client"
 
-import { formatDate } from "@/utils/utils"
+import { formatDate, groupByThreeDigits } from "@/utils/utils"
 import type { ColumnDef } from "@tanstack/react-table"
 
 // Define the data type for points history
@@ -20,7 +20,7 @@ export const pointsHistoryColumns: ColumnDef<PointsHistory>[] = [
         enableSorting: true,
     },
     {
-        accessorKey: "title",
+        accessorKey: "property.title",
         header: "Title",
         enableSorting: true,
     },
@@ -33,12 +33,15 @@ export const pointsHistoryColumns: ColumnDef<PointsHistory>[] = [
         accessorKey: "points",
         header: "Points Received",
         enableSorting: true,
+        cell: ({ row }: any) => {
+            return <span>{groupByThreeDigits(row.original.points || 0)}</span>
+        }
     },
     {
         accessorKey: "createdAt",
         header: "Date",
         enableSorting: true,
-        cell: ({ row }) => {
+        cell: ({ row }: any) => {
             return <span>{formatDate(row.original.createdAt)}</span>
         }
     },

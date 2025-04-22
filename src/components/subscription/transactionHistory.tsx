@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import type { ColumnDef } from "@tanstack/react-table"
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
+import { StatusIndicator } from "../ui/status-indicator"
+import { groupByThreeDigits } from "@/utils/utils"
 
 
 
@@ -27,7 +29,7 @@ export function TransactionHistory({ subscription }: { subscription: any }) {
         {
             accessorKey: "points",
             header: t("points"),
-            cell: ({ row }) => <span className="font-medium">{row.original.points}</span>,
+            cell: ({ row }) => <span className="font-medium">{groupByThreeDigits(row.original.points || 0)}</span>,
             enableSorting: true,
         },
         {
@@ -50,9 +52,9 @@ export function TransactionHistory({ subscription }: { subscription: any }) {
             header: t("status"),
             cell: ({ row }) => {
                 if (row.original?.endDate && new Date(row.original?.endDate) > new Date()) {
-                    return <StatusBadge status={"active"} />
+                    return <StatusIndicator status={"active"} label={"Active"} variant={"subtle"} />
                 } else {
-                    return <StatusBadge status={"expired"} />
+                    return <StatusIndicator status={"expired"} label={"Expired"} variant={"subtle"} />
                 }
             },
         },

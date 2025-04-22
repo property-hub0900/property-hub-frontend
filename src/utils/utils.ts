@@ -1,3 +1,4 @@
+import { USER_ROLES } from "@/constants/rbac";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -70,6 +71,7 @@ export function buildQueryString(params: Record<string, any>): string {
 }
 
 export function formatDate(dateString: string): string {
+
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -139,4 +141,20 @@ export function calculateRemainingDays(endDate: string | undefined): number {
 
   // Return 0 if the date has passed or is invalid
   return differenceInDays > 0 ? differenceInDays : 0;
+}
+
+// map manager to admin
+export const mapManagerToAdmin = (role: string): string => {
+  if (role === USER_ROLES.MANAGER) {
+    return USER_ROLES.ADMIN;
+  } else if (role === USER_ROLES.ADMIN) {
+    return USER_ROLES.ADMIN;
+  } else {
+    return role;
+  }
+};
+
+
+export function groupByThreeDigits(num: number | string): string {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }

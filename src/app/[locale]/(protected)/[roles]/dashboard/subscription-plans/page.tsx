@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/u
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { companyService } from "@/services/protected/company"
 import { useAuthStore } from "@/store/auth-store"
-import { formatDate } from "@/utils/utils"
+import { formatDate, groupByThreeDigits } from "@/utils/utils"
 import { useQuery } from "@tanstack/react-query"
 import { ArrowRight, Filter, Loader2, Menu } from "lucide-react"
 import { useTranslations } from "next-intl"
@@ -56,6 +56,7 @@ export default function SubscriptionPlansPage() {
     return (
         <>
             <Loader isLoading={isLoadingSubscription} />
+
             <div className="space-y-6 w-full max-w-full px-4 sm:px-6 py-4 sm:py-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sticky top-0 z-10 bg-background pb-4 border-b">
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">{t("subscription")}</h1>
@@ -111,7 +112,7 @@ export default function SubscriptionPlansPage() {
 
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-6 sm:mt-8">
                                     <div className="text-4xl sm:text-5xl font-bold text-primary">
-                                        {user?.company?.sharedPoints} <span className="text-xs sm:text-sm font-normal text-primary">/ {t("remainingPoints")}</span>
+                                        {groupByThreeDigits(user?.company?.sharedPoints)} <span className="text-xs sm:text-sm font-normal text-primary">/ {t("remainingPoints")}</span>
                                     </div>
 
 
@@ -129,12 +130,12 @@ export default function SubscriptionPlansPage() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
                                     <div>
                                         <h2 className="text-lg sm:text-xl font-semibold">{t("pointsExpires")}</h2>
-                                        <p className="text-sm text-muted-foreground mt-1">{t("onDate", { date: formatDate(user?.company?.subscriptionEndDate) })}</p>
+                                        <p className="text-sm text-muted-foreground mt-1">{user?.company?.subscriptionEndDate ? t("onDate", { date: formatDate(user?.company?.subscriptionEndDate) }) : null}</p>
                                     </div>
 
                                     <div>
                                         <h2 className="text-lg sm:text-xl font-semibold">{t("contractExpires")}</h2>
-                                        <p className="text-sm text-muted-foreground mt-1">{t("onDate", { date: formatDate(user?.company?.CompanyContract?.contractExpiryDate) })}</p>
+                                        <p className="text-sm text-muted-foreground mt-1">{user?.company?.CompanyContract?.contractExpiryDate ? t("onDate", { date: formatDate(user?.company?.CompanyContract?.contractExpiryDate) }) : null}</p>
                                     </div>
                                 </div>
                             </div>

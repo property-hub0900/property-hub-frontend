@@ -24,6 +24,19 @@ export const ADMIN_PATHS = {
   propertiesData: "/admin/dashboard/properties",
 };
 
+
+export const COMPANY_DASHBOARD_PATHS = {
+  properties: "/company/dashboard/properties",
+  addNewProperty: "/company/dashboard/properties/add-new-property",
+  dashboard: "/company/dashboard",
+  accessManagement: "/company/dashboard/access-management",
+  agents: "/company/dashboard/agents",
+  points: "/company/dashboard/points",
+  subscriptionPlans: "/company/dashboard/subscription-plans",
+  topUp: "/company/dashboard/top-up",
+  settings: "/company/dashboard/settings",
+};
+
 export const PUBLIC_ROUTES = {
   properties: "/properties",
   help: "/help",

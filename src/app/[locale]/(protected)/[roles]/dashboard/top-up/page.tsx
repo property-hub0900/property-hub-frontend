@@ -93,21 +93,8 @@ export default function TopUpSubscriptionPage() {
         </div>
 
         <div className="rounded-md border overflow-hidden">
-          <div className="flex justify-between items-center px-2 py-1 border-b">
-            <h2 className="text-xl font-bold">{t("history")}</h2>
-            <div className="flex justify-end p-4">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder={t("selectStatus")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={undefined as any}>{t("allStatuses")}</SelectItem>
-                  <SelectItem value="paid">{t("statusPaid")}</SelectItem>
-                  <SelectItem value="pending">{t("statusPending")}</SelectItem>
-                  <SelectItem value="cancelled">{t("statusCancelled")}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="flex justify-between items-center px-2 py-1">
+            <h2 className="text-xl font-bold p-2">{t("history")}</h2>
           </div>
 
           <div className="w-full overflow-x-auto">

@@ -32,6 +32,8 @@ import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 import { uploadImageToFirebase } from "@/lib/firebaseUtil";
 import { DeleteDialog } from "../delete-dailog";
+import { mapManagerToAdmin } from "@/utils/utils";
+import { USER_ROLES } from "@/constants/rbac";
 
 interface EditUserFormProps {
   selectedStaff: StaffMember | null;
@@ -116,7 +118,7 @@ export function EditUserForm({
     if (selectedStaff?.isOwner) {
       setShowPermissionsSection(false);
     } else {
-      setShowPermissionsSection(role !== "admin");
+      setShowPermissionsSection(role !== USER_ROLES.MANAGER);
     }
   }, [role, selectedStaff]);
 
@@ -328,7 +330,7 @@ export function EditUserForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>{t("form.role.label") || "Role"}</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select onValueChange={field.onChange} value={mapManagerToAdmin(field.value)}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue

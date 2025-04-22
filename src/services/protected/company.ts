@@ -188,4 +188,8 @@ export const companyService = {
   getTopUpHistoryAndPointsTransactions: async (type: string = "topup", page: number = 0, pageSize: number = 999): Promise<IResponse<any>> => {
     return apiClient.get(`companies/points-transaction?type=${type}&page=${page}&pageSize=${pageSize}`);
   },
+
+  refundPoints: async (transactionId: string): Promise<IResponse<any>> => {
+    return apiClient.put(`companies/refund-points/${transactionId}`);
+  },
 };

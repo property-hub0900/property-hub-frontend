@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/utils/utils";
+import { cn, groupByThreeDigits } from "@/utils/utils";
 import { Switch } from "@/components/ui/switch";
 import { companyService } from "@/services/protected/company";
 
@@ -160,7 +160,7 @@ export function TopUpForm({ onCancel, onComplete, plans = [] }: TopUpFormProps) 
                 )}
                 onClick={() => handlePointSelection(option)}
               >
-                <span className="text-xl font-bold">{option.value}</span>
+                <span className="text-xl font-bold">{groupByThreeDigits(option.value || 0)}</span>
                 <span className="text-xs text-muted-foreground">
                   {t("points")}
                 </span>
@@ -176,7 +176,7 @@ export function TopUpForm({ onCancel, onComplete, plans = [] }: TopUpFormProps) 
           <h2 className="text-lg font-medium">{t("paymentMethods")}</h2>
           <div className="text-left sm:text-right">
             <p className="text-sm text-muted-foreground">{t("total")}</p>
-            <p className="text-xl font-bold">QAR {selectedPoints.price}</p>
+            <p className="text-xl font-bold">QAR {groupByThreeDigits(selectedPoints.price || 0)}</p>
           </div>
         </div>
         {developmentMode ? <>

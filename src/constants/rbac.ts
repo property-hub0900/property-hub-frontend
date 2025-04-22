@@ -1,4 +1,4 @@
-import { ADMIN_PATHS, CUSTOMER_PATHS } from "./paths";
+import { ADMIN_PATHS, COMPANY_DASHBOARD_PATHS, CUSTOMER_PATHS } from "./paths";
 
 // Role definitions
 export const USER_ROLES = {
@@ -36,13 +36,13 @@ export const PERMISSIONS = {
   MANAGE_MY_PROFILE: "manage:menu:myPorfile",
 
   // Sidebar menu access
-  ACCESS_PROPERTIES_MENU: "access:menu:properties",
+  ACCESS_PROPERTIES: "access:menu:properties",
 
-  ACCESS_USERS_MENU: "access:menu:users",
-  ACCESS_WALLET_MENU: "access:menu:wallet",
-  ACCESS_SUBSCRIPTION_MENU: "access:menu:subscription",
-  ACCESS_TOPUP_MENU: "access:menu:topup",
-  ACCESS_SETTINGS_MENU: "access:menu:settings",
+  ACCESS_MANAGEMENT: "access:menu:management",
+  ACCESS_POINTS: "access:menu:points",
+  ACCESS_SUBSCRIPTION: "access:menu:subscription",
+  ACCESS_TOPUP: "access:menu:topup",
+  ACCESS_SETTINGS: "access:menu:settings",
 
   // Admin
   ADMIN_DASHBOARD: "admin:dashboard",
@@ -74,12 +74,12 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 
     // PERMISSIONS.MANAGE_SAVED_PROPERTIES,
     // PERMISSIONS.MANAGE_SAVED_SEARCHES,
-    PERMISSIONS.ACCESS_PROPERTIES_MENU,
-    PERMISSIONS.ACCESS_USERS_MENU,
-    PERMISSIONS.ACCESS_WALLET_MENU,
-    PERMISSIONS.ACCESS_SUBSCRIPTION_MENU,
-    PERMISSIONS.ACCESS_TOPUP_MENU,
-    PERMISSIONS.ACCESS_SETTINGS_MENU,
+    PERMISSIONS.ACCESS_PROPERTIES,
+    PERMISSIONS.ACCESS_MANAGEMENT,
+    PERMISSIONS.ACCESS_POINTS,
+    PERMISSIONS.ACCESS_SUBSCRIPTION,
+    PERMISSIONS.ACCESS_TOPUP,
+    PERMISSIONS.ACCESS_SETTINGS,
   ],
 
   [USER_ROLES.ADMIN]: [
@@ -107,8 +107,8 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 
     PERMISSIONS.EDIT_PROPERTY,
     PERMISSIONS.ACCESS_COMPANY_DASHBOARD,
-    PERMISSIONS.ACCESS_PROPERTIES_MENU,
-    PERMISSIONS.ACCESS_SETTINGS_MENU,
+    PERMISSIONS.ACCESS_PROPERTIES,
+    PERMISSIONS.ACCESS_SETTINGS,
   ],
 
   [USER_ROLES.MANAGER]: [
@@ -123,12 +123,12 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
 
     PERMISSIONS.ACCESS_COMPANY_DASHBOARD,
 
-    PERMISSIONS.ACCESS_PROPERTIES_MENU,
-    PERMISSIONS.ACCESS_USERS_MENU,
+    PERMISSIONS.ACCESS_PROPERTIES,
+    PERMISSIONS.ACCESS_MANAGEMENT,
     // PERMISSIONS.ACCESS_WALLET_MENU,
     // PERMISSIONS.ACCESS_SUBSCRIPTION_MENU,
     // PERMISSIONS.ACCESS_TOPUP_MENU,
-    PERMISSIONS.ACCESS_SETTINGS_MENU,
+    PERMISSIONS.ACCESS_SETTINGS,
   ],
   [USER_ROLES.CUSTOMER]: [
     PERMISSIONS.MANAGE_MY_PROFILE,
@@ -146,22 +146,17 @@ export const ROUTE_PERMISSIONS: Record<string, Permission[]> = {
   "/properties/create": [PERMISSIONS.CREATE_PROPERTY],
   "/properties/edit": [PERMISSIONS.EDIT_PROPERTY],
   "/properties/delete": [PERMISSIONS.DELETE_PROPERTY],
-  "/company/dashboard/properties/add-new-property": [
-    PERMISSIONS.CREATE_PROPERTY,
-  ],
 
-  // Company settings
-  "/company/settings": [PERMISSIONS.EDIT_COMPANY],
 
-  // Add menu item routes with their permissions
-  "/company/dashboard/properties": [PERMISSIONS.ACCESS_PROPERTIES_MENU],
-  "/company/dashboard/access-management": [PERMISSIONS.ACCESS_USERS_MENU],
-  "/company/dashboard/points": [PERMISSIONS.ACCESS_WALLET_MENU],
-  "/company/dashboard/subscription-plans": [
-    PERMISSIONS.ACCESS_SUBSCRIPTION_MENU,
-  ],
-  "/company/dashboard/top-up": [PERMISSIONS.ACCESS_TOPUP_MENU],
-  "/company/dashboard/settings": [PERMISSIONS.ACCESS_SETTINGS_MENU],
+  // Company 
+  [COMPANY_DASHBOARD_PATHS.addNewProperty]: [PERMISSIONS.CREATE_PROPERTY],
+  [COMPANY_DASHBOARD_PATHS.settings]: [PERMISSIONS.EDIT_COMPANY],
+  [COMPANY_DASHBOARD_PATHS.properties]: [PERMISSIONS.ACCESS_PROPERTIES],
+  [COMPANY_DASHBOARD_PATHS.accessManagement]: [PERMISSIONS.ACCESS_MANAGEMENT],
+  [COMPANY_DASHBOARD_PATHS.points]: [PERMISSIONS.ACCESS_POINTS],
+  [COMPANY_DASHBOARD_PATHS.subscriptionPlans]: [PERMISSIONS.ACCESS_SUBSCRIPTION],
+  [COMPANY_DASHBOARD_PATHS.topUp]: [PERMISSIONS.ACCESS_TOPUP],
+  [COMPANY_DASHBOARD_PATHS.settings]: [PERMISSIONS.ACCESS_SETTINGS],
 
   // Customer dashboard routes
   [CUSTOMER_PATHS.savedSearches]: [PERMISSIONS.MANAGE_SAVED_SEARCHES],
@@ -170,4 +165,6 @@ export const ROUTE_PERMISSIONS: Record<string, Permission[]> = {
 
   // manageuper Admin Routes
   [ADMIN_PATHS.dashboard]: [PERMISSIONS.ADMIN_DASHBOARD],
+  [ADMIN_PATHS.customersData]: [PERMISSIONS.CUSTOMERS_DATA],
+  [ADMIN_PATHS.companiesData]: [PERMISSIONS.COMPANIES_DATA],
 };

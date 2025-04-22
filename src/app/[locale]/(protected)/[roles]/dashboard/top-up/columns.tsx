@@ -3,7 +3,7 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { useTranslations } from "next-intl"
 import moment from "moment"
-import { formatCurrency, formatDate } from "@/utils/utils"
+import { formatCurrency, formatDate, groupByThreeDigits } from "@/utils/utils"
 
 export interface TopUpSubscription {
     date: Date
@@ -28,6 +28,9 @@ export function Columns() {
         {
             accessorKey: "points",
             header: t("columns.points"),
+            cell: ({ row }: any) => {
+                return groupByThreeDigits(row.original.points || 0)
+            },
         },
         {
             accessorKey: "paymentMethod",

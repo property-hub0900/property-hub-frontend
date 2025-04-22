@@ -10,7 +10,7 @@ import type { SortingState } from "@tanstack/react-table"
 import { pointsHistoryColumns } from "@/components/points-history-columns"
 import { archivedPropertiesColumns } from "@/components/archived-properties-columns"
 import { useAuthStore } from "@/store/auth-store"
-import { formatDate, getErrorMessage } from "@/utils/utils"
+import { formatDate, getErrorMessage, groupByThreeDigits } from "@/utils/utils"
 import { useQuery } from "@tanstack/react-query"
 import { companyService } from "@/services/protected/company"
 import { toast } from "sonner"
@@ -62,7 +62,7 @@ export default function PointsPage() {
         queryKey: ["topUpHistory", statusFilter], // Include statusFilter in the query key
         queryFn: async () => {
             try {
-                const response: any = await companyService.getTopUpHistoryAndPointsTransactions("topup", 0, 999)
+                const response: any = await companyService.getTopUpHistoryAndPointsTransactions("deduct", 0, 999)
                 return response.results || []
             } catch (error) {
                 console.error("Failed to fetch top-up history:", error)
@@ -119,7 +119,7 @@ export default function PointsPage() {
                 <Card className="flex justify-around items-center p-1">
                     <div className="flex-col sm:flex-row justify-between items-start sm:items-center mt-2">
                         <p className="text-sm text-muted-foreground">Remaining Points</p>
-                        <h3 className="text-primary">{user?.company?.sharedPoints}</h3>
+                        <h3 className="text-primary">{groupByThreeDigits(user?.company?.sharedPoints || 0)}</h3>
                     </div>
                     <div className="lg:col-span-1">
                         <CardHeader className="pb-2">
