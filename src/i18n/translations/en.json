@@ -40,7 +40,11 @@
     "filters": "Filters",
     "areYouSure": "Are you sure?",
     "contactUsTitle": "Find Your Dream Home in Qatar!",
-    "loginAdminTitle": "Welcome to PropertyExplorer"
+    "loginAdminTitle": "Welcome to PropertyExplorer",
+    "companies": "Companies",
+    "customerListing": "Customer Listing",
+    "pointsDetails": "Points Details",
+    "subscriptionDetails": "Subscription Details"
   },
   "button": {
     "next": "Next",
@@ -89,7 +93,8 @@
     "reset": "Reset",
     "find": "Find",
     "logout": "Log out",
-    "goBack": "Go back"
+    "goBack": "Go back",
+    "addPoints": "Add Points"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -133,6 +138,8 @@
     "of": "of"
   },
   "form": {
+    "required": "This field is required",
+    "invalidNumber": "Please enter a valid number",
     "fullName": {
       "label": "Full Name",
       "placeholder": "Enter your full name",
@@ -151,7 +158,6 @@
         "max": "Bio should be at most 50 characters long."
       }
     },
-    "required": "This field is required",
     "firstName": {
       "label": "First Name",
       "placeholder": "First Name",
@@ -369,7 +375,8 @@
       "placeholder": "Select status",
       "options": {
         "active": "Active",
-        "inactive": "Inactive"
+        "inactive": "Inactive",
+        "reject": "Reject"
       }
     },
     "role": {
@@ -478,6 +485,15 @@
     "additionalInformation": {
       "label": "Additional Information",
       "placeholder": ""
+    },
+    "contractExpiry": {
+      "label": "Contract Expiry"
+    },
+    "points": {
+      "label": "Points"
+    },
+    "currentPoints": {
+      "label": "Current Points"
     }
   },
   "seo": {

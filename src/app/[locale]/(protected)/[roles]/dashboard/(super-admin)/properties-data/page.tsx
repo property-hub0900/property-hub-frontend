@@ -24,8 +24,8 @@ export default function PropertiesListing() {
     isLoading: isLoadingProperties,
     isFetching: isFetchingProperties,
   } = useQuery({
-    queryKey: ["companiesProperties"],
-    queryFn: () => companiesProperties(),
+    queryKey: ["getAdminProperties"],
+    queryFn: () => adminServices.getAdminProperties(),
   });
 
   return (
@@ -36,11 +36,6 @@ export default function PropertiesListing() {
       ></Loader>
       <div className="flex justify-between items-center mb-5">
         <h3>{t("sidebar.propertyData")}</h3>
-        {hasPermission(PERMISSIONS.CREATE_PROPERTY) && (
-          <Link className="cursor-pointer" href={COMPANY_PATHS.addNewProperty}>
-            <Button>{t("title.addNewProperty")}</Button>
-          </Link>
-        )}
       </div>
       {dataCompaniesProperties && (
         <PropertiesTable data={dataCompaniesProperties.results || []} />

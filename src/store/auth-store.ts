@@ -193,7 +193,7 @@ export const useAuthStore = create<AuthState>()(
           let response;
           if (user.role === "customer") {
             //response = await customerService.getMe();
-          } else {
+          } else if (user.role === "staff") {
             response = await companyService.getMe();
           }
 

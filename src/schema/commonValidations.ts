@@ -1,4 +1,9 @@
-import { z } from "zod";
+import { z, ZodType } from "zod";
+
+type NumberRequiredValidator = (
+  requiredErrorMessage: string,
+  invalidErrorMessage?: string
+) => ZodType<number>;
 
 export const commonValidations = {
   stringRequired: (requiredErrorMessage: string) =>
@@ -7,9 +12,12 @@ export const commonValidations = {
       .trim()
       .min(1, { message: requiredErrorMessage }),
   stringOptional: () => z.string().trim().optional().or(z.literal("")),
-  numberRequired: (requiredErrorMessage: string) =>
+  numberRequired: (requiredErrorMessage: string, invalidErrorMessage: string) =>
     z.coerce
-      .number({ required_error: requiredErrorMessage })
+      .number({
+        required_error: requiredErrorMessage,
+        invalid_type_error: invalidErrorMessage,
+      })
       .min(1, { message: requiredErrorMessage }),
   numberOptional: (requiredErrorMessage: string) =>
     z.coerce

@@ -83,9 +83,9 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-8 space-x-8">
+    <div className="space-y-8">
       {/* <DataTableToolbar table={table} /> */}
-      <div className="">
+      <div className="overflow-x-auto w-full max-w-full">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -113,8 +113,8 @@ export function DataTable<TData, TValue>({
                                 asc: <ChevronUp className="ms-2 h-4 w-4" />,
                                 desc: <ChevronDown className="ms-2 h-4 w-4" />,
                               }[header.column.getIsSorted() as string] ?? (
-                                  <ChevronsUpDown className="ms-2 h-4 w-4" />
-                                )}
+                                <ChevronsUpDown className="ms-2 h-4 w-4" />
+                              )}
                             </Button>
                           ) : (
                             flexRender(
@@ -158,7 +158,9 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      {data.length > 1 && <DataTablePagination table={table} pageSize={pageSize} />}
+      {data.length > 1 && (
+        <DataTablePagination table={table} pageSize={pageSize} />
+      )}
     </div>
   );
 }

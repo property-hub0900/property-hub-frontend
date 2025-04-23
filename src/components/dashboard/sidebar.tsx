@@ -94,7 +94,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
     if (
       path === "/dashboard" ||
       path === "/company/dashboard" ||
-      path === "/customer/dashboard"
+      path === "/admin/dashboard"
     ) {
       return normalizedPathname === path;
     }
@@ -196,6 +196,11 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       href: ADMIN_PATHS.companiesData,
       icon: BriefcaseBusiness,
     },
+    {
+      title: t("sidebar.propertyData"),
+      href: ADMIN_PATHS.propertiesData,
+      icon: Database,
+    },
   ];
 
   const filteredNavItems: any = NavItems.filter((item) => {
@@ -203,18 +208,18 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
     return hasRoutePermission(item.href);
   });
 
-  const footerItems = [
-    {
-      title: t("sidebar.contactUs"),
-      href: PUBLIC_ROUTES.contactUs,
-      icon: MessageSquare,
-    },
-  ];
+  // const footerItems = [
+  //   {
+  //     title: t("sidebar.contactUs"),
+  //     href: PUBLIC_ROUTES.contactUs,
+  //     icon: MessageSquare,
+  //   },
+  // ];
 
   return (
     <div
       className={cn(
-        "relative flex flex-col border-r bg-white transition-all duration-300",
+        "relative flex flex-col shrink-0 border-r bg-white transition-all duration-300",
         open ? "w-72 p-4 md:p-6 lg:p-8" : "w-[78px] p-2"
       )}
     >
@@ -248,7 +253,8 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                 src="/logo.svg"
                 alt="PropertyExplorer"
                 width={160}
-                height={160}
+                height={81}
+                priority
               />
             </>
           ) : (
@@ -333,7 +339,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       </div>
 
       {/* Footer Items */}
-      <div className="px-2 py-4">
+      {/* <div className="px-2 py-4">
         <nav className="grid gap-1">
           {footerItems.map((item, index) => {
             const active = isActive(item.href);
@@ -386,7 +392,7 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
             );
           })}
         </nav>
-      </div>
+      </div> */}
 
       {/* Logout button */}
       <div className={cn("border-t p-4", !open && "flex justify-center")}>
