@@ -4,6 +4,8 @@ import {
   ICustomerAdmin,
   IEditCompanyGet,
   IEditCompanyUpdate,
+  IAddCompanyPoints,
+  IAdminProperty,
 } from "@/types/protected/admin";
 import { ICommonMessageResponse, IListResponse } from "@/types/common";
 
@@ -26,5 +28,17 @@ export const adminServices = {
       `/admin/companies/${payloads.companyId}`,
       payloads.data
     );
+  },
+  addCompanyPoints: async (payloads: {
+    companyId: number;
+    data: IAddCompanyPoints;
+  }): Promise<ICommonMessageResponse> => {
+    return apiClient.post(
+      `/admin/companies/points/${payloads.companyId}`,
+      payloads.data
+    );
+  },
+  getAdminProperties: async (): Promise<IListResponse<IAdminProperty>> => {
+    return apiClient.get(`/admin/properties`);
   },
 };

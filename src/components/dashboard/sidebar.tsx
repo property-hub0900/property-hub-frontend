@@ -196,6 +196,11 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       href: ADMIN_PATHS.companiesData,
       icon: BriefcaseBusiness,
     },
+    {
+      title: t("sidebar.propertyData"),
+      href: ADMIN_PATHS.propertiesData,
+      icon: Database,
+    },
   ];
 
   const filteredNavItems: any = NavItems.filter((item) => {
@@ -248,7 +253,8 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
                 src="/logo.svg"
                 alt="PropertyExplorer"
                 width={160}
-                height={160}
+                height={81}
+                priority
               />
             </>
           ) : (

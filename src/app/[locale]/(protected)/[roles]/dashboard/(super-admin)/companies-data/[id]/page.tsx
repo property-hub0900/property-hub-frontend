@@ -18,7 +18,7 @@ export default function Page() {
     isLoading,
     isFetching,
   } = useQuery({
-    queryKey: ["getAdminCompany", id],
+    queryKey: ["adminCompanies", "getAdminCompany", id],
     queryFn: () => adminServices.getAdminCompany(Number(id)),
   });
 

@@ -25,7 +25,10 @@ export const createPropertySchema = (t: (key: string) => string) =>
     propertyType: commonValidations.stringRequired(t("form.required")),
     propertySize: commonValidations.stringRequired(t("form.required")),
     bedrooms: commonValidations.numberOptional(t("form.required")),
-    bathrooms: commonValidations.numberRequired(t("form.required")),
+    bathrooms: commonValidations.numberRequired(
+      t("form.required"),
+      t("form.invalidNumber")
+    ),
     tenure: commonValidations.stringOptional(),
     ownershipStatus: commonValidations.enumOptional(PROPERTY_OWNERSHIP_STATUS),
     buildingFloors: commonValidations.numberOptional(t("form.required")),
@@ -34,7 +37,10 @@ export const createPropertySchema = (t: (key: string) => string) =>
     furnishedType: z.string().trim().nullable(),
     views: commonValidations.stringOptional(),
     serviceCharges: commonValidations.stringOptional(),
-    price: commonValidations.numberRequired(t("form.required")),
+    price: commonValidations.numberRequired(
+      t("form.required"),
+      t("form.invalidNumber")
+    ),
     priceVisibilityFlag: z.boolean().optional(),
     //city: commonValidations.stringRequired(t("form.required")),
     address: commonValidations.stringRequired(t("form.required")),
@@ -85,11 +91,33 @@ export const adminCompanySchema = (t: (key: string) => string) =>
     state: commonValidations.stringRequired(t("form.required")),
     postalCode: commonValidations.stringRequired(t("form.required")),
 
-    contractExpiryDate: commonValidations.stringRequired(t("form.required")),
-    pointsPerDuration: commonValidations.stringRequired(t("form.required")),
-    pricePerDuration: commonValidations.stringRequired(t("form.required")),
+    //contractExpiryDate: commonValidations.stringRequired(t("form.required")),
+    contractExpiryDate: z.date({
+      required_error: t("form.required"),
+    }),
+    pointsPerDuration: commonValidations.numberRequired(
+      t("form.required"),
+      t("form.invalidNumber")
+    ),
+    pricePerDuration: commonValidations.numberRequired(
+      t("form.required"),
+      t("form.invalidNumber")
+    ),
   });
 
 export type TAdminCompanySchema = z.infer<
   ReturnType<typeof adminCompanySchema>
+>;
+
+export const updateCompanyPointsSchema = (t: (key: string) => string) =>
+  z.object({
+    points: commonValidations.numberRequired(
+      t("form.required"),
+      t("form.invalidNumber")
+    ),
+    description: commonValidations.stringRequired(t("form.required")),
+  });
+
+export type TUpdateCompanyPointsSchema = z.infer<
+  ReturnType<typeof updateCompanyPointsSchema>
 >;

@@ -42,9 +42,9 @@ export interface IEditCompanyGet {
 }
 
 export interface ICompanyContract {
-  pointsPerDuration: string | null;
-  pricePerDuration: string | null;
-  contractExpiryDate: string | null;
+  pointsPerDuration: number | null;
+  pricePerDuration: number | null;
+  contractExpiryDate: Date | null;
 }
 
 export interface IEditCompanyUpdate {
@@ -58,7 +58,26 @@ export interface IEditCompanyUpdate {
   state: string | null;
   country?: string | null;
   postalCode: string | null;
-  contractExpiryDate: string | null;
-  pointsPerDuration: string | null;
-  pricePerDuration: string | null;
+  contractExpiryDate: Date | null;
+  pointsPerDuration: number | null;
+  pricePerDuration: number | null;
+}
+
+export interface IAddCompanyPoints {
+  points: number;
+  type: string;
+  description: string;
+}
+
+export interface IAdminProperty {
+  propertyId: number;
+  title: string;
+  price: number;
+  propertyType: string;
+  status: string;
+  featured: boolean;
+  company: {
+    companyId: number;
+    companyName: string;
+  };
 }

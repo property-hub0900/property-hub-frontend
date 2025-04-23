@@ -12,8 +12,8 @@ import {
 import { IPropertyFilters, IPropertyResponse } from "@/types/public/properties";
 import { buildQueryString } from "@/utils/utils";
 
-export const companiesProperties = (role: string): Promise<IProperties> => {
-  return apiClient.get(`/companies/properties?role=${role}`);
+export const companiesProperties = (): Promise<IProperties> => {
+  return apiClient.get(`/companies/properties`);
 };
 
 export const createProperty = (

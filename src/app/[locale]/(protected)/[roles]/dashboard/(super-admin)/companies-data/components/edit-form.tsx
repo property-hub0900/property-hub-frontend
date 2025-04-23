@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { ADMIN_PATHS } from "@/constants/paths";
-
 import {
   adminCompanySchema,
   TAdminCompanySchema,
@@ -29,15 +28,23 @@ import { adminServices } from "@/services/protected/admin";
 import { IEditCompanyGet } from "@/types/protected/admin";
 import { getErrorMessage } from "@/utils/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { AddPointsDialogue } from "./add-points-dialogue";
+import { useState } from "react";
+
+import * as React from "react";
+
+import { DatePicker } from "@/components/datepicker";
 
 export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
   const t = useTranslations();
+  const queryClient = useQueryClient();
+
+  const [isAddPointsDialogOpen, setIsAddPointsDialogOpen] = useState(false);
 
   const updateAdminCompanyMutation = useMutation({
     mutationKey: ["updateAdminCompany"],
@@ -56,10 +63,12 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
       state: companyData.state || "",
       street: companyData.street || "",
       postalCode: companyData.postalCode || "",
-      contractExpiryDate: companyData.CompanyContract.contractExpiryDate || "",
+      contractExpiryDate:
+        companyData.CompanyContract?.contractExpiryDate || undefined,
       pointsPerDuration:
-        `${companyData.CompanyContract.pointsPerDuration}` || "",
-      pricePerDuration: companyData.CompanyContract.pricePerDuration || "",
+        companyData.CompanyContract?.pointsPerDuration || undefined,
+      pricePerDuration:
+        companyData.CompanyContract?.pricePerDuration || undefined,
     },
   });
 
@@ -71,7 +80,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
       };
 
       const response = await updateAdminCompanyMutation.mutateAsync(payloads);
-
+      queryClient.invalidateQueries({
+        queryKey: ["adminCompanies"],
+      });
       toast.success(response.message);
     } catch (error) {
       toast.error(getErrorMessage(error));
@@ -169,9 +180,15 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                           />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={"active"}>Active</SelectItem>
-                          <SelectItem value={"inactive"}>InActive</SelectItem>
-                          <SelectItem value={"rejected"}>Reject</SelectItem>
+                          <SelectItem value={"active"}>
+                            {t("form.status.options.active")}
+                          </SelectItem>
+                          <SelectItem value={"inactive"}>
+                            {t("form.status.options.inactive")}
+                          </SelectItem>
+                          <SelectItem value={"rejected"}>
+                            {t("form.status.options.reject")}
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -182,7 +199,7 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   <Separator />
                 </div>
 
-                <h5 className=" col-span-2">Business Address</h5>
+                <h5 className=" col-span-2">{t(`title.businessAddress`)}</h5>
 
                 <FormField
                   control={form.control}
@@ -250,25 +267,18 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   <Separator />
                 </div>
 
-                <h5 className=" col-span-2">Subscription Details</h5>
+                <h5 className=" col-span-2">
+                  {t(`title.subscriptionDetails`)}
+                </h5>
 
-                <FormField
-                  control={form.control}
+                <DatePicker
                   name="contractExpiryDate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t("form.contractExpiry.label")}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="date"
-                          placeholder={t("form.contractExpiry.label")}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label={t("form.contractExpiry.label")}
+                  disabledDate={(date) =>
+                    date < new Date(new Date().setHours(0, 0, 0, 0))
+                  }
                 />
+
                 <div className=""></div>
 
                 <FormField
@@ -281,6 +291,7 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                         <Input
                           placeholder={t("form.points.label")}
                           {...field}
+                          value={field.value ? field.value : ""}
                         />
                       </FormControl>
                       <FormMessage />
@@ -294,7 +305,11 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                     <FormItem>
                       <FormLabel>{t("form.price.label")}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t("form.price.label")} {...field} />
+                        <Input
+                          placeholder={t("form.price.label")}
+                          {...field}
+                          value={field.value ? field.value : ""}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -305,18 +320,25 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   <Separator />
                 </div>
 
-                <h5 className=" col-span-2">Points Details</h5>
+                <h5 className=" col-span-2">{t(`title.pointsDetails`)}</h5>
 
                 <div>
                   <FormItem>
-                    <FormLabel>Current Points</FormLabel>
+                    <FormLabel>{t(`form.currentPoints.label`)}</FormLabel>
                     <FormControl>
-                      <Input disabled value={companyData.sharedPoints} />
+                      <Input disabled value={companyData.sharedPoints || ""} />
                     </FormControl>
                   </FormItem>
                 </div>
                 <div>
-                  <AddPointsDialogue />
+                  <Button
+                    size={"sm"}
+                    className="h-10 mt-5"
+                    type="button"
+                    onClick={() => setIsAddPointsDialogOpen(true)}
+                  >
+                    {t("button.addPoints")}
+                  </Button>
                 </div>
               </div>
             </div>
@@ -331,6 +353,11 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
             </div>
           </form>
         </Form>
+        <AddPointsDialogue
+          companyId={companyData.companyId}
+          isAddPointsDialogOpen={isAddPointsDialogOpen}
+          setIsAddPointsDialogOpen={setIsAddPointsDialogOpen}
+        />
       </div>
     </>
   );
