@@ -1,17 +1,12 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
+import { useAuth } from "@/lib/hooks/useAuth";
 import CustomersDataTable, {
   ICustomersData,
 } from "./components/customers-table";
 
-//import { Loader } from "@/components/loader";
-import { useAuth } from "@/lib/hooks/useAuth";
-
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
-
-export const customersData: ICustomersData = {
+const customersData: ICustomersData = {
   results: [
     {
       name: "Akbar Ali",
