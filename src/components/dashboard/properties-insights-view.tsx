@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ChevronDown, ChevronUp, ArrowRight, ArrowLeftIcon } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import { companyService } from "@/services/protected/company"
 
 export function PropertiesInsightsView({ onBack }) {
     const [currentPage, setCurrentPage] = useState(1)
@@ -43,6 +45,14 @@ export function PropertiesInsightsView({ onBack }) {
             callLeads: 18,
         },
     ]
+
+    const { data: propertyInsightsData, isLoading: isPropertyInsightsLoading } = useQuery<any>({
+        queryKey: ["property-insights"],
+        queryFn: () => companyService.getPropertyInsights(),
+        // placeholderData: emptyPropertyInsightsData,
+    })
+
+    console.log({ propertyInsightsData })
 
     const handleSort = (column) => {
         if (sortColumn === column) {

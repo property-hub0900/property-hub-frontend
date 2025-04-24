@@ -26,6 +26,8 @@ interface DashboardViewProps {
     }
     chartData: LeadChannel[]
     hasData: boolean
+    timeframe: string
+    setTimeframe: (timeframe: string) => void
 }
 
 interface CustomTooltipProps {
@@ -34,9 +36,9 @@ interface CustomTooltipProps {
     label?: string
 }
 
-export function DashboardView({ metrics, chartData, hasData }: Readonly<DashboardViewProps>) {
-    const [timeframe, setTimeframe] = useState("monthly")
-    const timeframeOptions = ["daily", "weekly", "monthly", "yearly"]
+export function DashboardView({ metrics, chartData, hasData, timeframe, setTimeframe }: Readonly<DashboardViewProps>) {
+
+    const timeframeOptions = ["monthly", "yearly"]
 
     const { hasPermission } = useRBAC();
 
@@ -145,14 +147,14 @@ export function DashboardView({ metrics, chartData, hasData }: Readonly<Dashboar
 
                 <div className="relative">
                     {hasData ? (
-                        <div className="h-[200px] sm:h-[240px] mt-6 -ml-2 sm:ml-0">
+                        <div className="h-[200px] sm:h-[240px] mt-6 ml-2 sm:ml-0">
                             <ResponsiveContainer width="100%" height="100%">
                                 <LineChart
                                     data={chartData}
                                     margin={{
                                         top: 5,
                                         right: 5,
-                                        left: -20,
+                                        left: 20,
                                         bottom: 5,
                                     }}
                                 >
@@ -171,6 +173,9 @@ export function DashboardView({ metrics, chartData, hasData }: Readonly<Dashboar
                                         tickLine={false}
                                         tick={{ fontSize: 10, fill: "#888" }}
                                         width={30}
+                                        domain={[0, 'dataMax + 1']}  // Set domain from 0 to max value + 1
+                                        allowDecimals={false}        // No decimal ticks
+                                        tickMargin={20}
                                     />
                                     <Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 10 }} />
                                     <Line
