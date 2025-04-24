@@ -81,3 +81,23 @@ export interface IAdminProperty {
     companyName: string;
   };
 }
+
+export interface IAdminSubscription {
+  subscriptionId: number;
+  companyId: number;
+  points: number;
+  status: string | null;
+  paymentMethod: string | null;
+  paymentImage: string | null;
+  type: string | null;
+  price: string;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  company: {
+    companyId: number;
+    companyName: string;
+    companyEmail: string;
+    companyPhone: string | null;
+  };
+}

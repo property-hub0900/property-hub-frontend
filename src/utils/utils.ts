@@ -71,7 +71,6 @@ export function buildQueryString(params: Record<string, any>): string {
 }
 
 export function formatDate(dateString: string): string {
-
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -126,7 +125,6 @@ export const convertSavedSearchToURL = (jsonString: string): string => {
   }
 };
 
-
 export function calculateRemainingDays(endDate: string | undefined): number {
   if (!endDate) return 0; // Return 0 if endDate is undefined or invalid
 
@@ -154,7 +152,50 @@ export const mapManagerToAdmin = (role: string): string => {
   }
 };
 
-
 export function groupByThreeDigits(num: number | string): string {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+type SortDirection = "asc" | "desc";
+
+interface SortOption<T> {
+  field: keyof T;
+  direction: SortDirection;
+}
+
+export const sortTableData = <T>(data: T[], sortOption: SortOption<T>): T[] => {
+  const { field, direction } = sortOption;
+
+  return [...data].sort((a, b) => {
+    const aValue = a[field];
+    const bValue = b[field];
+
+    // Handle date fields
+
+    if (
+      field.toString().toLowerCase().includes("createdAt") ||
+      field.toString().toLowerCase().includes("startDate") ||
+      field.toString().toLowerCase().includes("endDate")
+    ) {
+      const aDate = new Date(aValue as string).getTime();
+      const bDate = new Date(bValue as string).getTime();
+
+      return direction === "desc" ? bDate - aDate : aDate - bDate;
+    }
+
+    // Handle strings
+    if (typeof aValue === "string" && typeof bValue === "string") {
+      return direction === "desc"
+        ? bValue.localeCompare(aValue)
+        : aValue.localeCompare(bValue);
+    }
+
+    // Handle numbers or other comparable values
+    if (aValue && bValue) {
+      if (aValue < bValue) return direction === "desc" ? 1 : -1;
+      if (aValue > bValue) return direction === "desc" ? -1 : 1;
+    }
+
+    return 0;
+  });
+};

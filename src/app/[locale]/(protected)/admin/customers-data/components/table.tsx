@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ICustomerAdmin } from "@/types/protected/admin";
+import { sortTableData } from "@/utils/utils";
 
 export default function CustomersDataTable({
   data,
@@ -43,31 +44,11 @@ export default function CustomersDataTable({
       return true;
     });
 
-    // Then apply sorting
     if (sorting.length > 0) {
-      const { id: sortField, desc } = sorting[0];
-
-      filteredItems.sort((a, b) => {
-        const aValue = a[sortField as keyof ICustomerAdmin];
-        const bValue = b[sortField as keyof ICustomerAdmin];
-
-        // Handle date strings
-        if (sortField.toLowerCase().includes("createdAt")) {
-          const aDate = new Date(aValue as string).getTime();
-          const bDate = new Date(bValue as string).getTime();
-
-          return desc ? bDate - aDate : aDate - bDate;
-        }
-
-        if (typeof aValue === "string" && typeof bValue === "string") {
-          return desc
-            ? bValue.localeCompare(aValue)
-            : aValue.localeCompare(bValue);
-        }
-
-        if (aValue < bValue) return desc ? 1 : -1;
-        if (aValue > bValue) return desc ? -1 : 1;
-        return 0;
+      const { id, desc } = sorting[0];
+      return sortTableData(filteredItems, {
+        field: id as keyof ICustomerAdmin,
+        direction: desc ? "desc" : "asc",
       });
     }
 
