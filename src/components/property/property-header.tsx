@@ -1,5 +1,5 @@
 import { formatAmountToQAR, formatNumber } from "@/utils/utils";
-import { Bath, Bed, BedDouble, Expand } from "lucide-react";
+import { Bath, BedDouble, Expand } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 interface PropertyHeaderProps {
@@ -14,7 +14,7 @@ export function PropertyHeader({
   bedrooms,
   bathrooms,
   propertySize,
-}: PropertyHeaderProps) {
+}: Readonly<PropertyHeaderProps>) {
   const t = useTranslations();
 
   const formattedPrice = formatAmountToQAR(price);
