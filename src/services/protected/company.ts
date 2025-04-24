@@ -1,4 +1,5 @@
 import apiClient from "@/lib/api-client";
+import { MetricsData } from "@/types/common";
 
 // Define types for the API requests and responses
 export type StaffRole = "agent" | "manager";
@@ -191,5 +192,9 @@ export const companyService = {
 
   refundPoints: async (transactionId: string): Promise<IResponse<any>> => {
     return apiClient.put(`companies/refund-points/${transactionId}`);
+  },
+
+  getMetrics: async (): Promise<IResponse<MetricsData | any>> => {
+    return apiClient.get("companies/metrics");
   },
 };

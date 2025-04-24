@@ -50,6 +50,8 @@ export const PERMISSIONS = {
   ADMIN_COMPANIES_DATA: "admin:companiesData",
   ADMIN_PROPERTIES_DATA: "admin:propertiesData",
   ADMIN_SUBSCRIPTION_PLANS: "admin:subscriptionPlans",
+
+  POINT_SUBSCRIPTION_TOPUP_GLOBAL_PRIVACY_FOR_DASHBOARD: "point:subscription:topup:global:privacy:for:dashboard",
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -82,6 +84,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     PERMISSIONS.ACCESS_SUBSCRIPTION,
     PERMISSIONS.ACCESS_TOPUP,
     PERMISSIONS.ACCESS_SETTINGS,
+    PERMISSIONS.POINT_SUBSCRIPTION_TOPUP_GLOBAL_PRIVACY_FOR_DASHBOARD,
   ],
 
   [USER_ROLES.MANAGER]: [
