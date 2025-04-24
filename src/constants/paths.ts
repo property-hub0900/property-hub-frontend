@@ -8,6 +8,7 @@ export const COMPANY_PATHS = {
   subscriptionPlans: "/company/subscription-plans",
   topUp: "/company/top-up",
   settings: "/company/settings",
+  points: "/company/points",
 };
 
 export const CUSTOMER_PATHS = {
@@ -25,21 +26,10 @@ export const ADMIN_PATHS = {
   subscriptionPlans: "/admin/subscription-plans",
 };
 
-export const COMPANY_DASHBOARD_PATHS = {
-  properties: "/company/properties",
-  addNewProperty: "/company/properties/add-new-property",
-  dashboard: "/company/dashboard",
-  accessManagement: "/company/access-management",
-  agents: "/company/agents",
-  points: "/company/points",
-  subscriptionPlans: "/company/subscription-plans",
-  topUp: "/company/top-up",
-  settings: "/company/settings",
-};
+export const COMPANY_DASHBOARD_PATHS = {};
 
 export const PUBLIC_ROUTES = {
   properties: "/properties",
-  help: "/help",
   contactUs: "/contact-us",
   login: "/customer/login",
   register: "/customer/register",
