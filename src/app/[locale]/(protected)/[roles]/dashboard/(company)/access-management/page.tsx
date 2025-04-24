@@ -82,7 +82,7 @@ export default function AccessManagementPage() {
       // Create a properly typed updated staff member
       const updatedStaffMember: StaffMember = {
         ...(response.data as StaffMember),
-        languagesSpoken: variables.languagesSpoken || "English",
+        languagesSpoken: variables.languagesSpoken ?? "English",
       }
 
       const updatedStaffList = staff.map((s) => (s.id === selectedStaff?.id ? updatedStaffMember : s))
@@ -94,7 +94,7 @@ export default function AccessManagementPage() {
     },
     onError: (error: any) => {
       console.log("Failed to update staff:", error)
-      toast.error(error?.message || t("toast.updateFailed") || "Failed to update staff member")
+      toast.error(error?.message ?? t("toast.updateFailed") ?? "Failed to update staff member")
     },
   })
 
@@ -113,7 +113,7 @@ export default function AccessManagementPage() {
     },
     onError: (error: any) => {
       console.log("Failed to delete staff:", error)
-      toast.error(error?.message || t("text.deleteFailed") || "Failed to delete staff member")
+      toast.error(error?.message ?? t("text.deleteFailed") ?? "Failed to delete staff member")
     },
   })
 
@@ -132,7 +132,7 @@ export default function AccessManagementPage() {
 
       // If we have a response with data property
       if (response.data) {
-        const staffMember = response.data as StaffMember
+        const staffMember = response.data;
         setSelectedStaff(staffMember)
       } else {
         // If response has a different structure, try to use it directly
@@ -203,12 +203,12 @@ export default function AccessManagementPage() {
     // Set the selected staff member first as a fallback with all available data
     setSelectedStaff({
       ...staffMember,
-      email: staffMember.email || staffMember.user?.email || "",
-      status: staffMember.status || (staffMember.active ? "active" : "inactive"),
+      email: staffMember.email ?? staffMember.user?.email ?? "",
+      status: staffMember.status ?? (staffMember.active ? "active" : "inactive"),
       canAddProperty: staffMember.staffPermissions?.[0]?.canAddProperty ?? true,
       canPublishProperty: staffMember.staffPermissions?.[0]?.canPublishProperty ?? true,
       canFeatureProperty: staffMember.staffPermissions?.[0]?.canFeatureProperty ?? false,
-      biography: staffMember.biography || "",
+      biography: staffMember.biography ?? "",
     })
 
     // Try to get more complete data from API
@@ -274,24 +274,31 @@ export default function AccessManagementPage() {
         <div className="p-6">
           <h2 className="text-lg font-semibold mb-4">{t("title.companyAgents") || "Company Agents"}</h2>
 
-          {showAddForm ? (
-            <AddStaffForm
-              onSubmit={handleAddStaff}
-              onCancel={handleToggleAddForm}
-              isSubmitting={inviteStaffMutation.isPending}
-            />
-          ) : showEditForm ? (
-            <EditUserForm
-              selectedStaff={selectedStaff}
-              onSubmit={handleUpdateStaff}
-              onCancel={handleCancelEdit}
-              isSubmitting={updateStaffMutation.isPending}
-            />
-          ) : isLoadingStaff && staff.length === 0 ? (
-            <p>{t("text.loadingStaff") || "Loading staff members..."}</p>
-          ) : (
-            <StaffTable staff={staff} onEdit={handleEditClick} onDelete={handleDeleteClick} />
-          )}
+          {(() => {
+            if (showAddForm) {
+              return (
+                <AddStaffForm
+                  onSubmit={handleAddStaff}
+                  onCancel={handleToggleAddForm}
+                  isSubmitting={inviteStaffMutation.isPending}
+                />
+              );
+            }
+            if (showEditForm) {
+              return (
+                <EditUserForm
+                  selectedStaff={selectedStaff}
+                  onSubmit={handleUpdateStaff}
+                  onCancel={handleCancelEdit}
+                  isSubmitting={updateStaffMutation.isPending}
+                />
+              );
+            }
+            if (isLoadingStaff && staff.length === 0) {
+              return <p>{t("text.loadingStaff") || "Loading staff members..."}</p>;
+            }
+            return <StaffTable staff={staff} onEdit={handleEditClick} onDelete={handleDeleteClick} />;
+          })()}
         </div>
       </div>
 

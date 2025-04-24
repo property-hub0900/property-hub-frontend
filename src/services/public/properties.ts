@@ -6,12 +6,17 @@ import {
   IPropertyResponse,
 } from "@/types/public/properties";
 import { ICommonMessageResponse } from "@/types/common";
+import { leadsGenerationService } from "./leads-generation";
 
 export const propertyServices = {
   fetchProperties(filters: IPropertyFilters): Promise<IPropertyResponse> {
     return apiClient.get(`/properties?${buildQueryString(filters)}`);
   },
   getPropertyById: async (id: string): Promise<IProperty> => {
+    await leadsGenerationService.generateLeads({
+      propertyId: parseInt(id),
+      type: "visit",
+    });
     return apiClient.get(`/properties/${id}`);
   },
 

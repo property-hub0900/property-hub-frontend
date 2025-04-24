@@ -31,6 +31,7 @@ import { useTranslations } from "next-intl";
 import { USER_ROLES } from "@/constants/rbac";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { propertyServices } from "@/services/public/properties";
+import { leadsGenerationService } from "@/services/public/leads-generation";
 
 export const PropertyListCard = ({ data }: { data: IProperty }) => {
   const t = useTranslations();
@@ -83,6 +84,15 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
     }
   };
 
+  const handleLeadsGeneration = async (type: "call" | "email" | "whatsapp" | "visit") => {
+    try {
+      const response = await leadsGenerationService.generateLeads({ propertyId: data.propertyId, type: type });
+
+      toast.success(response.message);
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+  }
   return (
     <Card className="overflow-hidden flex flex-col md:flex-row">
       <div className="relative  md:w-[300px]">
@@ -169,13 +179,13 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <Link href={`tel:${postedByStaff?.phoneNumber}`}>
-            <Button variant="outlinePrimary" size="sm">
+            <Button variant="outlinePrimary" size="sm" onClick={(e) => { e.preventDefault(); handleLeadsGeneration("call") }}>
               <Phone className="h-4 w-4" />
               {t("button.call")}
             </Button>
           </Link>
           <Link href={`mailto:${postedByStaff?.user.email}`}>
-            <Button variant="outlinePrimary" size="sm">
+            <Button variant="outlinePrimary" size="sm" onClick={(e) => { e.preventDefault(); handleLeadsGeneration("email") }}>
               <Mail className="h-4 w-4" />
               {t("button.email")}
             </Button>
@@ -184,7 +194,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             target="_blank"
             href={`https://wa.me/${postedByStaff?.phoneNumber}`}
           >
-            <Button variant="outlinePrimary" size="sm">
+            <Button variant="outlinePrimary" size="sm" onClick={(e) => { e.preventDefault(); handleLeadsGeneration("whatsapp") }}>
               <MessageCircle className="h-4 w-4" />
               {t("button.whatsApp")}
             </Button>
@@ -193,11 +203,10 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             <Button
               variant="outlinePrimary"
               size="icon"
-              className={`${
-                isFavorite
-                  ? "bg-primary text-primary-foreground hover:!bg-primary-foreground hover:!text-primary hover:[&>svg]:stroke-primary"
-                  : ""
-              }`}
+              className={`${isFavorite
+                ? "bg-primary text-primary-foreground hover:!bg-primary-foreground hover:!text-primary hover:[&>svg]:stroke-primary"
+                : ""
+                }`}
               onClick={() =>
                 handleCustomerFavorites(
                   isFavorite ? "remove" : "add",
@@ -207,7 +216,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             >
               <Heart
                 className="h-4 w-4"
-                // fill={isFavorite ? "currentColor" : "none"}
+              // fill={isFavorite ? "currentColor" : "none"}
               />
             </Button>
           )}
