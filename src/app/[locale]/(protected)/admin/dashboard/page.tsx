@@ -64,7 +64,7 @@ export default function DashboardPage() {
                             </DropdownMenu>
                         </div>
                     </div>
-                    <DashboardView />
+                    {/* <DashboardView metrics={metricsData} chartData={chartData} hasData={!isLoading} /> */}
                 </>
             )}
 

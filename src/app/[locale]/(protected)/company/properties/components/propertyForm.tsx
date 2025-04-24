@@ -2,6 +2,7 @@
 
 import { Loader } from "@/components/loader";
 import { SimpleMultiSelect } from "@/components/multiSelect";
+import PlacesAutocomplete from "@/components/placesAutoComplete";
 import { TiptapEditor, type TiptapEditorRef } from "@/components/tiptap-editor";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -34,7 +35,7 @@ import {
   TPropertyStatuses,
 } from "@/constants/constants";
 import { COMPANY_PATHS } from "@/constants/paths";
-import { useAuth } from "@/lib/hooks/useAuth";
+import { PERMISSIONS } from "@/constants/rbac";
 import { useRBAC } from "@/lib/hooks/useRBAC";
 import { createPropertySchema } from "@/schema/protected/properties";
 import { amenities } from "@/services/protected/properties";
@@ -45,9 +46,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DefaultValues, useForm } from "react-hook-form";
-import PlacesAutocomplete from "../../../../../../../../components/placesAutoComplete";
 import { IFilesUrlPayload, TImages, UploadImages } from "./uploadImages";
-import { PERMISSIONS } from "@/constants/rbac";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";

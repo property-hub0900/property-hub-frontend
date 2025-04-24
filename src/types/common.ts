@@ -24,3 +24,22 @@ export interface IListResponse<T> {
   pageSize: number;
   isError: boolean;
 }
+
+export interface MetricsData {
+  isError: boolean
+  metrics: {
+    pointsSpent: number
+    publishedListings: number
+    leads: number
+    propertyViewImpressions: number
+  }
+  chartData: LeadChannel[]
+}
+
+interface LeadChannel {
+  name: string
+  whatsapp: number
+  email: number
+  call: number
+  visit: number
+}
