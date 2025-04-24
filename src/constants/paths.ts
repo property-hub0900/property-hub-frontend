@@ -22,8 +22,8 @@ export const ADMIN_PATHS = {
   customersData: "/admin/dashboard/customers-data",
   companiesData: "/admin/dashboard/companies-data",
   propertiesData: "/admin/dashboard/properties-data",
+  subscriptionPlans: "/admin/dashboard/subscription-plans",
 };
-
 
 export const COMPANY_DASHBOARD_PATHS = {
   properties: "/company/dashboard/properties",

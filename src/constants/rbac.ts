@@ -49,6 +49,7 @@ export const PERMISSIONS = {
   ADMIN_CUSTOMERS_DATA: "admin:customersData",
   ADMIN_COMPANIES_DATA: "admin:companiesData",
   ADMIN_PROPERTIES_DATA: "admin:propertiesData",
+  ADMIN_SUBSCRIPTION_PLANS: "admin:subscriptionPlans",
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -131,6 +132,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     PERMISSIONS.ADMIN_CUSTOMERS_DATA,
     PERMISSIONS.ADMIN_COMPANIES_DATA,
     PERMISSIONS.ADMIN_PROPERTIES_DATA,
+    PERMISSIONS.ADMIN_SUBSCRIPTION_PLANS,
   ],
 };
 
@@ -166,4 +168,5 @@ export const ROUTE_PERMISSIONS: Record<string, Permission[]> = {
   [ADMIN_PATHS.customersData]: [PERMISSIONS.ADMIN_CUSTOMERS_DATA],
   [ADMIN_PATHS.companiesData]: [PERMISSIONS.ADMIN_COMPANIES_DATA],
   [ADMIN_PATHS.propertiesData]: [PERMISSIONS.ADMIN_PROPERTIES_DATA],
+  [ADMIN_PATHS.subscriptionPlans]: [PERMISSIONS.ADMIN_SUBSCRIPTION_PLANS],
 };

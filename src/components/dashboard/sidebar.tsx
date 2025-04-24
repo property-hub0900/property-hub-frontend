@@ -201,6 +201,11 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       href: ADMIN_PATHS.propertiesData,
       icon: Database,
     },
+    {
+      title: t("sidebar.subscriptionPlans"),
+      href: ADMIN_PATHS.subscriptionPlans,
+      icon: Package,
+    },
   ];
 
   const filteredNavItems: any = NavItems.filter((item) => {
