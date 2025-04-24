@@ -82,32 +82,32 @@ export default function PropertyForm(
       mode === "edit"
         ? defaultValues
         : {
-          title: "",
-          titleAr: "",
-          featured: false,
-          category: undefined,
-          price: 0,
-          propertyType: "",
-          purpose: undefined,
-          bedrooms: 0,
-          bathrooms: 0,
-          status: PROPERTY_STATUSES.draft,
-          furnishedType: "",
-          occupancy: undefined,
-          ownershipStatus: undefined,
-          referenceNo: "",
-          priceVisibilityFlag: false,
-          propertySize: "",
-          serviceCharges: "",
-          buildingFloors: 0,
-          floor: 0,
-          tenure: "",
-          views: "",
-          address: "",
-          amenities: [],
-          description: "",
-          PropertyImages: [],
-        },
+            title: "",
+            titleAr: "",
+            featured: false,
+            category: undefined,
+            price: 0,
+            propertyType: "",
+            purpose: undefined,
+            bedrooms: 0,
+            bathrooms: 0,
+            status: PROPERTY_STATUSES.draft,
+            furnishedType: "",
+            occupancy: undefined,
+            ownershipStatus: undefined,
+            referenceNo: "",
+            priceVisibilityFlag: false,
+            propertySize: undefined,
+            serviceCharges: "",
+            buildingFloors: 0,
+            floor: 0,
+            tenure: "",
+            views: "",
+            address: "",
+            amenities: [],
+            description: "",
+            PropertyImages: [],
+          },
   });
 
   const category = form.watch("category");
@@ -317,7 +317,7 @@ export default function PropertyForm(
                     </small>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ""} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -717,36 +717,36 @@ export default function PropertyForm(
         <div className="col-span-2 gap-2 flex justify-end mt-6">
           {(!defaultValues ||
             defaultValues?.status === PROPERTY_STATUSES.draft) && (
-              <>
-                <Button
-                  variant={"outline"}
-                  type="button"
-                  onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
-                >
-                  {t("button.saveDraft")}
-                </Button>
+            <>
+              <Button
+                variant={"outline"}
+                type="button"
+                onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
+              >
+                {t("button.saveDraft")}
+              </Button>
 
-                {hasPermission(PERMISSIONS.PUBLISH_PROPERTY) ? (
-                  <Button
-                    type="button"
-                    onClick={() =>
-                      handleSubmitWithStatus(PROPERTY_STATUSES.published)
-                    }
-                  >
-                    {t("button.publish")}
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    onClick={() =>
-                      handleSubmitWithStatus(PROPERTY_STATUSES.pending)
-                    }
-                  >
-                    {t("button.requestForApproval")}
-                  </Button>
-                )}
-              </>
-            )}
+              {hasPermission(PERMISSIONS.PUBLISH_PROPERTY) ? (
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitWithStatus(PROPERTY_STATUSES.published)
+                  }
+                >
+                  {t("button.publish")}
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitWithStatus(PROPERTY_STATUSES.pending)
+                  }
+                >
+                  {t("button.requestForApproval")}
+                </Button>
+              )}
+            </>
+          )}
 
           {defaultValues?.status === PROPERTY_STATUSES.published && (
             <Button

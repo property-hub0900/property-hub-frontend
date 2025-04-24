@@ -4,16 +4,17 @@ import { DataTable } from "@/components/dataTable/data-table";
 import type { IProperty } from "@/types/protected/properties";
 import type { SortingState } from "@tanstack/react-table";
 import React, { useMemo, useState } from "react";
-import { propertiesTableColumns } from "./properties-table-columns";
+import { propertiesTableColumns } from "./columns";
 
 import { Input } from "@/components/ui/input";
 import { useTranslations } from "next-intl";
-import { MoreFiltersDialog } from "./more-filters-dialog";
+import { MoreFiltersDialog } from "../../../company/properties/components/more-filters-dialog";
 
 export interface IPropertyDataFilters {
   title?: string;
   referenceNo?: string;
   publisher?: string;
+  companyName?: string;
   featured?: string;
   propertyType?: string;
   status?: string;
@@ -26,6 +27,7 @@ const initFilters = {
   title: "",
   referenceNo: "",
   publisher: "",
+  companyName: "",
   featured: "",
   propertyType: "",
   status: "",
@@ -58,8 +60,13 @@ export const PropertiesTable = ({ data }: { data: IAdminProperty[] }) => {
       )
         return false;
 
-      // if (filters?.referenceNo && item.referenceNo !== filters?.referenceNo)
-      //   return false;
+      if (
+        filters?.referenceNo &&
+        !item.referenceNo
+          .toLowerCase()
+          .includes(filters?.referenceNo.toLowerCase())
+      )
+        return false;
 
       // if (filters?.publisher && filters?.publisher != `publisher`) {
       //   if (`${item.postedBy}` !== filters?.publisher) return false;
@@ -115,9 +122,6 @@ export const PropertiesTable = ({ data }: { data: IAdminProperty[] }) => {
   ) => {
     setSorting(updaterOrValue);
   };
-
-  //console.log("filters", filters);
-  // console.log("filteredData", filteredData);
 
   return (
     <>

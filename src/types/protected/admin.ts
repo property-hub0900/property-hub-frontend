@@ -71,6 +71,7 @@ export interface IAddCompanyPoints {
 
 export interface IAdminProperty {
   propertyId: number;
+  referenceNo: string;
   title: string;
   price: number;
   propertyType: string;

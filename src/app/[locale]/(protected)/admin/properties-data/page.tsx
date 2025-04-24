@@ -1,22 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
-import { COMPANY_PATHS } from "@/constants/paths";
-
-import { PropertiesTable } from "./components/properties-table";
-
 import { Loader } from "@/components/loader";
-import { PERMISSIONS } from "@/constants/rbac";
-import { useRBAC } from "@/lib/hooks/useRBAC";
-import { companiesProperties } from "@/services/protected/properties";
 
-import { useQuery } from "@tanstack/react-query";
 import { adminServices } from "@/services/protected/admin";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
+import { PropertiesTable } from "./components/table";
 
 export default function PropertiesListing() {
-  const { hasPermission } = useRBAC();
   const t = useTranslations();
 
   const {
