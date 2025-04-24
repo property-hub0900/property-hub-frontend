@@ -34,9 +34,7 @@ export default function PropertiesListing() {
         variant="inline"
         isLoading={isLoadingProperties || isFetchingProperties}
       ></Loader>
-      <div className="flex justify-between items-center mb-5">
-        <h3>{t("sidebar.propertyData")}</h3>
-      </div>
+
       {dataCompaniesProperties && (
         <PropertiesTable data={dataCompaniesProperties.results || []} />
       )}
