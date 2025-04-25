@@ -9,8 +9,8 @@ export interface IGenerateLeadsSchema {
 }
 export const leadsGenerationService = {
     generateLeads: async (payloads: IGenerateLeadsSchema): Promise<IResponse<ICommonMessageResponse>> => {
-        const response = await apiClient.post("/properties/leads", payloads);
-        return response.data;
+        return apiClient.post("/properties/leads", payloads);
+
     },
 };
 
