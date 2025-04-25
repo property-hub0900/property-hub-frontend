@@ -107,7 +107,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
                 <SwiperSlide key={index}>
                   <div className="relative h-full w-full select-none">
                     <Image
-                      src={image}
+                      src={image || "/placeholder.svg?height=80&width=80"}
                       width={500}
                       height={300}
                       alt={`${propertyType} property`}

@@ -73,7 +73,7 @@ export function PropertyGallery({
           onClick={() => openPopup(0)}
         >
           <Image
-            src={primaryImage.url}
+            src={primaryImage?.url || "/placeholder.svg?height=80&width=80"}
             alt={title}
             className="object-cover rounded-xl md:rounded-r-none "
             fill
@@ -88,11 +88,10 @@ export function PropertyGallery({
               <Button
                 type="button"
                 size="icon"
-                className={`bg-white/90 hover:bg-primary text-muted-foreground hover:text-primary-foreground ${
-                  isFavorite
-                    ? "bg-primary text-primary-foreground hover:bg-primary-foreground hover:text-primary"
-                    : ""
-                }`}
+                className={`bg-white/90 hover:bg-primary text-muted-foreground hover:text-primary-foreground ${isFavorite
+                  ? "bg-primary text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+                  : ""
+                  }`}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleCustomerFavorites(isFavorite ? "remove" : "add");
@@ -114,9 +113,8 @@ export function PropertyGallery({
                 src={image.url || "/placeholder.svg"}
                 alt={`${title} - view ${0}`}
                 fill
-                className={`object-cover ${
-                  index === 0 ? "rounded-tr-xl" : "rounded-br-xl"
-                }`}
+                className={`object-cover ${index === 0 ? "rounded-tr-xl" : "rounded-br-xl"
+                  }`}
               />
             </div>
           ))}
