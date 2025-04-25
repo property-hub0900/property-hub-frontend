@@ -72,6 +72,7 @@ export const createPropertySchema = (t: (key: string) => string) =>
 
 export const propertyDataFIltersSchema = (t: (key: string) => string) =>
   z.object({
+    companyName: commonValidations.stringOptional(),
     publisher: commonValidations.stringOptional(),
     featured: commonValidations.stringOptional(),
     propertyType: commonValidations.stringOptional(),

@@ -34,8 +34,8 @@ import {
   PROPERTY_VIEWS,
   TPropertyStatuses,
 } from "@/constants/constants";
-import { COMPANY_PATHS } from "@/constants/paths";
-import { PERMISSIONS } from "@/constants/rbac";
+import { ADMIN_PATHS, COMPANY_PATHS } from "@/constants/paths";
+import { PERMISSIONS, USER_ROLES } from "@/constants/rbac";
 import { useRBAC } from "@/lib/hooks/useRBAC";
 import { createPropertySchema } from "@/schema/protected/properties";
 import { amenities } from "@/services/protected/properties";
@@ -62,7 +62,7 @@ export default function PropertyForm(
   const t = useTranslations();
   const router = useRouter();
 
-  const { hasPermission } = useRBAC();
+  const { hasPermission, currentRole } = useRBAC();
 
   const [filesUrls, setFilesUrls] = useState<IFilesUrlPayload>({ images: [] });
 
@@ -114,7 +114,11 @@ export default function PropertyForm(
   const propertyType = form.watch("propertyType");
 
   const handleCancel = () => {
-    router.push(COMPANY_PATHS.properties);
+    router.push(
+      currentRole === USER_ROLES.ADMIN
+        ? ADMIN_PATHS.propertiesData
+        : COMPANY_PATHS.properties
+    );
   };
 
   const handleSubmitWithStatus = (status: TPropertyStatuses | string) => {

@@ -13,7 +13,7 @@ import {
   updatePropertyById,
 } from "@/services/protected/properties";
 import { Loader } from "@/components/loader";
-import { ADMIN_PATHS, COMPANY_PATHS } from "@/constants/paths";
+import { ADMIN_PATHS } from "@/constants/paths";
 import PropertyForm from "../../../company/properties/components/propertyForm";
 
 export default function EditPropertyPage() {

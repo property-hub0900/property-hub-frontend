@@ -128,7 +128,7 @@ const StatusCell = ({ row }) => {
 const FeaturedCell = ({ row }) => {
   const { hasPermission } = useRBAC();
   const rowData = row.original;
-  const { propertyId, featured } = rowData;
+  const { propertyId, featured, status } = rowData;
 
   const queryClient = useQueryClient();
 
@@ -161,16 +161,18 @@ const FeaturedCell = ({ row }) => {
         </Button>
       ) : (
         <>
-          {hasPermission(PERMISSIONS.FEATURE_PROPERTY) && (
-            <Button
-              className="w-28"
-              disabled={updatePropertyByIdMutation.isPending}
-              onClick={handleUpgradeFeatured}
-              size={"sm"}
-            >
-              Feature
-            </Button>
-          )}
+          {hasPermission(PERMISSIONS.FEATURE_PROPERTY) &&
+            (status === PROPERTY_STATUSES.draft ||
+              status === PROPERTY_STATUSES.published) && (
+              <Button
+                className="w-28"
+                disabled={updatePropertyByIdMutation.isPending}
+                onClick={handleUpgradeFeatured}
+                size={"sm"}
+              >
+                Feature
+              </Button>
+            )}
         </>
       )}
     </div>
@@ -183,7 +185,7 @@ const ActionCell = ({ row }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const rowData = row.original;
-  const { propertyId } = rowData;
+  const { propertyId, status } = rowData;
 
   const queryClient = useQueryClient();
 
@@ -231,10 +233,13 @@ const ActionCell = ({ row }) => {
           <Edit className="size-5 text-primary" />
         </Link>
 
-        <Archive
-          onClick={handleArchive}
-          className="size-5 text-muted-foreground cursor-pointer"
-        />
+        {status === PROPERTY_STATUSES.published && (
+          <Archive
+            onClick={handleArchive}
+            className="size-5 text-muted-foreground cursor-pointer"
+          />
+        )}
+
         <Trash2
           onClick={() => setIsDeleteDialogOpen(true)}
           className="size-5 text-destructive cursor-pointer"

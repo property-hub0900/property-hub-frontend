@@ -1,7 +1,10 @@
 "use client";
 
 import { DataTable } from "@/components/dataTable/data-table";
-import type { IProperty } from "@/types/protected/properties";
+import type {
+  IProperty,
+  IPropertyDataFilters,
+} from "@/types/protected/properties";
 import type { SortingState } from "@tanstack/react-table";
 import React, { useMemo, useState } from "react";
 import { propertiesTableColumns } from "./columns";
@@ -10,23 +13,13 @@ import { Input } from "@/components/ui/input";
 import { useTranslations } from "next-intl";
 import { MoreFiltersDialog } from "../../../company/properties/components/more-filters-dialog";
 
-export interface IPropertyDataFilters {
-  title?: string;
-  referenceNo?: string;
-  publisher?: string;
-  companyName?: string;
-  featured?: string;
-  propertyType?: string;
-  status?: string;
-}
-
 import { Search } from "lucide-react";
 import { IAdminProperty } from "@/types/protected/admin";
+import { sortTableData } from "@/utils/utils";
 
 const initFilters = {
   title: "",
   referenceNo: "",
-  publisher: "",
   companyName: "",
   featured: "",
   propertyType: "",
@@ -68,9 +61,18 @@ export const PropertiesTable = ({ data }: { data: IAdminProperty[] }) => {
       )
         return false;
 
-      // if (filters?.publisher && filters?.publisher != `publisher`) {
-      //   if (`${item.postedBy}` !== filters?.publisher) return false;
+      // if (filters?.companyName && filters?.companyName != `companyName`) {
+      //   if (`${item.company.companyId}` !== filters?.companyName) return false;
       // }
+
+      if (filters?.companyName && filters?.companyName != `companyName`) {
+        if (
+          !item.company.companyName
+            .toLowerCase()
+            .includes(filters?.companyName.toLowerCase())
+        )
+          return false;
+      }
 
       if (filters?.featured && filters?.featured != `featuredStatus`) {
         const shouldBeFeatured = filters.featured === "featured";
@@ -96,21 +98,10 @@ export const PropertiesTable = ({ data }: { data: IAdminProperty[] }) => {
 
     // Then apply sorting
     if (sorting.length > 0) {
-      const { id: sortField, desc } = sorting[0];
-
-      filteredItems.sort((a, b) => {
-        const aValue = a[sortField as keyof IProperty];
-        const bValue = b[sortField as keyof IProperty];
-
-        if (typeof aValue === "string" && typeof bValue === "string") {
-          return desc
-            ? bValue.localeCompare(aValue)
-            : aValue.localeCompare(bValue);
-        }
-
-        if (aValue < bValue) return desc ? 1 : -1;
-        if (aValue > bValue) return desc ? -1 : 1;
-        return 0;
+      const { id, desc } = sorting[0];
+      return sortTableData(filteredItems, {
+        field: id as keyof IAdminProperty,
+        direction: desc ? "desc" : "asc",
       });
     }
 
