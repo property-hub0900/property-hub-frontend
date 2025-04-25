@@ -95,6 +95,7 @@ export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
                                     const newTimeframe = timeframe === "weekly" ? "monthly" : "weekly"
                                     setTimeframe(newTimeframe)
                                 }}
+                                disabled
                             >
                                 {timeframe === "weekly" ? "Weekly" : "Monthly"}
                                 <ChevronDown className="h-3 w-3 ml-1" />
