@@ -23,12 +23,14 @@ import {
   LogOut,
   MessageSquare,
   Package,
+  PackagePlus,
   Search,
   Settings,
   User2,
   Users,
   Users2,
   Wallet,
+  Weight,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -205,6 +207,16 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
       title: t("sidebar.subscriptionPlans"),
       href: ADMIN_PATHS.subscriptionPlans,
       icon: Package,
+    },
+    {
+      title: t("sidebar.renewalRequests"),
+      href: ADMIN_PATHS.renewalRequests,
+      icon: PackagePlus,
+    },
+    {
+      title: t("sidebar.topUpRequests"),
+      href: ADMIN_PATHS.topUpRequests,
+      icon: Weight,
     },
   ];
 

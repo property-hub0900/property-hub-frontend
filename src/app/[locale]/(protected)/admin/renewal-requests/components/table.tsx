@@ -1,9 +1,12 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { DataTable } from "@/components/dataTable/data-table";
 import type { SortingState } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
 
+import { Columns } from "./columns";
+
+import { useTranslations } from "next-intl";
 import {
   Select,
   SelectContent,
@@ -11,17 +14,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useTranslations } from "next-intl";
-import { Columns } from "./columns";
-import { ICompanyAdmin } from "@/types/protected/admin";
+import { IAdminSubscription } from "@/types/protected/admin";
+import { sortTableData } from "@/utils/utils";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { sortTableData } from "@/utils/utils";
 
-export default function CompaniesDataTable({
+export default function RenewalRequestsTable({
   data,
 }: {
-  data: ICompanyAdmin[];
+  data: IAdminSubscription[];
 }) {
   const t = useTranslations();
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -39,16 +40,24 @@ export default function CompaniesDataTable({
     const filteredItems = data.filter((item) => {
       if (
         filters?.companyName &&
-        !item.name.toLowerCase().includes(filters?.companyName.toLowerCase())
+        !item.company.companyName
+          .toLowerCase()
+          .includes(filters?.companyName.toLowerCase())
       )
         return false;
 
       if (
         filters?.status &&
-        filters?.status != `${t("form.propertyStatuses.label")}` &&
-        item.status.toLowerCase() !== filters?.status.toLowerCase()
-      )
-        return false;
+        filters?.status !== `${t("form.propertyStatuses.label")}`
+      ) {
+        const statusBoolean = filters?.status.toLowerCase() === "active";
+        const isActive =
+          new Date(item.startDate) <= new Date() &&
+          new Date(item.endDate) >= new Date();
+        if (isActive !== statusBoolean) {
+          return false;
+        }
+      }
 
       return true;
     });
@@ -56,7 +65,7 @@ export default function CompaniesDataTable({
     if (sorting.length > 0) {
       const { id, desc } = sorting[0];
       return sortTableData(filteredItems, {
-        field: id as keyof ICompanyAdmin,
+        field: id as keyof IAdminSubscription,
         direction: desc ? "desc" : "asc",
       });
     }
@@ -82,7 +91,7 @@ export default function CompaniesDataTable({
       <div className="bg-white rounded-md shadow mb-10">
         <div className="p-6">
           <div className="flex justify-between items-center mb-5">
-            <h4>{t("sidebar.companiesData")}</h4>
+            <h4>{t("sidebar.renewalRequests")}</h4>
             <div className="flex gap-2">
               <div className="relative">
                 <Input
@@ -102,9 +111,15 @@ export default function CompaniesDataTable({
                     <SelectValue placeholder={t("form.status.label")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={"Status"}>Status</SelectItem>
-                    <SelectItem value={"active"}>Active</SelectItem>
-                    <SelectItem value={"inactive"}>InActive</SelectItem>
+                    <SelectItem value={"Status"}>
+                      {t("form.status.label")}
+                    </SelectItem>
+                    <SelectItem value={"active"}>
+                      {t("form.status.options.active")}
+                    </SelectItem>
+                    <SelectItem value={"expired"}>
+                      {t("form.status.options.expired")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>

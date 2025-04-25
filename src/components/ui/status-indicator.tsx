@@ -14,6 +14,8 @@ const statusVariants = cva(
       },
       status: {
         active: "",
+        approved: "",
+        paid: "",
         inactive: "",
         expired: "",
         pending: "",
@@ -26,6 +28,8 @@ const statusVariants = cva(
     compoundVariants: [
       // Default variant
       { variant: "default", status: "active", class: "border-green-200" },
+      { variant: "default", status: "approved", class: "border-green-200" },
+      { variant: "default", status: "paid", class: "border-green-200" },
       { variant: "default", status: "expired", class: "border-red-200" },
       { variant: "default", status: "pending", class: "border-yellow-200" },
       { variant: "default", status: "draft", class: "border-gray-200" },
@@ -35,6 +39,7 @@ const statusVariants = cva(
 
       // Solid variant
       { variant: "solid", status: "active", class: "bg-green-500" },
+      { variant: "solid", status: "approved", class: "bg-green-500" },
       { variant: "solid", status: "expired", class: "bg-red-500" },
       { variant: "solid", status: "pending", class: "bg-yellow-500" },
       { variant: "solid", status: "draft", class: "bg-gray-500" },
@@ -46,6 +51,16 @@ const statusVariants = cva(
       {
         variant: "subtle",
         status: "active",
+        class: "bg-green-50 text-green-700",
+      },
+      {
+        variant: "subtle",
+        status: "approved",
+        class: "bg-green-50 text-green-700",
+      },
+      {
+        variant: "subtle",
+        status: "paid",
         class: "bg-green-50 text-green-700",
       },
       { variant: "subtle", status: "expired", class: "bg-red-50 text-red-700" },
@@ -115,6 +130,8 @@ const dotVariants = cva("size-2 rounded-full", {
   variants: {
     status: {
       active: "bg-green-500",
+      approved: "bg-green-500",
+      paid: "bg-green-500",
       inactive: "bg-gray-500",
       expired: "bg-red-500",
       pending: "bg-yellow-500",

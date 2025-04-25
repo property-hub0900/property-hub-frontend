@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import SearchTabs from "@/components/sections/search-tabs";
+import SearchTabs from "@/components/landing-page-sections/search-tabs";
 
 import PlacesAutocomplete from "@/components/placesAutoComplete";
 import { useTranslations } from "next-intl";
