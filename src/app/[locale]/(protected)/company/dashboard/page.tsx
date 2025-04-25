@@ -33,6 +33,7 @@ const emptyMetricsData: MetricsData = {
 
 export default function DashboardPage() {
     const [activeView, setActiveView] = useState("dashboard")
+    const [timeframe, setTimeframe] = useState("monthly")
 
     const insightViews = [
         { id: "properties", label: "Properties Insights" },
@@ -42,10 +43,12 @@ export default function DashboardPage() {
 
     // Use React Query to fetch metrics data
     const { data: metricsData, isLoading } = useQuery<MetricsData | any>({
-        queryKey: ["metrics"],
-        queryFn: () => companyService.getMetrics(),
+        queryKey: ["metrics", timeframe],
+        queryFn: () => companyService.getMetrics(timeframe),
         placeholderData: emptyMetricsData,
     })
+
+
 
     const dashboardProps = {
         metrics: metricsData?.metrics || emptyMetricsData.metrics,
@@ -95,7 +98,7 @@ export default function DashboardPage() {
                     <Loader isLoading={isLoading} />
 
                     {/* Only render dashboard when not loading */}
-                    {!isLoading && <DashboardView {...dashboardProps as any} />}
+                    {!isLoading && <DashboardView {...dashboardProps as any} timeframe={timeframe} setTimeframe={setTimeframe} />}
                 </>
             )}
 
