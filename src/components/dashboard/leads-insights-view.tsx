@@ -8,6 +8,7 @@ import { COLOR_DASHBOARD } from "@/constants/constants"
 import { useQuery } from "@tanstack/react-query"
 import { companyService } from "@/services/protected/company"
 import { Loader } from "../loader"
+import { groupByThreeDigits } from "@/utils/utils"
 
 export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
     const [timeframe, setTimeframe] = useState("monthly")
@@ -57,7 +58,7 @@ export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
                         <div className="relative w-40 h-40">
                             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
                                 <div className="text-xs text-gray-500">Total Leads</div>
-                                <h4>{leadsInsightsData?.leadsByType?.whatsapp || 0}</h4>
+                                <h4>{groupByThreeDigits(leadsInsightsData?.leadsByType?.whatsapp || 0)}</h4>
                             </div>
                             <svg className="w-full h-full" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="40" fill="none" stroke="#f0f0f0" strokeWidth="12" />
@@ -172,12 +173,12 @@ export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
 
                     <div className="mt-6">
                         <div className="text-xs text-gray-500">Total Calls</div>
-                        <div className="text-4xl font-bold text-primary">{leadsInsightsData?.callData?.totalCalls || 0}</div>
+                        <div className="text-4xl font-bold text-primary">{groupByThreeDigits(leadsInsightsData?.callData?.totalCalls || 0)}</div>
                     </div>
 
                     <div className="mt-6">
                         <div className="text-xs text-gray-500">Today's Calls</div>
-                        <div className="text-4xl font-bold text-primary">{leadsInsightsData?.callData?.todaysCalls || 0}</div>
+                        <div className="text-4xl font-bold text-primary">{groupByThreeDigits(leadsInsightsData?.callData?.todaysCalls || 0)}</div>
                     </div>
 
                     <div className="mt-6 text-center">
