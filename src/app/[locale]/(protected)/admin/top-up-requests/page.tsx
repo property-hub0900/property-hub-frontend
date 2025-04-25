@@ -4,23 +4,21 @@ import { Loader } from "@/components/loader";
 import { adminServices } from "@/services/protected/admin";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import CustomersDataTable from "./components/table";
+import TopUpsTable from "./components/table";
 
 export default function Page() {
   const t = useTranslations();
 
-  const { data: dataCustomers, isLoading } = useQuery({
-    queryKey: ["adminCustomers"],
-    queryFn: () => adminServices.adminCustomers(),
+  const { data: dataList, isLoading } = useQuery({
+    queryKey: ["getAdminPoints"],
+    queryFn: () => adminServices.getAdminPoints(),
   });
 
   return (
     <>
       <Loader variant="inline" isLoading={isLoading}></Loader>
 
-      {dataCustomers?.results && (
-        <CustomersDataTable data={dataCustomers.results || []} />
-      )}
+      {dataList?.results && <TopUpsTable data={dataList.results || []} />}
     </>
   );
 }

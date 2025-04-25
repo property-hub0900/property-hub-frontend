@@ -21,10 +21,6 @@ export default function Page() {
   return (
     <>
       <Loader variant="inline" isLoading={isLoading || isFetching}></Loader>
-      <div className="flex justify-between items-center mb-5">
-        <h3>{t("sidebar.companiesData")}</h3>
-      </div>
-
       {dataList?.results && (
         <CompaniesDataTable data={dataList.results || []} />
       )}

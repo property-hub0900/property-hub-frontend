@@ -102,3 +102,20 @@ export interface IAdminSubscription {
     companyPhone: string | null;
   };
 }
+
+export interface IAdminPoints {
+  transactionId: number;
+  companyId: number;
+  companyName: string;
+  points: number;
+  status: "approved" | "pending" | "rejected"; // adjust as needed
+  archivedays: number | null;
+  paymentMethod: "card" | "cash" | "bank" | string | null; // extend if needed
+  email: string | null;
+  phoneNumber: string | null;
+  message: string | null;
+  type: "topup" | "refund" | string; // adjust if there are other types
+  description: string;
+  propertyId: number | null;
+  createdAt: string; // ISO date string
+}

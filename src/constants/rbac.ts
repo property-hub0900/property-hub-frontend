@@ -50,8 +50,11 @@ export const PERMISSIONS = {
   ADMIN_COMPANIES_DATA: "admin:companiesData",
   ADMIN_PROPERTIES_DATA: "admin:propertiesData",
   ADMIN_SUBSCRIPTION_PLANS: "admin:subscriptionPlans",
+  ADMIN_RENEWAL_REQUESTS: "admin:renewalRequests",
+  ADMIN_TOP_UP_REQUESTS: "admin:topUpRequests",
 
-  POINT_SUBSCRIPTION_TOPUP_GLOBAL_PRIVACY_FOR_DASHBOARD: "point:subscription:topup:global:privacy:for:dashboard",
+  POINT_SUBSCRIPTION_TOPUP_GLOBAL_PRIVACY_FOR_DASHBOARD:
+    "point:subscription:topup:global:privacy:for:dashboard",
 } as const;
 
 export type Permission = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -136,6 +139,8 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     PERMISSIONS.ADMIN_COMPANIES_DATA,
     PERMISSIONS.ADMIN_PROPERTIES_DATA,
     PERMISSIONS.ADMIN_SUBSCRIPTION_PLANS,
+    PERMISSIONS.ADMIN_RENEWAL_REQUESTS,
+    PERMISSIONS.ADMIN_TOP_UP_REQUESTS,
   ],
 };
 
@@ -170,4 +175,6 @@ export const ROUTE_PERMISSIONS: Record<string, Permission[]> = {
   [ADMIN_PATHS.companiesData]: [PERMISSIONS.ADMIN_COMPANIES_DATA],
   [ADMIN_PATHS.propertiesData]: [PERMISSIONS.ADMIN_PROPERTIES_DATA],
   [ADMIN_PATHS.subscriptionPlans]: [PERMISSIONS.ADMIN_SUBSCRIPTION_PLANS],
+  [ADMIN_PATHS.renewalRequests]: [PERMISSIONS.ADMIN_RENEWAL_REQUESTS],
+  [ADMIN_PATHS.topUpRequests]: [PERMISSIONS.ADMIN_TOP_UP_REQUESTS],
 };
