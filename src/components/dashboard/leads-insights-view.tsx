@@ -10,7 +10,7 @@ import { companyService } from "@/services/protected/company"
 import { Loader } from "../loader"
 
 export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
-    const [timeframe, setTimeframe] = useState("weekly")
+    const [timeframe, setTimeframe] = useState("monthly")
 
     const { data: leadsInsightsData, isLoading: isLeadsInsightsLoading } = useQuery<any>({
         queryKey: ["leads-insights", timeframe],
