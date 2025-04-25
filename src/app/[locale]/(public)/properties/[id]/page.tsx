@@ -99,6 +99,7 @@ export default function PropertyPage() {
             <AgentCard
               postedByStaff={property.postedByStaff}
               company={property.company}
+              propertyId={property.propertyId}
             />
           </div>
         </div>

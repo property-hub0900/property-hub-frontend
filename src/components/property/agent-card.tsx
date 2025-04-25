@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/ui/user-avatar";
+import { leadsGenerationService } from "@/services/public/leads-generation";
 import { IPostedByStaff, IPropertyCompany } from "@/types/public/properties";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -8,11 +9,16 @@ import Link from "next/link";
 interface AgentCardProps {
   postedByStaff: IPostedByStaff;
   company: IPropertyCompany;
+  propertyId: number;
 }
 
-export function AgentCard({ postedByStaff, company }: AgentCardProps) {
+export function AgentCard({ postedByStaff, company, propertyId }: AgentCardProps) {
   const agentName = `${postedByStaff.firstName} ${postedByStaff.lastName}`;
   const t = useTranslations();
+
+  const handleLeadsGeneration = async (type: "call" | "email" | "whatsapp" | "visit") => {
+    await leadsGenerationService.generateLeads({ propertyId: propertyId, type: type });
+  }
 
   return (
     <div className="bg-white rounded-lg p-6 shadow-sm border">
@@ -30,13 +36,15 @@ export function AgentCard({ postedByStaff, company }: AgentCardProps) {
 
       <div className="grid grid-cols-2 gap-3 mb-3">
         <Link href={`tel:${postedByStaff?.phoneNumber}`}>
-          <Button className="w-full">{t("button.call")}</Button>
+          <Button className="w-full" onClick={(e) => { handleLeadsGeneration("call") }}>
+            {t("button.call")}
+          </Button>
         </Link>
         <Link
           target="_blank"
           href={`https://wa.me/${postedByStaff?.phoneNumber}`}
         >
-          <Button className="w-full" variant="outline">
+          <Button className="w-full" variant="outline" onClick={(e) => { handleLeadsGeneration("whatsapp") }}>
             {t("button.whatsApp")}
           </Button>
         </Link>
@@ -44,7 +52,7 @@ export function AgentCard({ postedByStaff, company }: AgentCardProps) {
           className="col-span-2"
           href={`mailto:${postedByStaff?.user.email}`}
         >
-          <Button className="w-full" variant="outline">
+          <Button className="w-full" variant="outline" onClick={(e) => { handleLeadsGeneration("email") }}>
             {t("button.email")}
           </Button>
         </Link>
