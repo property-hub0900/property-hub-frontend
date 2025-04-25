@@ -19,7 +19,7 @@ import { sortTableData } from "@/utils/utils";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 
-export default function CustomersDataTable({
+export default function SubscriptionPlansTable({
   data,
 }: {
   data: IAdminSubscription[];

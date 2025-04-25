@@ -44,7 +44,8 @@
     "companies": "Companies",
     "customerListing": "Customer Listing",
     "pointsDetails": "Points Details",
-    "subscriptionDetails": "Subscription Details"
+    "subscriptionDetails": "Subscription Details",
+    "paymentReceipt": "Payment Receipt"
   },
   "button": {
     "next": "Next",
@@ -94,7 +95,8 @@
     "find": "Find",
     "logout": "Log out",
     "goBack": "Go back",
-    "addPoints": "Add Points"
+    "addPoints": "Add Points",
+    "renewSubscription": "Renew Subscription"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -377,7 +379,10 @@
         "active": "Active",
         "inactive": "Inactive",
         "reject": "Reject",
-        "expired": "Expired"
+        "expired": "Expired",
+        "approved": "Approved",
+        "paid": "Paid",
+        "pending": "Pending"
       }
     },
     "role": {
@@ -782,7 +787,10 @@
     "myProfile": "My Profile",
     "savedSearches": "Saved Searches",
     "customersData": "Customers Data",
-    "companiesData": "Companies Data"
+    "companiesData": "Companies Data",
+    "renewalRequests": "Renewal Requests",
+    "topUpRequests": "Top-Up Requests",
+    "topUpPoints": "Top-Up Points"
   },
   "userMenu": {
     "logout": "Log out",

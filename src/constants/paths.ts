@@ -24,6 +24,8 @@ export const ADMIN_PATHS = {
   companiesData: "/admin/companies-data",
   propertiesData: "/admin/properties-data",
   subscriptionPlans: "/admin/subscription-plans",
+  renewalRequests: "/admin/renewal-requests",
+  topUpRequests: "/admin/top-up-requests",
 };
 
 export const COMPANY_DASHBOARD_PATHS = {};

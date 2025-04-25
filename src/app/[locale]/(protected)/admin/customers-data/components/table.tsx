@@ -74,7 +74,7 @@ export default function CustomersDataTable({
       <div className="bg-white rounded-md shadow mb-10">
         <div className="p-6">
           <div className="flex justify-between items-center mb-5">
-            <h5>Customers Listing</h5>
+            <h4>{t("sidebar.customersData")}</h4>
             <div>
               <div className="relative">
                 <Select

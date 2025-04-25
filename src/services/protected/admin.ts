@@ -7,6 +7,7 @@ import {
   IAddCompanyPoints,
   IAdminProperty,
   IAdminSubscription,
+  IAdminPoints,
 } from "@/types/protected/admin";
 import { ICommonMessageResponse, IListResponse, IOption } from "@/types/common";
 
@@ -49,5 +50,20 @@ export const adminServices = {
   },
   getAdminCompanyList: async (): Promise<IListResponse<IOption>> => {
     return apiClient.get(`/admin/companies/select?page=0&pageSize=999`);
+  },
+  getAdminPoints: async (): Promise<IListResponse<IAdminPoints>> => {
+    return apiClient.get(`/admin/points`);
+  },
+  approveTopUpPoints: async (
+    transactionId: number
+  ): Promise<ICommonMessageResponse> => {
+    return apiClient.put(`/admin/subscriptions/approve-topup/${transactionId}`);
+  },
+  approveRenewalSubscription: async (
+    subscriptionId: number
+  ): Promise<ICommonMessageResponse> => {
+    return apiClient.put(
+      `/admin/subscriptions/approve-subscription/${subscriptionId}`
+    );
   },
 };
