@@ -4,9 +4,20 @@ import { Button } from "@/components/ui/button"
 import { DataTable } from "../dataTable/data-table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft } from "lucide-react"
+import { companyService } from "@/services/protected/company"
+import { useQuery } from "@tanstack/react-query"
 
 export function AgentsInsightsView({ onBack }) {
     // Sample data for agents table
+
+    const { data: agentInsightsData, isLoading: isAgentInsightsLoading } = useQuery<any>({
+        queryKey: ["agent-insights"],
+        queryFn: () => companyService.getAgentInsights(),
+        // placeholderData: emptyAgentInsightsData,
+    })
+
+    console.log({ agentInsightsData })
+
     const agentsData = [
         {
             id: 1,

@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ChevronDown, ChevronUp, ArrowRight, ArrowLeftIcon } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 import { companyService } from "@/services/protected/company"
+import { Loader } from "../loader"
 
 export function PropertiesInsightsView({ onBack }) {
     const [currentPage, setCurrentPage] = useState(1)
@@ -72,6 +73,7 @@ export function PropertiesInsightsView({ onBack }) {
 
     return (
         <div>
+            <Loader isLoading={isPropertyInsightsLoading} />
             <div className="flex items-center mb-8">
                 <Button variant="ghost" className="p-0 mr-2" onClick={onBack}>
                     <ArrowLeft className="h-4 w-4" />

@@ -198,7 +198,11 @@ export const companyService = {
     return apiClient.get(`companies/metrics?period=${period}`);
   },
 
-  getPropertyInsights: async (agentId?: string, page = 0, pageSize = 9999): Promise<IResponse<any>> => {
-    return apiClient.get(`companies/properties-insights?agentId=${agentId}&page=${page}&pageSize=${pageSize}`);
+  getPropertyInsights: async (page = 0, pageSize = 9999): Promise<IResponse<any>> => {
+    return apiClient.get(`companies/properties-insights?page=${page}&pageSize=${pageSize}`);
+  },
+
+  getAgentInsights: async (page = 0, pageSize = 9999): Promise<IResponse<any>> => {
+    return apiClient.get(`companies/agents-insights?page=${page}&pageSize=${pageSize}`);
   },
 };
