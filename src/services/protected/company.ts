@@ -205,4 +205,8 @@ export const companyService = {
   getAgentInsights: async (page = 0, pageSize = 9999): Promise<IResponse<any>> => {
     return apiClient.get(`companies/agents-insights?page=${page}&pageSize=${pageSize}`);
   },
+
+  getLeadsInsights: async (timeframe: string, page = 0, pageSize = 9999): Promise<IResponse<any>> => {
+    return apiClient.get(`companies/leads-insights?timeframe=${timeframe}&page=${page}&pageSize=${pageSize}`);
+  },
 };
