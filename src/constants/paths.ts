@@ -1,45 +1,35 @@
 export const COMPANY_PATHS = {
-  properties: "/company/dashboard/properties",
-  addNewProperty: "/company/dashboard/properties/add-new-property",
+  properties: "/company/properties",
+  addNewProperty: "/company/properties/add-new-property",
   dashboard: "/company/dashboard",
-  accessManagement: "/company/dashboard/access-management",
-  agents: "/company/dashboard/agents",
-  walletPoints: "/company/dashboard/points",
-  subscriptionPlans: "/company/dashboard/subscription-plans",
-  topUp: "/company/dashboard/top-up",
-  settings: "/company/dashboard/settings",
+  accessManagement: "/company/access-management",
+  agents: "/company/agents",
+  walletPoints: "/company/points",
+  subscriptionPlans: "/company/subscription-plans",
+  topUp: "/company/top-up",
+  settings: "/company/settings",
+  points: "/company/points",
 };
 
 export const CUSTOMER_PATHS = {
   dashboard: "/customer/dashboard",
-  myProfile: "/customer/dashboard/my-profile",
-  savedSearches: "/customer/dashboard/saved-searches",
-  savedProperties: "/customer/dashboard/saved-properties",
+  myProfile: "/customer/my-profile",
+  savedSearches: "/customer/saved-searches",
+  savedProperties: "/customer/saved-properties",
 };
 
 export const ADMIN_PATHS = {
   dashboard: "/admin/dashboard",
-  customersData: "/admin/dashboard/customers-data",
-  companiesData: "/admin/dashboard/companies-data",
-  propertiesData: "/admin/dashboard/properties-data",
+  customersData: "/admin/customers-data",
+  companiesData: "/admin/companies-data",
+  propertiesData: "/admin/properties-data",
+  subscriptionPlans: "/admin/subscription-plans",
 };
 
-
-export const COMPANY_DASHBOARD_PATHS = {
-  properties: "/company/dashboard/properties",
-  addNewProperty: "/company/dashboard/properties/add-new-property",
-  dashboard: "/company/dashboard",
-  accessManagement: "/company/dashboard/access-management",
-  agents: "/company/dashboard/agents",
-  points: "/company/dashboard/points",
-  subscriptionPlans: "/company/dashboard/subscription-plans",
-  topUp: "/company/dashboard/top-up",
-  settings: "/company/dashboard/settings",
-};
+export const COMPANY_DASHBOARD_PATHS = {};
 
 export const PUBLIC_ROUTES = {
   properties: "/properties",
-  help: "/help",
   contactUs: "/contact-us",
   login: "/customer/login",
   register: "/customer/register",

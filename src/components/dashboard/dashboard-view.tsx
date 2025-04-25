@@ -2,44 +2,58 @@
 
 import { useState } from "react"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts"
-import { Wallet, FileText, Users, CheckCircle, ChevronDown } from "lucide-react"
+import { Wallet, FileText, Users, CheckCircle, ChevronDown, AlertCircle } from 'lucide-react'
 import { MetricCard } from "./metric-card"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useRBAC } from "@/lib/hooks/useRBAC"
+import { PERMISSIONS } from "@/constants/rbac"
 
-export function DashboardView() {
-    const [timeframe, setTimeframe] = useState("monthly")
+interface LeadChannel {
+    name: string
+    whatsapp: number
+    email: number
+    call: number
+    visit: number
+}
 
-    // Sample data for the chart
-    const data = [
-        { name: "Jan", whatsapp: 25, email: 20, call: 5 },
-        { name: "Feb", whatsapp: 30, email: 35, call: 15 },
-        { name: "Mar", whatsapp: 35, email: 25, call: 5 },
-        { name: "Apr", whatsapp: 50, email: 40, call: 25 },
-        { name: "May", whatsapp: 65, email: 60, call: 35 },
-        { name: "Jun", whatsapp: 60, email: 45, call: 40 },
-        { name: "Jul", whatsapp: 70, email: 40, call: 30 },
-        { name: "Aug", whatsapp: 65, email: 45, call: 25 },
-        { name: "Sep", whatsapp: 60, email: 50, call: 30 },
-        { name: "Oct", whatsapp: 55, email: 45, call: 35 },
-        { name: "Nov", whatsapp: 60, email: 55, call: 45 },
-        { name: "Dec", whatsapp: 70, email: 60, call: 50 },
-    ]
+interface DashboardViewProps {
+    metrics: {
+        pointsSpent: number
+        publishedListings: number
+        leads: number
+        propertyViewImpressions: number
+    }
+    chartData: LeadChannel[]
+    hasData: boolean
+    timeframe: string
+    setTimeframe: (timeframe: string) => void
+}
 
-    const timeframeOptions = ["daily", "weekly", "monthly", "yearly"]
+interface CustomTooltipProps {
+    active?: boolean
+    payload?: any[]
+    label?: string
+}
+
+export function DashboardView({ metrics, chartData, hasData, timeframe, setTimeframe }: Readonly<DashboardViewProps>) {
+
+    const timeframeOptions = ["monthly", "yearly"]
+
+    const { hasPermission } = useRBAC();
 
     const CustomizedDot = () => {
         // Remove dots completely
         return null
     }
 
-    const CustomTooltip = ({ active, payload, label }) => {
-        if (active && payload && payload.length) {
+    const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+        if (active && payload?.length) {
             return (
                 <div className="bg-white p-2 border border-gray-200 shadow-sm rounded-md text-xs max-w-[200px] z-50">
                     <p className="font-medium mb-1">{label}</p>
                     {payload.map((entry, index) => (
-                        <p key={`item-${index}`} className="flex items-center gap-1.5 mb-0.5" style={{ color: entry.color }}>
+                        <p key={`item-${index * Math.random()}`} className="flex items-center gap-1.5 mb-0.5" style={{ color: entry.color }}>
                             <span className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }}></span>
                             <span>
                                 {entry.name}: {entry.value}
@@ -52,19 +66,38 @@ export function DashboardView() {
         return null
     }
 
+    // Format numbers with commas
+    const formatNumber = (num: number): string => {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
+
     return (
         <>
             {/* Key Metrics */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-10">
-                <MetricCard value="760" label="Points Spent" icon={<Wallet className="h-5 w-5 text-primary" />} />
-                <MetricCard value="900" label="Published Listings" icon={<FileText className="h-5 w-5 text-primary" />} />
-                <MetricCard value="13000" label="Leads" icon={<Users className="h-5 w-5 text-primary" />} />
+            {/* make sure if three item then handle gracefully */}
+            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${hasPermission(PERMISSIONS.POINT_SUBSCRIPTION_TOPUP_GLOBAL_PRIVACY_FOR_DASHBOARD) ? "4" : "3"} gap-4 md:gap-6 mb-6 md:mb-10`}>
+                {hasPermission(PERMISSIONS.POINT_SUBSCRIPTION_TOPUP_GLOBAL_PRIVACY_FOR_DASHBOARD) && <MetricCard
+                    value={formatNumber(metrics.pointsSpent)}
+                    label="Points Spent"
+                    icon={<Wallet className="h-5 w-5 text-primary" />}
+                />}
                 <MetricCard
-                    value="20,004"
+                    value={formatNumber(metrics.publishedListings)}
+                    label="Published Listings"
+                    icon={<FileText className="h-5 w-5 text-primary" />}
+                />
+                <MetricCard
+                    value={formatNumber(metrics.leads)}
+                    label="Leads"
+                    icon={<Users className="h-5 w-5 text-primary" />}
+                />
+                <MetricCard
+                    value={formatNumber(metrics.propertyViewImpressions)}
                     label="Property View Impressions"
                     icon={<CheckCircle className="h-5 w-5 text-primary" />}
                 />
             </div>
+
 
             {/* Chart Section */}
             <div className="border border-gray-100 rounded-lg p-3 sm:p-4 md:p-6 mb-6">
@@ -86,6 +119,10 @@ export function DashboardView() {
                             <div className="flex items-center">
                                 <div className="w-2 h-2 rounded-full bg-[#f97316] mr-1.5"></div>
                                 <span className="text-xs">Call</span>
+                            </div>
+                            <div className="flex items-center">
+                                <div className="w-2 h-2 rounded-full bg-[#a855f7] mr-1.5"></div>
+                                <span className="text-xs">Visit</span>
                             </div>
                         </div>
 
@@ -109,72 +146,84 @@ export function DashboardView() {
                 </div>
 
                 <div className="relative">
-                    {/* <div className="absolute right-0 top-0 text-xs text-gray-500 mr-2 sm:mr-6">10 Leads</div>r */}
-                    <div className="h-[200px] sm:h-[240px] mt-6 -ml-2 sm:ml-0">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <LineChart
-                                data={data}
-                                margin={{
-                                    top: 5,
-                                    right: 5,
-                                    left: -20,
-                                    bottom: 5,
-                                }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                                <XAxis
-                                    dataKey="name"
-                                    axisLine={false}
-                                    tickLine={false}
-                                    tick={{ fontSize: 10, fill: "#888" }}
-                                    dy={10}
-                                    interval="preserveStartEnd"
-                                    minTickGap={5}
-                                />
-                                <YAxis
-                                    axisLine={false}
-                                    tickLine={false}
-                                    tick={{ fontSize: 10, fill: "#888" }}
-                                    domain={[0, 100]}
-                                    ticks={[0, 20, 40, 60, 80, 100]}
-                                    width={30}
-                                />
-                                <Tooltip content={<CustomTooltip
-                                    active={true}
-                                    payload={[]}
-                                    label={""}
-                                />} wrapperStyle={{ zIndex: 10 }} />
-                                <ReferenceLine x="May" stroke="#e0f2fe" strokeWidth={20} ifOverflow="extendDomain" />
-                                <Line
-                                    type="monotone"
-                                    dataKey="whatsapp"
-                                    stroke="#4ade80"
-                                    strokeWidth={2}
-                                    dot={<CustomizedDot />}
-                                    activeDot={{ r: 5, fill: "#4ade80" }}
-                                    name="WhatsApp"
-                                />
-                                <Line
-                                    type="monotone"
-                                    dataKey="email"
-                                    stroke="#3b82f6"
-                                    strokeWidth={2}
-                                    dot={<CustomizedDot />}
-                                    activeDot={{ r: 5, fill: "#3b82f6" }}
-                                    name="Email"
-                                />
-                                <Line
-                                    type="monotone"
-                                    dataKey="call"
-                                    stroke="#f97316"
-                                    strokeWidth={2}
-                                    dot={<CustomizedDot />}
-                                    activeDot={{ r: 5, fill: "#f97316" }}
-                                    name="Call"
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
+                    {hasData ? (
+                        <div className="h-[200px] sm:h-[240px] mt-6 ml-2 sm:ml-0">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <LineChart
+                                    data={chartData}
+                                    margin={{
+                                        top: 5,
+                                        right: 5,
+                                        left: 20,
+                                        bottom: 5,
+                                    }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                                    <XAxis
+                                        dataKey="name"
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fontSize: 10, fill: "#888" }}
+                                        dy={10}
+                                        interval="preserveStartEnd"
+                                        minTickGap={5}
+                                    />
+                                    <YAxis
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fontSize: 10, fill: "#888" }}
+                                        width={30}
+                                        domain={[0, 'dataMax + 1']}  // Set domain from 0 to max value + 1
+                                        allowDecimals={false}        // No decimal ticks
+                                        tickMargin={20}
+                                    />
+                                    <Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 10 }} />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="whatsapp"
+                                        stroke="#4ade80"
+                                        strokeWidth={2}
+                                        dot={<CustomizedDot />}
+                                        activeDot={{ r: 5, fill: "#4ade80" }}
+                                        name="WhatsApp"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="email"
+                                        stroke="#3b82f6"
+                                        strokeWidth={2}
+                                        dot={<CustomizedDot />}
+                                        activeDot={{ r: 5, fill: "#3b82f6" }}
+                                        name="Email"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="call"
+                                        stroke="#f97316"
+                                        strokeWidth={2}
+                                        dot={<CustomizedDot />}
+                                        activeDot={{ r: 5, fill: "#f97316" }}
+                                        name="Call"
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="visit"
+                                        stroke="#a855f7"
+                                        strokeWidth={2}
+                                        dot={<CustomizedDot />}
+                                        activeDot={{ r: 5, fill: "#a855f7" }}
+                                        name="Visit"
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </div>
+                    ) : (
+                        <div className="h-[200px] flex flex-col items-center justify-center text-gray-500">
+                            <AlertCircle className="h-10 w-10 mb-2 opacity-50" />
+                            <p className="text-sm">No lead data available for this period</p>
+                            <p className="text-xs mt-1">Try changing the time period or check back later</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </>

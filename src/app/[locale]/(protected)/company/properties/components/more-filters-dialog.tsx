@@ -42,7 +42,8 @@ import { useQuery } from "@tanstack/react-query";
 import { staffList } from "@/services/protected/properties";
 import { IOption } from "@/types/common";
 import { RoleGate } from "@/components/rbac/role-gate";
-import { USER_ROLES } from "@/constants/rbac";
+import { USER_ROLES, UserRole } from "@/constants/rbac";
+import { useRBAC } from "@/lib/hooks/useRBAC";
 
 const initFilters = {
   title: "",
@@ -66,9 +67,15 @@ export const MoreFiltersDialog = ({
 
   const schema = useMemo(() => propertyDataFIltersSchema(t), [t]);
 
+  const { currentRole }: any = useRBAC();
+
+
+  const allowedRoles = [USER_ROLES.OWNER, USER_ROLES.ADMIN];
+
   const { data: staffListData } = useQuery({
     queryKey: ["staffList"],
     queryFn: staffList,
+    enabled: allowedRoles.includes(currentRole),
   });
 
   useEffect(() => {
@@ -114,7 +121,7 @@ export const MoreFiltersDialog = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className="py-2 grid grid-cols-1 md:grid-cols-2 gap-4"
             >
-              <RoleGate allowedRoles={[USER_ROLES.OWNER, USER_ROLES.ADMIN]}>
+              <RoleGate allowedRoles={allowedRoles}>
                 <FormField
                   control={form.control}
                   name="publisher"

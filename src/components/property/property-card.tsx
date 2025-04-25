@@ -9,7 +9,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { PUBLIC_ROUTES } from "@/constants/paths";
 
-export default function PropertyCard({ data }: { data: IProperty }) {
+export default function PropertyCard({ data }: Readonly<{ data: IProperty }>) {
   const t = useTranslations();
 
   return (

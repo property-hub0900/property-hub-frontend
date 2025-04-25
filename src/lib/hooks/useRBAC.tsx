@@ -94,13 +94,14 @@ export const useRBAC = () => {
 
     return {
         roles,
-        permissions, // Expose permissions for debugging if needed
+        permissions,
         isAuthenticated,
         hasRole,
         hasAnyRole,
         hasAllRoles,
         hasPermission,
         hasRoutePermission,
+        currentRole: roles[0],
     }
 }
 

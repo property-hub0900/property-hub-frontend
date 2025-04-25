@@ -119,15 +119,33 @@ const redirectToHome = () => {
   window.location.href = locale ? `/${locale}` : "/";
 };
 
+// Helper function to get the device IP address
+const getAnonymousId = () => {
+  if (typeof window === "undefined") return null; // Server-side, return null
+
+  let anonymousId = localStorage.getItem("ip-address");
+  if (!anonymousId) {
+    const randomBytes = new Uint8Array(8);
+    crypto.getRandomValues(randomBytes);
+    // Convert Uint8Array to 16-digit hexadecimal string
+    anonymousId = Array.from(randomBytes, byte => byte.toString(16).padStart(2, '0')).join('');
+    localStorage.setItem("ip-address", anonymousId);
+  }
+  return anonymousId;
+};
+
 // Request interceptor for adding auth token
 apiClient.interceptors.request.use(
   (config) => {
     // For client-side requests only
     if (isClient()) {
       const token = getAuthToken();
-
+      const anonymousId = getAnonymousId();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+      }
+      if (anonymousId) {
+        config.headers["ip-address"] = anonymousId;
       }
     }
     return config;

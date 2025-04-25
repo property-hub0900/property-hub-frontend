@@ -62,7 +62,7 @@ export default function PropertyForm(
 
   const t = useTranslations();
   const router = useRouter();
-  const { user } = useAuth();
+
   const { hasPermission } = useRBAC();
 
   const [filesUrls, setFilesUrls] = useState<IFilesUrlPayload>({ images: [] });
