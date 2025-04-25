@@ -23,7 +23,10 @@ export const createPropertySchema = (t: (key: string) => string) =>
       t("form.required")
     ),
     propertyType: commonValidations.stringRequired(t("form.required")),
-    propertySize: commonValidations.stringRequired(t("form.required")),
+    propertySize: commonValidations.numberRequired(
+      t("form.required"),
+      t("form.invalidNumber")
+    ),
     bedrooms: commonValidations.numberOptional(t("form.required")),
     bathrooms: commonValidations.numberRequired(
       t("form.required"),
@@ -69,6 +72,7 @@ export const createPropertySchema = (t: (key: string) => string) =>
 
 export const propertyDataFIltersSchema = (t: (key: string) => string) =>
   z.object({
+    companyName: commonValidations.stringOptional(),
     publisher: commonValidations.stringOptional(),
     featured: commonValidations.stringOptional(),
     propertyType: commonValidations.stringOptional(),

@@ -88,3 +88,13 @@ export interface IStaffList {
   firstName: string;
   lastName: string;
 }
+
+export interface IPropertyDataFilters {
+  title?: string;
+  referenceNo?: string;
+  companyName?: string;
+  publisher?: string;
+  featured?: string;
+  propertyType?: string;
+  status?: string;
+}

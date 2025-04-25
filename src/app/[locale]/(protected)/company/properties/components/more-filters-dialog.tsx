@@ -10,13 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,7 +23,7 @@ import {
   propertyDataFIltersSchema,
   TPropertyDataFIltersSchema,
 } from "@/schema/protected/properties";
-import { IPropertyDataFilters } from "./properties-table";
+import { IPropertyDataFilters } from "@/types/protected/properties";
 import {
   Select,
   SelectContent,
@@ -44,10 +38,13 @@ import { IOption } from "@/types/common";
 import { RoleGate } from "@/components/rbac/role-gate";
 import { USER_ROLES, UserRole } from "@/constants/rbac";
 import { useRBAC } from "@/lib/hooks/useRBAC";
+import { adminServices } from "@/services/protected/admin";
+import { Input } from "@/components/ui/input";
 
 const initFilters = {
   title: "",
   referenceNo: "",
+  companyName: "",
   publisher: "",
   featured: "",
   propertyType: "",
@@ -67,16 +64,21 @@ export const MoreFiltersDialog = ({
 
   const schema = useMemo(() => propertyDataFIltersSchema(t), [t]);
 
-  const { currentRole }: any = useRBAC();
+  const { currentRole } = useRBAC();
 
-
-  const allowedRoles = [USER_ROLES.OWNER, USER_ROLES.ADMIN];
+  const staffAllowedRoles: UserRole[] = [USER_ROLES.OWNER, USER_ROLES.MANAGER];
 
   const { data: staffListData } = useQuery({
     queryKey: ["staffList"],
     queryFn: staffList,
-    enabled: allowedRoles.includes(currentRole),
+    enabled: staffAllowedRoles.includes(currentRole),
   });
+
+  // const { data: companiesListData } = useQuery({
+  //   queryKey: ["adminCompanyList"],
+  //   queryFn: adminServices.getAdminCompanyList,
+  //   enabled: currentRole === USER_ROLES.ADMIN,
+  // });
 
   useEffect(() => {
     if (staffListData?.results && staffListData?.results.length > 0) {
@@ -121,7 +123,54 @@ export const MoreFiltersDialog = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className="py-2 grid grid-cols-1 md:grid-cols-2 gap-4"
             >
-              <RoleGate allowedRoles={allowedRoles}>
+              <RoleGate allowedRoles={[USER_ROLES.ADMIN]}>
+                <FormField
+                  control={form.control}
+                  name="companyName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Input {...field} />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* <FormField
+                  control={form.control}
+                  name="companyName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value?.toString()}
+                      >
+                        <SelectTrigger className="capitalize">
+                          <SelectValue
+                            placeholder={t("form.companyName.label")}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value={"companyName"}>
+                            {t("form.companyName.label")}
+                          </SelectItem>
+                          <>
+                            {companiesListData?.results.map((item) => (
+                              <SelectItem
+                                key={`companyName-${item.value}`}
+                                value={item.value.toString()}
+                              >
+                                {item.label}
+                              </SelectItem>
+                            ))}
+                          </>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                /> */}
+              </RoleGate>
+
+              <RoleGate allowedRoles={staffAllowedRoles}>
                 <FormField
                   control={form.control}
                   name="publisher"

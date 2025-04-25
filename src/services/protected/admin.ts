@@ -6,8 +6,9 @@ import {
   IEditCompanyUpdate,
   IAddCompanyPoints,
   IAdminProperty,
+  IAdminSubscription,
 } from "@/types/protected/admin";
-import { ICommonMessageResponse, IListResponse } from "@/types/common";
+import { ICommonMessageResponse, IListResponse, IOption } from "@/types/common";
 
 // Customer service with methods for customer operations
 export const adminServices = {
@@ -40,5 +41,13 @@ export const adminServices = {
   },
   getAdminProperties: async (): Promise<IListResponse<IAdminProperty>> => {
     return apiClient.get(`/admin/properties`);
+  },
+  getAdminSubscriptions: async (): Promise<
+    IListResponse<IAdminSubscription>
+  > => {
+    return apiClient.get(`/admin/subscriptions`);
+  },
+  getAdminCompanyList: async (): Promise<IListResponse<IOption>> => {
+    return apiClient.get(`/admin/companies/select?page=0&pageSize=999`);
   },
 };

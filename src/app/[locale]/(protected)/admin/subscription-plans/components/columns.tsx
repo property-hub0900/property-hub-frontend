@@ -2,52 +2,64 @@
 
 import { formatDate } from "@/utils/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { ICustomerAdmin } from "@/types/protected/admin";
+import { IAdminSubscription } from "@/types/protected/admin";
+import { StatusIndicator } from "@/components/ui/status-indicator";
 
-export const Columns: ColumnDef<ICustomerAdmin>[] = [
+export const Columns: ColumnDef<IAdminSubscription>[] = [
   {
-    accessorKey: "firstName",
-    header: "Name",
+    accessorKey: "company.companyName",
+    header: "Company Name",
     enableSorting: true,
-    cell: ({ row }) => {
-      const { firstName, lastName } = row.original;
-      return <div className="capitalize">{`${firstName} ${lastName}`}</div>;
-    },
   },
   {
-    accessorKey: "user.email",
+    accessorKey: "company.companyEmail",
     header: "Email",
-    enableSorting: false,
+    enableSorting: true,
   },
   {
-    accessorKey: "phoneNumber",
-    header: "Phone Number",
-    enableSorting: false,
+    accessorKey: "points",
+    header: "Points",
+    enableSorting: true,
   },
   {
-    accessorKey: "createdAt",
-    header: "Registration Date",
+    accessorKey: "startDate",
+    header: "Subscription Date",
     enableSorting: true,
     cell: ({ row }) => {
-      const { createdAt } = row.original;
-      return <div className="capitalize">{formatDate(createdAt)}</div>;
+      const { startDate } = row.original;
+      return <div className="capitalize">{formatDate(startDate)}</div>;
     },
   },
+
+  {
+    accessorKey: "endDate",
+    header: "Subscription Expiry Date",
+    enableSorting: true,
+    cell: ({ row }) => {
+      const { endDate } = row.original;
+      return <div className="capitalize">{formatDate(endDate)}</div>;
+    },
+  },
+
   {
     accessorKey: "status",
     header: "Status",
     enableSorting: false,
     cell: ({ row }) => {
-      const status = row.original.user.status;
+      const { startDate, endDate } = row.original;
+      const isActive =
+        new Date(startDate) <= new Date() && new Date(endDate) >= new Date();
+
+      const isActiveStatus = isActive ? "active" : "expired";
+
       return (
-        <div className="capitalize px-4 py-1.5 shadow-md rounded-md inline-flex gap-2 items-center">
-          <span
-            className={`inline-block size-2 rounded-full ${
-              status ? "bg-primary" : "bg-muted-foreground/60"
-            }`}
-          ></span>
-          {status ? "Active" : "Inactive"}
-        </div>
+        <>
+          <StatusIndicator
+            status={isActiveStatus}
+            label={isActiveStatus}
+            variant={"subtle"}
+          />
+        </>
       );
     },
   },

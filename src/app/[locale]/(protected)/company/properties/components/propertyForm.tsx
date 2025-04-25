@@ -34,8 +34,8 @@ import {
   PROPERTY_VIEWS,
   TPropertyStatuses,
 } from "@/constants/constants";
-import { COMPANY_PATHS } from "@/constants/paths";
-import { PERMISSIONS } from "@/constants/rbac";
+import { ADMIN_PATHS, COMPANY_PATHS } from "@/constants/paths";
+import { PERMISSIONS, USER_ROLES } from "@/constants/rbac";
 import { useRBAC } from "@/lib/hooks/useRBAC";
 import { createPropertySchema } from "@/schema/protected/properties";
 import { amenities } from "@/services/protected/properties";
@@ -62,7 +62,7 @@ export default function PropertyForm(
   const t = useTranslations();
   const router = useRouter();
 
-  const { hasPermission } = useRBAC();
+  const { hasPermission, currentRole } = useRBAC();
 
   const [filesUrls, setFilesUrls] = useState<IFilesUrlPayload>({ images: [] });
 
@@ -82,39 +82,43 @@ export default function PropertyForm(
       mode === "edit"
         ? defaultValues
         : {
-          title: "",
-          titleAr: "",
-          featured: false,
-          category: undefined,
-          price: 0,
-          propertyType: "",
-          purpose: undefined,
-          bedrooms: 0,
-          bathrooms: 0,
-          status: PROPERTY_STATUSES.draft,
-          furnishedType: "",
-          occupancy: undefined,
-          ownershipStatus: undefined,
-          referenceNo: "",
-          priceVisibilityFlag: false,
-          propertySize: "",
-          serviceCharges: "",
-          buildingFloors: 0,
-          floor: 0,
-          tenure: "",
-          views: "",
-          address: "",
-          amenities: [],
-          description: "",
-          PropertyImages: [],
-        },
+            title: "",
+            titleAr: "",
+            featured: false,
+            category: undefined,
+            price: 0,
+            propertyType: "",
+            purpose: undefined,
+            bedrooms: 0,
+            bathrooms: 0,
+            status: PROPERTY_STATUSES.draft,
+            furnishedType: "",
+            occupancy: undefined,
+            ownershipStatus: undefined,
+            referenceNo: "",
+            priceVisibilityFlag: false,
+            propertySize: undefined,
+            serviceCharges: "",
+            buildingFloors: 0,
+            floor: 0,
+            tenure: "",
+            views: "",
+            address: "",
+            amenities: [],
+            description: "",
+            PropertyImages: [],
+          },
   });
 
   const category = form.watch("category");
   const propertyType = form.watch("propertyType");
 
   const handleCancel = () => {
-    router.push(COMPANY_PATHS.properties);
+    router.push(
+      currentRole === USER_ROLES.ADMIN
+        ? ADMIN_PATHS.propertiesData
+        : COMPANY_PATHS.properties
+    );
   };
 
   const handleSubmitWithStatus = (status: TPropertyStatuses | string) => {
@@ -317,7 +321,7 @@ export default function PropertyForm(
                     </small>
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value || ""} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -717,36 +721,36 @@ export default function PropertyForm(
         <div className="col-span-2 gap-2 flex justify-end mt-6">
           {(!defaultValues ||
             defaultValues?.status === PROPERTY_STATUSES.draft) && (
-              <>
-                <Button
-                  variant={"outline"}
-                  type="button"
-                  onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
-                >
-                  {t("button.saveDraft")}
-                </Button>
+            <>
+              <Button
+                variant={"outline"}
+                type="button"
+                onClick={() => handleSubmitWithStatus(PROPERTY_STATUSES.draft)}
+              >
+                {t("button.saveDraft")}
+              </Button>
 
-                {hasPermission(PERMISSIONS.PUBLISH_PROPERTY) ? (
-                  <Button
-                    type="button"
-                    onClick={() =>
-                      handleSubmitWithStatus(PROPERTY_STATUSES.published)
-                    }
-                  >
-                    {t("button.publish")}
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    onClick={() =>
-                      handleSubmitWithStatus(PROPERTY_STATUSES.pending)
-                    }
-                  >
-                    {t("button.requestForApproval")}
-                  </Button>
-                )}
-              </>
-            )}
+              {hasPermission(PERMISSIONS.PUBLISH_PROPERTY) ? (
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitWithStatus(PROPERTY_STATUSES.published)
+                  }
+                >
+                  {t("button.publish")}
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  onClick={() =>
+                    handleSubmitWithStatus(PROPERTY_STATUSES.pending)
+                  }
+                >
+                  {t("button.requestForApproval")}
+                </Button>
+              )}
+            </>
+          )}
 
           {defaultValues?.status === PROPERTY_STATUSES.published && (
             <Button

@@ -1,20 +1,17 @@
 "use client";
 
 import { Loader } from "@/components/loader";
-import { useAuth } from "@/lib/hooks/useAuth";
 import { adminServices } from "@/services/protected/admin";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import CustomersDataTable from "./components/table";
 
 export default function Page() {
-  const { user } = useAuth();
   const t = useTranslations();
 
   const { data: dataCustomers, isLoading } = useQuery({
     queryKey: ["adminCustomers"],
     queryFn: () => adminServices.adminCustomers(),
-    enabled: !!user?.userId,
   });
 
   return (

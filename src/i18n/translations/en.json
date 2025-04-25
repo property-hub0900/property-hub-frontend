@@ -376,7 +376,8 @@
       "options": {
         "active": "Active",
         "inactive": "Inactive",
-        "reject": "Reject"
+        "reject": "Reject",
+        "expired": "Expired"
       }
     },
     "role": {

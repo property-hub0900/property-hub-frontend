@@ -3,40 +3,42 @@
 import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { ADMIN_PATHS } from "@/constants/paths";
-import { formatAmountToQAR, getErrorMessage } from "@/utils/utils";
 import {
   deletePropertyById,
   updatePropertyById,
 } from "@/services/protected/properties";
+import { formatAmountToQAR, getErrorMessage } from "@/utils/utils";
 
+import { PROPERTY_STATUSES } from "@/constants/constants";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
-import { Archive, Edit, Edit2, Trash2 } from "lucide-react";
+import { Archive, Edit, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
-import { PROPERTY_STATUSES } from "@/constants/constants";
 
 import { DeleteDialog } from "@/components/delete-dailog";
+import { IAdminProperty } from "@/types/protected/admin";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { IAdminProperty } from "@/types/protected/admin";
+import { PERMISSIONS } from "@/constants/rbac";
+import { useRBAC } from "@/lib/hooks/useRBAC";
 
 export const propertiesTableColumns: ColumnDef<IAdminProperty>[] = [
   {
-    accessorKey: "propertyId",
+    accessorKey: "referenceNo",
     header: "Ref ID",
     enableSorting: true,
     cell: ({ row }) => {
-      const rowData = row.original;
-      //const { propertyId } = rowData;
+      const { propertyId, referenceNo } = row.original;
       return (
         <>
-          {/* <Link
+          <Link
             className="text-primary"
             href={`${ADMIN_PATHS.propertiesData}/${propertyId}`}
-          ></Link> */}
-          {rowData.propertyId}
+          >
+            {referenceNo}
+          </Link>
         </>
       );
     },
@@ -124,16 +126,54 @@ const StatusCell = ({ row }) => {
 };
 
 const FeaturedCell = ({ row }) => {
+  const { hasPermission } = useRBAC();
   const rowData = row.original;
-  const { featured } = rowData;
+  const { propertyId, featured, status } = rowData;
+
+  const queryClient = useQueryClient();
+
+  const updatePropertyByIdMutation = useMutation({
+    mutationKey: ["updatePropertyById"],
+    mutationFn: updatePropertyById,
+  });
+
+  const handleUpgradeFeatured = async () => {
+    try {
+      const updatedObj = {
+        id: String(propertyId),
+        payload: { featured: true },
+      };
+
+      const response = await updatePropertyByIdMutation.mutateAsync(updatedObj);
+      toast.success(response.message);
+      queryClient.refetchQueries({ queryKey: ["getAdminProperties"] });
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+  };
 
   return (
     <div className="flex">
-      {featured && (
+      {featured ? (
         <Button className="w-28" disabled variant={"outline"} size={"sm"}>
           <Image width={20} height={20} src="/star.svg" alt="Featured" />
           Featured
         </Button>
+      ) : (
+        <>
+          {hasPermission(PERMISSIONS.FEATURE_PROPERTY) &&
+            (status === PROPERTY_STATUSES.draft ||
+              status === PROPERTY_STATUSES.published) && (
+              <Button
+                className="w-28"
+                disabled={updatePropertyByIdMutation.isPending}
+                onClick={handleUpgradeFeatured}
+                size={"sm"}
+              >
+                Feature
+              </Button>
+            )}
+        </>
       )}
     </div>
   );
@@ -145,7 +185,7 @@ const ActionCell = ({ row }) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const rowData = row.original;
-  const { propertyId } = rowData;
+  const { propertyId, status } = rowData;
 
   const queryClient = useQueryClient();
 
@@ -178,7 +218,8 @@ const ActionCell = ({ row }) => {
     try {
       const response = await deletePropertyByIdMutation.mutateAsync(propertyId);
       toast.success(response.message);
-      queryClient.refetchQueries({ queryKey: ["companiesProperties"] });
+      setIsDeleteDialogOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["getAdminProperties"] });
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
@@ -188,17 +229,17 @@ const ActionCell = ({ row }) => {
     <>
       <Loader isLoading={deletePropertyByIdMutation.isPending}></Loader>
       <div className="flex gap-3 items-center">
-        <Link
-          className="hidden"
-          href={`${ADMIN_PATHS.propertiesData}/${propertyId}`}
-        >
+        <Link className="" href={`${ADMIN_PATHS.propertiesData}/${propertyId}`}>
           <Edit className="size-5 text-primary" />
         </Link>
 
-        <Archive
-          onClick={handleArchive}
-          className="size-5 text-muted-foreground cursor-pointer hidden"
-        />
+        {status === PROPERTY_STATUSES.published && (
+          <Archive
+            onClick={handleArchive}
+            className="size-5 text-muted-foreground cursor-pointer"
+          />
+        )}
+
         <Trash2
           onClick={() => setIsDeleteDialogOpen(true)}
           className="size-5 text-destructive cursor-pointer"

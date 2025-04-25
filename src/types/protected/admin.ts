@@ -71,6 +71,7 @@ export interface IAddCompanyPoints {
 
 export interface IAdminProperty {
   propertyId: number;
+  referenceNo: string;
   title: string;
   price: number;
   propertyType: string;
@@ -79,5 +80,25 @@ export interface IAdminProperty {
   company: {
     companyId: number;
     companyName: string;
+  };
+}
+
+export interface IAdminSubscription {
+  subscriptionId: number;
+  companyId: number;
+  points: number;
+  status: string | null;
+  paymentMethod: string | null;
+  paymentImage: string | null;
+  type: string | null;
+  price: string;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  company: {
+    companyId: number;
+    companyName: string;
+    companyEmail: string;
+    companyPhone: string | null;
   };
 }
