@@ -86,9 +86,8 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
 
   const handleLeadsGeneration = async (type: "call" | "email" | "whatsapp" | "visit") => {
     try {
-      const response = await leadsGenerationService.generateLeads({ propertyId: data.propertyId, type: type });
-
-      toast.success(response.message);
+      await leadsGenerationService.generateLeads({ propertyId: data.propertyId, type: type });
+      // toast.success(response.message);
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
@@ -108,7 +107,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
                 <SwiperSlide key={index}>
                   <div className="relative h-full w-full select-none">
                     <Image
-                      src={image}
+                      src={image || "/placeholder.svg?height=80&width=80"}
                       width={500}
                       height={300}
                       alt={`${propertyType} property`}
@@ -179,13 +178,13 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <Link href={`tel:${postedByStaff?.phoneNumber}`}>
-            <Button variant="outlinePrimary" size="sm" onClick={(e) => { e.preventDefault(); handleLeadsGeneration("call") }}>
+            <Button variant="outlinePrimary" size="sm" onClick={(e) => { handleLeadsGeneration("call") }}>
               <Phone className="h-4 w-4" />
               {t("button.call")}
             </Button>
           </Link>
           <Link href={`mailto:${postedByStaff?.user.email}`}>
-            <Button variant="outlinePrimary" size="sm" onClick={(e) => { e.preventDefault(); handleLeadsGeneration("email") }}>
+            <Button variant="outlinePrimary" size="sm" onClick={(e) => { handleLeadsGeneration("email") }}>
               <Mail className="h-4 w-4" />
               {t("button.email")}
             </Button>
@@ -194,7 +193,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             target="_blank"
             href={`https://wa.me/${postedByStaff?.phoneNumber}`}
           >
-            <Button variant="outlinePrimary" size="sm" onClick={(e) => { e.preventDefault(); handleLeadsGeneration("whatsapp") }}>
+            <Button variant="outlinePrimary" size="sm" onClick={(e) => { handleLeadsGeneration("whatsapp") }}>
               <MessageCircle className="h-4 w-4" />
               {t("button.whatsApp")}
             </Button>

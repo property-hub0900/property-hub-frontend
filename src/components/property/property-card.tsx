@@ -17,7 +17,7 @@ export default function PropertyCard({ data }: Readonly<{ data: IProperty }>) {
       <div className="relative overflow-hidden h-48 md:h-64">
         <Link href={`${PUBLIC_ROUTES.properties}/${data.propertyId}`}>
           <Image
-            src={data?.PropertyImages[0].url}
+            src={data?.PropertyImages[0]?.url || "/placeholder.svg?height=80&width=80"}
             alt={data.title}
             className="w-full h-full object-cover"
             width={500}

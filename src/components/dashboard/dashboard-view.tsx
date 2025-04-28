@@ -1,13 +1,12 @@
 "use client"
 
-import { useState } from "react"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts"
-import { Wallet, FileText, Users, CheckCircle, ChevronDown, AlertCircle } from 'lucide-react'
-import { MetricCard } from "./metric-card"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useRBAC } from "@/lib/hooks/useRBAC"
 import { PERMISSIONS } from "@/constants/rbac"
+import { useRBAC } from "@/lib/hooks/useRBAC"
+import { AlertCircle, CheckCircle, ChevronDown, FileText, Users, Wallet } from 'lucide-react'
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { MetricCard } from "./metric-card"
 
 interface LeadChannel {
     name: string
@@ -26,6 +25,8 @@ interface DashboardViewProps {
     }
     chartData: LeadChannel[]
     hasData: boolean
+    timeframe: string
+    setTimeframe: (timeframe: string) => void
 }
 
 interface CustomTooltipProps {
@@ -34,9 +35,9 @@ interface CustomTooltipProps {
     label?: string
 }
 
-export function DashboardView({ metrics, chartData, hasData }: Readonly<DashboardViewProps>) {
-    const [timeframe, setTimeframe] = useState("monthly")
-    const timeframeOptions = ["daily", "weekly", "monthly", "yearly"]
+export function DashboardView({ metrics, chartData, hasData, timeframe, setTimeframe }: Readonly<DashboardViewProps>) {
+
+    const timeframeOptions = ["monthly", "yearly"]
 
     const { hasPermission } = useRBAC();
 
@@ -68,27 +69,27 @@ export function DashboardView({ metrics, chartData, hasData }: Readonly<Dashboar
     const formatNumber = (num: number): string => {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     }
-
+    const showPointsSpent = hasPermission(PERMISSIONS.POINT_SUBSCRIPTION_TOPUP_GLOBAL_PRIVACY_FOR_DASHBOARD)
     return (
         <>
             {/* Key Metrics */}
             {/* make sure if three item then handle gracefully */}
-            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${hasPermission(PERMISSIONS.POINT_SUBSCRIPTION_TOPUP_GLOBAL_PRIVACY_FOR_DASHBOARD) ? "4" : "3"} gap-4 md:gap-6 mb-6 md:mb-10`}>
-                {hasPermission(PERMISSIONS.POINT_SUBSCRIPTION_TOPUP_GLOBAL_PRIVACY_FOR_DASHBOARD) && <MetricCard
-                    value={formatNumber(metrics.pointsSpent)}
-                    label="Points Spent"
-                    icon={<Wallet className="h-5 w-5 text-primary" />}
-                />}
+            <div
+                className={`grid grid-cols-1 sm:grid-cols-2 ${showPointsSpent ? "lg:grid-cols-4" : "lg:grid-cols-3"} gap-4 md:gap-6 mb-6 md:mb-10`}
+            >
+                {showPointsSpent && (
+                    <MetricCard
+                        value={formatNumber(metrics.pointsSpent)}
+                        label="Points Spent"
+                        icon={<Wallet className="h-5 w-5 text-primary" />}
+                    />
+                )}
                 <MetricCard
                     value={formatNumber(metrics.publishedListings)}
                     label="Published Listings"
                     icon={<FileText className="h-5 w-5 text-primary" />}
                 />
-                <MetricCard
-                    value={formatNumber(metrics.leads)}
-                    label="Leads"
-                    icon={<Users className="h-5 w-5 text-primary" />}
-                />
+                <MetricCard value={formatNumber(metrics.leads)} label="Leads" icon={<Users className="h-5 w-5 text-primary" />} />
                 <MetricCard
                     value={formatNumber(metrics.propertyViewImpressions)}
                     label="Property View Impressions"
@@ -145,14 +146,15 @@ export function DashboardView({ metrics, chartData, hasData }: Readonly<Dashboar
 
                 <div className="relative">
                     {hasData ? (
-                        <div className="h-[200px] sm:h-[240px] mt-6 -ml-2 sm:ml-0">
-                            <ResponsiveContainer width="100%" height="100%">
+                        <div className="h-[400px] sm:h-[240px] mt-6 ml-2 sm:ml-0">
+                            {/*  80 percent of remaing screen height */}
+                            <ResponsiveContainer width="100%" height="150%">
                                 <LineChart
                                     data={chartData}
                                     margin={{
                                         top: 5,
                                         right: 5,
-                                        left: -20,
+                                        left: 20,
                                         bottom: 5,
                                     }}
                                 >
@@ -171,6 +173,9 @@ export function DashboardView({ metrics, chartData, hasData }: Readonly<Dashboar
                                         tickLine={false}
                                         tick={{ fontSize: 10, fill: "#888" }}
                                         width={30}
+                                        domain={[0, 'dataMax + 1']}  // Set domain from 0 to max value + 1
+                                        allowDecimals={false}        // No decimal ticks
+                                        tickMargin={20}
                                     />
                                     <Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 10 }} />
                                     <Line

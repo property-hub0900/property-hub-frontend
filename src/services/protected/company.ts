@@ -194,7 +194,19 @@ export const companyService = {
     return apiClient.put(`companies/refund-points/${transactionId}`);
   },
 
-  getMetrics: async (): Promise<IResponse<MetricsData | any>> => {
-    return apiClient.get("companies/metrics");
+  getMetrics: async (period: string): Promise<IResponse<MetricsData | any>> => {
+    return apiClient.get(`companies/metrics?period=${period}`);
+  },
+
+  getPropertyInsights: async (page = 0, pageSize = 9999): Promise<IResponse<any>> => {
+    return apiClient.get(`companies/properties-insights?page=${page}&pageSize=${pageSize}`);
+  },
+
+  getAgentInsights: async (page = 0, pageSize = 9999): Promise<IResponse<any>> => {
+    return apiClient.get(`companies/agents-insights?page=${page}&pageSize=${pageSize}`);
+  },
+
+  getLeadsInsights: async (timeframe: string, page = 0, pageSize = 9999): Promise<IResponse<any>> => {
+    return apiClient.get(`companies/leads-insights?timeframe=${timeframe}&page=${page}&pageSize=${pageSize}`);
   },
 };
