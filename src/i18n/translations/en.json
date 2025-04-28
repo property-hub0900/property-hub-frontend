@@ -45,7 +45,9 @@
     "customerListing": "Customer Listing",
     "pointsDetails": "Points Details",
     "subscriptionDetails": "Subscription Details",
-    "paymentReceipt": "Payment Receipt"
+    "paymentReceipt": "Payment Receipt",
+    "dashboard": "Dashboard",
+    "inactiveCompanies": "Inactive Companies"
   },
   "button": {
     "next": "Next",

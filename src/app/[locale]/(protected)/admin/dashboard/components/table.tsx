@@ -1,0 +1,100 @@
+"use client";
+
+import { DataTable } from "@/components/dataTable/data-table";
+import type { SortingState } from "@tanstack/react-table";
+import { useMemo, useState } from "react";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useTranslations } from "next-intl";
+import { Columns } from "./columns";
+import { ICompanyAdmin } from "@/types/protected/admin";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import { sortTableData } from "@/utils/utils";
+
+export default function CompaniesDataTable({
+  data,
+}: {
+  data: ICompanyAdmin[];
+}) {
+  const t = useTranslations();
+  const [sorting, setSorting] = useState<SortingState>([]);
+
+  const [filters, setFilters] = useState<{
+    companyName: string;
+  }>({
+    companyName: "",
+  });
+
+  const filteredAndSortedData = useMemo(() => {
+    // First apply filters
+    const filteredItems = data.filter((item) => {
+      if (
+        filters?.companyName &&
+        !item.name.toLowerCase().includes(filters?.companyName.toLowerCase())
+      )
+        return false;
+
+      return true;
+    });
+
+    if (sorting.length > 0) {
+      const { id, desc } = sorting[0];
+      return sortTableData(filteredItems, {
+        field: id as keyof ICompanyAdmin,
+        direction: desc ? "desc" : "asc",
+      });
+    }
+
+    return filteredItems;
+  }, [filters, sorting, data]);
+
+  const handleSortingChange = (
+    updaterOrValue: SortingState | ((prev: SortingState) => SortingState)
+  ) => {
+    setSorting(updaterOrValue);
+  };
+
+  const handleChange = (name: string, value: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  return (
+    <>
+      <div className="bg-white rounded-md shadow mb-10">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-5">
+            <h4>{t("title.inactiveCompanies")}</h4>
+            <div className="flex gap-2">
+              <div className="relative">
+                <Input
+                  className="w-56"
+                  name="companyName"
+                  onChange={(e) => handleChange("companyName", e.target.value)}
+                  placeholder={t("form.companyName.label")}
+                />
+                <Search className="size-[20px] absolute right-2 top-1/2 -translate-y-1/2 z-10 text-muted-foreground/50" />
+              </div>
+            </div>
+          </div>
+
+          <DataTable
+            columns={Columns}
+            data={filteredAndSortedData || []}
+            sorting={sorting}
+            onSortingChange={handleSortingChange}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
