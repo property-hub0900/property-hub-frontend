@@ -194,8 +194,8 @@ export const companyService = {
     return apiClient.put(`companies/refund-points/${transactionId}`);
   },
 
-  getMetrics: async (period: string): Promise<IResponse<MetricsData | any>> => {
-    return apiClient.get(`companies/metrics?period=${period}`);
+  getMetrics: async (timeframe: string): Promise<IResponse<MetricsData | any>> => {
+    return apiClient.get(`companies/metrics?timeframe=${timeframe}`);
   },
 
   getPropertyInsights: async (page = 0, pageSize = 9999): Promise<IResponse<any>> => {
@@ -208,5 +208,9 @@ export const companyService = {
 
   getLeadsInsights: async (timeframe: string, page = 0, pageSize = 9999): Promise<IResponse<any>> => {
     return apiClient.get(`companies/leads-insights?timeframe=${timeframe}&page=${page}&pageSize=${pageSize}`);
+  },
+
+  getCallsData: async (date: string): Promise<IResponse<any>> => {
+    return apiClient.get(`companies/calls-data?date=${date}`);
   },
 };

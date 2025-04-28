@@ -59,25 +59,25 @@ export function PropertiesInsightsView({ onBack }: { onBack: () => void }) {
             accessorKey: "totalLeads",
             header: "Total Leads",
             enableSorting: true,
-            cell: ({ row }) => <div className="text-right">{row.original.totalLeads}</div>,
+            cell: ({ row }) => <div className="text-center">{row.original.totalLeads}</div>,
         },
         {
             accessorKey: "whatsappLeads",
             header: "WhatsApp Leads",
             enableSorting: true,
-            cell: ({ row }) => <div className="text-right">{row.original.whatsappLeads}</div>,
+            cell: ({ row }) => <div className="text-center">{row.original.whatsappLeads}</div>,
         },
         {
             accessorKey: "emailLeads",
             header: "Email Leads",
             enableSorting: true,
-            cell: ({ row }) => <div className="text-right">{row.original.emailLeads}</div>,
+            cell: ({ row }) => <div className="text-center">{row.original.emailLeads}</div>,
         },
         {
             accessorKey: "callLeads",
             header: "Call Leads",
             enableSorting: true,
-            cell: ({ row }) => <div className="text-right">{row.original.callLeads}</div>,
+            cell: ({ row }) => <div className="text-center">{row.original.callLeads}</div>,
         },
     ]
 

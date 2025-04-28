@@ -1,5 +1,7 @@
 {
   "title": {
+    "agentsInsights": "Agents Insights",
+    "agentDetails": "Agent Details",
     "companySettings": "Company Settings",
     "personalDetails": "Personal Details",
     "companyDetails": "Company Details",
@@ -140,6 +142,42 @@
     "of": "of"
   },
   "form": {
+    "agent": {
+      "label": "Agent"
+    },
+    "listings": {
+      "label": "Listings"
+    },
+    "lastPosted": {
+      "label": "Last Posted"
+    },
+    "avgPostingMonthly": {
+      "label": "Avg. Posting Monthly"
+    },
+    "totalLeads": {
+      "label": "Total Leads"
+    },
+    "whatsappLeads": {
+      "label": "WhatsApp Leads"
+    },
+    "emailLeads": {
+      "label": "Email Leads"
+    },
+    "callLeads": {
+      "label": "Call Leads"
+    },
+    "weeklyPerformance": {
+      "label": "Weekly Performance"
+    },
+    "searchAgent": {
+      "label": "Search Agent"
+    },
+    "selectAgent": {
+      "label": "Select Agent"
+    },
+    "allAgents": {
+      "label": "All Agents"
+    },
     "required": "This field is required",
     "invalidNumber": "Please enter a valid number",
     "fullName": {

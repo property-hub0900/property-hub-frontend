@@ -70,7 +70,7 @@ export default function DashboardPage() {
 
             {activeView === "agents" && <AgentsInsightsView onBack={() => setActiveView("dashboard")} />}
             {activeView === "properties" && <PropertiesInsightsView onBack={() => setActiveView("dashboard")} />}
-            {activeView === "leads" && <LeadsInsightsView onBack={() => setActiveView("dashboard")} />}
+            {activeView === "leads" && <LeadsInsightsView onBack={() => setActiveView("dashboard")} setActiveView={setActiveView} />}
         </div>
     )
 }
