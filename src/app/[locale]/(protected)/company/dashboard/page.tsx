@@ -1,9 +1,5 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
-import { ChevronDown } from 'lucide-react'
-import { useState } from "react"
-
 import { AgentsInsightsView } from "@/components/dashboard/agents-insights-view"
 import { DashboardView } from "@/components/dashboard/dashboard-view"
 import { LeadsInsightsView } from "@/components/dashboard/leads-insights-view"
@@ -13,6 +9,9 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { companyService } from "@/services/protected/company"
 import { MetricsData } from "@/types/common"
+import { useQuery } from "@tanstack/react-query"
+import { ChevronDown } from 'lucide-react'
+import { useState } from "react"
 
 // Define types for our metrics data
 
@@ -109,7 +108,7 @@ export default function DashboardPage() {
 
                 {activeView === "agents" && <AgentsInsightsView onBack={() => setActiveView("dashboard")} />}
                 {activeView === "properties" && <PropertiesInsightsView onBack={() => setActiveView("dashboard")} />}
-                {activeView === "leads" && <LeadsInsightsView onBack={() => setActiveView("dashboard")} />}
+                {activeView === "leads" && <LeadsInsightsView onBack={() => setActiveView("dashboard")} setActiveView={setActiveView} />}
             </div>
         </>
 

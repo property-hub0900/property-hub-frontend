@@ -8,12 +8,12 @@ import { StaffTable } from "@/components/staffTable"
 import { Button } from "@/components/ui/button"
 import { PERMISSIONS } from "@/constants/rbac"
 import { useRBAC } from "@/lib/hooks/useRBAC"
-import { navigationEvents, NAVIGATION_EVENTS } from "@/lib/navigation-events"
+import { NAVIGATION_EVENTS, navigationEvents } from "@/lib/navigation-events"
 import type { staffFormSchema } from "@/schema/protected/company"
 import { companyService, type StaffMember } from "@/services/protected/company"
 import { getErrorMessage } from "@/utils/utils"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { PlusCircle } from "lucide-react"
+import { ArrowLeft, PlusCircle } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
@@ -244,8 +244,19 @@ export default function AccessManagementPage() {
       <Loader isLoading={isLoading}></Loader>
 
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">{t("title.accessManagement") || "Access Management"}</h1>
-        {hasPermission(PERMISSIONS.CREATE_USER) && <Button
+
+
+
+        <h1 className="text-2xl font-bold">
+          {(showAddForm || showEditForm) && <Button variant="ghost" className="p-0 mr-2" onClick={() => {
+            setShowAddForm(false)
+            setShowEditForm(false)
+          }}>
+            <ArrowLeft className="h-4 w-4" />
+          </Button>}
+          {t("title.accessManagement") || "Access Management"}</h1>
+
+        {(showAddForm || showEditForm) || hasPermission(PERMISSIONS.CREATE_USER) && <Button
           className="bg-primary text-white hover:bg-primary/90"
           onClick={() => {
             // Reset all form states first
@@ -259,13 +270,9 @@ export default function AccessManagementPage() {
           }}
           disabled={isSubmitting}
         >
-          {showAddForm || showEditForm ? (
-            t("button.cancel") || "Cancel"
-          ) : (
-            <>
-              <PlusCircle className="mr-2 h-4 w-4" /> {t("button.addNewAgent") || "Add New Agent"}
-            </>
-          )}
+          <>
+            <PlusCircle className="mr-2 h-4 w-4" /> {t("button.addNewAgent") || "Add New Agent"}
+          </>
         </Button>}
       </div>
 

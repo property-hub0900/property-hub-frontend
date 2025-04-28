@@ -301,6 +301,7 @@ export function EditUserForm({
                     <FormMessage />
                   </FormItem>
                 )}
+                disabled
               />
 
               <FormField
