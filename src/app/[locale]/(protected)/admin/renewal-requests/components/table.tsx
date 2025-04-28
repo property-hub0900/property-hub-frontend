@@ -7,13 +7,13 @@ import type { SortingState } from "@tanstack/react-table";
 import { Columns } from "./columns";
 
 import { useTranslations } from "next-intl";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 import { IAdminSubscription } from "@/types/protected/admin";
 import { sortTableData } from "@/utils/utils";
 import { Input } from "@/components/ui/input";
@@ -102,7 +102,7 @@ export default function RenewalRequestsTable({
                 />
                 <Search className="size-[20px] absolute right-2 top-1/2 -translate-y-1/2 z-10 text-muted-foreground/50" />
               </div>
-              <div className="relative">
+              {/* <div className="relative">
                 <Select
                   onValueChange={(val) => handleChange("status", val)}
                   defaultValue={filters.status}
@@ -122,7 +122,7 @@ export default function RenewalRequestsTable({
                     </SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
             </div>
           </div>
 

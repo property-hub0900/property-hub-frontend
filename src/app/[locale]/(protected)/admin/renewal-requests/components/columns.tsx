@@ -21,8 +21,13 @@ export const Columns: ColumnDef<IAdminSubscription>[] = [
     enableSorting: true,
   },
   {
+    accessorKey: "company.companyPhone",
+    header: "Phone Number",
+    enableSorting: true,
+  },
+  {
     accessorKey: "points",
-    header: "Points",
+    header: "Renewal Points",
     enableSorting: true,
   },
   {
@@ -35,28 +40,28 @@ export const Columns: ColumnDef<IAdminSubscription>[] = [
     },
   },
 
-  {
-    accessorKey: "status",
-    header: "Status",
-    enableSorting: false,
-    cell: ({ row }) => {
-      const { startDate, endDate } = row.original;
-      const isActive =
-        new Date(startDate) <= new Date() && new Date(endDate) >= new Date();
+  // {
+  //   accessorKey: "status",
+  //   header: "Status",
+  //   enableSorting: false,
+  //   cell: ({ row }) => {
+  //     const { startDate, endDate } = row.original;
+  //     const isActive =
+  //       new Date(startDate) <= new Date() && new Date(endDate) >= new Date();
 
-      const isActiveStatus = isActive ? "active" : "expired";
+  //     const isActiveStatus = isActive ? "active" : "expired";
 
-      return (
-        <>
-          <StatusIndicator
-            status={isActiveStatus}
-            label={isActiveStatus}
-            variant={"subtle"}
-          />
-        </>
-      );
-    },
-  },
+  //     return (
+  //       <>
+  //         <StatusIndicator
+  //           status={isActiveStatus}
+  //           label={isActiveStatus}
+  //           variant={"subtle"}
+  //         />
+  //       </>
+  //     );
+  //   },
+  // },
   {
     accessorKey: "subscriptionId",
     header: "Action",
@@ -70,25 +75,22 @@ const ActionCell = ({ data }: { data: IAdminSubscription }) => {
   const [isRenewSubscriptionDialogOpen, setIsRenewSubscriptionDialogOpen] =
     useState(false);
 
-  const { status, startDate, endDate, subscriptionId } = data;
-
-  const isActive =
-    new Date(startDate) <= new Date() && new Date(endDate) >= new Date();
+  const { subscriptionId, paymentImage } = data;
 
   return (
     <>
-      {!isActive && (
-        <Button
-          size={"sm"}
-          className="h-10 mt-5"
-          type="button"
-          onClick={() => setIsRenewSubscriptionDialogOpen(true)}
-        >
-          {t("button.renewSubscription")}
-        </Button>
-      )}
+      <Button
+        size={"sm"}
+        className="h-10 mt-5"
+        type="button"
+        onClick={() => setIsRenewSubscriptionDialogOpen(true)}
+      >
+        {t("button.renewSubscription")}
+      </Button>
+
       <RenewSubscriptionDialogue
         subscriptionId={subscriptionId}
+        paymentImage={paymentImage}
         isRenewSubscriptionDialogOpen={isRenewSubscriptionDialogOpen}
         setIsRenewSubscriptionDialogOpen={setIsRenewSubscriptionDialogOpen}
       />

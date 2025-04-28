@@ -11,7 +11,7 @@ export default function Page() {
 
   const { data: dataCustomers, isLoading } = useQuery({
     queryKey: ["adminSubscriptions"],
-    queryFn: () => adminServices.getAdminSubscriptions(),
+    queryFn: () => adminServices.getAdminSubscriptionsRenewalRequestsPending(),
   });
 
   return (

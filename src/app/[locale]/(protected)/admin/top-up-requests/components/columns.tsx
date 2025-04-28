@@ -11,17 +11,17 @@ import { useTranslations } from "next-intl";
 
 export const Columns: ColumnDef<IAdminPoints>[] = [
   {
-    accessorKey: "companyName",
+    accessorKey: "company.companyName",
     header: "Company Name",
     enableSorting: true,
   },
   {
-    accessorKey: "email",
+    accessorKey: "company.companyEmail",
     header: "Email",
     enableSorting: true,
   },
   {
-    accessorKey: "phoneNumber",
+    accessorKey: "company.companyPhone",
     header: "Phone Number",
     enableSorting: true,
   },
