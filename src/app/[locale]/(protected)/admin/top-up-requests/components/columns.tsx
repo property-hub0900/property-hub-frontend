@@ -16,12 +16,12 @@ export const Columns: ColumnDef<IAdminPoints>[] = [
     enableSorting: true,
   },
   {
-    accessorKey: "company.companyEmail",
+    accessorKey: "email",
     header: "Email",
     enableSorting: true,
   },
   {
-    accessorKey: "company.companyPhone",
+    accessorKey: "phoneNumber",
     header: "Phone Number",
     enableSorting: true,
   },
