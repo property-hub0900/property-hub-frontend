@@ -43,10 +43,15 @@ export const adminServices = {
   getAdminProperties: async (): Promise<IListResponse<IAdminProperty>> => {
     return apiClient.get(`/admin/properties`);
   },
-  getAdminSubscriptions: async (): Promise<
+  getAdminSubscriptionsPlansApproved: async (): Promise<
     IListResponse<IAdminSubscription>
   > => {
-    return apiClient.get(`/admin/subscriptions`);
+    return apiClient.get(`/admin/subscriptions?status=approved`);
+  },
+  getAdminSubscriptionsRenewalRequestsPending: async (): Promise<
+    IListResponse<IAdminSubscription>
+  > => {
+    return apiClient.get(`/admin/subscriptions?status=pending`);
   },
   getAdminCompanyList: async (): Promise<IListResponse<IOption>> => {
     return apiClient.get(`/admin/companies/select?page=0&pageSize=999`);

@@ -23,6 +23,7 @@ import { toast } from "sonner";
 
 interface IAddPointsDialogueProps {
   subscriptionId: number;
+  paymentImage: string | null;
   isRenewSubscriptionDialogOpen: boolean;
   setIsRenewSubscriptionDialogOpen: React.Dispatch<
     React.SetStateAction<boolean>
@@ -31,6 +32,7 @@ interface IAddPointsDialogueProps {
 
 export const RenewSubscriptionDialogue = ({
   subscriptionId,
+  paymentImage,
   isRenewSubscriptionDialogOpen,
   setIsRenewSubscriptionDialogOpen,
 }: IAddPointsDialogueProps) => {
@@ -71,15 +73,17 @@ export const RenewSubscriptionDialogue = ({
           </DialogHeader>
           <Separator />
           <div className="space-y-5">
-            <div>
-              <Image
-                className="w-full"
-                width={400}
-                height={600}
-                src={`/receiptImg.jpg`}
-                alt="#d"
-              ></Image>
-            </div>
+            {paymentImage && (
+              <div>
+                <Image
+                  className="w-full"
+                  width={400}
+                  height={600}
+                  src={`${paymentImage}`}
+                  alt="#"
+                ></Image>
+              </div>
+            )}
             <div className="flex justify-end gap-2">
               <Button
                 type="button"
