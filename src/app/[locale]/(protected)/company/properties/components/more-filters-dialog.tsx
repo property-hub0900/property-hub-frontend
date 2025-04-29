@@ -129,7 +129,10 @@ export const MoreFiltersDialog = ({
                   name="companyName"
                   render={({ field }) => (
                     <FormItem>
-                      <Input {...field} />
+                      <Input
+                        {...field}
+                        placeholder={t("form.companyName.label")}
+                      />
                       <FormMessage />
                     </FormItem>
                   )}
@@ -184,7 +187,9 @@ export const MoreFiltersDialog = ({
                           <SelectValue placeholder={"publisher"} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value={"publisher"}>Publisher</SelectItem>
+                          <SelectItem value={"publisher"}>
+                            {t("form.publisher.label")}
+                          </SelectItem>
                           <>
                             {mappedStaffList.map((item) => (
                               <SelectItem
@@ -213,14 +218,20 @@ export const MoreFiltersDialog = ({
                       defaultValue={field.value}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder={t("form.featured.label")} />
+                        <SelectValue
+                          placeholder={t("form.featuredStatus.label")}
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value={"featuredStatus"}>
-                          Featured Status
+                          {t("form.featuredStatus.label")}
                         </SelectItem>
-                        <SelectItem value={"featured"}>Featured</SelectItem>
-                        <SelectItem value={"Standard"}>Standard</SelectItem>
+                        <SelectItem value={"featured"}>
+                          {t("form.featuredStatus.options.featured")}
+                        </SelectItem>
+                        <SelectItem value={"Standard"}>
+                          {t("form.featuredStatus.options.standard")}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -300,7 +311,7 @@ export const MoreFiltersDialog = ({
                 )}
               />
 
-              <div className="col-span-2 flex gap-2 justify-end">
+              <div className="md:col-span-2 flex gap-2 justify-end">
                 <DialogClose asChild>
                   <Button
                     onClick={handleReset}

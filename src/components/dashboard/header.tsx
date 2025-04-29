@@ -1,13 +1,13 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
-import { Bell, Search } from "lucide-react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Search } from "lucide-react";
 import { UserMenu } from "../layout/userMenu";
+import NotificationDropdown from "./notifications";
+import { useRBAC } from "@/lib/hooks/useRBAC";
+import { USER_ROLES } from "@/constants/rbac";
 
 export function DashboardHeader() {
-  const { toggleSidebar } = useSidebar();
+  const { currentRole } = useRBAC();
 
   return (
     <header className="flex h-16 items-center justify-between border-b p-12 md:px-6 bg-white">
@@ -20,10 +20,8 @@ export function DashboardHeader() {
         </Button>
       </div>
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary" />
-        </Button>
+        {currentRole === USER_ROLES.CUSTOMER && <NotificationDropdown />}
+
         <UserMenu />
       </div>
     </header>

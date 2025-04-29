@@ -20,12 +20,12 @@ export const Stats = ({ data }: { data: IGetAdminStatsReport }) => {
 
         <StatCard
           title="Total Customers"
-          value={data.pointsCount}
+          value={data.customerCount}
           icon={<Users2 className="w-full" />}
         />
         <StatCard
           title="Total Subscriptions"
-          value={data.leadCount}
+          value={data.subscriptionCount}
           icon={<Package className="w-full" />}
         />
       </div>

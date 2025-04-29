@@ -9,6 +9,7 @@ import {
   IAdminSubscription,
   IAdminPoints,
   IGetAdminStatsReport,
+  IGetAdminChartReports,
 } from "@/types/protected/admin";
 import { ICommonMessageResponse, IListResponse, IOption } from "@/types/common";
 
@@ -79,7 +80,7 @@ export const adminServices = {
   },
   getAdminCompaniesReport: async (
     period: string
-  ): Promise<IListResponse<IOption>> => {
+  ): Promise<IListResponse<IGetAdminChartReports>> => {
     return apiClient.get(
       `/admin/companies/company-report?page=0&pageSize=9999&period=${period}`
     );
@@ -87,7 +88,7 @@ export const adminServices = {
 
   getAdminPropertiesReport: async (
     period: string
-  ): Promise<IListResponse<IOption>> => {
+  ): Promise<IListResponse<IGetAdminChartReports>> => {
     return apiClient.get(
       `/admin/companies/property-report?page=0&pageSize=9999&period=${period}`
     );
