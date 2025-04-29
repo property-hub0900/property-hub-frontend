@@ -1,22 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Bell, Filter, Check, Clock, Search, Trash2 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Bell, Check } from "lucide-react";
+import { JSX, useEffect, useState } from "react";
 
 import {
   Pagination,
@@ -28,106 +16,14 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { customerService } from "@/services/protected/customer";
-import { useQuery } from "@tanstack/react-query";
 import { formatDateAndTime } from "@/utils/utils";
-
-// Sample notification data with categories
-const sampleNotifications = [
-  {
-    id: 1,
-    title: "New Message",
-    description: "You have received a new message from John Doe",
-    timestamp: "2025-04-29T10:15:00",
-    formattedTime: "5 min ago",
-    category: "message",
-    read: false,
-  },
-  {
-    id: 2,
-    title: "System Update",
-    description: "A new system update is available for installation",
-    timestamp: "2025-04-29T08:30:00",
-    formattedTime: "2 hours ago",
-    category: "system",
-    read: false,
-  },
-  {
-    id: 3,
-    title: "Task Completed",
-    description: 'Task "Update user interface" has been completed',
-    timestamp: "2025-04-28T15:45:00",
-    formattedTime: "Yesterday",
-    category: "task",
-    read: true,
-  },
-  {
-    id: 4,
-    title: "Meeting Reminder",
-    description: "Your meeting with the design team starts in 30 minutes",
-    timestamp: "2025-04-28T10:00:00",
-    formattedTime: "Yesterday",
-    category: "reminder",
-    read: true,
-  },
-  {
-    id: 5,
-    title: "Payment Received",
-    description: "You have received a payment of $500 from Client XYZ",
-    timestamp: "2025-04-26T09:15:00",
-    formattedTime: "3 days ago",
-    category: "payment",
-    read: true,
-  },
-  {
-    id: 6,
-    title: "New Comment",
-    description: "Sarah left a comment on your recent post",
-    timestamp: "2025-04-25T14:20:00",
-    formattedTime: "4 days ago",
-    category: "message",
-    read: true,
-  },
-  {
-    id: 7,
-    title: "Security Alert",
-    description: "Unusual login detected from a new device",
-    timestamp: "2025-04-25T08:10:00",
-    formattedTime: "4 days ago",
-    category: "system",
-    read: false,
-  },
-  {
-    id: 8,
-    title: "Project Deadline Approaching",
-    description: 'Project "Dashboard Redesign" is due in 2 days',
-    timestamp: "2025-04-24T11:30:00",
-    formattedTime: "5 days ago",
-    category: "reminder",
-    read: true,
-  },
-  {
-    id: 9,
-    title: "New Feature Available",
-    description: "The new analytics dashboard is now available",
-    timestamp: "2025-04-23T16:45:00",
-    formattedTime: "6 days ago",
-    category: "system",
-    read: true,
-  },
-  {
-    id: 10,
-    title: "Welcome to the Platform",
-    description:
-      "Thank you for joining our platform. Get started with these tips.",
-    timestamp: "2025-04-22T09:00:00",
-    formattedTime: "1 week ago",
-    category: "system",
-    read: true,
-  },
-];
+import { useQuery } from "@tanstack/react-query";
 
 export default function page() {
   const [unreadCount, setUnreadCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 5;
 
   const { data: notificationData } = useQuery({
     queryKey: ["notificationAll"],
@@ -136,48 +32,147 @@ export default function page() {
     //refetchIntervalInBackground: false,
   });
 
+  // Calculate unread count whenever notification data changes
   useEffect(() => {
     if (notificationData) {
-      const unreadCount = notificationData.results?.filter(
-        (notification) => !notification.notificationRecipients[0].readStatus
-      ).length;
-      setUnreadCount(unreadCount);
+      const count =
+        notificationData.results?.filter(
+          (notification) => !notification.notificationRecipients[0].readStatus
+        ).length || 0;
+
+      setUnreadCount(count);
     }
   }, [notificationData]);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  // Calculate pagination details
+  const totalItems = notificationData?.results?.length || 0;
+  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
 
-  const itemsPerPage = 5;
+  // Ensure current page is valid
+  useEffect(() => {
+    if (totalPages > 0 && currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [totalPages, currentPage]);
 
-  // Pagination
-  const totalPages = Math.ceil(
-    notificationData?.results.length ?? 0 / itemsPerPage
-  );
-  const currentNotifications = notificationData?.results.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  // Get current page items
+  const getCurrentPageItems = () => {
+    if (!notificationData?.results) return [];
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+    return notificationData.results.slice(startIndex, endIndex);
+  };
+
+  const currentNotifications = getCurrentPageItems();
 
   // Mark notification as read
   const markAsRead = (id) => {
-    console.log("markAsRead");
+    console.log("Marking notification as read:", id);
+    // Implement the actual API call here
   };
 
   // Mark all as read
   const markAllAsRead = () => {
-    console.log("markAllAsRead");
+    console.log("Marking all notifications as read");
   };
 
-  // Count unread notifications
-  // const unreadCount = notifications.filter(
-  //   (notification) => !notification.read
-  // ).length;
+  // Paginate to a specific page
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  // Create pagination items
+  const renderPaginationItems = (): JSX.Element[] => {
+    const items: JSX.Element[] = [];
+
+    // First page
+    items.push(
+      <PaginationItem key="first">
+        <PaginationLink
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            goToPage(1);
+          }}
+          isActive={currentPage === 1}
+        >
+          1
+        </PaginationLink>
+      </PaginationItem>
+    );
+
+    // Ellipsis after first page
+    if (currentPage > 3) {
+      items.push(
+        <PaginationItem key="ellipsis-1">
+          <PaginationEllipsis />
+        </PaginationItem>
+      );
+    }
+
+    // Pages around current
+    for (
+      let i = Math.max(2, currentPage - 1);
+      i <= Math.min(totalPages - 1, currentPage + 1);
+      i++
+    ) {
+      if (i === 1 || i === totalPages) continue; // Skip first and last pages as they're handled separately
+
+      items.push(
+        <PaginationItem key={i}>
+          <PaginationLink
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              goToPage(i);
+            }}
+            isActive={currentPage === i}
+          >
+            {i}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    // Ellipsis before last page
+    if (currentPage < totalPages - 2) {
+      items.push(
+        <PaginationItem key="ellipsis-2">
+          <PaginationEllipsis />
+        </PaginationItem>
+      );
+    }
+
+    // Last page (if not the first page)
+    if (totalPages > 1) {
+      items.push(
+        <PaginationItem key="last">
+          <PaginationLink
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              goToPage(totalPages);
+            }}
+            isActive={currentPage === totalPages}
+          >
+            {totalPages}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    return items;
+  };
 
   return (
     <div className="">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h4 className="">Notifications</h4>
+          <h4 className="text-xl font-bold">Notifications</h4>
           <p className="text-muted-foreground">
             {unreadCount > 0
               ? `You have ${unreadCount} unread notifications`
@@ -186,15 +181,17 @@ export default function page() {
         </div>
 
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={markAllAsRead}
-            className="flex items-center gap-1"
-          >
-            <Check className="h-4 w-4" />
-            Mark all as read
-          </Button>
+          {unreadCount > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={markAllAsRead}
+              className="flex items-center gap-1"
+            >
+              <Check className="h-4 w-4" />
+              Mark all as read
+            </Button>
+          )}
         </div>
       </div>
 
@@ -207,13 +204,12 @@ export default function page() {
           </div>
         </CardHeader>
         <Separator />
-        {currentNotifications && currentNotifications?.length > 0 ? (
+
+        {currentNotifications && currentNotifications.length > 0 ? (
           <>
-            {currentNotifications.map((notification, index) => (
+            {currentNotifications.map((notification) => (
               <div key={notification.notificationId}>
-                {/* {index > 0 && <Separator />} */}
                 <div
-                  key={notification.notificationId}
                   className={`px-4 py-4 hover:bg-muted-foreground/5 cursor-pointer border-b ${
                     !notification.notificationRecipients[0].readStatus
                       ? "bg-primary/10"
@@ -255,7 +251,7 @@ export default function page() {
           </div>
         )}
 
-        {notificationData && notificationData.results.length > itemsPerPage && (
+        {totalItems > itemsPerPage && (
           <CardContent className="pt-2 pb-4">
             <Pagination>
               <PaginationContent>
@@ -264,7 +260,7 @@ export default function page() {
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      if (currentPage > 1) setCurrentPage(currentPage - 1);
+                      goToPage(currentPage - 1);
                     }}
                     className={
                       currentPage === 1 ? "pointer-events-none opacity-50" : ""
@@ -272,47 +268,14 @@ export default function page() {
                   />
                 </PaginationItem>
 
-                {[...Array(totalPages)].map((_, i) => {
-                  // Show first page, last page, and pages around current page
-                  if (
-                    i === 0 ||
-                    i === totalPages - 1 ||
-                    (i >= currentPage - 2 && i <= currentPage + 1)
-                  ) {
-                    return (
-                      <PaginationItem key={i}>
-                        <PaginationLink
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setCurrentPage(i + 1);
-                          }}
-                          isActive={currentPage === i + 1}
-                        >
-                          {i + 1}
-                        </PaginationLink>
-                      </PaginationItem>
-                    );
-                  } else if (
-                    (i === 1 && currentPage > 3) ||
-                    (i === totalPages - 2 && currentPage < totalPages - 2)
-                  ) {
-                    return (
-                      <PaginationItem key={i}>
-                        <PaginationEllipsis />
-                      </PaginationItem>
-                    );
-                  }
-                  return null;
-                })}
+                {renderPaginationItems()}
 
                 <PaginationItem>
                   <PaginationNext
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      if (currentPage < totalPages)
-                        setCurrentPage(currentPage + 1);
+                      goToPage(currentPage + 1);
                     }}
                     className={
                       currentPage === totalPages
