@@ -62,11 +62,6 @@ export default function SubscriptionPlansPage() {
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">{t("subscription")}</h1>
                     <div className="sm:hidden">
                         <Sheet>
-                            <SheetTrigger asChild>
-                                <Button variant="outline" size="icon">
-                                    <Menu className="h-5 w-5" />
-                                </Button>
-                            </SheetTrigger>
                             <SheetContent>
                                 <div className="flex flex-col gap-4 mt-8">
                                     <Button onClick={() => setShowRenewalForm(true)} className="w-full justify-start">
