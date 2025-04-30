@@ -44,3 +44,18 @@ export interface IChangePassword {
   currentPassword: string;
   password: string;
 }
+
+interface INotificationRecipient {
+  readStatus: boolean;
+}
+
+export interface INotification {
+  notificationId: number;
+  titleEn: string;
+  titleAr: string;
+  bodyEn: string;
+  bodyAr: string;
+  imgUrl: string | null;
+  createdAt: string;
+  notificationRecipients: INotificationRecipient[];
+}

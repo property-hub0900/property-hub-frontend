@@ -79,14 +79,14 @@ export default function CompaniesDataTable({
 
   return (
     <>
-      <div className="bg-white rounded-md shadow mb-10">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-5">
+      <div className="bg-white rounded-md shadow">
+        <div className="p-4 md:p-6">
+          <div className="flex gap-3 flex-col mb-5 md:flex-row md:justify-between md:items-center">
             <h4>{t("sidebar.companiesData")}</h4>
-            <div className="flex gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               <div className="relative">
                 <Input
-                  className="w-56"
+                  className="md:w-56"
                   name="companyName"
                   onChange={(e) => handleChange("companyName", e.target.value)}
                   placeholder={t("form.companyName.label")}
@@ -98,7 +98,7 @@ export default function CompaniesDataTable({
                   onValueChange={(val) => handleChange("status", val)}
                   defaultValue={filters.status}
                 >
-                  <SelectTrigger className="w-48">
+                  <SelectTrigger className="md:w-48">
                     <SelectValue placeholder={t("form.status.label")} />
                   </SelectTrigger>
                   <SelectContent>

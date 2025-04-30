@@ -1,8 +1,9 @@
 import apiClient from "@/lib/api-client";
-import { ICommonMessageResponse } from "@/types/common";
+import { ICommonMessageResponse, IListResponse } from "@/types/common";
 import {
   IChangePassword,
   ICustomerGetMe,
+  INotification,
   IUpdateCustomerProfile,
 } from "@/types/protected/customer";
 
@@ -22,5 +23,18 @@ export const customerService = {
     payloads: IChangePassword
   ): Promise<ICommonMessageResponse> => {
     return apiClient.post(`/userAuth/change-password`, payloads);
+  },
+  notification: async (
+    pageSize: number = 10000
+  ): Promise<IListResponse<INotification>> => {
+    return apiClient.get(`/customers/notification?page=0&pageSize=${pageSize}`);
+  },
+  notificationMarkAsRead: async (
+    notificationId: number
+  ): Promise<ICommonMessageResponse> => {
+    return apiClient.put(`/customers/read-notification/${notificationId}`);
+  },
+  notificationMarkAllAsRead: async (): Promise<ICommonMessageResponse> => {
+    return apiClient.put(`/customers/notifications-read`);
   },
 };
