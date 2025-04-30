@@ -9,6 +9,10 @@ import moment from "moment";
 import { PERMISSIONS } from "@/constants/rbac";
 import { useRBAC } from "@/lib/hooks/useRBAC";
 import { StatusIndicator } from "./ui/status-indicator";
+import { useMemo, useState } from "react";
+import type { SortingState } from "@tanstack/react-table";
+import { sortTableData } from "@/utils/utils";
+
 export function StaffTable({
   staff,
   onEdit,
@@ -19,6 +23,8 @@ export function StaffTable({
   onDelete: (staff: StaffMember) => void;
 }) {
   const { hasPermission } = useRBAC();
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   let columns = [
     {
       accessorKey: "fullName",
@@ -28,6 +34,7 @@ export function StaffTable({
         const lastName = row.original.lastName || "";
         return <span>{`${firstName} ${lastName}`}</span>;
       },
+      enableSorting: true,
     },
     {
       accessorKey: "role",
@@ -37,6 +44,7 @@ export function StaffTable({
           {row.original.role === "manager" ? "Admin" : row.original.role}
         </span>
       ),
+      enableSorting: true,
     },
     {
       accessorKey: "joinedDate",
@@ -45,6 +53,7 @@ export function StaffTable({
         const date = row.original.createdAt;
         return date ? moment(date).format("YYYY-MM-DD") : "N/A";
       },
+      enableSorting: true,
     },
     {
       accessorKey: "status",
@@ -59,6 +68,7 @@ export function StaffTable({
           />
         );
       },
+      enableSorting: false,
     },
     {
       id: "actions",
@@ -87,6 +97,7 @@ export function StaffTable({
           )}
         </div>
       ),
+      enableSorting: false,
     },
   ];
 
@@ -94,8 +105,53 @@ export function StaffTable({
     !hasPermission(PERMISSIONS.EDIT_USER) &&
     !hasPermission(PERMISSIONS.DELETE_USER)
   ) {
-    // remove the actions column
     columns = columns.filter((column) => column.id !== "actions");
   }
-  return <DataTable columns={columns} data={staff} />;
+
+  // Preprocess data to include computed fields for sorting
+  const sortableData = useMemo(() => {
+    return staff.map((item) => ({
+      ...item,
+      fullName: `${item.firstName || ""} ${item.lastName || ""}`.trim(), // Computed fullName
+      sortableRole: item.role === "manager" ? "admin" : item.role, // Map manager to admin
+      joinedDate: item.createdAt, // Alias for createdAt
+      status: item.active, // Alias for active
+    }));
+  }, [staff]);
+
+  // Apply sorting to the data
+  const sortedData = useMemo(() => {
+    if (sorting.length > 0) {
+      const { id, desc } = sorting[0];
+      // Map column accessorKey to the corresponding field in sortableData
+      const fieldMap: { [key: string]: keyof typeof sortableData[0] } = {
+        fullName: "fullName",
+        role: "sortableRole",
+        joinedDate: "joinedDate",
+        status: "status",
+      };
+      const sortField = fieldMap[id] || id;
+      return sortTableData(sortableData, {
+        field: sortField,
+        direction: desc ? "desc" : "asc",
+      });
+    }
+    return sortableData;
+  }, [sortableData, sorting]);
+
+  // Handle sorting state changes
+  const handleSortingChange = (
+    updaterOrValue: SortingState | ((prev: SortingState) => SortingState)
+  ) => {
+    setSorting(updaterOrValue);
+  };
+
+  return (
+    <DataTable
+      columns={columns}
+      data={sortedData}
+      sorting={sorting}
+      onSortingChange={handleSortingChange}
+    />
+  );
 }

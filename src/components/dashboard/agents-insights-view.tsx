@@ -1,90 +1,102 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { DataTable } from "../dataTable/data-table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft } from "lucide-react"
-import { companyService } from "@/services/protected/company"
-import { useQuery } from "@tanstack/react-query"
-import { Loader } from "../loader"
-import type { ColumnDef } from "@tanstack/react-table"
+import { useState, useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import { DataTable } from "../dataTable/data-table";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { ArrowLeft, Search } from "lucide-react";
+import { companyService } from "@/services/protected/company";
+import { useQuery } from "@tanstack/react-query";
+import { Loader } from "../loader";
+import type { ColumnDef, SortingState } from "@tanstack/react-table";
+import { Input } from "@/components/ui/input";
+import { useTranslations } from "next-intl";
+import { sortTableData } from "@/utils/utils";
 
 type AgentInsight = {
-    id: number
-    name: string
-    listings: number
-    lastPosted: string
-    avgPostingMonthly: number
-    totalLeads: number
-    whatsappLeads: number
-    emailLeads: number
-    callLeads: number
-    weeklyPerformance: number
-}
+    id: number;
+    name: string;
+    listings: number;
+    lastPosted: string;
+    avgPostingMonthly: number;
+    totalLeads: number;
+    whatsappLeads: number;
+    emailLeads: number;
+    callLeads: number;
+    weeklyPerformance: number;
+};
 
 export function AgentsInsightsView({ onBack }: { onBack: () => void }) {
-    const [selectedAgent, setSelectedAgent] = useState("all")
-    const [sorting, setSorting] = useState([])
+    const t = useTranslations();
+    const [sorting, setSorting] = useState<SortingState>([]);
+    const [filters, setFilters] = useState<{
+        name: string; // Filter by agent name (text input)
+        selectedAgent: string; // Existing filter by specific agent
+    }>({
+        name: "",
+        selectedAgent: "all",
+    });
 
-    const { data: agentInsightsData, isLoading: isAgentInsightsLoading } = useQuery<any>({
+    const { data: agentInsightsData, isLoading: isAgentInsightsLoading } = useQuery<
+        any
+    >({
         queryKey: ["agent-insights"],
         queryFn: () => companyService.getAgentInsights(),
-    })
+    });
 
     // Define columns for agents table
     const agentsColumns: ColumnDef<AgentInsight>[] = [
         {
             accessorKey: "name",
-            header: "Agent",
+            header: t("form.agent.label") || "Agent",
             enableSorting: true,
         },
         {
             accessorKey: "listings",
-            header: "Listings",
-            enableSorting: true,
+            header: t("form.listings.label") || "Listings",
         },
         {
             accessorKey: "lastPosted",
-            header: "Last Posted",
-            enableSorting: true,
+            header: t("form.lastPosted.label") || "Last Posted",
         },
         {
             accessorKey: "avgPostingMonthly",
-            header: "Avg. Posting Monthly",
-            enableSorting: true,
+            header: t("form.avgPostingMonthly.label") || "Avg. Posting Monthly",
         },
         {
             accessorKey: "totalLeads",
-            header: "Total Leads",
-            enableSorting: true,
+            header: t("form.totalLeads.label") || "Total Leads",
         },
         {
             accessorKey: "whatsappLeads",
-            header: "WhatsApp Leads",
-            enableSorting: true,
+            header: t("form.whatsappLeads.label") || "WhatsApp Leads",
         },
         {
             accessorKey: "emailLeads",
-            header: "Email Leads",
-            enableSorting: true,
+            header: t("form.emailLeads.label") || "Email Leads",
         },
         {
             accessorKey: "callLeads",
-            header: "Call Leads",
-            enableSorting: true,
+            header: t("form.callLeads.label") || "Call Leads",
         },
         {
             accessorKey: "weeklyPerformance",
-            header: "Weekly Performance",
-            enableSorting: true,
+            header: t("form.weeklyPerformance.label") || "Weekly Performance",
             cell: ({ row }) => {
-                const value = row.getValue("weeklyPerformance")
-                const isPositive = Number(value) >= 0
+                const value = row.original.weeklyPerformance;
+                const isPositive = Number(value) >= 0;
 
                 return (
                     <div className="flex items-center">
-                        <span className={`${isPositive ? "text-green-500" : "text-red-500"}`}>
+                        <span
+                            className={`${isPositive ? "text-green-500" : "text-red-500"}`}
+                        >
                             {Math.abs(Number(value) * 100).toFixed(2)}%
                         </span>
                         {isPositive ? (
@@ -119,19 +131,60 @@ export function AgentsInsightsView({ onBack }: { onBack: () => void }) {
                             </svg>
                         )}
                     </div>
-                )
+                );
             },
         },
-    ]
+    ];
 
-    // Filter data based on selected agent
-    const filteredData =
-        agentInsightsData?.data?.filter((agent) => {
-            return selectedAgent === "all" || agent.name === selectedAgent
-        }) || []
+    // Filter data based on selected agent and name search
+    const filteredAndSortedData = useMemo(() => {
+        const data = agentInsightsData?.data || [];
+
+        // Apply filters
+        const filteredItems = data.filter((agent) => {
+            // Filter by selected agent
+            if (
+                filters.selectedAgent !== "all" &&
+                agent.name !== filters.selectedAgent
+            ) {
+                return false;
+            }
+
+            // Filter by name search
+            if (
+                filters.name &&
+                !agent.name.toLowerCase().includes(filters.name.toLowerCase())
+            ) {
+                return false;
+            }
+
+            return true;
+        });
+
+        // Apply sorting
+        if (sorting.length > 0) {
+            const { id, desc } = sorting[0];
+            return sortTableData(filteredItems, {
+                field: id as keyof AgentInsight,
+                direction: desc ? "desc" : "asc",
+            });
+        }
+
+        return filteredItems;
+    }, [agentInsightsData, filters, sorting]);
 
     // Get unique agent names for the filter dropdown
-    const uniqueAgents = agentInsightsData?.data ? [...new Set(agentInsightsData.data.map((agent) => agent.name))] : []
+    const uniqueAgents = agentInsightsData?.data
+        ? [...new Set(agentInsightsData.data.map((agent: AgentInsight) => agent.name))]
+        : [];
+
+    // Handle filter changes
+    const handleFilterChange = (name: string, value: string) => {
+        setFilters((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     return (
         <div>
@@ -140,37 +193,61 @@ export function AgentsInsightsView({ onBack }: { onBack: () => void }) {
                 <Button variant="ghost" className="p-0 mr-2" onClick={onBack}>
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
-                <h3 className="text-lg font-medium">Agents Insights</h3>
+                <h3 className="text-lg font-medium">
+                    {t("title.agentsInsights") || "Agents Insights"}
+                </h3>
             </div>
 
-            <div className="border border-gray-100 rounded-lg p-6">
+            <div className="border border-gray-100 rounded-lg pId p-6 bg-white shadow mb-10">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-base font-semibold">Agent Details</h2>
-                    <div className="w-48">
-                        <Select value={selectedAgent} onValueChange={setSelectedAgent}>
-                            <SelectTrigger className="w-full border-gray-200">
-                                <SelectValue placeholder="Select Agent" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">All Agents</SelectItem>
-                                {uniqueAgents.map((agent) => (
-                                    <SelectItem key={agent as string} value={agent as string}>
-                                        {agent as string}
+                    <h2 className="text-base font-semibold">
+                        {t("title.agentDetails") || "Agent Details"}
+                    </h2>
+                    <div className="flex gap-2">
+                        <div className="relative">
+                            <Input
+                                className="w-56"
+                                name="name"
+                                onChange={(e) => handleFilterChange("name", e.target.value)}
+                                placeholder={t("form.searchAgent.label") || "Search Agent"}
+                            />
+                            <Search className="size-[20px] absolute right-2 top-1/2 -translate-y-1/2 z-10 text-muted-foreground/50" />
+                        </div>
+                        <div className="w-48">
+                            <Select
+                                value={filters.selectedAgent}
+                                onValueChange={(value) =>
+                                    handleFilterChange("selectedAgent", value)
+                                }
+                            >
+                                <SelectTrigger className="w-full border-gray-200">
+                                    <SelectValue
+                                        placeholder={t("form.selectAgent.label") || "Select Agent"}
+                                    />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">
+                                        {t("form.allAgents.label") || "All Agents"}
                                     </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                                    {uniqueAgents.map((agent: any) => (
+                                        <SelectItem key={agent} value={agent}>
+                                            {agent}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
                     </div>
                 </div>
 
                 <DataTable
                     columns={agentsColumns}
-                    data={filteredData}
+                    data={filteredAndSortedData}
                     sorting={sorting}
-                    // onSortingChange={setSorting}
+                    onSortingChange={setSorting}
                     pageSize={10}
                 />
             </div>
         </div>
-    )
+    );
 }

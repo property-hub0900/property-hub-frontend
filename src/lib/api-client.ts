@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { useAuthStore } from "@/store/auth-store";
+import moment from "moment";
 
 // Create an axios instance with default config
 export const apiClient = axios.create({
@@ -146,6 +147,7 @@ apiClient.interceptors.request.use(
       }
       if (anonymousId) {
         config.headers["ip-address"] = anonymousId;
+        config.headers['x-user-timezone'] = Intl.DateTimeFormat().resolvedOptions().timeZone;
       }
     }
     return config;

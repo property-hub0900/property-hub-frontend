@@ -92,14 +92,14 @@ export function DashboardView({ metrics, chartData, hasData, timeframe, setTimef
                 <MetricCard value={formatNumber(metrics.leads)} label="Leads" icon={<Users className="h-5 w-5 text-primary" />} />
                 <MetricCard
                     value={formatNumber(metrics.propertyViewImpressions)}
-                    label="Property View Impressions"
+                    label="Property Views"
                     icon={<CheckCircle className="h-5 w-5 text-primary" />}
                 />
             </div>
 
 
             {/* Chart Section */}
-            <div className="border border-gray-100 rounded-lg p-3 sm:p-4 md:p-6 mb-6">
+            <div className=" rounded-lg p-3 sm:p-4 md:p-6 mb-6">
                 {/* Chart Header - Responsive layout */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4 md:mb-6">
                     <h4>Total Leads</h4>
@@ -118,10 +118,6 @@ export function DashboardView({ metrics, chartData, hasData, timeframe, setTimef
                             <div className="flex items-center">
                                 <div className="w-2 h-2 rounded-full bg-[#f97316] mr-1.5"></div>
                                 <span className="text-xs">Call</span>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="w-2 h-2 rounded-full bg-[#a855f7] mr-1.5"></div>
-                                <span className="text-xs">Visit</span>
                             </div>
                         </div>
 
@@ -204,15 +200,6 @@ export function DashboardView({ metrics, chartData, hasData, timeframe, setTimef
                                         dot={<CustomizedDot />}
                                         activeDot={{ r: 5, fill: "#f97316" }}
                                         name="Call"
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="visit"
-                                        stroke="#a855f7"
-                                        strokeWidth={2}
-                                        dot={<CustomizedDot />}
-                                        activeDot={{ r: 5, fill: "#a855f7" }}
-                                        name="Visit"
                                     />
                                 </LineChart>
                             </ResponsiveContainer>

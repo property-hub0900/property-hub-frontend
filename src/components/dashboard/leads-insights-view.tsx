@@ -1,43 +1,69 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, ChevronDown, ArrowRight } from "lucide-react"
-import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
 import { COLOR_DASHBOARD } from "@/constants/constants"
-import { useQuery } from "@tanstack/react-query"
 import { companyService } from "@/services/protected/company"
-import { Loader } from "../loader"
 import { groupByThreeDigits } from "@/utils/utils"
+import { useQuery } from "@tanstack/react-query"
+import { ArrowLeft, ArrowRight } from "lucide-react"
+import { useState } from "react"
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { Loader } from "../loader"
+import { DatePickerLight } from "../ui/date-picker-light"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import moment from "moment"
 
-export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
-    const [timeframe, setTimeframe] = useState("monthly")
+const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload?.length) {
+        // Filter to only show tooltip for the "value" dataKey
+        const valuePayload = payload.find((entry: any) => entry.dataKey === "value")
+
+        if (valuePayload) {
+            return (
+                <div className="bg-white p-4 border border-gray-200 shadow-sm rounded-md text-xs">
+                    <p className="font-medium mb-2">{label}</p>
+                    <div className="flex items-center text-gray-700">
+                        <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: valuePayload.color }}></div>
+                        <span>
+                            {valuePayload.value} New Lead{valuePayload.value > 1 ? "s" : ""} on {valuePayload.payload.day}
+                        </span>
+                    </div>
+                </div>
+            )
+        }
+    }
+    return null
+}
+
+
+export function LeadsInsightsView({
+    onBack,
+    setActiveView,
+}: { onBack: () => void; setActiveView: (view: string) => void }) {
+    const [timeframe, setTimeframe] = useState("monthly");
+    const [date, setDate] = useState(new Date().toISOString());
 
     const { data: leadsInsightsData, isLoading: isLeadsInsightsLoading } = useQuery<any>({
         queryKey: ["leads-insights", timeframe],
         queryFn: () => companyService.getLeadsInsights(timeframe),
-    })
+    });
 
-    // Calculate percentage for WhatsApp leads circle
+    const { data: callsData } = useQuery<any>({
+        queryKey: ["calls-data", date],
+        queryFn: () => companyService.getCallsData(moment(date).format("YYYY-MM-DD")),
+    });
+
+    console.log({ callsData });
+
     const whatsappPercentage = leadsInsightsData?.totalLeads
         ? (leadsInsightsData.leadsByType.whatsapp / leadsInsightsData.totalLeads) * 100
         : 0
 
-    // Calculate the stroke-dashoffset for the circle
+
     const circleDashoffset = 251.2 - (251.2 * whatsappPercentage) / 100
 
-    // Get the highest value in the WhatsApp chart data for better visualization
-    const maxWhatsappValue = leadsInsightsData?.whatsappData?.chartData
-        ? Math.max(...leadsInsightsData.whatsappData.chartData.map((item: any) => item.value))
-        : 0
 
-    // Find the day with the highest value for the annotation
-    const highestDay = leadsInsightsData?.whatsappData?.chartData
-        ? leadsInsightsData.whatsappData.chartData.reduce((max: any, item: any) => (item.value > max.value ? item : max), {
-            value: 0,
-            day: "",
-        })
-        : { day: "", value: 0 }
+
 
     return (
         <div>
@@ -79,7 +105,7 @@ export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
                     </div>
 
                     <div className="mt-4 text-center">
-                        <Button variant="link" className="text-primary text-sm p-0">
+                        <Button variant="link" className="text-primary text-sm p-0" onClick={() => setActiveView("agents")}>
                             View Per Agent <ArrowRight className="h-3 w-3 ml-1 inline" />
                         </Button>
                     </div>
@@ -90,23 +116,22 @@ export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-base font-medium">WhatsApp Leads</h2>
                         <div className="relative inline-block">
-                            <button
-                                className="flex items-center text-xs border border-gray-200 rounded px-2 py-1"
-                                onClick={() => {
-                                    const newTimeframe = timeframe === "weekly" ? "monthly" : "weekly"
-                                    setTimeframe(newTimeframe)
-                                }}
-                                disabled
-                            >
-                                {timeframe === "weekly" ? "Weekly" : "Monthly"}
-                                <ChevronDown className="h-3 w-3 ml-1" />
-                            </button>
+                            <Select value={timeframe} onValueChange={(value) => setTimeframe(value)}>
+                                <SelectTrigger className="cursor-pointer">
+                                    <SelectValue placeholder="Select a timeframe" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="weekly">Weekly</SelectItem>
+                                    <SelectItem value="monthly">Monthly</SelectItem>
+                                    <SelectItem value="yearly">Yearly</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
 
                     {leadsInsightsData?.whatsappData?.chartData && (
                         <>
-                            <div className="grid grid-cols-6 text-xs text-gray-500 mb-1">
+                            <div className="flex justify-between text-xs text-gray-500 mb-1">
                                 {leadsInsightsData.whatsappData.chartData.map((item: any) => (
                                     <div key={item.day + item.date} className="text-center">
                                         {item.day}
@@ -116,11 +141,6 @@ export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
                             </div>
 
                             <div className="h-[180px] relative">
-                                {highestDay.value > 0 && (
-                                    <div className="absolute right-0 top-0 text-xs text-gray-500">
-                                        {highestDay.value} New Lead{highestDay.value > 1 ? "s" : ""} on {highestDay.day}
-                                    </div>
-                                )}
                                 <ResponsiveContainer width="100%" height="100%">
                                     <AreaChart
                                         data={leadsInsightsData.whatsappData.chartData}
@@ -135,7 +155,7 @@ export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
                                         <CartesianGrid vertical={false} stroke="#f0f0f0" />
                                         <XAxis dataKey="day" hide />
                                         <YAxis hide domain={[0, "auto"]} />
-
+                                        <Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 10 }} />
                                         {/* Top line with no fill */}
                                         <Area
                                             type="monotone"
@@ -155,6 +175,7 @@ export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
                                             fillOpacity={1}
                                             fill="url(#colorWhatsapp)"
                                         />
+
                                     </AreaChart>
                                 </ResponsiveContainer>
                             </div>
@@ -168,21 +189,27 @@ export function LeadsInsightsView({ onBack }: { onBack: () => void }) {
                 <div className="border border-gray-100 rounded-lg p-6">
                     <div className="flex justify-between items-center mb-2">
                         <h2 className="text-base font-medium">Call Data</h2>
-                        <div className="text-xs text-gray-500">{new Date().toLocaleDateString()}</div>
-                    </div>
 
-                    <div className="mt-6">
-                        <div className="text-xs text-gray-500">Total Calls</div>
-                        <div className="text-4xl font-bold text-primary">{groupByThreeDigits(leadsInsightsData?.callData?.totalCalls || 0)}</div>
+                        <DatePickerLight date={new Date(date)} setDate={(value) => setDate(value.toISOString())} />
                     </div>
+                    <div className="text-center">
+                        <div className="mt-6">
+                            <div className="text-xs text-gray-500">Total Calls</div>
+                            <div className="text-4xl font-bold text-primary">
+                                {groupByThreeDigits(callsData?.data?.totalCalls || 0)}
+                            </div>
+                        </div>
 
-                    <div className="mt-6">
-                        <div className="text-xs text-gray-500">Today's Calls</div>
-                        <div className="text-4xl font-bold text-primary">{groupByThreeDigits(leadsInsightsData?.callData?.todaysCalls || 0)}</div>
+                        <div className="mt-6">
+                            <div className="text-xs text-gray-500">Today's Calls</div>
+                            <div className="text-4xl font-bold text-primary">
+                                {groupByThreeDigits(callsData?.data?.todaysCalls || 0)}
+                            </div>
+                        </div>
                     </div>
 
                     <div className="mt-6 text-center">
-                        <Button variant="link" className="text-primary text-sm p-0">
+                        <Button variant="link" className="text-primary text-sm p-0" onClick={() => setActiveView("agents")}>
                             View Per Agent <ArrowRight className="h-3 w-3 ml-1 inline" />
                         </Button>
                     </div>
