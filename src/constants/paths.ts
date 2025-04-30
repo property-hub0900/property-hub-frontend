@@ -12,10 +12,10 @@ export const COMPANY_PATHS = {
 };
 
 export const CUSTOMER_PATHS = {
-  dashboard: "/customer/dashboard",
   myProfile: "/customer/my-profile",
   savedSearches: "/customer/saved-searches",
   savedProperties: "/customer/saved-properties",
+  notifications: "/customer/notifications",
 };
 
 export const ADMIN_PATHS = {

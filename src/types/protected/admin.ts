@@ -119,3 +119,15 @@ export interface IAdminPoints {
   propertyId: number | null;
   createdAt: string; // ISO date string
 }
+
+export interface IGetAdminChartReports {
+  name: string;
+  count: number;
+}
+
+export interface IGetAdminStatsReport {
+  propertyCount: number;
+  companyCount: number;
+  customerCount: number;
+  subscriptionCount: number;
+}

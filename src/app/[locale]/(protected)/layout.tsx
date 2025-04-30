@@ -38,7 +38,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           />
           <div className="flex-1 w-full max-w-full overflow-auto">
             <DashboardHeader />
-            <main className="p-6 min-h-3/4 relative">{children}</main>
+            <main className="p-4 md:p-6 min-h-3/4 relative">{children}</main>
           </div>
         </div>
       </SidebarProvider>

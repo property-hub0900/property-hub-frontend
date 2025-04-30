@@ -17,12 +17,12 @@ export const Columns: ColumnDef<ICustomerAdmin>[] = [
   {
     accessorKey: "user.email",
     header: "Email",
-    enableSorting: false,
+    enableSorting: true,
   },
   {
     accessorKey: "phoneNumber",
     header: "Phone Number",
-    enableSorting: false,
+    enableSorting: true,
   },
   {
     accessorKey: "createdAt",
