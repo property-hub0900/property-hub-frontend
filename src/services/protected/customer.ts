@@ -29,4 +29,12 @@ export const customerService = {
   ): Promise<IListResponse<INotification>> => {
     return apiClient.get(`/customers/notification?page=0&pageSize=${pageSize}`);
   },
+  notificationMarkAsRead: async (
+    notificationId: number
+  ): Promise<ICommonMessageResponse> => {
+    return apiClient.put(`/customers/read-notification/${notificationId}`);
+  },
+  notificationMarkAllAsRead: async (): Promise<ICommonMessageResponse> => {
+    return apiClient.put(`/customers/notifications-read`);
+  },
 };

@@ -9,21 +9,24 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "../ui/scroll-area";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { customerService } from "@/services/protected/customer";
-import { formatDateAndTime } from "@/utils/utils";
+import { formatDateAndTime, getErrorMessage } from "@/utils/utils";
 import Link from "next/link";
 import { CUSTOMER_PATHS } from "@/constants/paths";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 export default function NotificationDropdown() {
   const t = useTranslations();
+
+  const queryClient = useQueryClient();
 
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
   const { data: notificationData } = useQuery({
-    queryKey: ["notification"],
+    queryKey: ["notifications"],
     queryFn: () => customerService.notification(10),
     //refetchInterval: 1000,
     //refetchIntervalInBackground: false,
@@ -38,22 +41,43 @@ export default function NotificationDropdown() {
     }
   }, [notificationData]);
 
+  const notificationMarkAllAsReadMutation = useMutation({
+    mutationFn: customerService.notificationMarkAllAsRead,
+  });
+
+  const notificationMarkAsReadMutation = useMutation({
+    mutationFn: customerService.notificationMarkAsRead,
+  });
+
   // Mark notification as read
-  const markAsRead = (id) => {
-    console.log("markAsRead");
+  const markAsRead = async (notificationId: number) => {
+    try {
+      await notificationMarkAsReadMutation.mutateAsync(notificationId);
+      queryClient.refetchQueries({ queryKey: ["notifications"] });
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
   };
 
   // Mark all as read
-  const markAllAsRead = () => {
-    console.log("markAllAsRead");
+  const markAllAsRead = async () => {
+    try {
+      const response = await notificationMarkAllAsReadMutation.mutateAsync();
+      toast.success(response.message);
+      queryClient.refetchQueries({ queryKey: ["notifications"] });
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
   };
+
+  console.log("unreadCount", unreadCount);
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />
-          {unreadCount && unreadCount > 0 && (
+          {unreadCount > 0 && (
             <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary" />
           )}
         </Button>
@@ -61,7 +85,7 @@ export default function NotificationDropdown() {
       <PopoverContent className="w-80 p-0" align="end">
         <div className="flex items-center justify-between px-4 py-2">
           <h6 className="text-base">{t("title.notifications")}</h6>
-          {unreadCount && unreadCount > 0 && (
+          {unreadCount > 0 && (
             <Button
               variant="ghost"
               size="sm"

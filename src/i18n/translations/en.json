@@ -48,7 +48,8 @@
     "paymentReceipt": "Payment Receipt",
     "dashboard": "Dashboard",
     "inactiveCompanies": "Inactive Companies",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "allNotifications": "All Notifications"
   },
   "button": {
     "next": "Next",

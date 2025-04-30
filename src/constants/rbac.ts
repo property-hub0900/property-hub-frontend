@@ -33,7 +33,8 @@ export const PERMISSIONS = {
   // Favorites and saved searches (customer)
   MANAGE_SAVED_PROPERTIES: "manage:saved:properties",
   MANAGE_SAVED_SEARCHES: "manage:saved:searches",
-  MANAGE_MY_PROFILE: "manage:menu:myPorfile",
+  MANAGE_MY_PROFILE: "manage:menu:myProfile",
+  MANAGE_CUSTOMER_NOTIFICATION: "manage:menu:notification",
 
   // Sidebar menu access
   ACCESS_PROPERTIES: "access:menu:properties",
@@ -123,6 +124,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     PERMISSIONS.MANAGE_MY_PROFILE,
     PERMISSIONS.MANAGE_SAVED_PROPERTIES,
     PERMISSIONS.MANAGE_SAVED_SEARCHES,
+    PERMISSIONS.MANAGE_CUSTOMER_NOTIFICATION,
   ],
   [USER_ROLES.ADMIN]: [
     // Administrative access
@@ -168,6 +170,7 @@ export const ROUTE_PERMISSIONS: Record<string, Permission[]> = {
   [CUSTOMER_PATHS.savedSearches]: [PERMISSIONS.MANAGE_SAVED_SEARCHES],
   [CUSTOMER_PATHS.savedProperties]: [PERMISSIONS.MANAGE_SAVED_PROPERTIES],
   [CUSTOMER_PATHS.myProfile]: [PERMISSIONS.MANAGE_MY_PROFILE],
+  [CUSTOMER_PATHS.notifications]: [PERMISSIONS.MANAGE_CUSTOMER_NOTIFICATION],
 
   // manage Super Admin Routes
   [ADMIN_PATHS.dashboard]: [PERMISSIONS.ADMIN_DASHBOARD],

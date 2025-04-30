@@ -16,21 +16,55 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { customerService } from "@/services/protected/customer";
-import { formatDateAndTime } from "@/utils/utils";
-import { useQuery } from "@tanstack/react-query";
+import { formatDateAndTime, getErrorMessage } from "@/utils/utils";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Loader } from "@/components/loader";
+import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function page() {
+  const queryClient = useQueryClient();
+  const t = useTranslations();
+
   const [unreadCount, setUnreadCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 5;
 
-  const { data: notificationData } = useQuery({
-    queryKey: ["notificationAll"],
-    queryFn: () => customerService.notification(),
-    //refetchInterval: 1000,
-    //refetchIntervalInBackground: false,
+  const { data: notificationData, isLoading: isLoadingNotifications } =
+    useQuery({
+      queryKey: ["notifications", "notificationsAll"],
+      queryFn: () => customerService.notification(),
+    });
+
+  const notificationMarkAllAsReadMutation = useMutation({
+    mutationFn: customerService.notificationMarkAllAsRead,
   });
+
+  const notificationMarkAsReadMutation = useMutation({
+    mutationFn: customerService.notificationMarkAsRead,
+  });
+
+  // Mark notification as read
+  const markAsRead = async (notificationId: number) => {
+    try {
+      await notificationMarkAsReadMutation.mutateAsync(notificationId);
+      queryClient.refetchQueries({ queryKey: ["notifications"] });
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+  };
+
+  // Mark all as read
+  const markAllAsRead = async () => {
+    try {
+      const response = await notificationMarkAllAsReadMutation.mutateAsync();
+      toast.success(response.message);
+      queryClient.refetchQueries({ queryKey: ["notifications"] });
+    } catch (error) {
+      toast.error(getErrorMessage(error));
+    }
+  };
 
   // Calculate unread count whenever notification data changes
   useEffect(() => {
@@ -66,17 +100,6 @@ export default function page() {
   };
 
   const currentNotifications = getCurrentPageItems();
-
-  // Mark notification as read
-  const markAsRead = (id) => {
-    console.log("Marking notification as read:", id);
-    // Implement the actual API call here
-  };
-
-  // Mark all as read
-  const markAllAsRead = () => {
-    console.log("Marking all notifications as read");
-  };
 
   // Paginate to a specific page
   const goToPage = (page) => {
@@ -168,16 +191,19 @@ export default function page() {
     return items;
   };
 
+  if (isLoadingNotifications || notificationMarkAllAsReadMutation.isPending) {
+    return <Loader isLoading={true}></Loader>;
+  }
   return (
     <div className="">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h4 className="text-xl font-bold">Notifications</h4>
-          <p className="text-muted-foreground">
+          <h4 className="text-xl font-bold">{t("title.notifications")}</h4>
+          {/* <p className="text-muted-foreground">
             {unreadCount > 0
               ? `You have ${unreadCount} unread notifications`
               : "All caught up!"}
-          </p>
+          </p> */}
         </div>
 
         <div className="flex gap-2">
@@ -189,7 +215,7 @@ export default function page() {
               className="flex items-center gap-1"
             >
               <Check className="h-4 w-4" />
-              Mark all as read
+              {t("button.markAllAsRead")}
             </Button>
           )}
         </div>
@@ -199,7 +225,7 @@ export default function page() {
         <CardHeader className="py-4 px-6">
           <div className="flex items-center">
             <CardTitle className="text-base font-medium">
-              All Notifications
+              {t("title.allNotifications")}
             </CardTitle>
           </div>
         </CardHeader>
@@ -215,7 +241,10 @@ export default function page() {
                       ? "bg-primary/10"
                       : ""
                   }`}
-                  onClick={() => markAsRead(notification.notificationId)}
+                  onClick={() =>
+                    !notification.notificationRecipients[0]?.readStatus &&
+                    markAsRead(notification.notificationId)
+                  }
                 >
                   <div className="flex items-start gap-2">
                     <div
@@ -246,8 +275,9 @@ export default function page() {
         ) : (
           <div className="py-12 text-center text-gray-500">
             <Bell className="mx-auto h-12 w-12 text-gray-300 mb-4" />
-            <h3 className="text-lg font-medium mb-1">No notifications found</h3>
-            <p className="text-sm">Try changing your filters or search terms</p>
+            <p className="text-lg font-medium mb-1">
+              {t("text.noNotifications")}
+            </p>
           </div>
         )}
 
