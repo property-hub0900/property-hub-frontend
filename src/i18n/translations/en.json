@@ -105,7 +105,8 @@
     "addPoints": "Add Points",
     "renewSubscription": "Renew Subscription",
     "markAllAsRead": "Mark all as read",
-    "viewAllNotifications": "View all notifications"
+    "viewAllNotifications": "View all notifications",
+    "done": "Done"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",

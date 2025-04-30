@@ -24,7 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import {
   PROPERTY_FURNISHED_TYPE,
   PROPERTY_PURPOSE,
@@ -51,6 +51,10 @@ export const PropertySearchFilters = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isMoreFiltersOpen, setIsMoreFiltersOpen] = useState(false);
+
+  const findButtonRef = useRef<HTMLButtonElement | null>(null);
+  const bedsBathButtonRef = useRef<HTMLButtonElement | null>(null);
+  const priceButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const [isSaveSearchDisabled, setIsSaveSearchDisabled] = useState(false);
 
@@ -213,6 +217,44 @@ export const PropertySearchFilters = () => {
     return JSON.stringify(activeParams);
   }, [searchParams]);
 
+  const handleResetBedsBaths = () => {
+    bedsBathButtonRef.current?.click();
+    setFilters((prev) => ({ ...prev, bedrooms: "", bathrooms: "" }));
+    setTimeout(() => {
+      findButtonRef.current?.click();
+    }, 200);
+  };
+
+  const handleDoneBedsBaths = () => {
+    bedsBathButtonRef.current?.click();
+    findButtonRef.current?.click();
+  };
+
+  const handleResetPrice = () => {
+    priceButtonRef.current?.click();
+    setFilters((prev) => ({ ...prev, priceMin: "", priceMax: "" }));
+    setTimeout(() => {
+      findButtonRef.current?.click();
+    }, 200);
+  };
+
+  const handleDonePrice = () => {
+    priceButtonRef.current?.click();
+    findButtonRef.current?.click();
+  };
+
+  const isBedroomBathroomSelected =
+    (filters.bedrooms && filters.bedrooms != "") ||
+    (filters.bathrooms && filters.bathrooms != "");
+
+  console.log("isBedroomBathroomSelected", isBedroomBathroomSelected);
+
+  const isPriceSelected =
+    (filters.priceMin && filters.priceMin != "") ||
+    (filters.priceMax && filters.priceMax != "");
+
+  console.log("isPriceSelected", isPriceSelected);
+
   return (
     <form onSubmit={handleSearch} className="">
       <div className="flex  gap-2 mb-6">
@@ -273,7 +315,11 @@ export const PropertySearchFilters = () => {
           {/* Beds & Baths Popover */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline">
+              <Button
+                ref={bedsBathButtonRef}
+                variant="outline"
+                className="font-normal"
+              >
                 {filters.bedrooms || filters.bathrooms
                   ? `${filters.bedrooms === "8" ? "8+" : filters.bedrooms} ${t(
                       "button.bed"
@@ -320,6 +366,28 @@ export const PropertySearchFilters = () => {
                     ))}
                   </div>
                 </div>
+                {isBedroomBathroomSelected && (
+                  <>
+                    <Separator />
+                    <div className="flex justify-between">
+                      <Button
+                        onClick={handleResetBedsBaths}
+                        variant={"secondary"}
+                        size={"sm"}
+                        type="button"
+                      >
+                        {t("button.reset")}
+                      </Button>
+                      <Button
+                        onClick={handleDoneBedsBaths}
+                        size={"sm"}
+                        type="button"
+                      >
+                        {t("button.done")}
+                      </Button>
+                    </div>
+                  </>
+                )}
               </div>
             </PopoverContent>
           </Popover>
@@ -327,7 +395,11 @@ export const PropertySearchFilters = () => {
           {/* Price Popover */}
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline">
+              <Button
+                ref={priceButtonRef}
+                variant="outline"
+                className="font-normal"
+              >
                 {filters.priceMin || filters.priceMax
                   ? `${filters.priceMin || "0"} - ${
                       filters.priceMax || `${t("text.any")}`
@@ -336,7 +408,7 @@ export const PropertySearchFilters = () => {
                 <ChevronDown className="ms-2 h-4 w-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[380px] px-4 py-6">
+            <PopoverContent className="w-[380px] px-4 pt-6 pb-4">
               <div className="space-y-4">
                 <div className="space-y-2">
                   <div className="flex gap-2">
@@ -346,6 +418,8 @@ export const PropertySearchFilters = () => {
                       placeholder={`${t("text.min")}`}
                       value={filters.priceMin}
                       onChange={handleInputChange}
+                      min={0}
+                      autoComplete="np"
                     />
                     <Input
                       type="number"
@@ -353,9 +427,33 @@ export const PropertySearchFilters = () => {
                       placeholder={`${t("text.max")}`}
                       value={filters.priceMax}
                       onChange={handleInputChange}
+                      min={0}
+                      autoComplete="np"
                     />
                   </div>
                 </div>
+                {isPriceSelected && (
+                  <>
+                    <Separator />
+                    <div className="flex justify-between">
+                      <Button
+                        onClick={handleResetPrice}
+                        variant={"secondary"}
+                        size={"sm"}
+                        type="button"
+                      >
+                        {t("button.reset")}
+                      </Button>
+                      <Button
+                        onClick={handleDonePrice}
+                        size={"sm"}
+                        type="button"
+                      >
+                        {t("button.done")}
+                      </Button>
+                    </div>
+                  </>
+                )}
               </div>
             </PopoverContent>
           </Popover>
@@ -377,7 +475,7 @@ export const PropertySearchFilters = () => {
         <Button
           type="button"
           variant="outline"
-          className="hidden lg:flex"
+          className="hidden lg:flex font-normal"
           onClick={() => setIsMoreFiltersOpen(true)}
         >
           {t("button.moreFilters")}
@@ -385,7 +483,7 @@ export const PropertySearchFilters = () => {
         </Button>
 
         {/* Find Button */}
-        <Button type="submit" className="w-10 lg:w-auto">
+        <Button ref={findButtonRef} type="submit" className="w-10 lg:w-auto">
           {t("button.find")}
         </Button>
       </div>

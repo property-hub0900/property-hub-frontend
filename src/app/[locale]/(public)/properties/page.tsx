@@ -56,13 +56,15 @@ export default function PropertiesPage() {
       <PropertySearchFilters />
       <div className="grid grid-cols-1 xl:grid-cols-[200px_1fr_200px] gap-3">
         <div className="hidden xl:block">
-          <Image
-            src={"/add1.jpg"}
-            width={500}
-            height={300}
-            alt="#"
-            className="w-full h-auto"
-          />
+          <div className="sticky top-0">
+            <Image
+              src={"/add1.jpg"}
+              width={500}
+              height={300}
+              alt="#"
+              className="w-full h-auto"
+            />
+          </div>
         </div>
 
         <div className="space-y-5">
@@ -110,13 +112,15 @@ export default function PropertiesPage() {
         </div>
 
         <div className="hidden xl:block">
-          <Image
-            src={"/add1.jpg"}
-            width={500}
-            height={300}
-            alt="#"
-            className="w-full h-auto"
-          />
+          <div className="sticky top-0">
+            <Image
+              src={"/add1.jpg"}
+              width={500}
+              height={300}
+              alt="#"
+              className="w-full h-auto"
+            />
+          </div>
         </div>
       </div>
     </div>
