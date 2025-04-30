@@ -14,6 +14,7 @@
     "createNewPassword": "Create New Password",
     "accessManagement": "Access Management",
     "companyAgents": "Company Agents",
+    "newAgent": "New Agent",
     "inviteUser": "Invite User",
     "editUser": "Edit User",
     "editAgent": "Edit Agent",
@@ -794,7 +795,6 @@
     "message": "Message",
     "cardNumber": "Card Number",
     "expiration": "Expiration Date",
-    "optionalMessage": "Optional Message",
     "cvc": "CVC",
     "country": "Country",
     "selectCountry": "Select Country",
@@ -869,5 +869,6 @@
   "uploading": "Uploading...",
   "uploadSuccess": "Upload successful",
   "uploadError": "Upload error",
-  "receiptPreview": "Receipt Preview"
+  "receiptPreview": "Receipt Preview",
+  "search": "Search.."
 }

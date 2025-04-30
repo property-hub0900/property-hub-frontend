@@ -279,7 +279,7 @@ export default function AccessManagementPage() {
       {/* Company Agents Section */}
       <div className="bg-white rounded-md shadow">
         <div className="p-6">
-          <h2 className="text-lg font-semibold mb-4">{t("title.companyAgents") || "Company Agents"}</h2>
+
 
           {(() => {
             if (showAddForm) {
@@ -304,7 +304,7 @@ export default function AccessManagementPage() {
             if (isLoadingStaff && staff.length === 0) {
               return <p>{t("text.loadingStaff") || "Loading staff members..."}</p>;
             }
-            return <StaffTable staff={staff} onEdit={handleEditClick} onDelete={handleDeleteClick} />;
+            return <StaffTable staff={staff} onEdit={handleEditClick} onDelete={handleDeleteClick} title={t("title.companyAgents")} />;
           })()}
         </div>
       </div>

@@ -356,6 +356,7 @@ export function TopUpForm({ onCancel, onComplete, plans = [] }: TopUpFormProps) 
                 {/* Email Address */}
                 <div className="space-y-2">
                   <Label htmlFor="email">{t("email")}</Label>
+
                   <Input
                     id="email"
                     type="email"
@@ -384,9 +385,11 @@ export function TopUpForm({ onCancel, onComplete, plans = [] }: TopUpFormProps) 
                   <Label htmlFor="message">{t("message")}</Label>
                   <Input
                     id="message"
-                    placeholder={t("optionalMessage")}
+                    placeholder={t("message")}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    required
+
                   />
                 </div>
               </div>
