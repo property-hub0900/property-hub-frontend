@@ -3,21 +3,37 @@ import { MapPin, BedDouble, Bath, Ruler, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
-import { formatAmountToQAR, formatNumber } from "@/utils/utils";
+import {
+  formatAmountToQAR,
+  formatNumber,
+  handleWhatsAppContent,
+} from "@/utils/utils";
 import { IProperty } from "@/types/public/properties";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { PUBLIC_ROUTES } from "@/constants/paths";
+import { useMemo } from "react";
 
 export default function PropertyCard({ data }: Readonly<{ data: IProperty }>) {
   const t = useTranslations();
+
+  const whatsappUrl = useMemo(() => {
+    return handleWhatsAppContent({
+      title: data.title,
+      propertyId: data.propertyId,
+      phoneNumber: data.postedByStaff.phoneNumber,
+    });
+  }, []);
 
   return (
     <Card className="overflow-hidden border-0 rounded-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 m-3 mb-5">
       <div className="relative overflow-hidden h-48 md:h-64">
         <Link href={`${PUBLIC_ROUTES.properties}/${data.propertyId}`}>
           <Image
-            src={data?.PropertyImages[0]?.url || "/placeholder.svg?height=80&width=80"}
+            src={
+              data?.PropertyImages[0]?.url ||
+              "/placeholder.svg?height=80&width=80"
+            }
             alt={data.title}
             className="w-full h-full object-cover"
             width={500}
@@ -63,10 +79,7 @@ export default function PropertyCard({ data }: Readonly<{ data: IProperty }>) {
           <span className="font-bold text-base">
             {formatAmountToQAR(Number(data.price))}
           </span>
-          <Link
-            target="_blank"
-            href={`https://wa.me/${data.postedByStaff?.phoneNumber}`}
-          >
+          <Link target="_blank" href={`${whatsappUrl}`}>
             <Button variant="outlinePrimary" size="sm" className="">
               <MessageCircle className="h-4 w-4" />
               {t("button.whatsapp")}
