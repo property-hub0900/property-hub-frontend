@@ -97,6 +97,7 @@ export default function PropertyPage() {
 
           <div className="w-full md:max-w-[550px] mx-auto shrink-0 xl:max-w-[350px]">
             <AgentCard
+              title={property.title}
               postedByStaff={property.postedByStaff}
               company={property.company}
               propertyId={property.propertyId}

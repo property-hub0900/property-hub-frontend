@@ -199,3 +199,21 @@ export const sortTableData = <T>(data: T[], sortOption: SortOption<T>): T[] => {
     return 0;
   });
 };
+
+export const handleWhatsAppContent = ({
+  title,
+  propertyId,
+  phoneNumber,
+}: {
+  title: string;
+  propertyId: number;
+  phoneNumber: string;
+}) => {
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  const whatsAppTitle = title || "Property";
+  const whatsAppUrl = `${origin}/properties/${propertyId}`; // or your actual property URL
+  const whatsAppMessage = `Hi, I'm inquiring about the property:\n\n*${whatsAppTitle}*\n${whatsAppUrl}`;
+  const encodedMessage = encodeURIComponent(whatsAppMessage);
+
+  return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+};

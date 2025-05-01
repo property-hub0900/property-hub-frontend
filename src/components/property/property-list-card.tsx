@@ -18,14 +18,18 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { formatAmountToQAR, getErrorMessage } from "@/utils/utils";
+import {
+  formatAmountToQAR,
+  getErrorMessage,
+  handleWhatsAppContent,
+} from "@/utils/utils";
 import { PUBLIC_ROUTES } from "@/constants/paths";
 import { useTranslations } from "next-intl";
 import { USER_ROLES } from "@/constants/rbac";
@@ -84,14 +88,28 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
     }
   };
 
-  const handleLeadsGeneration = async (type: "call" | "email" | "whatsapp" | "visit") => {
+  const handleLeadsGeneration = async (
+    type: "call" | "email" | "whatsapp" | "visit"
+  ) => {
     try {
-      await leadsGenerationService.generateLeads({ propertyId: data.propertyId, type: type });
+      await leadsGenerationService.generateLeads({
+        propertyId: data.propertyId,
+        type: type,
+      });
       // toast.success(response.message);
     } catch (error) {
       toast.error(getErrorMessage(error));
     }
-  }
+  };
+
+  const whatsappUrl = useMemo(() => {
+    return handleWhatsAppContent({
+      title: data.title,
+      propertyId: data.propertyId,
+      phoneNumber: data.postedByStaff.phoneNumber,
+    });
+  }, []);
+
   return (
     <Card className="overflow-hidden flex flex-col md:flex-row">
       <div className="relative  md:w-[300px]">
@@ -178,22 +196,37 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <Link href={`tel:${postedByStaff?.phoneNumber}`}>
-            <Button variant="outlinePrimary" size="sm" onClick={(e) => { handleLeadsGeneration("call") }}>
+            <Button
+              variant="outlinePrimary"
+              size="sm"
+              onClick={(e) => {
+                handleLeadsGeneration("call");
+              }}
+            >
               <Phone className="h-4 w-4" />
               {t("button.call")}
             </Button>
           </Link>
           <Link href={`mailto:${postedByStaff?.user.email}`}>
-            <Button variant="outlinePrimary" size="sm" onClick={(e) => { handleLeadsGeneration("email") }}>
+            <Button
+              variant="outlinePrimary"
+              size="sm"
+              onClick={(e) => {
+                handleLeadsGeneration("email");
+              }}
+            >
               <Mail className="h-4 w-4" />
               {t("button.email")}
             </Button>
           </Link>
-          <Link
-            target="_blank"
-            href={`https://wa.me/${postedByStaff?.phoneNumber}`}
-          >
-            <Button variant="outlinePrimary" size="sm" onClick={(e) => { handleLeadsGeneration("whatsapp") }}>
+          <Link target="_blank" href={`${whatsappUrl}`}>
+            <Button
+              variant="outlinePrimary"
+              size="sm"
+              onClick={(e) => {
+                handleLeadsGeneration("whatsapp");
+              }}
+            >
               <MessageCircle className="h-4 w-4" />
               {t("button.whatsApp")}
             </Button>
@@ -202,10 +235,11 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             <Button
               variant="outlinePrimary"
               size="icon"
-              className={`${isFavorite
-                ? "bg-primary text-primary-foreground hover:!bg-primary-foreground hover:!text-primary hover:[&>svg]:stroke-primary"
-                : ""
-                }`}
+              className={`${
+                isFavorite
+                  ? "bg-primary text-primary-foreground hover:!bg-primary-foreground hover:!text-primary hover:[&>svg]:stroke-primary"
+                  : ""
+              }`}
               onClick={() =>
                 handleCustomerFavorites(
                   isFavorite ? "remove" : "add",
@@ -215,7 +249,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             >
               <Heart
                 className="h-4 w-4"
-              // fill={isFavorite ? "currentColor" : "none"}
+                // fill={isFavorite ? "currentColor" : "none"}
               />
             </Button>
           )}
