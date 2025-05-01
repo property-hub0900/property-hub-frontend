@@ -55,6 +55,7 @@
     "allNotifications": "All Notifications"
   },
   "button": {
+    "confirm": "Confirm",
     "next": "Next",
     "login": "Login",
     "submit": "Submit",
@@ -773,6 +774,10 @@
   "processing": "Processing...",
   "securePaymentNotice": "Your payment is secure and encrypted.",
   "topUpSubscription": {
+    "purchaseTopUp": "Purchase Top Up",
+    "developmentMode": "Development Mode",
+    "confirmPurchase": "Are you sure?",
+    "confirmPurchaseDescription": "Are you sure you want to proceed with this purchase of",
     "title": "Top Up Subscription",
     "history": "Top Up History",
     "addNew": "+ Top-Up Subscription",
@@ -786,6 +791,7 @@
     "selectPointsHelp": "Select the number of points you want to purchase",
     "points": "Points",
     "paymentMethods": "Payment Methods",
+    "submit": "Submit",
     "type": "Type",
     "total": "Total Amount",
     "card": "Card",
@@ -805,6 +811,7 @@
     "paymentSuccessful": "Payment successful! Your points have been added.",
     "paymentFailed": "Payment failed. Please try again.",
     "purchaseTopUpSuccess": "Purchase Top Up Success",
+    "purchaseTopUpSuccessSalesTeam": "Purchase Top Up Success (Sales Team)",
     "purchaseTopUpFailed": "Purchase Top Up Failed",
     "columns": {
       "date": "Date",

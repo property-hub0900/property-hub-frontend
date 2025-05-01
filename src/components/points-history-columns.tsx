@@ -28,6 +28,9 @@ export const pointsHistoryColumns: ColumnDef<PointsHistory>[] = [
         accessorKey: "type",
         header: "Action Type",
         enableSorting: true,
+        cell: ({ row }: any) => {
+            return <span className="font-medium">{row?.original?.type?.charAt(0)?.toUpperCase() + row?.original?.type?.slice(1) || "-"}</span>
+        }
     },
     {
         accessorKey: "points",

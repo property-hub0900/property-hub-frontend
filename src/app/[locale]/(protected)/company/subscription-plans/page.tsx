@@ -14,26 +14,49 @@ import { ArrowRight, Filter, Loader2, Menu } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { navigationEvents, NAVIGATION_EVENTS } from "@/lib/navigation-events"
+import { usePathname, useSearchParams, useRouter } from "next/navigation"
 
+// Define view types for better type safety
+type ViewType = "default" | "renewal"
+type Transaction = any // Replace with actual Transaction type from your codebase
 
 export default function SubscriptionPlansPage() {
     const t = useTranslations()
     const { user } = useAuthStore()
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
 
-    const [showRenewalForm, setShowRenewalForm] = useState(false)
+    // Get initial view from URL or default to "default"
+    const viewParam = searchParams.get("view") as ViewType | null
+    const initialView = viewParam === "renewal" ? "renewal" : "default"
+    const [showRenewalForm, setShowRenewalForm] = useState<ViewType>(initialView)
     const [filters, setFilters] = useState("all")
-    const [filteredSubscriptions, setFilteredSubscriptions] = useState<Transaction[]>([]);
+    const [filteredSubscriptions, setFilteredSubscriptions] = useState<Transaction[]>([])
 
     let { data: subscription, isLoading: isLoadingSubscription, refetch }: any = useQuery({
         queryKey: ["subscription"],
         queryFn: () => companyService.getCompanySubscription(),
-
     } as any)
 
+    // Handle view changes and update URL
+    const handleViewChange = (view: ViewType) => {
+        setShowRenewalForm(view)
+        const params = new URLSearchParams(searchParams)
+        if (view === "default") {
+            params.delete("view") // Clean up URL for default view
+            router.replace(pathname, { scroll: false })
+        } else {
+            params.set("view", view)
+            router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+        }
+    }
+
     const resetPageState = () => {
-        setShowRenewalForm(false)
+        handleViewChange("default")
         // refetch()
     }
+
     useEffect(() => {
         const unsubscribe = navigationEvents.subscribe(NAVIGATION_EVENTS.RESET_SUBSCRIPTION_PAGE, resetPageState)
         return unsubscribe
@@ -41,30 +64,36 @@ export default function SubscriptionPlansPage() {
 
     useEffect(() => {
         if (!subscription || !subscription.results) {
-            setFilteredSubscriptions([]);
-            return;
+            setFilteredSubscriptions([])
+            return
         }
 
-        const today = new Date();
-        let filtered: Transaction[] = subscription.results;
-        if (filters === "active") filtered['results'] = subscription.results.filter((s) => s.endDate && new Date(s.endDate) > today)
-        else if (filters === "inactive") filtered['results'] = subscription.results.filter((s) => s.endDate && new Date(s.endDate) <= today)
+        const today = new Date()
+        let filtered: Transaction[] = subscription.results
+        if (filters === "active") filtered = subscription.results.filter((s) => s.endDate && new Date(s.endDate) > today)
+        else if (filters === "inactive") filtered = subscription.results.filter((s) => s.endDate && new Date(s.endDate) <= today)
         else filtered = subscription
 
-        setFilteredSubscriptions(filtered);
-    }, [subscription, filters]);
+        setFilteredSubscriptions(filtered)
+    }, [subscription, filters])
+
     return (
         <>
             <Loader isLoading={isLoadingSubscription} />
 
             <div className="space-y-6 w-full max-w-full px-4 sm:px-6 py-4 sm:py-6">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sticky top-0 z-10 bg-background pb-4 border-b">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b">
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">{t("subscription")}</h1>
                     <div className="sm:hidden">
                         <Sheet>
+                            <SheetTrigger asChild>
+                                <Button variant="outline" size="icon">
+                                    <Menu className="h-4 w-4" />
+                                </Button>
+                            </SheetTrigger>
                             <SheetContent>
                                 <div className="flex flex-col gap-4 mt-8">
-                                    <Button onClick={() => setShowRenewalForm(true)} className="w-full justify-start">
+                                    <Button onClick={() => handleViewChange("renewal")} className="w-full justify-start">
                                         {t("renewSubscription")}
                                     </Button>
                                     <Button variant="outline" className="w-full justify-start">
@@ -76,10 +105,10 @@ export default function SubscriptionPlansPage() {
                     </div>
                 </div>
 
-                {showRenewalForm ? (
+                {showRenewalForm === "renewal" ? (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
                         <SubscriptionRenewalForm
-                            onCancel={() => setShowRenewalForm(false)}
+                            onCancel={() => handleViewChange("default")}
                             subscription={subscription}
                             user={user}
                         />
@@ -97,7 +126,7 @@ export default function SubscriptionPlansPage() {
 
                                     {/* Desktop renewal button - hidden on mobile */}
                                     <Button
-                                        onClick={() => setShowRenewalForm(true)}
+                                        onClick={() => handleViewChange("renewal")}
                                         variant="outline"
                                         className="hidden sm:flex items-center gap-2 border-gray-300 mt-4 sm:mt-0"
                                     >
@@ -110,9 +139,8 @@ export default function SubscriptionPlansPage() {
                                         {groupByThreeDigits(user?.company?.sharedPoints)} <span className="text-xs sm:text-sm font-normal text-primary">/ {t("remainingPoints")}</span>
                                     </div>
 
-
                                     <Button
-                                        onClick={() => setShowRenewalForm(true)}
+                                        onClick={() => handleViewChange("renewal")}
                                         variant="outline"
                                         className="sm:hidden flex items-center gap-2 border-gray-300 mt-4 w-full justify-center"
                                     >
@@ -149,7 +177,7 @@ export default function SubscriptionPlansPage() {
                                             <SelectContent>
                                                 <SelectItem value="all">All</SelectItem>
                                                 <SelectItem value="active">Active</SelectItem>
-                                                <SelectItem value="inactive">Inactive</SelectItem>
+                                                <SelectItem value="inactive">Inactive</SelectItem> {/* Updated to match filter logic */}
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -168,4 +196,3 @@ export default function SubscriptionPlansPage() {
         </>
     )
 }
-

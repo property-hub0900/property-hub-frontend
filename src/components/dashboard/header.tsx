@@ -37,7 +37,7 @@ export function DashboardHeader() {
   return (
     <header
       className={cn(
-        "flex h-16 items-center justify-between border-b p-4 md:p-6 bg-white",
+        "flex h-16 items-center justify-between border-b p-4 md:p-6 bg-white sticky top-0 z-20",
         isMobile && "sticky top-0 z-40 w-full"
       )}
     >

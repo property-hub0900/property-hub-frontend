@@ -280,10 +280,10 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
           size="icon"
           onClick={handleToggle}
           className={cn(
-            "absolute -right-4 top-20 z-10 hidden md:flex h-8 w-8 items-center justify-center rounded-full border bg-white shadow-sm",
+            "absolute -right-4 top-12 hidden md:flex h-8 w-8 items-center justify-center rounded-full border bg-white shadow-sm z-50",
           )}
         >
-          {open ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+          {open ? <ChevronLeft className="h-2 w-2" /> : <ChevronRight className="h-2 w-2" />}
         </Button>
 
         {/* Navigation */}

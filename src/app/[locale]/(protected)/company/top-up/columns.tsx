@@ -2,16 +2,16 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 import { useTranslations } from "next-intl"
-import moment from "moment"
 import { formatCurrency, formatDate, groupByThreeDigits } from "@/utils/utils"
 
 export interface TopUpSubscription {
-    date: Date
+    createdAt: string // Adjusted to match the accessorKey
     points: number
-    expires: string
     paymentMethod: string
-    subscriptionExpiryDate: Date
-    status: string
+    type: string
+    expires?: string
+    subscriptionExpiryDate?: Date
+    status?: string
 }
 
 export function Columns() {
@@ -21,27 +21,28 @@ export function Columns() {
         {
             accessorKey: "createdAt",
             header: t("columns.date"),
-            cell: ({ row }: any) => {
-                return formatDate(row.original.createdAt)
-            },
+            cell: ({ row }: any) => formatDate(row.original.createdAt),
+            enableSorting: true, // Enable sorting
         },
         {
             accessorKey: "points",
             header: t("columns.points"),
-            cell: ({ row }: any) => {
-                return groupByThreeDigits(row.original.points || 0)
-            },
+            cell: ({ row }: any) => groupByThreeDigits(row.original.points || 0),
+            enableSorting: true, // Enable sorting
         },
         {
             accessorKey: "paymentMethod",
             header: t("columns.paymentMethod"),
+            enableSorting: true,
+            cell: ({ row }: any) => <span className="font-medium">{row?.original?.paymentMethod?.charAt(0)?.toUpperCase() + row?.original?.paymentMethod?.slice(1) || "-"}</span>,
         },
         {
             accessorKey: "type",
             header: t("columns.type"),
+            enableSorting: true,
+            cell: ({ row }: any) => <span className="font-medium">{row?.original?.type?.charAt(0)?.toUpperCase() + row?.original?.type?.slice(1) || "-"}</span>,
         },
     ]
 
     return columns
 }
-

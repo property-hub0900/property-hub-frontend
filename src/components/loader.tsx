@@ -14,9 +14,8 @@ export const Loader = ({
   return (
     <div
       className={cn(
-        `${
-          variant === "inline" ? "absolute" : "fixed"
-        } inset-0 flex items-center justify-center bg-background/60 backdrop-blur-xs z-50 w-full h-full`
+        `${variant === "inline" ? "absolute" : "fixed"
+        } inset-0 flex items-center justify-center bg-background/60 backdrop-blur-xs z-40 w-full h-full`
       )}
     >
       <LoaderCircle className="w-12 h-12 animate-spin text-primary" />

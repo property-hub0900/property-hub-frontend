@@ -135,6 +135,7 @@ export function SubscriptionRenewalForm({ onCancel, subscription, user }: Subscr
         image: uploadedFileUrl ? uploadedFileUrl : null,
       })
       toast.success(t("subscriptionRenewedSuccessfully"))
+      onCancel()
     } catch (err) {
       console.error("Renew subscription error:", err)
       setPaymentError("An error occurred. Please try again.")

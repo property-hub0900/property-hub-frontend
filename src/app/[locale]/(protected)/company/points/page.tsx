@@ -15,51 +15,22 @@ import { useQuery } from "@tanstack/react-query"
 import { companyService } from "@/services/protected/company"
 import { toast } from "sonner"
 
-
-
-// Mock data for archived properties
-const archivedPropertiesData = [
-    {
-        id: "123",
-        title: "Furnished Villa",
-        pointsRefundable: 10,
-        archivedDate: "Mar 10, 2023",
-        afterPublish: "10 Days",
-        status: "active",
-    },
-    {
-        id: "456",
-        title: "High Floor",
-        pointsRefundable: 7,
-        archivedDate: "Mar 12, 2023",
-        afterPublish: "15 Days",
-        status: "refunded",
-    },
-    {
-        id: "789",
-        title: "High Floor",
-        pointsRefundable: 2,
-        archivedDate: "Mar 14, 2023",
-        afterPublish: "10 Days",
-        status: "refunded",
-    },
-]
-
 export default function PointsPage() {
-    // const t = useTranslations()
+    // State for sorting and search
     const [pointsHistorySorting, setPointsHistorySorting] = useState<SortingState>([])
     const [archivedSorting, setArchivedSorting] = useState<SortingState>([])
+    const [pointsHistorySearch, setPointsHistorySearch] = useState("")
+    const [archivedPropertiesSearch, setArchivedPropertiesSearch] = useState("")
     const { user } = useAuthStore()
     const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
 
-
-
+    // Fetch Points History data
     const {
         data: pointsHistoryData = [],
         isLoading: isLoadingHistory,
         refetch: refetchHistory,
     } = useQuery({
-        queryKey: ["topUpHistory", statusFilter], // Include statusFilter in the query key
+        queryKey: ["topUpHistory", statusFilter],
         queryFn: async () => {
             try {
                 const response: any = await companyService.getTopUpHistoryAndPointsTransactions("deduct", 0, 999)
@@ -70,31 +41,60 @@ export default function PointsPage() {
                 return []
             }
         },
-        // Enable refetching when component mounts or when dependencies change
         refetchOnWindowFocus: false,
     })
 
-
+    // Fetch Archived Properties data
     const {
         data: archivedPropertiesData = [],
         isLoading: isLoadingArchivedProperties,
         refetch: refetchArchivedProperties,
     } = useQuery({
-        queryKey: ["archivedProperties", statusFilter], // Include statusFilter in the query key
+        queryKey: ["archivedProperties", statusFilter],
         queryFn: async () => {
             try {
                 const response: any = await companyService.getTopUpHistoryAndPointsTransactions("refund", 0, 999)
                 return response.results || []
             } catch (error) {
-                console.error("Failed to fetch top-up history:", error)
+                console.error("Failed to fetch archived properties:", error)
                 toast.error(getErrorMessage(error))
                 return []
             }
         },
-        // Enable refetching when component mounts or when dependencies change
         refetchOnWindowFocus: false,
     })
 
+    // Filter and sort Points History data
+    const filteredPointsHistory = pointsHistoryData.filter((item: any) =>
+        item.property?.title?.toLowerCase().includes(pointsHistorySearch.toLowerCase())
+    )
+    const sortedPointsHistory = filteredPointsHistory.sort((a: any, b: any) => {
+        if (pointsHistorySorting.length > 0) {
+            const { id, desc } = pointsHistorySorting[0]
+            const aValue = a[id] ?? a.property?.[id] // Fallback to property object if column is nested
+            const bValue = b[id] ?? b.property?.[id]
+            if (aValue < bValue) return desc ? 1 : -1
+            if (aValue > bValue) return desc ? -1 : 1
+            return 0
+        }
+        return 0
+    })
+
+    // Filter and sort Archived Properties data
+    const filteredArchivedProperties = archivedPropertiesData.filter((item: any) =>
+        item.property?.title?.toLowerCase().includes(archivedPropertiesSearch.toLowerCase())
+    )
+    const sortedArchivedProperties = filteredArchivedProperties.sort((a: any, b: any) => {
+        if (archivedSorting.length > 0) {
+            const { id, desc } = archivedSorting[0]
+            const aValue = a[id] ?? a.property?.[id] // Fallback to property object if column is nested
+            const bValue = b[id] ?? b.property?.[id]
+            if (aValue < bValue) return desc ? 1 : -1
+            if (aValue > bValue) return desc ? -1 : 1
+            return 0
+        }
+        return 0
+    })
 
     return (
         <div className="space-y-6">
@@ -110,12 +110,10 @@ export default function PointsPage() {
                     </CardHeader>
                     <CardContent>
                         <p className="text-sm text-muted-foreground mb-2">Users earn points based on their subscription plan.</p>
-
                     </CardContent>
                 </Card>
 
                 {/* Points Expiry Card */}
-
                 <Card className="flex justify-around items-center p-1">
                     <div className="flex-col sm:flex-row justify-between items-start sm:items-center mt-2">
                         <p className="text-sm text-muted-foreground">Remaining Points</p>
@@ -128,7 +126,6 @@ export default function PointsPage() {
                         <CardContent>
                             <p className="text-sm text-muted-foreground">on {formatDate(user?.company?.subscriptionEndDate)}</p>
                         </CardContent>
-
                     </div>
                 </Card>
             </div>
@@ -140,14 +137,19 @@ export default function PointsPage() {
                         <CardTitle>Points History</CardTitle>
                         <div className="relative w-full sm:w-64 mt-2 sm:mt-0">
                             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input placeholder="Search Title" className="pl-8" />
+                            <Input
+                                placeholder="Search Title"
+                                className="pl-8"
+                                value={pointsHistorySearch}
+                                onChange={(e) => setPointsHistorySearch(e.target.value)}
+                            />
                         </div>
                     </div>
                 </CardHeader>
                 <CardContent>
                     <DataTable
                         columns={pointsHistoryColumns}
-                        data={pointsHistoryData}
+                        data={sortedPointsHistory}
                         sorting={pointsHistorySorting}
                         onSortingChange={setPointsHistorySorting}
                         pageSize={10}
@@ -162,14 +164,19 @@ export default function PointsPage() {
                         <CardTitle>Archived Properties History</CardTitle>
                         <div className="relative w-full sm:w-64 mt-2 sm:mt-0">
                             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input placeholder="Search Title" className="pl-8" />
+                            <Input
+                                placeholder="Search Title"
+                                className="pl-8"
+                                value={archivedPropertiesSearch}
+                                onChange={(e) => setArchivedPropertiesSearch(e.target.value)}
+                            />
                         </div>
                     </div>
                 </CardHeader>
                 <CardContent>
                     <DataTable
                         columns={archivedPropertiesColumns}
-                        data={archivedPropertiesData}
+                        data={sortedArchivedProperties}
                         sorting={archivedSorting}
                         onSortingChange={setArchivedSorting}
                         pageSize={10}

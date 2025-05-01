@@ -32,7 +32,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <ProtectedRoute>
       <SidebarProvider open={sidebarOpen} onOpenChange={handleSidebarChange}>
-        <div className="flex min-h-screen w-full bg-white">
+        <div className="flex h-screen w-full">
           <DashboardSidebar
             userType={user?.role === "staff" ? "company" : "customer"}
           />
