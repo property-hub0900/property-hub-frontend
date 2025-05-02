@@ -1,54 +1,58 @@
 "use client";
 
 import { DataTable } from "@/components/dataTable/data-table";
-import { formatDate, groupByThreeDigits, sortTableData } from "@/utils/utils";
+import { formatDate, formatPaymentMethod, groupByThreeDigits, sortTableData } from "@/utils/utils";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { StatusIndicator } from "../ui/status-indicator";
 
-// Define the Transaction interface based on used fields
+// Transaction interface (consistent with parent)
 interface Transaction {
+    subscriptionId: number;
     createdAt: string;
     points: number;
     paymentMethod: string;
     type: string;
-    endDate: string;
+    endDate?: string;
+    status?: string;
 }
 
-export function TransactionHistory({ subscription }: { subscription: any }) {
+
+
+export function TransactionHistory({ subscription }: { subscription: Transaction[] }) {
     const t = useTranslations();
     const [sorting, setSorting] = useState<SortingState>([]);
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-    // Update transactions when subscription changes
-    useEffect(() => {
-        setTransactions(subscription?.results || []);
-    }, [subscription]);
+    // Use subscription directly as transactions (already an array)
+    const transactions = subscription || [];
 
-    // Preprocess data to include computed fields for sorting
+    // Preprocess data for sorting with computed fields
     const sortableTransactions = useMemo(() => {
         return transactions.map((transaction) => ({
             ...transaction,
-            subscriptionDate: transaction.createdAt, // Alias for createdAt
-            status: transaction.endDate && new Date(transaction.endDate) > new Date() ? "active" : "expired", // Computed status
+            subscriptionDate: transaction.createdAt,
+            computedStatus:
+                transaction.status === "pending"
+                    ? "pending"
+                    : transaction.endDate && new Date(transaction.endDate) > new Date()
+                        ? "active"
+                        : "expired",
         }));
     }, [transactions]);
 
-    // Apply sorting to the data
+    // Apply sorting
     const sortedTransactions = useMemo(() => {
-        if (sorting.length > 0) {
-            const { id, desc } = sorting[0];
-            return sortTableData(sortableTransactions, {
-                field: id as keyof typeof sortableTransactions[0],
-                direction: desc ? "desc" : "asc",
-            });
-        }
-        return sortableTransactions;
+        if (sorting.length === 0) return sortableTransactions;
+        const { id, desc } = sorting[0];
+        return sortTableData(sortableTransactions, {
+            field: id as keyof typeof sortableTransactions[0],
+            direction: desc ? "desc" : "asc",
+        });
     }, [sortableTransactions, sorting]);
 
     // Define columns
-    const columns: ColumnDef<Transaction>[] = [
+    const columns: ColumnDef<Transaction & { computedStatus?: string }>[] = [
         {
             accessorKey: "subscriptionDate",
             header: t("subscriptionDate"),
@@ -65,33 +69,52 @@ export function TransactionHistory({ subscription }: { subscription: any }) {
             accessorKey: "paymentMethod",
             header: t("method"),
             enableSorting: false,
-            // capitalize the first letter
-            cell: ({ row }) => <span className="font-medium">{row?.original?.paymentMethod?.charAt(0)?.toUpperCase() + row?.original?.paymentMethod?.slice(1) || "-"}</span>,
+            cell: ({ row }) =>
+                row.original.paymentMethod ? (
+                    <span className="font-medium">
+                        {formatPaymentMethod(row.original.paymentMethod)}
+                    </span>
+                ) : (
+                    "-"
+                ),
         },
         {
             accessorKey: "type",
             header: t("type"),
-            cell: ({ row }) => <span className="font-medium">{row?.original?.type?.charAt(0)?.toUpperCase() + row?.original?.type?.slice(1) || "-"}</span>,
+            cell: ({ row }) =>
+                row.original.type ? (
+                    <span className="font-medium">{row.original.type.charAt(0).toUpperCase() + row.original.type.slice(1)}</span>
+                ) : (
+                    "-"
+                ),
             enableSorting: true,
         },
         {
             accessorKey: "endDate",
             header: t("subscriptionExpiryDate"),
-            cell: ({ row }) => formatDate(row.original.endDate),
+            cell: ({ row }) => (row.original.endDate ? formatDate(row.original.endDate) : "-"),
             enableSorting: true,
         },
         {
-            accessorKey: "status",
+            accessorKey: "computedStatus",
             header: t("status"),
             cell: ({ row }) => {
-                const isActive = row.original.endDate && new Date(row.original.endDate) > new Date();
-                return (
-                    <StatusIndicator
-                        status={isActive ? "active" : "expired"}
-                        label={isActive ? "Active" : "Expired"}
-                        variant="subtle"
-                    />
-                );
+                const { status, endDate } = row.original;
+                let statusType: "pending" | "active" | "expired";
+                let statusLabel: string;
+
+                if (status === "pending") {
+                    statusType = "pending";
+                    statusLabel = t("form.status.options.pending");
+                } else if (endDate && new Date(endDate) > new Date()) {
+                    statusType = "active";
+                    statusLabel = t("form.status.options.active");
+                } else {
+                    statusType = "expired";
+                    statusLabel = t("form.status.options.expired");
+                }
+
+                return <StatusIndicator status={statusType} label={statusLabel} variant="subtle" />;
             },
             enableSorting: true,
         },
@@ -99,12 +122,7 @@ export function TransactionHistory({ subscription }: { subscription: any }) {
 
     return (
         <div className="w-full">
-            <DataTable
-                columns={columns}
-                data={sortedTransactions}
-                sorting={sorting}
-                onSortingChange={setSorting}
-            />
+            <DataTable columns={columns} data={sortedTransactions} sorting={sorting} onSortingChange={setSorting} />
         </div>
     );
 }

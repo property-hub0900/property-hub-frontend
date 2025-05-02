@@ -118,7 +118,7 @@ export function EditUserForm({
     if (selectedStaff?.isOwner) {
       setShowPermissionsSection(false);
     } else {
-      setShowPermissionsSection(role !== USER_ROLES.MANAGER);
+      setShowPermissionsSection(role !== mapManagerToAdmin(USER_ROLES.MANAGER));
     }
   }, [role, selectedStaff]);
 
@@ -245,6 +245,7 @@ export function EditUserForm({
                   <FormItem>
                     <FormLabel>
                       {t("form.firstName.label") || "First Name"}
+                      <span className="text-xs text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -266,6 +267,7 @@ export function EditUserForm({
                   <FormItem>
                     <FormLabel>
                       {t("form.lastName.label") || "Last Name"}
+                      <span className="text-xs text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -288,6 +290,7 @@ export function EditUserForm({
                   <FormItem>
                     <FormLabel>
                       {t("form.email.label") || "Email Address"}
+                      <span className="text-xs text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -311,6 +314,7 @@ export function EditUserForm({
                   <FormItem>
                     <FormLabel>
                       {t("form.phoneNumber.label") || "Phone Number"}
+                      <span className="text-xs text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -330,7 +334,10 @@ export function EditUserForm({
                 name="role"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.role.label") || "Role"}</FormLabel>
+                    <FormLabel>
+                      {t("form.role.label") || "Role"}
+                      <span className="text-xs text-red-500">*</span>
+                    </FormLabel>
                     <Select onValueChange={field.onChange} value={mapManagerToAdmin(field.value)}>
                       <FormControl>
                         <SelectTrigger>
@@ -360,7 +367,10 @@ export function EditUserForm({
                 name="status"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("form.status.label") || "Status"}</FormLabel>
+                    <FormLabel>
+                      {t("form.status.label") || "Status"}
+                      <span className="text-xs text-red-500">*</span>
+                    </FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
@@ -392,6 +402,7 @@ export function EditUserForm({
                   <FormItem>
                     <FormLabel>
                       {t("form.languages.label") || "Languages Spoken"}
+                      <span className="text-xs text-red-500">*</span>
                     </FormLabel>
                     <Select
                       onValueChange={field.onChange}
