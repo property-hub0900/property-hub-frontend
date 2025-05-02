@@ -424,13 +424,15 @@
       "label": "Status",
       "placeholder": "Select status",
       "options": {
+        "all": "All",
         "active": "Active",
         "inactive": "Inactive",
         "reject": "Reject",
         "expired": "Expired",
         "approved": "Approved",
         "paid": "Paid",
-        "pending": "Pending"
+        "pending": "Pending",
+        "needApproval": "Need Approval"
       }
     },
     "role": {
@@ -781,7 +783,7 @@
     "confirmPurchaseDescription": "Are you sure you want to proceed with this purchase of",
     "title": "Top Up Subscription",
     "history": "Top Up History",
-    "addNew": "+ Top-Up Subscription",
+    "addNew": "Top-Up Subscription",
     "back": "Back",
     "selectStatus": "Filter by Status",
     "allStatuses": "All Statuses",

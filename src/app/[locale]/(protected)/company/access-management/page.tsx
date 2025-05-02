@@ -257,7 +257,7 @@ export default function AccessManagementPage() {
           {t("title.accessManagement") || "Access Management"}</h1>
 
         {(showAddForm || showEditForm) || hasPermission(PERMISSIONS.CREATE_USER) && <Button
-          className="bg-primary text-white hover:bg-primary/90"
+
           onClick={() => {
             // Reset all form states first
             setSelectedStaff(null)
@@ -271,7 +271,7 @@ export default function AccessManagementPage() {
           disabled={isSubmitting}
         >
           <>
-            <PlusCircle className="mr-2 h-4 w-4" /> {t("button.addNewAgent") || "Add New Agent"}
+            {t("button.addNewAgent") || "Add New Agent"}
           </>
         </Button>}
       </div>
