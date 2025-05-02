@@ -103,7 +103,7 @@ export function TransactionHistory({ subscription }: { subscription: Transaction
 
                 if (status === "pending") {
                     statusType = "pending";
-                    statusLabel = t("form.status.options.needApproval");
+                    statusLabel = t("form.status.options.pending");
                 } else if (endDate && new Date(endDate) > new Date()) {
                     statusType = "active";
                     statusLabel = t("form.status.options.active");

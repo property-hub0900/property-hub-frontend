@@ -34,7 +34,7 @@ interface Subscription {
 }
 
 type ViewType = "default" | "renewal";
-type FilterType = "all" | "active" | "pending" | "expired";
+type FilterType = "all" | "active" | "pending" | "expired" | "needApproval";
 
 export default function SubscriptionPlansPage() {
     const t = useTranslations();
@@ -94,7 +94,6 @@ export default function SubscriptionPlansPage() {
         } else if (filter === "pending") {
             filtered = subscription.results.filter((s) => {
                 if (!s.status) return false;
-                debugger;
                 return s.status === "pending";
             });
         } else if (filter === "expired") {
@@ -115,22 +114,7 @@ export default function SubscriptionPlansPage() {
                 {/* Header */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b">
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">{t("subscription")}</h1>
-                    <div className="sm:hidden">
-                        <Sheet>
-                            <SheetTrigger asChild>
-                                <Button variant="outline" size="icon">
-                                    <Menu className="h-4 w-4" />
-                                </Button>
-                            </SheetTrigger>
-                            <SheetContent>
-                                <div className="flex flex-col gap-4 mt-8">
-                                    <Button onClick={() => handleViewChange("renewal")} className="w-full justify-start">
-                                        {t("renewSubscription")}
-                                    </Button>
-                                </div>
-                            </SheetContent>
-                        </Sheet>
-                    </div>
+
                 </div>
 
                 {view === "renewal" ? (
@@ -200,10 +184,10 @@ export default function SubscriptionPlansPage() {
                             <div className="p-4 sm:p-6 md:p-8">
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 sm:mb-6">
                                     <h2 className="text-base sm:text-lg md:text-xl font-semibold">{t("subscriptionRecordsHistory")}</h2>
-                                    <div className="hidden sm:block">
+                                    <div className="flex flex-row justify-between items-center gap-4">
                                         <Select onValueChange={(value) => setFilter(value as FilterType)} value={filter}>
                                             <SelectTrigger>
-                                                <Filter className="h-4 w-4" /> {t("filters")}
+                                                {t(`form.status.options.${filter}`)}
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="all">{t("form.status.options.all")}</SelectItem>
@@ -218,8 +202,10 @@ export default function SubscriptionPlansPage() {
                                     <div className="inline-block min-w-full align-middle px-4 sm:px-0">
                                         {filteredSubscriptions.length === 0 && !isLoadingSubscription ? (
                                             <p className="text-center text-muted-foreground py-4">{t("noTransactions")}</p>
-                                        ) : (
+                                        ) : (<>
+
                                             <TransactionHistory subscription={filteredSubscriptions} />
+                                        </>
                                         )}
                                     </div>
                                 </div>
