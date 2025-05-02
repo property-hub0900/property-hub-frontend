@@ -1,111 +1,123 @@
-"use client"
+"use client";
 
-import { Loader } from "@/components/loader"
-import { SubscriptionRenewalForm } from "@/components/subscription/subscriptionRenewalForm"
-import { TransactionHistory } from "@/components/subscription/transactionHistory"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { companyService } from "@/services/protected/company"
-import { useAuthStore } from "@/store/auth-store"
-import { formatDate, groupByThreeDigits } from "@/utils/utils"
-import { useQuery } from "@tanstack/react-query"
-import { ArrowRight, Filter, Loader2, Menu } from "lucide-react"
-import { useTranslations } from "next-intl"
-import { useEffect, useState } from "react"
-import { navigationEvents, NAVIGATION_EVENTS } from "@/lib/navigation-events"
-import { usePathname, useSearchParams, useRouter } from "next/navigation"
+import { Loader } from "@/components/loader";
+import { SubscriptionRenewalForm } from "@/components/subscription/subscriptionRenewalForm";
+import { TransactionHistory } from "@/components/subscription/transactionHistory";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { companyService } from "@/services/protected/company";
+import { useAuthStore } from "@/store/auth-store";
+import { formatDate, groupByThreeDigits } from "@/utils/utils";
+import { useQuery } from "@tanstack/react-query";
+import { ArrowRight, Filter, Loader2, Menu } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useEffect, useMemo, useState } from "react";
+import { navigationEvents, NAVIGATION_EVENTS } from "@/lib/navigation-events";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
-// Define view types for better type safety
-type ViewType = "default" | "renewal"
-type Transaction = any // Replace with actual Transaction type from your codebase
+// Define Transaction interface
+interface Transaction {
+    subscriptionId: number;
+    createdAt: string;
+    points: number;
+    paymentMethod: string;
+    type: string;
+    endDate?: string; // Optional to handle cases where it might be missing
+    status?: string; // e.g., "pending", "approved"
+}
+
+// Define Subscription data structure from API
+interface Subscription {
+    results: Transaction[];
+    total?: number;
+}
+
+type ViewType = "default" | "renewal";
+type FilterType = "all" | "active" | "pending" | "expired" | "needApproval";
 
 export default function SubscriptionPlansPage() {
-    const t = useTranslations()
-    const { user } = useAuthStore()
-    const router = useRouter()
-    const pathname = usePathname()
-    const searchParams = useSearchParams()
+    const t = useTranslations();
+    const { user } = useAuthStore();
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
 
-    // Get initial view from URL or default to "default"
-    const viewParam = searchParams.get("view") as ViewType | null
-    const initialView = viewParam === "renewal" ? "renewal" : "default"
-    const [showRenewalForm, setShowRenewalForm] = useState<ViewType>(initialView)
-    const [filters, setFilters] = useState("all")
-    const [filteredSubscriptions, setFilteredSubscriptions] = useState<Transaction[]>([])
+    // State management
+    const [view, setView] = useState<ViewType>(searchParams.get("view") === "renewal" ? "renewal" : "default");
+    const [filter, setFilter] = useState<FilterType>("all");
 
-    let { data: subscription, isLoading: isLoadingSubscription, refetch }: any = useQuery({
+    // Fetch subscription data
+    const { data: subscription, isLoading: isLoadingSubscription, refetch }: any = useQuery<any>({
         queryKey: ["subscription"],
         queryFn: () => companyService.getCompanySubscription(),
-    } as any)
+    });
 
     // Handle view changes and update URL
-    const handleViewChange = (view: ViewType) => {
-        setShowRenewalForm(view)
-        const params = new URLSearchParams(searchParams)
-        if (view === "default") {
-            params.delete("view") // Clean up URL for default view
-            router.replace(pathname, { scroll: false })
+    const handleViewChange = (newView: ViewType) => {
+        setView(newView);
+        const params = new URLSearchParams(searchParams);
+        if (newView === "default") {
+            params.delete("view");
         } else {
-            params.set("view", view)
-            router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+            params.set("view", newView);
         }
-    }
+        router.replace(`${pathname}${params.toString() ? `?${params.toString()}` : ""}`, { scroll: false });
+    };
 
-    const resetPageState = () => {
-        handleViewChange("default")
-        // refetch()
-    }
-
+    // Reset page state on navigation event
     useEffect(() => {
-        const unsubscribe = navigationEvents.subscribe(NAVIGATION_EVENTS.RESET_SUBSCRIPTION_PAGE, resetPageState)
-        return unsubscribe
-    }, [])
+        const unsubscribe = navigationEvents.subscribe(NAVIGATION_EVENTS.RESET_SUBSCRIPTION_PAGE, () => {
+            handleViewChange("default");
+        });
+        return unsubscribe;
+    }, []);
 
-    useEffect(() => {
-        if (!subscription || !subscription.results) {
-            setFilteredSubscriptions([])
-            return
+    // Compute filtered subscriptions
+    const filteredSubscriptions = useMemo(() => {
+        if (!subscription?.results) return [];
+
+        const today = new Date();
+        let filtered: Transaction[] = subscription.results;
+
+        if (filter === "active") {
+            filtered = subscription.results.filter((s) => {
+                if (!s.endDate) return false;
+                if (s.status === "pending") return false;
+                const endDate = new Date(s.endDate);
+                if (isNaN(endDate.getTime())) {
+                    console.warn(`Invalid endDate for subscription ${s.subscriptionId}: ${s.endDate}`);
+                    return false;
+                }
+                return endDate > today;
+            });
+        } else if (filter === "pending") {
+            filtered = subscription.results.filter((s) => {
+                if (!s.status) return false;
+                return s.status === "pending";
+            });
+        } else if (filter === "expired") {
+            filtered = subscription.results.filter((s) => {
+                if (!s.endDate) return false;
+                const endDate = new Date(s.endDate);
+                return endDate <= today;
+            });
         }
-
-        const today = new Date()
-        let filtered: Transaction[] = subscription.results
-        if (filters === "active") filtered = subscription.results.filter((s) => s.endDate && new Date(s.endDate) > today)
-        else if (filters === "inactive") filtered = subscription.results.filter((s) => s.endDate && new Date(s.endDate) <= today)
-        else filtered = subscription
-
-        setFilteredSubscriptions(filtered)
-    }, [subscription, filters])
+        console.log(`Filtered subscriptions (${filter}):`, filtered);
+        return filtered;
+    }, [subscription, filter]);
 
     return (
         <>
             <Loader isLoading={isLoadingSubscription} />
-
             <div className="space-y-6 w-full max-w-full px-4 sm:px-6 py-4 sm:py-6">
+                {/* Header */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b">
                     <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">{t("subscription")}</h1>
-                    <div className="sm:hidden">
-                        <Sheet>
-                            <SheetTrigger asChild>
-                                <Button variant="outline" size="icon">
-                                    <Menu className="h-4 w-4" />
-                                </Button>
-                            </SheetTrigger>
-                            <SheetContent>
-                                <div className="flex flex-col gap-4 mt-8">
-                                    <Button onClick={() => handleViewChange("renewal")} className="w-full justify-start">
-                                        {t("renewSubscription")}
-                                    </Button>
-                                    <Button variant="outline" className="w-full justify-start">
-                                        <Filter className="h-4 w-4 mr-2" /> {t("filters")}
-                                    </Button>
-                                </div>
-                            </SheetContent>
-                        </Sheet>
-                    </div>
+
                 </div>
 
-                {showRenewalForm === "renewal" ? (
+                {view === "renewal" ? (
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
                         <SubscriptionRenewalForm
                             onCancel={() => handleViewChange("default")}
@@ -115,16 +127,14 @@ export default function SubscriptionPlansPage() {
                     </div>
                 ) : (
                     <div className="animate-in fade-in duration-300">
+                        {/* Subscription Info */}
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-                            {/* Left Panel - Subscription Plan */}
                             <div className="lg:col-span-2 border rounded-lg p-4 sm:p-6 md:p-8 shadow-sm">
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
                                     <div>
                                         <h2 className="text-lg sm:text-xl font-semibold">{t("subscriptionPlan")}</h2>
                                         <p className="text-sm text-muted-foreground mt-1">{t("pointsAddedToAccount")}</p>
                                     </div>
-
-                                    {/* Desktop renewal button - hidden on mobile */}
                                     <Button
                                         onClick={() => handleViewChange("renewal")}
                                         variant="outline"
@@ -133,12 +143,11 @@ export default function SubscriptionPlansPage() {
                                         {t("renewSubscription")} <ArrowRight className="h-4 w-4 text-primary" />
                                     </Button>
                                 </div>
-
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-6 sm:mt-8">
                                     <div className="text-4xl sm:text-5xl font-bold text-primary">
-                                        {groupByThreeDigits(user?.company?.sharedPoints)} <span className="text-xs sm:text-sm font-normal text-primary">/ {t("remainingPoints")}</span>
+                                        {groupByThreeDigits(user?.company?.sharedPoints ?? 0)}{" "}
+                                        <span className="text-xs sm:text-sm font-normal text-primary">/ {t("remainingPoints")}</span>
                                     </div>
-
                                     <Button
                                         onClick={() => handleViewChange("renewal")}
                                         variant="outline"
@@ -148,44 +157,56 @@ export default function SubscriptionPlansPage() {
                                     </Button>
                                 </div>
                             </div>
-
                             <div className="lg:col-span-1 border rounded-lg p-4 sm:p-6 md:p-8 shadow-sm">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
                                     <div>
                                         <h2 className="text-lg sm:text-xl font-semibold">{t("pointsExpires")}</h2>
-                                        <p className="text-sm text-muted-foreground mt-1">{user?.company?.subscriptionEndDate ? t("onDate", { date: formatDate(user?.company?.subscriptionEndDate) }) : null}</p>
+                                        <p className="text-sm text-muted-foreground mt-1">
+                                            {user?.company?.subscriptionEndDate
+                                                ? t("onDate", { date: formatDate(user.company.subscriptionEndDate) })
+                                                : t("notAvailable")}
+                                        </p>
                                     </div>
-
                                     <div>
                                         <h2 className="text-lg sm:text-xl font-semibold">{t("contractExpires")}</h2>
-                                        <p className="text-sm text-muted-foreground mt-1">{user?.company?.CompanyContract?.contractExpiryDate ? t("onDate", { date: formatDate(user?.company?.CompanyContract?.contractExpiryDate) }) : null}</p>
+                                        <p className="text-sm text-muted-foreground mt-1">
+                                            {user?.company?.CompanyContract?.contractExpiryDate
+                                                ? t("onDate", { date: formatDate(user.company.CompanyContract.contractExpiryDate) })
+                                                : t("notAvailable")}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
+                        {/* Transaction History */}
                         <div className="rounded-md border shadow-sm mt-6 sm:mt-8">
                             <div className="p-4 sm:p-6 md:p-8">
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 sm:mb-6">
                                     <h2 className="text-base sm:text-lg md:text-xl font-semibold">{t("subscriptionRecordsHistory")}</h2>
-
-                                    <div>
-                                        <Select onValueChange={(value) => setFilters(value)}>
+                                    <div className="flex flex-row justify-between items-center gap-4">
+                                        <Select onValueChange={(value) => setFilter(value as FilterType)} value={filter}>
                                             <SelectTrigger>
-                                                <Filter className="h-4 w-4" /> {t("filters")}
+                                                {t(`form.status.options.${filter}`)}
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="all">All</SelectItem>
-                                                <SelectItem value="active">Active</SelectItem>
-                                                <SelectItem value="inactive">Inactive</SelectItem> {/* Updated to match filter logic */}
+                                                <SelectItem value="all">{t("form.status.options.all")}</SelectItem>
+                                                <SelectItem value="active">{t("form.status.options.active")}</SelectItem>
+                                                <SelectItem value="pending">{t("form.status.options.needApproval")}</SelectItem>
+                                                <SelectItem value="expired">{t("form.status.options.expired")}</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
                                 </div>
-
                                 <div className="overflow-x-auto -mx-4 sm:mx-0 rounded-md">
                                     <div className="inline-block min-w-full align-middle px-4 sm:px-0">
-                                        <TransactionHistory subscription={filteredSubscriptions} />
+                                        {filteredSubscriptions.length === 0 && !isLoadingSubscription ? (
+                                            <p className="text-center text-muted-foreground py-4">{t("noTransactions")}</p>
+                                        ) : (<>
+
+                                            <TransactionHistory subscription={filteredSubscriptions} />
+                                        </>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -194,5 +215,5 @@ export default function SubscriptionPlansPage() {
                 )}
             </div>
         </>
-    )
+    );
 }

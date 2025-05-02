@@ -118,7 +118,6 @@ export function EditUserForm({
     if (selectedStaff?.isOwner) {
       setShowPermissionsSection(false);
     } else {
-      debugger;
       setShowPermissionsSection(role !== mapManagerToAdmin(USER_ROLES.MANAGER));
     }
   }, [role, selectedStaff]);
