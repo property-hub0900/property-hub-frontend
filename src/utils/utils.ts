@@ -217,3 +217,29 @@ export const handleWhatsAppContent = ({
 
   return `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 };
+
+
+
+export const formatPaymentMethod = (method: string) => {
+  if (!method) return "-";
+
+  // Handle specific cases
+  switch (method.toLowerCase()) {
+    case "banktransfer":
+      return "Bank Transfer";
+    case "creditcard":
+      return "Credit Card";
+    case "sales-team":
+      return "Sales Team";
+    // Add more special cases as needed
+    default:
+      // Convert camelCase or kebab-case to separate words and capitalize each word
+      return method
+        .replace(/([A-Z])/g, ' $1') // Insert a space before all capital letters
+        .replace(/-/g, ' ') // Replace any hyphens with spaces
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ')
+        .trim();
+  }
+};
