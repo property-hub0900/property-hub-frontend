@@ -25,6 +25,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { staffFormSchema } from "@/schema/protected/company";
 import { useTranslations } from "next-intl";
 import type * as z from "zod";
+import { mapManagerToAdmin } from "@/utils/utils";
+import { USER_ROLES } from "@/constants/rbac";
 
 interface AddStaffFormProps {
   onSubmit: (data: z.infer<typeof staffFormSchema>) => void;
@@ -60,7 +62,7 @@ export function AddStaffForm({
   // Watch role to determine if permissions section should be shown
   const role = form.watch("role");
   useEffect(() => {
-    setShowPermissionsSection(role !== "admin");
+    setShowPermissionsSection(role !== mapManagerToAdmin(USER_ROLES.MANAGER));
   }, [role]);
 
   return (
