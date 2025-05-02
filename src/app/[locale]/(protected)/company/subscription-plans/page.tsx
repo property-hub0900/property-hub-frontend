@@ -192,7 +192,7 @@ export default function SubscriptionPlansPage() {
                                             <SelectContent>
                                                 <SelectItem value="all">{t("form.status.options.all")}</SelectItem>
                                                 <SelectItem value="active">{t("form.status.options.active")}</SelectItem>
-                                                <SelectItem value="pending">{t("form.status.options.needApproval")}</SelectItem>
+                                                <SelectItem value="pending">{t("form.status.options.pending")}</SelectItem>
                                                 <SelectItem value="expired">{t("form.status.options.expired")}</SelectItem>
                                             </SelectContent>
                                         </Select>
