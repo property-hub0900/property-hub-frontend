@@ -86,17 +86,17 @@ export default function PropertyForm(
             titleAr: "",
             featured: false,
             category: undefined,
-            price: 0,
+            price: undefined,
+            hidePrice: false,
             propertyType: "",
             purpose: undefined,
-            bedrooms: 0,
-            bathrooms: 0,
+            bedrooms: undefined,
+            bathrooms: undefined,
             status: PROPERTY_STATUSES.draft,
             furnishedType: "",
             occupancy: undefined,
             ownershipStatus: undefined,
             referenceNo: "",
-            priceVisibilityFlag: false,
             propertySize: undefined,
             serviceCharges: "",
             buildingFloors: 0,
@@ -148,21 +148,24 @@ export default function PropertyForm(
 
   const editorRef = useRef<TiptapEditorRef>(null);
 
+  console.log("form Errors", form.formState.errors);
+
   return (
     <>
       <Loader isLoading={isLoadingAmenities}></Loader>
-      <div className="container mx-auto">
+      <div className="">
+        <h6 className="mb-5 capitalize">{t("title.propertyDetails")}</h6>
         <Form {...form}>
           <form
             //onSubmit={form.handleSubmit(onSubmit)}
             onSubmit={(event) => event.preventDefault()}
-            className="grid grid-cols-2 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem className="col-span-2">
+                <FormItem className="md:col-span-2">
                   <FormLabel>
                     {t("form.title.label")}
                     <span>*</span>
@@ -178,7 +181,7 @@ export default function PropertyForm(
               control={form.control}
               name="titleAr"
               render={({ field }) => (
-                <FormItem className="col-span-2" dir="rtl">
+                <FormItem className="md:col-span-2" dir="rtl">
                   <FormLabel>
                     عنوان<span>*</span>
                   </FormLabel>
@@ -189,7 +192,7 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-            <div className="col-span-2">
+            <div className="md:col-span-2">
               <FormField
                 control={form.control}
                 name="PropertyImages"
@@ -218,7 +221,7 @@ export default function PropertyForm(
               control={form.control}
               name="category"
               render={({ field }) => (
-                <FormItem className="col-span-2">
+                <FormItem className="md:col-span-2">
                   <FormLabel>
                     {t("form.propertyCategory.label")}
                     <span>*</span>
@@ -528,18 +531,18 @@ export default function PropertyForm(
               />
               <FormField
                 control={form.control}
-                name="priceVisibilityFlag"
+                name="hidePrice"
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-center space-x-2 space-y-0 mt-2">
                     <FormControl>
                       <Checkbox
-                        checked={field.value}
+                        checked={field.value ? field.value : false}
                         onCheckedChange={field.onChange}
-                        id="priceVisibilityFlag"
+                        id="hidePrice"
                       />
                     </FormControl>
                     <FormLabel
-                      htmlFor="priceVisibilityFlag"
+                      htmlFor="hidePrice"
                       className="text-sm font-normal cursor-pointer select-none text-muted-foreground"
                     >
                       {t("text.hidePriceFromListing")}
@@ -565,7 +568,7 @@ export default function PropertyForm(
               control={form.control}
               name="address"
               render={({ field }) => (
-                <FormItem className="col-span-2">
+                <FormItem className="md:col-span-2">
                   <FormLabel>
                     {t("form.location.label")}
                     <span>*</span>
@@ -586,7 +589,7 @@ export default function PropertyForm(
               control={form.control}
               name="amenities"
               render={({ field }) => (
-                <FormItem className="col-span-2">
+                <FormItem className="md:col-span-2">
                   <FormLabel>
                     {t("form.amenities.label")}
                     <span>*</span>
@@ -606,7 +609,7 @@ export default function PropertyForm(
               control={form.control}
               name="referenceNo"
               render={({ field }) => (
-                <FormItem className="col-span-2">
+                <FormItem className="md:col-span-2">
                   <FormLabel>
                     {t("form.referenceNo.label")}
                     <span>*</span>
@@ -622,7 +625,7 @@ export default function PropertyForm(
               control={form.control}
               name="description"
               render={({ field }) => (
-                <FormItem className="col-span-2">
+                <FormItem className="md:col-span-2">
                   <FormLabel>
                     {t("form.description.label")}
                     <span>*</span>
@@ -638,7 +641,7 @@ export default function PropertyForm(
               control={form.control}
               name={"description"}
               render={({ field }) => (
-                <FormItem className="w-full col-span-2">
+                <FormItem className="w-full md:col-span-2">
                   <FormLabel>
                     {t("form.description.label")}
                     <span>*</span>
@@ -661,7 +664,7 @@ export default function PropertyForm(
               control={form.control}
               name={"descriptionAr"}
               render={({ field }) => (
-                <FormItem className="col-span-2" dir="rtl">
+                <FormItem className="md:col-span-2" dir="rtl">
                   <FormLabel>
                     وصف<span>*</span>
                   </FormLabel>
@@ -683,7 +686,7 @@ export default function PropertyForm(
               control={form.control}
               name="descriptionAr"
               render={({ field }) => (
-                <FormItem className="col-span-2" dir="rtl">
+                <FormItem className="md:col-span-2" dir="rtl">
                   <FormLabel>
                     وصف<span>*</span>
                   </FormLabel>
@@ -699,7 +702,7 @@ export default function PropertyForm(
                 control={form.control}
                 name="featured"
                 render={({ field }) => (
-                  <FormItem className="col-span-2 flex justify-between items-center">
+                  <FormItem className="md:col-span-2 flex justify-between items-center">
                     <FormLabel className="text-lg">
                       {t("text.wantToFeatureProperty")}
                     </FormLabel>

@@ -31,7 +31,7 @@ import {
   handleWhatsAppContent,
 } from "@/utils/utils";
 import { PUBLIC_ROUTES } from "@/constants/paths";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { USER_ROLES } from "@/constants/rbac";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { propertyServices } from "@/services/public/properties";
@@ -40,12 +40,17 @@ import { leadsGenerationService } from "@/services/public/leads-generation";
 export const PropertyListCard = ({ data }: { data: IProperty }) => {
   const t = useTranslations();
 
+  const locale = useLocale();
+
   const {
     title,
+    titleAr,
+    propertyId,
     propertyType,
     PropertyImages,
     featured,
     price,
+    hidePrice,
     propertySize,
     address,
     bedrooms,
@@ -54,6 +59,8 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
     postedByStaff,
     is_favorite,
   } = data;
+
+  const localeTitle = locale === "ar" ? titleAr : title;
 
   const [isFavorite, setIsFavorite] = useState(is_favorite);
   const { user } = useAuth();
@@ -104,9 +111,9 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
 
   const whatsappUrl = useMemo(() => {
     return handleWhatsAppContent({
-      title: data.title,
-      propertyId: data.propertyId,
-      phoneNumber: data.postedByStaff.phoneNumber,
+      title: localeTitle,
+      propertyId: propertyId,
+      phoneNumber: postedByStaff.phoneNumber,
     });
   }, []);
 
@@ -144,11 +151,14 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
         </Link>
       </div>
       <CardContent className="p-4 grow">
-        <Link href={`${PUBLIC_ROUTES.properties}/${data.propertyId}`}>
+        <Link href={`${PUBLIC_ROUTES.properties}/${propertyId}`}>
           <div className="flex justify-between items-start">
             <div>
               <p className="text-lg font-light mb-1">{propertyType}</p>
-              <p className="text-2xl font-bold">{formatAmountToQAR(price)}</p>
+
+              {!hidePrice && (
+                <p className="text-2xl font-bold">{formatAmountToQAR(price)}</p>
+              )}
             </div>
             {featured && (
               <div className="flex items-center gap-2">
@@ -166,7 +176,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
           </div>
 
           <div className="mt-4">
-            <h2 className="text-base font-medium capitalize">{title}</h2>
+            <h2 className="text-base font-medium capitalize">{localeTitle}</h2>
             <p className="mt-1 text-base font-light flex gap-1">
               <MapPin className="h-4 w-4 mt-1" />
               {address}

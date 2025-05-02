@@ -35,6 +35,7 @@ const statusVariants = cva(
       { variant: "default", status: "draft", class: "border-gray-200" },
       { variant: "default", status: "archived", class: "border-gray-200" },
       { variant: "default", status: "rejected", class: "border-red-200" },
+      { variant: "default", status: "inactive", class: "border-gray-200" },
       { variant: "default", status: "info", class: "border-blue-200" },
 
       // Solid variant
@@ -77,6 +78,11 @@ const statusVariants = cva(
       },
       {
         variant: "subtle",
+        status: "inactive",
+        class: "bg-gray-50 text-gray-700",
+      },
+      {
+        variant: "subtle",
         status: "rejected",
         class: "bg-red-50 text-red-700",
       },
@@ -106,6 +112,11 @@ const statusVariants = cva(
       {
         variant: "outline",
         status: "archived",
+        class: "border-gray-500 text-gray-700",
+      },
+      {
+        variant: "outline",
+        status: "inactive",
         class: "border-gray-500 text-gray-700",
       },
       {

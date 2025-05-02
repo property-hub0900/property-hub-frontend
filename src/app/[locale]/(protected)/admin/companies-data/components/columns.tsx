@@ -1,5 +1,6 @@
 "use client";
 
+import { StatusIndicator } from "@/components/ui/status-indicator";
 import { ADMIN_PATHS } from "@/constants/paths";
 import { ICompanyAdmin } from "@/types/protected/admin";
 import { formatDate } from "@/utils/utils";
@@ -54,14 +55,7 @@ export const Columns: ColumnDef<ICompanyAdmin>[] = [
     cell: ({ row }) => {
       const status = row.original.status;
       return (
-        <div className="capitalize px-4 py-1.5 shadow-md rounded-md inline-flex gap-2 items-center">
-          <span
-            className={`inline-block size-2 rounded-full ${
-              status === "active" ? "bg-primary" : "bg-muted-foreground/60"
-            }`}
-          ></span>
-          {status}
-        </div>
+        <StatusIndicator status={status} label={status} variant={"subtle"} />
       );
     },
   },
