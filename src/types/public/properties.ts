@@ -23,7 +23,7 @@ export interface IProperty {
   description: string;
   descriptionAr: string;
   price: number;
-  hidePrice: string | null;
+  hidePrice: boolean;
   propertyType: string;
   purpose: string;
   bedrooms?: number;

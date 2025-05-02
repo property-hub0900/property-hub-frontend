@@ -107,7 +107,8 @@
     "renewSubscription": "Renew Subscription",
     "markAllAsRead": "Mark all as read",
     "viewAllNotifications": "View all notifications",
-    "done": "Done"
+    "done": "Done",
+    "bulkUpload": "Bulk Upload"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -427,6 +428,7 @@
         "active": "Active",
         "inactive": "Inactive",
         "reject": "Reject",
+        "rejected": "Rejected",
         "expired": "Expired",
         "approved": "Approved",
         "paid": "Paid",

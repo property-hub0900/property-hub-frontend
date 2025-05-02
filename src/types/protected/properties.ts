@@ -21,6 +21,7 @@ export interface IProperty {
   title: string;
   description: string;
   price: number;
+  hidePrice: boolean;
   propertyType: string;
   purpose: string;
   bedrooms: number;

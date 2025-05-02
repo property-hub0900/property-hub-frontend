@@ -67,18 +67,11 @@ export default function EditPropertyPage() {
       <div className="bg-white rounded-md shadow">
         <div className="p-6">
           {getPropertyByIdData && (
-            <>
-              {/* <PropertyForm
-                onSubmit={onSubmit as any}
-                initialImages={getPropertyByIdData.PropertyImages}
-              ></PropertyForm> */}
-
-              <PropertyForm
-                mode="edit"
-                onSubmit={onSubmit as any}
-                defaultValues={getPropertyByIdData}
-              ></PropertyForm>
-            </>
+            <PropertyForm
+              mode="edit"
+              onSubmit={onSubmit as any}
+              defaultValues={getPropertyByIdData}
+            ></PropertyForm>
           )}
         </div>
       </div>

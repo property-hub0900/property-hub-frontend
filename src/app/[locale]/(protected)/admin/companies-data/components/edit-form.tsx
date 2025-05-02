@@ -63,8 +63,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
       state: companyData.state || "",
       street: companyData.street || "",
       postalCode: companyData.postalCode || "",
-      contractExpiryDate:
-        companyData.CompanyContract?.contractExpiryDate || undefined,
+      contractExpiryDate: companyData.CompanyContract?.contractExpiryDate
+        ? new Date(companyData.CompanyContract?.contractExpiryDate)
+        : undefined,
       pointsPerDuration:
         companyData.CompanyContract?.pointsPerDuration || undefined,
       pricePerDuration:
@@ -102,7 +103,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.companyName.label")}</FormLabel>
+                      <FormLabel>
+                        {t("form.companyName.label")} <span>*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder={t("form.companyName.placeholder")}
@@ -119,7 +122,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.companyEmail.label")}</FormLabel>
+                      <FormLabel>
+                        {t("form.companyEmail.label")} <span>*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder={t("form.companyEmail.placeholder")}
@@ -136,7 +141,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.phoneNumber.label")}</FormLabel>
+                      <FormLabel>
+                        {t("form.phoneNumber.label")} <span>*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder={t("form.phoneNumber.placeholder")}
@@ -169,7 +176,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   name="status"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.status.label")}</FormLabel>
+                      <FormLabel>
+                        {t("form.status.label")} <span>*</span>
+                      </FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -206,7 +215,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   name="street"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.streetAddress.label")}</FormLabel>
+                      <FormLabel>
+                        {t("form.streetAddress.label")} <span>*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder={t("form.streetAddress.placeholder")}
@@ -222,7 +233,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   name="city"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.city.label")}</FormLabel>
+                      <FormLabel>
+                        {t("form.city.label")} <span>*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input placeholder={t("form.city.label")} {...field} />
                       </FormControl>
@@ -235,7 +248,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   name="state"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.stateProvince.label")}</FormLabel>
+                      <FormLabel>
+                        {t("form.stateProvince.label")} <span>*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder={t("form.stateProvince.label")}
@@ -251,7 +266,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   name="postalCode"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.postalCode.label")}</FormLabel>
+                      <FormLabel>
+                        {t("form.postalCode.label")} <span>*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder={t("form.postalCode.label")}
@@ -286,7 +303,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   name="pointsPerDuration"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.points.label")}</FormLabel>
+                      <FormLabel>
+                        {t("form.points.label")} <span>*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder={t("form.points.label")}
@@ -303,7 +322,9 @@ export const EditForm = ({ companyData }: { companyData: IEditCompanyGet }) => {
                   name="pricePerDuration"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("form.price.label")}</FormLabel>
+                      <FormLabel>
+                        {t("form.price.label")} <span>*</span>
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder={t("form.price.label")}

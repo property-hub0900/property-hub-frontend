@@ -11,9 +11,6 @@ export const createPropertySchema = (t: (key: string) => string) =>
   z.object({
     title: commonValidations.stringRequired(t("form.required")),
     titleAr: commonValidations.stringRequired(t("form.required")),
-    // category: z.enum(PROPERTY_CATEGORIES, {
-    //   required_error: t("form.required"),
-    // }),
     category: commonValidations.enumRequired(
       PROPERTY_CATEGORIES,
       t("form.required")
@@ -27,7 +24,7 @@ export const createPropertySchema = (t: (key: string) => string) =>
       t("form.required"),
       t("form.invalidNumber")
     ),
-    bedrooms: commonValidations.numberOptional(t("form.required")),
+    //bedrooms: commonValidations.numberOptional(t("form.required")),
     bathrooms: commonValidations.numberRequired(
       t("form.required"),
       t("form.invalidNumber")
@@ -44,8 +41,8 @@ export const createPropertySchema = (t: (key: string) => string) =>
       t("form.required"),
       t("form.invalidNumber")
     ),
-    priceVisibilityFlag: z.boolean().optional(),
-    //city: commonValidations.stringRequired(t("form.required")),
+    hidePrice: z.boolean().optional(),
+
     address: commonValidations.stringRequired(t("form.required")),
     amenities: z.array(z.string()).min(1, t("form.required")),
     referenceNo: commonValidations.stringRequired(t("form.required")),
@@ -53,13 +50,6 @@ export const createPropertySchema = (t: (key: string) => string) =>
     descriptionAr: commonValidations.stringRequired(t("form.required")),
     featured: z.boolean().optional(),
     status: commonValidations.stringRequired(t("form.required")),
-    // PropertyImages: z.array(
-    //   z
-    //     .object({
-    //       url: z.string(), // Required field
-    //     })
-    //     .optional()
-    // ),
     PropertyImages: z
       .array(
         z.object({
@@ -68,7 +58,23 @@ export const createPropertySchema = (t: (key: string) => string) =>
       )
       .min(1, "At least one image is required")
       .max(20, `Maximum 20 images allowed`),
+    bedrooms: commonValidations.numberOptional(t("form.required")),
   });
+// .refine(
+//   (data) => {
+//     console.log("data.category", data.category);
+
+//     if (data.category === "Residential") {
+//       console.log("data.category IF", data.bedrooms !== undefined);
+//       return data.bedrooms !== undefined;
+//     }
+//     return true;
+//   },
+//   {
+//     message: "Number of bedrooms is required for residential properties",
+//     path: ["bedrooms"], // This specifies which field the error is attached to
+//   }
+// );
 
 export const propertyDataFIltersSchema = (t: (key: string) => string) =>
   z.object({

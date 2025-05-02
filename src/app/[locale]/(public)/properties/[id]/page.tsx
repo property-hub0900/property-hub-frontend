@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 
 import { AgentCard } from "@/components/property/agent-card";
@@ -24,6 +24,8 @@ export default function PropertyPage() {
   const params = useParams<{ id: string }>();
   const t = useTranslations();
 
+  const locale = useLocale();
+
   // Fetch property data
   const {
     data: property,
@@ -43,6 +45,11 @@ export default function PropertyPage() {
       </>
     );
   }
+
+  const localeTitle = locale === "ar" ? property?.titleAr : property?.title;
+
+  const localeDescription =
+    locale === "ar" ? property?.descriptionAr : property?.description;
 
   if (error || !property) {
     return (
@@ -72,6 +79,7 @@ export default function PropertyPage() {
 
         <PropertyHeader
           price={property.price}
+          hidePrice={property.hidePrice}
           bedrooms={property.bedrooms}
           bathrooms={property.bathrooms}
           propertySize={property.propertySize}
@@ -81,8 +89,8 @@ export default function PropertyPage() {
 
         <div className="flex flex-col gap-4 xl:gap-8 xl:flex-row ">
           <div className="grow">
-            <h4 className="font-bold uppercase mb-4">{property.title}</h4>
-            <PropertyDescription description={property.description} />
+            <h4 className="font-bold uppercase mb-4">{localeTitle}</h4>
+            <PropertyDescription description={localeDescription || ""} />
 
             <Separator className="my-6" />
 
@@ -97,7 +105,7 @@ export default function PropertyPage() {
 
           <div className="w-full md:max-w-[550px] mx-auto shrink-0 xl:max-w-[350px]">
             <AgentCard
-              title={property.title}
+              title={localeTitle || ""}
               postedByStaff={property.postedByStaff}
               company={property.company}
               propertyId={property.propertyId}

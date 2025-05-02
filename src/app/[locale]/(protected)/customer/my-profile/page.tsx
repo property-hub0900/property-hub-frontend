@@ -13,7 +13,7 @@ export default function Page() {
   const t = useTranslations();
 
   const { data: profileData, isLoading: isLoadingProfileData } = useQuery({
-    queryKey: ["getMe"],
+    queryKey: ["customerProfileGetMe"],
     queryFn: () => customerService.getMe(),
   });
 

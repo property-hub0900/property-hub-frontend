@@ -33,9 +33,15 @@ export default function PropertiesListing() {
       <div className="flex justify-between items-center mb-5">
         <h3>{t("sidebar.propertyData")}</h3>
         {hasPermission(PERMISSIONS.CREATE_PROPERTY) && (
-          <Link className="cursor-pointer" href={COMPANY_PATHS.addNewProperty}>
-            <Button>{t("title.addNewProperty")}</Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              className="cursor-pointer"
+              href={COMPANY_PATHS.addNewProperty}
+            >
+              <Button>{t("title.addNewProperty")}</Button>
+            </Link>
+            {/* <Button variant={"outline"}>+ {t("button.bulkUpload")}</Button> */}
+          </div>
         )}
       </div>
       {dataCompaniesProperties && (

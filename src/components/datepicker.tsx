@@ -1,4 +1,3 @@
-// components/DatePicker.tsx
 "use client";
 
 import { useRef } from "react";
@@ -12,8 +11,14 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { FormControl } from "@/components/ui/form";
-import { useFormContext, Controller } from "react-hook-form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useFormContext } from "react-hook-form";
 
 interface DatePickerProps {
   name: string;
@@ -27,15 +32,15 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   disabledDate = (date) => date < new Date("1900-01-01"),
 }) => {
   const contractExpiryButton = useRef<HTMLButtonElement>(null);
-  const { control } = useFormContext();
+  const form = useFormContext();
 
   return (
-    <Controller
-      control={control}
+    <FormField
+      control={form.control}
       name={name}
       render={({ field }) => (
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium">{label}</label>
+        <FormItem className="flex flex-col gap-1">
+          <FormLabel className="text-sm font-medium">{label}</FormLabel>
           <Popover>
             <PopoverTrigger asChild>
               <FormControl>
@@ -69,7 +74,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
               />
             </PopoverContent>
           </Popover>
-        </div>
+          <FormMessage />
+        </FormItem>
       )}
     />
   );

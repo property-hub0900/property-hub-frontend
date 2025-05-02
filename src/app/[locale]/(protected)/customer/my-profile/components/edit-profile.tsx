@@ -28,7 +28,7 @@ import {
   customerProfileSchema,
   TCustomerProfileSchema,
 } from "@/schema/protected/customer";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { customerService } from "@/services/protected/customer";
 import { Loader } from "@/components/loader";
 import { Switch } from "@/components/ui/switch";
@@ -39,6 +39,8 @@ interface EditUserFormProps {
 
 export const EditProfile = ({ customer }: EditUserFormProps) => {
   const t = useTranslations();
+
+  const queryClient = useQueryClient();
 
   const [isProfileUploading, setIsProfileUploading] = useState(false);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(
@@ -73,6 +75,8 @@ export const EditProfile = ({ customer }: EditUserFormProps) => {
       });
 
       toast.success(response.message);
+
+      queryClient.invalidateQueries({ queryKey: ["customerProfileGetMe"] });
 
       //setProfileImageUrl(null);
     } catch (error) {

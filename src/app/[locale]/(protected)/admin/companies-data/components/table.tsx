@@ -102,9 +102,18 @@ export default function CompaniesDataTable({
                     <SelectValue placeholder={t("form.status.label")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={"Status"}>Status</SelectItem>
-                    <SelectItem value={"active"}>Active</SelectItem>
-                    <SelectItem value={"inactive"}>InActive</SelectItem>
+                    <SelectItem value={"Status"}>
+                      {t("form.status.label")}
+                    </SelectItem>
+                    <SelectItem value={"active"}>
+                      {t("form.status.options.active")}
+                    </SelectItem>
+                    <SelectItem value={"inactive"}>
+                      {t("form.status.options.inactive")}
+                    </SelectItem>
+                    <SelectItem value={"rejected"}>
+                      {t("form.status.options.rejected")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>

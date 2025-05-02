@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/select";
 import { ICustomerAdmin } from "@/types/protected/admin";
 import { sortTableData } from "@/utils/utils";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 export default function CustomersDataTable({
   data,
@@ -25,12 +27,18 @@ export default function CustomersDataTable({
   const t = useTranslations();
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const [filters, setFilters] = useState<{ status: string }>({ status: "" });
+  const [filters, setFilters] = useState<{ email: string; status: string }>({
+    email: "",
+    status: "",
+  });
 
   const filteredAndSortedData = useMemo(() => {
     // First apply filters
 
     const filteredItems = data.filter((item) => {
+      if (filters?.email && !item.user.email.includes(filters?.email))
+        return false;
+
       if (
         filters?.status &&
         filters?.status !== `${t("form.propertyStatuses.label")}`
@@ -61,11 +69,10 @@ export default function CustomersDataTable({
     setSorting(updaterOrValue);
   };
 
-  const handleChange = (val: string) => {
-    //const { name, value } = e.target;
+  const handleChange = (name: string, value: string) => {
     setFilters((prev) => ({
       ...prev,
-      ["status"]: val,
+      [name]: value,
     }));
   };
 
@@ -77,17 +84,32 @@ export default function CustomersDataTable({
             <h4>{t("sidebar.customersData")}</h4>
             <div className="flex flex-col md:flex-row gap-2">
               <div className="relative">
+                <Input
+                  className="md:w-56"
+                  name="email"
+                  onChange={(e) => handleChange("email", e.target.value)}
+                  placeholder={t("form.email.label")}
+                />
+                <Search className="size-[20px] absolute right-2 top-1/2 -translate-y-1/2 z-10 text-muted-foreground/50" />
+              </div>
+              <div className="relative">
                 <Select
-                  onValueChange={(val) => handleChange(val)}
+                  onValueChange={(val) => handleChange("status", val)}
                   defaultValue={filters.status}
                 >
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder={t("form.status.label")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={"Status"}>Status</SelectItem>
-                    <SelectItem value={"active"}>Active</SelectItem>
-                    <SelectItem value={"inactive"}>InActive</SelectItem>
+                    <SelectItem value={"Status"}>
+                      {t("form.status.label")}
+                    </SelectItem>
+                    <SelectItem value={"active"}>
+                      {t("form.status.options.active")}
+                    </SelectItem>
+                    <SelectItem value={"inactive"}>
+                      {t("form.status.options.inactive")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
