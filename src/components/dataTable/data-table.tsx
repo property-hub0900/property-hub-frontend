@@ -28,8 +28,7 @@ import {
 } from "@tanstack/react-table";
 
 import { DataTablePagination } from "./data-table-pagination";
-
-//import { DataTableToolbar } from "./data-table-toolbar";
+import { DataTableToolbar } from "./data-table-tool";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -40,6 +39,9 @@ interface DataTableProps<TData, TValue> {
   ) => void;
   rowClassName?: (row: TData) => string;
   pageSize?: number;
+  search?: boolean;
+  searchingParams?: (keyof TData)[];
+  title?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -49,13 +51,15 @@ export function DataTable<TData, TValue>({
   onSortingChange,
   rowClassName,
   pageSize,
+  search = false,
+  searchingParams = [],
+  title,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = React.useState(""); // Local state for global filter
 
   const t = useTranslations();
 
@@ -63,36 +67,63 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     state: {
-      sorting: sorting,
+      sorting,
       columnVisibility,
       rowSelection,
       columnFilters,
+      globalFilter, // Use local state
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: onSortingChange,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
+    globalFilterFn: (row, columnId, filterValue: string) => {
+      const columnsToSearch =
+        searchingParams.length > 0
+          ? searchingParams
+          : columns
+            .map((col: any) => col.accessorKey as keyof TData)
+            .filter(Boolean);
+
+      return columnsToSearch.some((key) => {
+        const value = row.original[key];
+        if (value == null) return false;
+        return String(value)
+          .toLowerCase()
+          .includes(filterValue.toLowerCase());
+      });
+    },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    enableSorting: false,
+    enableSorting: true,
   });
 
   return (
     <div className="space-y-8">
-      {/* <DataTableToolbar table={table} /> */}
+      {search && (
+        <div className="flex flex-col sm:flex-row justify-between items-center w-full">
+          {title && <h2 className="text-lg font-semibold mb-4">{title}</h2>}
+          <DataTableToolbar
+            table={table}
+            searchValue={globalFilter}
+            onSearchChange={setGlobalFilter}
+          />
+        </div>
+      )}
       <div className="overflow-x-auto w-full max-w-full">
+
         <Table>
+
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  const canSort =
-                    header.column.columnDef.enableSorting === true;
+                  const canSort = header.column.columnDef.enableSorting === true;
 
                   return (
                     <TableHead key={header.id} colSpan={header.colSpan}>
@@ -113,8 +144,8 @@ export function DataTable<TData, TValue>({
                                 asc: <ChevronUp className="ms-2 h-4 w-4" />,
                                 desc: <ChevronDown className="ms-2 h-4 w-4" />,
                               }[header.column.getIsSorted() as string] ?? (
-                                <ChevronsUpDown className="ms-2 h-4 w-4" />
-                              )}
+                                  <ChevronsUpDown className="ms-2 h-4 w-4" />
+                                )}
                             </Button>
                           ) : (
                             flexRender(
@@ -150,8 +181,10 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className=" text-center">
-                  {t("table.notFound")}
+                <TableCell colSpan={columns.length} className="text-center">
+                  {globalFilter
+                    ? t("text.noPropertyFound") // "لم يتم العثور على عقار"
+                    : t("table.notFound")} {/* "لم يتم العثور على سجل" */}
                 </TableCell>
               </TableRow>
             )}

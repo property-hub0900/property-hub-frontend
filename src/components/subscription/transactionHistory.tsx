@@ -1,30 +1,59 @@
-"use client"
+"use client";
 
-import { DataTable } from "@/components/dataTable/data-table"
-import { Badge } from "@/components/ui/badge"
-import type { ColumnDef } from "@tanstack/react-table"
-import { useTranslations } from "next-intl"
-import { useEffect, useState } from "react"
-import { StatusIndicator } from "../ui/status-indicator"
-import { groupByThreeDigits } from "@/utils/utils"
+import { DataTable } from "@/components/dataTable/data-table";
+import { formatDate, groupByThreeDigits, sortTableData } from "@/utils/utils";
+import type { ColumnDef, SortingState } from "@tanstack/react-table";
+import { useTranslations } from "next-intl";
+import { useEffect, useMemo, useState } from "react";
+import { StatusIndicator } from "../ui/status-indicator";
 
-
+// Define the Transaction interface based on used fields
+interface Transaction {
+    createdAt: string;
+    points: number;
+    paymentMethod: string;
+    type: string;
+    endDate: string;
+}
 
 export function TransactionHistory({ subscription }: { subscription: any }) {
-    const t = useTranslations()
-    const [sorting, setSorting] = useState([])
+    const t = useTranslations();
+    const [sorting, setSorting] = useState<SortingState>([]);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-
+    // Update transactions when subscription changes
     useEffect(() => {
         setTransactions(subscription?.results || []);
     }, [subscription]);
 
+    // Preprocess data to include computed fields for sorting
+    const sortableTransactions = useMemo(() => {
+        return transactions.map((transaction) => ({
+            ...transaction,
+            subscriptionDate: transaction.createdAt, // Alias for createdAt
+            status: transaction.endDate && new Date(transaction.endDate) > new Date() ? "active" : "expired", // Computed status
+        }));
+    }, [transactions]);
+
+    // Apply sorting to the data
+    const sortedTransactions = useMemo(() => {
+        if (sorting.length > 0) {
+            const { id, desc } = sorting[0];
+            return sortTableData(sortableTransactions, {
+                field: id as keyof typeof sortableTransactions[0],
+                direction: desc ? "desc" : "asc",
+            });
+        }
+        return sortableTransactions;
+    }, [sortableTransactions, sorting]);
+
+    // Define columns
     const columns: ColumnDef<Transaction>[] = [
         {
             accessorKey: "subscriptionDate",
             header: t("subscriptionDate"),
-            cell: ({ row }) => <span className="font-medium">{formatDate(row?.original?.createdAt as string)}</span>,
+            cell: ({ row }) => <span className="font-medium">{formatDate(row.original.createdAt)}</span>,
+            enableSorting: true,
         },
         {
             accessorKey: "points",
@@ -35,76 +64,47 @@ export function TransactionHistory({ subscription }: { subscription: any }) {
         {
             accessorKey: "paymentMethod",
             header: t("method"),
+            enableSorting: false,
+            // capitalize the first letter
+            cell: ({ row }) => <span className="font-medium">{row?.original?.paymentMethod?.charAt(0)?.toUpperCase() + row?.original?.paymentMethod?.slice(1) || "-"}</span>,
         },
         {
             accessorKey: "type",
             header: t("type"),
-            cell: ({ row }) => <span className="font-medium">{row.original.type}</span>,
+            cell: ({ row }) => <span className="font-medium">{row?.original?.type?.charAt(0)?.toUpperCase() + row?.original?.type?.slice(1) || "-"}</span>,
             enableSorting: true,
         },
         {
             accessorKey: "endDate",
             header: t("subscriptionExpiryDate"),
-            cell: ({ row }) => formatDate(row.original.endDate as string),
+            cell: ({ row }) => formatDate(row.original.endDate),
+            enableSorting: true,
         },
         {
             accessorKey: "status",
             header: t("status"),
             cell: ({ row }) => {
-                if (row.original?.endDate && new Date(row.original?.endDate) > new Date()) {
-                    return <StatusIndicator status={"active"} label={"Active"} variant={"subtle"} />
-                } else {
-                    return <StatusIndicator status={"expired"} label={"Expired"} variant={"subtle"} />
-                }
+                const isActive = row.original.endDate && new Date(row.original.endDate) > new Date();
+                return (
+                    <StatusIndicator
+                        status={isActive ? "active" : "expired"}
+                        label={isActive ? "Active" : "Expired"}
+                        variant="subtle"
+                    />
+                );
             },
+            enableSorting: true,
         },
-    ]
+    ];
 
     return (
         <div className="w-full">
-            <DataTable columns={columns} data={transactions} sorting={sorting} onSortingChange={setSorting as any} />
+            <DataTable
+                columns={columns}
+                data={sortedTransactions}
+                sorting={sorting}
+                onSortingChange={setSorting}
+            />
         </div>
-    )
+    );
 }
-
-function StatusBadge({ status }: { status: Transaction["status"] }) {
-    const t = useTranslations()
-
-    const variants = {
-        successful: "bg-green-100 text-green-800 hover:bg-green-100",
-        pending: "bg-yellow-100 text-yellow-800 hover:bg-yellow-100",
-        failed: "bg-red-100 text-red-800 hover:bg-red-100",
-        active: "bg-green-100 text-green-800 hover:bg-green-100",
-        expired: "bg-red-100 text-red-800 hover:bg-red-100",
-    }
-
-    const labels = {
-        successful: t("statusSuccessful"),
-        pending: t("statusPending"),
-        failed: t("statusFailed"),
-        active: t("statusActive"),
-        expired: t("statusExpired"),
-    }
-
-    return (
-        <Badge className={variants[status]} variant="outline">
-            {labels[status]}
-        </Badge>
-    )
-}
-
-function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-    })
-}
-
-function formatCurrency(amount: number): string {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-    }).format(amount)
-}
-

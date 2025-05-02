@@ -17,10 +17,12 @@ export function StaffTable({
   staff,
   onEdit,
   onDelete,
+  title,
 }: {
   staff: StaffMember[];
   onEdit: (staff: StaffMember) => void;
   onDelete: (staff: StaffMember) => void;
+  title: string;
 }) {
   const { hasPermission } = useRBAC();
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -62,13 +64,14 @@ export function StaffTable({
         return (
           <StatusIndicator
             status={row.original.active ? "active" : "inactive"}
-            label={row.original.active ? "Active" : "In-active"}
+            label={row.original.active ? "active" : "In-active"}
             variant={"subtle"}
             className="capitalize"
           />
         );
+
       },
-      enableSorting: false,
+      enableSorting: true,
     },
     {
       id: "actions",
@@ -91,6 +94,7 @@ export function StaffTable({
               size="icon"
               onClick={() => onDelete(row.original)}
               aria-label="Delete staff member"
+              disabled
             >
               <Trash2 className="h-4 w-4 text-red-500" />
             </Button>
@@ -110,19 +114,23 @@ export function StaffTable({
 
   // Preprocess data to include computed fields for sorting
   const sortableData = useMemo(() => {
-    return staff.map((item) => ({
-      ...item,
-      fullName: `${item.firstName || ""} ${item.lastName || ""}`.trim(), // Computed fullName
-      sortableRole: item.role === "manager" ? "admin" : item.role, // Map manager to admin
-      joinedDate: item.createdAt, // Alias for createdAt
-      status: item.active, // Alias for active
-    }));
+    return staff.map((item) => {
+      return {
+        ...item,
+        fullName: `${item.firstName || ""} ${item.lastName || ""}`.trim(), // Computed fullName
+        sortableRole: item.role === "manager" ? "admin" : item.role, // Map manager to admin
+        joinedDate: item.createdAt, // Alias for createdAt
+        status: item.active ? "active" : "inactive",
+      };
+    });
   }, [staff]);
 
   // Apply sorting to the data
   const sortedData = useMemo(() => {
+    // sort with status what should we do 
     if (sorting.length > 0) {
       const { id, desc } = sorting[0];
+
       // Map column accessorKey to the corresponding field in sortableData
       const fieldMap: { [key: string]: keyof typeof sortableData[0] } = {
         fullName: "fullName",
@@ -147,11 +155,16 @@ export function StaffTable({
   };
 
   return (
-    <DataTable
-      columns={columns}
-      data={sortedData}
-      sorting={sorting}
-      onSortingChange={handleSortingChange}
-    />
+    <div className="w-full">
+      <DataTable
+        columns={columns}
+        data={sortedData}
+        sorting={sorting}
+        onSortingChange={handleSortingChange}
+        search={true}
+        title={title}
+        searchingParams={["fullName", "role", "joinedDate", "status"]}
+      />
+    </div>
   );
 }

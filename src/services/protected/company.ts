@@ -75,7 +75,7 @@ export interface IResponse<T> {
 export const companyService = {
   // Get all staff members
   getAllStaff: async (): Promise<IResponse<StaffMember[]>> => {
-    return apiClient.get("companies/staff");
+    return apiClient.get("companies/staff?page=0&pageSize=999&sortBy=createdAt&sortOrder=desc");
   },
 
   updateStaffProfile: async (payload: UpdateStaffRequest): Promise<IResponse<StaffMember>> => {
@@ -176,7 +176,7 @@ export const companyService = {
     return apiClient.put(`/companies`, payload);
   },
   getCompanySubscription: async (): Promise<IResponse<any>> => {
-    return apiClient.get("companies/subscriptions");
+    return apiClient.get("companies/subscriptions?page=0&pageSize=999&sortBy=createdAt&sortOrder=desc");
   },
   renewSubscription: async (payload: any): Promise<IResponse<any>> => {
     return apiClient.post("companies/renew-subscription", payload);
@@ -187,7 +187,7 @@ export const companyService = {
   },
 
   getTopUpHistoryAndPointsTransactions: async (type: string = "topup", page: number = 0, pageSize: number = 999): Promise<IResponse<any>> => {
-    return apiClient.get(`companies/points-transaction?type=${type}&page=${page}&pageSize=${pageSize}`);
+    return apiClient.get(`companies/points-transaction?type=${type}&page=${page}&pageSize=${pageSize}&sortBy=createdAt&sortOrder=desc`);
   },
 
   refundPoints: async (transactionId: string): Promise<IResponse<any>> => {

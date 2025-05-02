@@ -73,9 +73,9 @@ export const archivedPropertiesColumns: ColumnDef<ArchivedProperty>[] = [
                     <RefundConfirmationDialog
                         isOpen={isDialogOpen}
                         onClose={() => setIsDialogOpen(false)}
-                        transactionId={property.transactionId}
-                        propertyTitle={property.property.title}
-                        points={property.points}
+                        transactionId={property?.transactionId}
+                        propertyTitle={property?.property?.title}
+                        points={property?.points}
                         onSuccess={handleRefundSuccess}
                     />
                 </>

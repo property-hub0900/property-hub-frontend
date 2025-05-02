@@ -12,6 +12,7 @@ import { DataTable } from "@/components/dataTable/data-table"
 import type { ColumnDef } from "@tanstack/react-table"
 
 type PropertyInsight = {
+    visitLeads: number
     refId: string
     propertyTitle: string
     propertyType: string
@@ -78,6 +79,12 @@ export function PropertiesInsightsView({ onBack }: { onBack: () => void }) {
             header: "Call Leads",
             enableSorting: true,
             cell: ({ row }) => <div className="text-center">{row.original.callLeads}</div>,
+        },
+        {
+            accessorKey: "visitLeads",
+            header: "View Leads",
+            enableSorting: true,
+            cell: ({ row }) => <div className="text-center">{row.original.visitLeads}</div>,
         },
     ]
 

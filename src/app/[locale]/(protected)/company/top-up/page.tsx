@@ -1,24 +1,54 @@
 "use client"
 
-import { DataTable } from "@/components/dataTable/data-table"
+import { useState, useEffect } from "react"
 import { Loader } from "@/components/loader"
 import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { getErrorMessage } from "@/utils/utils"
 import { companyService } from "@/services/protected/company"
 import { useQuery } from "@tanstack/react-query"
 import { useTranslations } from "next-intl"
-import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { DataTable } from "@/components/dataTable/data-table"
+import type { SortingState } from "@tanstack/react-table"
 import { Columns } from "./columns"
-import { TopUpForm } from "./top-up-form"
 import { navigationEvents, NAVIGATION_EVENTS } from "@/lib/navigation-events"
+import { TopUpForm } from "./top-up-form"
+import { useSearchParams, usePathname, useRouter } from "next/navigation"
 
 export default function TopUpSubscriptionPage() {
   const t = useTranslations("topUpSubscription")
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
+
   const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined)
-  const [showTopUpForm, setShowTopUpForm] = useState(false)
-  const [currentPage, setCurrentPage] = useState(1)
+  const [showTopUpForm, setShowTopUpForm] = useState(searchParams.get("showForm") === "true")
+  const [currentPage, setCurrentPage] = useState(parseInt(searchParams.get("page") || "1", 10))
+  const [sorting, setSorting] = useState<SortingState>([])
+
+  // Function to update URL parameters
+  const updateUrlParams = (params: { page?: number; showForm?: boolean }) => {
+    const newParams = new URLSearchParams(searchParams.toString())
+
+    if (params.page === 1 || params.page === undefined) {
+      newParams.delete("page")
+    } else {
+      newParams.set("page", params.page.toString())
+    }
+
+    if (params.showForm) {
+      newParams.set("showForm", "true")
+    } else {
+      newParams.delete("showForm")
+    }
+
+    router.replace(`${pathname}?${newParams.toString()}`)
+  }
+
+  // Update URL when state changes
+  useEffect(() => {
+    updateUrlParams({ page: currentPage, showForm: showTopUpForm })
+  }, [currentPage, showTopUpForm, pathname])
 
   // Fetch top-up plans
   const { data: topUpPlans = [], isLoading: isLoadingPlans } = useQuery({
@@ -41,7 +71,7 @@ export default function TopUpSubscriptionPage() {
     isLoading: isLoadingHistory,
     refetch: refetchHistory,
   } = useQuery({
-    queryKey: ["topUpHistory", statusFilter], // Include statusFilter in the query key
+    queryKey: ["topUpHistory", statusFilter],
     queryFn: async () => {
       try {
         const response: any = await companyService.getTopUpHistoryAndPointsTransactions("topup", 0, 999)
@@ -52,7 +82,6 @@ export default function TopUpSubscriptionPage() {
         return []
       }
     },
-    // Enable refetching when component mounts or when dependencies change
     refetchOnWindowFocus: false,
   })
 
@@ -61,15 +90,21 @@ export default function TopUpSubscriptionPage() {
   const resetPageState = () => {
     setShowTopUpForm(false)
     setStatusFilter(undefined)
-    // Refetch history data when resetting the page
+    setSorting([])
+    setCurrentPage(1)
+    updateUrlParams({ page: 1, showForm: false })
     refetchHistory()
   }
 
-  // Handle form completion
   const handleTopUpComplete = () => {
     setShowTopUpForm(false)
-    // Refetch history data when a top-up is completed
+    updateUrlParams({ page: currentPage, showForm: false })
     refetchHistory()
+  }
+
+  const handleToggleTopUpForm = () => {
+    setShowTopUpForm(true)
+    updateUrlParams({ page: currentPage, showForm: true })
   }
 
   useEffect(() => {
@@ -78,7 +113,22 @@ export default function TopUpSubscriptionPage() {
   }, [])
 
   // Filter the history data based on status if a filter is selected
-  const filteredHistory = statusFilter ? topUpHistory.filter((item: any) => item.status === statusFilter) : topUpHistory
+  const filteredHistory = statusFilter
+    ? topUpHistory.filter((item: any) => item.status === statusFilter)
+    : topUpHistory
+
+  // Sort the filtered data based on the sorting state
+  const sortedHistory = [...filteredHistory].sort((a, b) => {
+    if (sorting.length > 0) {
+      const { id, desc } = sorting[0] // Use the first sorting criterion
+      const aValue = a[id]
+      const bValue = b[id]
+      if (aValue < bValue) return desc ? 1 : -1
+      if (aValue > bValue) return desc ? -1 : 1
+      return 0
+    }
+    return 0
+  })
 
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6 max-w-full">
@@ -87,7 +137,7 @@ export default function TopUpSubscriptionPage() {
       <div style={{ display: showTopUpForm ? "none" : "block" }}>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <Button onClick={() => setShowTopUpForm(true)} className="self-start sm:self-auto">
+          <Button onClick={handleToggleTopUpForm} className="self-start sm:self-auto">
             {t("addNew")}
           </Button>
         </div>
@@ -98,13 +148,21 @@ export default function TopUpSubscriptionPage() {
           </div>
 
           <div className="w-full overflow-x-auto">
-            <DataTable columns={Columns() as any} data={filteredHistory} />
+            <DataTable
+              columns={Columns() as any}
+              data={sortedHistory}
+              sorting={sorting}
+              onSortingChange={setSorting}
+            />
           </div>
         </div>
       </div>
 
       <div style={{ display: showTopUpForm ? "block" : "none" }}>
-        <TopUpForm onCancel={() => setShowTopUpForm(false)} onComplete={handleTopUpComplete} plans={topUpPlans} />
+        <TopUpForm onCancel={() => {
+          setShowTopUpForm(false)
+          updateUrlParams({ page: currentPage, showForm: false })
+        }} onComplete={handleTopUpComplete} plans={topUpPlans} />
       </div>
     </div>
   )
