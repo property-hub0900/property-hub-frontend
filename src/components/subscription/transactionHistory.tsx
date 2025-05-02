@@ -1,7 +1,7 @@
 "use client";
 
 import { DataTable } from "@/components/dataTable/data-table";
-import { formatDate, groupByThreeDigits, sortTableData } from "@/utils/utils";
+import { formatDate, formatPaymentMethod, groupByThreeDigits, sortTableData } from "@/utils/utils";
 import type { ColumnDef, SortingState } from "@tanstack/react-table";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
@@ -17,6 +17,8 @@ interface Transaction {
     endDate?: string;
     status?: string;
 }
+
+
 
 export function TransactionHistory({ subscription }: { subscription: Transaction[] }) {
     const t = useTranslations();
@@ -70,7 +72,7 @@ export function TransactionHistory({ subscription }: { subscription: Transaction
             cell: ({ row }) =>
                 row.original.paymentMethod ? (
                     <span className="font-medium">
-                        {row.original.paymentMethod.charAt(0).toUpperCase() + row.original.paymentMethod.slice(1)}
+                        {formatPaymentMethod(row.original.paymentMethod)}
                     </span>
                 ) : (
                     "-"

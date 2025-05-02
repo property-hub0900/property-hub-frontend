@@ -2,7 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table"
 import { useTranslations } from "next-intl"
-import { formatCurrency, formatDate, groupByThreeDigits } from "@/utils/utils"
+import { formatCurrency, formatDate, formatPaymentMethod, groupByThreeDigits } from "@/utils/utils"
 
 export interface TopUpSubscription {
     createdAt: string // Adjusted to match the accessorKey
@@ -34,7 +34,7 @@ export function Columns() {
             accessorKey: "paymentMethod",
             header: t("columns.paymentMethod"),
             enableSorting: true,
-            cell: ({ row }: any) => <span className="font-medium">{row?.original?.paymentMethod?.charAt(0)?.toUpperCase() + row?.original?.paymentMethod?.slice(1) || "-"}</span>,
+            cell: ({ row }: any) => <span className="font-medium">{formatPaymentMethod(row.original.paymentMethod)}</span>,
         },
         {
             accessorKey: "type",
