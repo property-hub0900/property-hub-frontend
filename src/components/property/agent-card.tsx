@@ -92,15 +92,15 @@ export function AgentCard({
           </Button>
         </Link>
       </div>
-      <div className="flex justify-center gap-4">
+      <div className="flex items-center gap-4">
         {company.logo && (
-          <p>
+          <p className="shrink-0 w-16">
             <Image
-              className="object-cover"
+              className="object-cover h-auto "
               src={company.logo}
               alt={company.name}
-              width={200}
-              height={100}
+              width={70}
+              height={70}
             ></Image>
           </p>
         )}

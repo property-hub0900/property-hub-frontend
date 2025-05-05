@@ -148,7 +148,8 @@ export default function PropertyForm(
 
   const editorRef = useRef<TiptapEditorRef>(null);
 
-  console.log("form Errors", form.formState.errors);
+  // console.log("form Errors", form.formState.errors);
+  // console.log("form defaultValues", form.formState.defaultValues);
 
   return (
     <>
@@ -338,7 +339,12 @@ export default function PropertyForm(
                   <FormItem>
                     <FormLabel>{t("form.bedrooms.label")}</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <Input
+                        min={0}
+                        type="number"
+                        {...field}
+                        value={field.value || ""}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -355,7 +361,12 @@ export default function PropertyForm(
                     <span>*</span>
                   </FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <Input
+                      min={0}
+                      type="number"
+                      {...field}
+                      value={field.value || ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -1,10 +1,12 @@
 "use client";
+import { PROPERTY_PURPOSE } from "@/constants/constants";
+import { PUBLIC_ROUTES } from "@/constants/paths";
 import { Facebook, Twitter, Youtube } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type React from "react";
 
 export default function Footer() {
-  const t = useTranslations("landingPage");
+  const t = useTranslations();
 
   const currentYear = new Date().getFullYear();
 
@@ -12,46 +14,50 @@ export default function Footer() {
     <footer className="bg-primary text-primary-foreground w-full pt-12 pb-4 md:pt-16 md:pb-8">
       <div className="container mx-auto">
         <div className="flex flex-col md:grid grid-cols-1 md:grid-cols-5 gap-8 mb-5 md:gap-16 md:mb-12">
-          <FooterBrand t={t} />
+          <FooterBrand />
           <FooterLinks
-            title={t("footer.product")}
+            title={t("title.properties")}
             links={[
-              { label: t("footer.features"), href: "#" },
-              { label: t("footer.pricing"), href: "#" },
-              { label: t("footer.listings"), href: "#" },
-              { label: t("footer.customers"), href: "#" },
-              { label: t("footer.brand"), href: "#" },
+              {
+                label: t("button.buy"),
+                href: `${PUBLIC_ROUTES.properties}?purpose=${PROPERTY_PURPOSE[0]}`,
+              },
+              {
+                label: t("button.rent"),
+                href: `${PUBLIC_ROUTES.properties}?purpose=${PROPERTY_PURPOSE[1]}`,
+              },
+              {
+                label: t("button.exploreAll"),
+                href: `${PUBLIC_ROUTES.properties}`,
+              },
+              {
+                label: t("button.findCompany"),
+                href: `#`,
+              },
             ]}
           />
           <FooterLinks
-            title={t("footer.company")}
+            title={t("title.company")}
             links={[
-              { label: t("footer.aboutUs"), href: "#" },
-              { label: t("footer.blog"), href: "#" },
-              { label: t("footer.careers"), href: "#" },
-              { label: t("footer.contact"), href: "#" },
-              { label: t("footer.customers"), href: "#" },
+              { label: t("button.aboutUs"), href: "#" },
+              {
+                label: t("button.contactUs"),
+                href: `${PUBLIC_ROUTES.contactUs}`,
+              },
             ]}
           />
           <FooterLinks
-            title={t("footer.resources")}
+            title={t("title.resources")}
             links={[
-              { label: t("footer.community"), href: "#" },
-              { label: t("footer.contact"), href: "#" },
-              { label: t("footer.dpa"), href: "#" },
-              { label: t("footer.terms"), href: "#" },
+              { label: t("button.privacyPolicy"), href: "#" },
+              { label: t("button.termsAndConditions"), href: "#" },
             ]}
           />
         </div>
 
-        <div className="border-t border-primary-foreground/40 pt-5 flex flex-col md:flex-row justify-between items-center md:pt-8">
+        <div className="border-t border-primary-foreground/40 pt-5 flex justify-start items-center md:pt-8">
           <p className=" text-sm">
-            © {currentYear} PropertyExplorer. {t("footer.allRightsReserved")}
-          </p>
-          <p className="text-primary-foreground hover:underline text-sm mt-2 md:mt-0">
-            <a href="#" className="hover:text-primary-foreground">
-              {t("footer.termsAndConditions")}
-            </a>
+            © {currentYear} PPortal. {t("footer.allRightsReserved")}
           </p>
         </div>
       </div>
@@ -59,14 +65,15 @@ export default function Footer() {
   );
 }
 
-function FooterBrand({ t }: { t: any }) {
+function FooterBrand() {
+  const t = useTranslations();
   return (
     <div className="col-span-2">
       <h3 className="text-2xl text-primary-foreground font-bold mb-4">
-        PropertyExplorer
+        PPortal
       </h3>
       <p className="text-primary-foreground text-base mb-5 ">
-        {t("footer.tagline")}
+        {t("text.footerTagline")}
       </p>
       <div className="flex gap-4">
         <SocialLink href="#" icon={<Facebook size={18} />} />
