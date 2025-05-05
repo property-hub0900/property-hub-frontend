@@ -104,14 +104,14 @@ export const PropertiesTable = ({ data }: { data: IProperty[] }) => {
 
   return (
     <>
-      <div className="bg-white rounded-md shadow mb-10">
-        <div className="p-6">
-          <div className="flex justify-between items-center">
+      <div className="bg-white rounded-md shadow">
+        <div className="p-4 md:p-6">
+          <div className="flex gap-3 flex-col mb-5 md:flex-row md:justify-between md:items-center">
             <h4>{t("title.properties")}</h4>
-            <div className="flex gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               <div className="relative">
                 <Input
-                  className="w-40"
+                  className="md:w-40"
                   name="referenceNo"
                   onChange={handleChange}
                   placeholder={t("form.referenceNo.label")}

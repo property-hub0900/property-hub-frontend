@@ -21,7 +21,10 @@ export const commonValidations = {
       .min(1, { message: requiredErrorMessage }),
   numberOptional: (requiredErrorMessage: string) =>
     z.coerce
-      .number({ required_error: requiredErrorMessage })
+      .number({
+        required_error: requiredErrorMessage,
+        invalid_type_error: requiredErrorMessage,
+      })
       .min(0, { message: requiredErrorMessage }),
 
   email: (requiredErrorMessage: string, invalidErrorMessage: string) =>
