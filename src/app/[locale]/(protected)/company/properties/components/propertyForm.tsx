@@ -148,9 +148,6 @@ export default function PropertyForm(
 
   const editorRef = useRef<TiptapEditorRef>(null);
 
-  // console.log("form Errors", form.formState.errors);
-  // console.log("form defaultValues", form.formState.defaultValues);
-
   return (
     <>
       <Loader isLoading={isLoadingAmenities}></Loader>
@@ -213,10 +210,6 @@ export default function PropertyForm(
                   </FormItem>
                 )}
               />
-
-              {/* <UploadImages1
-                setUploadedFilesUrls={setFilesUrls}
-              ></UploadImages1> */}
             </div>
             <FormField
               control={form.control}
@@ -632,22 +625,7 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
-            {/* <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="md:col-span-2">
-                  <FormLabel>
-                    {t("form.description.label")}
-                    <span>*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
+
             <FormField
               control={form.control}
               name={"description"}
@@ -665,7 +643,6 @@ export default function PropertyForm(
                       className="w-full"
                     />
                   </FormControl>
-                  {/* {description && <FormDescription>{description}</FormDescription>} */}
                   <FormMessage />
                 </FormItem>
               )}
@@ -687,27 +664,11 @@ export default function PropertyForm(
                       className="w-full"
                     />
                   </FormControl>
-                  {/* {description && <FormDescription>{description}</FormDescription>} */}
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            {/* <FormField
-              control={form.control}
-              name="descriptionAr"
-              render={({ field }) => (
-                <FormItem className="md:col-span-2" dir="rtl">
-                  <FormLabel>
-                    وصف<span>*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
             {hasPermission(PERMISSIONS.FEATURE_PROPERTY) && (
               <FormField
                 control={form.control}

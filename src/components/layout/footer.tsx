@@ -32,7 +32,7 @@ export default function Footer() {
               },
               {
                 label: t("button.findCompany"),
-                href: `#`,
+                href: `${PUBLIC_ROUTES.findCompany}`,
               },
             ]}
           />

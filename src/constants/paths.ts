@@ -32,6 +32,7 @@ export const COMPANY_DASHBOARD_PATHS = {};
 
 export const PUBLIC_ROUTES = {
   properties: "/properties",
+  findCompany: "/find-company",
   contactUs: "/contact-us",
   login: "/customer/login",
   register: "/customer/register",

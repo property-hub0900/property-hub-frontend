@@ -1,11 +1,13 @@
 import apiClient from "@/lib/api-client";
 import { buildQueryString } from "@/utils/utils";
 import {
+  ICompany,
+  ICompanyFilters,
   IProperty,
   IPropertyFilters,
   IPropertyResponse,
 } from "@/types/public/properties";
-import { ICommonMessageResponse } from "@/types/common";
+import { ICommonMessageResponse, IListResponse } from "@/types/common";
 import { leadsGenerationService } from "./leads-generation";
 
 export const propertyServices = {
@@ -42,5 +44,10 @@ export const propertyServices = {
     searchQuery: string;
   }): Promise<ICommonMessageResponse> {
     return apiClient.post(`/customers/save-search`, payloads);
+  },
+  fetchCompanies(filters: ICompanyFilters): Promise<IListResponse<ICompany>> {
+    return apiClient.get(
+      `/companies?status=active&${buildQueryString(filters)}`
+    );
   },
 };

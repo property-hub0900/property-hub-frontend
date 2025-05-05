@@ -124,3 +124,29 @@ export interface PaginatedResponse<T> {
   pageSize: number;
   total: number;
 }
+
+export interface ICompanyFilters {
+  name?: string;
+  page?: string;
+  pageSize?: string;
+}
+
+export interface ICompany {
+  companyId: number;
+  name: string;
+  email: string;
+  phone: string;
+  status: string;
+  website: string;
+  logo: string;
+  taxNumber: string;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  postalCode: string;
+  listingCount: number;
+  rentedProperties: number;
+  saledProperties: number;
+  createdAt: Date | string;
+}
