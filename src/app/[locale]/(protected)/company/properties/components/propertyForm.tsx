@@ -29,6 +29,7 @@ import {
   PROPERTY_OCCUPANCY,
   PROPERTY_OWNERSHIP_STATUS,
   PROPERTY_PURPOSE,
+  PROPERTY_RENTAL_PERIOD,
   PROPERTY_STATUSES,
   PROPERTY_TYPES,
   PROPERTY_VIEWS,
@@ -47,6 +48,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { DefaultValues, useForm } from "react-hook-form";
 import { IFilesUrlPayload, TImages, UploadImages } from "./uploadImages";
+import { DatePicker } from "@/components/datepicker";
 
 interface IPropertyFormProps<T> {
   mode: "create" | "edit";
@@ -90,6 +92,8 @@ export default function PropertyForm(
             hidePrice: false,
             propertyType: "",
             purpose: undefined,
+            rentalPeriod: "",
+            availableFrom: undefined,
             bedrooms: undefined,
             bathrooms: undefined,
             status: PROPERTY_STATUSES.draft,
@@ -112,6 +116,7 @@ export default function PropertyForm(
 
   const category = form.watch("category");
   const propertyType = form.watch("propertyType");
+  const propertyPurpose = form.watch("purpose");
 
   const handleCancel = () => {
     router.push(
@@ -305,6 +310,44 @@ export default function PropertyForm(
                 </FormItem>
               )}
             />
+            {propertyPurpose === "For Rent" && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="rentalPeriod"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("form.rentalPeriod.label")}</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={t("form.rentalPeriod.label")}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {PROPERTY_RENTAL_PERIOD.map((item, index) => (
+                            <SelectItem key={index} value={item}>
+                              {t(`form.rentalPeriod.options.${item}`)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <DatePicker
+                  name="availableFrom"
+                  label={t("form.availableFrom.label")}
+                  disabledDate={(date) =>
+                    date < new Date(new Date().setHours(0, 0, 0, 0))
+                  }
+                />
+              </>
+            )}
             <FormField
               control={form.control}
               name="propertySize"

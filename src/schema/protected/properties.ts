@@ -59,6 +59,10 @@ export const createPropertySchema = (t: (key: string) => string) =>
       .min(1, "At least one image is required")
       .max(20, `Maximum 20 images allowed`),
     bedrooms: commonValidations.numberOptional(t("form.required")),
+    rentalPeriod: commonValidations.stringOptional(),
+    availableFrom: z.date({
+      required_error: t("form.required"),
+    }),
   });
 // .refine(
 //   (data) => {

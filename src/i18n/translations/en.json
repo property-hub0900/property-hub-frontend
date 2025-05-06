@@ -607,6 +607,19 @@
     },
     "publisher": {
       "label": "Publisher"
+    },
+    "rentalPeriod": {
+      "label": "Rental Period",
+      "placeholder": "",
+      "options": {
+        "Yearly": "Yearly",
+        "Monthly": "Monthly",
+        "Weekly": "Weekly",
+        "Daily": "Daily"
+      }
+    },
+    "availableFrom": {
+      "label": "Available From"
     }
   },
   "seo": {

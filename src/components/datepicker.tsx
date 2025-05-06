@@ -48,7 +48,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
                   ref={contractExpiryButton}
                   variant="outline"
                   className={cn(
-                    "w-full pl-3 text-left font-normal hover:bg-background",
+                    "w-full pl-3 h-10 text-left font-normal hover:bg-background",
                     !field.value && "text-muted-foreground"
                   )}
                 >
