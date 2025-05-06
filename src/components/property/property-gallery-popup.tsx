@@ -5,6 +5,7 @@ import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IPropertyImages } from "@/types/public/properties";
+import { firebaseImageLoader } from "@/lib/firebaseUtil";
 
 interface PropertyImagePopupProps {
   images: IPropertyImages[];
@@ -84,6 +85,7 @@ export function PropertyGalleryPopup({
             alt={`${title} - image ${currentIndex + 1}`}
             fill
             className="object-contain"
+            loader={firebaseImageLoader}
           />
 
           <Button
@@ -113,9 +115,8 @@ export function PropertyGalleryPopup({
             {images.map((image, index) => (
               <div
                 key={index}
-                className={`relative w-20 h-20 flex-shrink-0 cursor-pointer ${
-                  index === currentIndex ? "ring-2 ring-primary" : ""
-                }`}
+                className={`relative w-20 h-20 flex-shrink-0 cursor-pointer ${index === currentIndex ? "ring-2 ring-primary" : ""
+                  }`}
                 onClick={() => goToImage(index)}
               >
                 <Image
@@ -123,6 +124,7 @@ export function PropertyGalleryPopup({
                   alt={`${title} - thumbnail ${index + 1}`}
                   fill
                   className="object-cover"
+                  loader={firebaseImageLoader}
                 />
               </div>
             ))}

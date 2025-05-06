@@ -25,6 +25,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { companyService } from "@/services/protected/company";
+import { firebaseImageLoader } from "@/lib/firebaseUtil";
 
 // Initialize Stripe with your publishable key
 // Make sure this is loaded only on the client side
@@ -245,11 +246,11 @@ function CardForm({ onSubmit, amount }: StripeCardFormProps) {
                       alt={icon.alt}
                       width={32}
                       height={20}
-                      className={`h-5 w-auto transition-opacity ${
-                        cardBrand && cardBrand !== icon.brand
-                          ? "opacity-30"
-                          : "opacity-100"
-                      }`}
+                      className={`h-5 w-auto transition-opacity ${cardBrand && cardBrand !== icon.brand
+                        ? "opacity-30"
+                        : "opacity-100"
+                        }`}
+                      loader={firebaseImageLoader}
                     />
                   ))}
                 </div>

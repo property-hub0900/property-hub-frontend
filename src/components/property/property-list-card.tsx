@@ -267,6 +267,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
                   src={postedByStaff.profilePhoto || "/placeholder.svg"}
                   alt="Profile"
                   className="rounded-full"
+                  loader={firebaseImageLoader}
                 />
               ) : (
                 <User className="size-4 text-muted-foreground/50" />

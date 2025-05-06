@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/ui/user-avatar";
+import { firebaseImageLoader } from "@/lib/firebaseUtil";
 import { leadsGenerationService } from "@/services/public/leads-generation";
 import { IPostedByStaff, IPropertyCompany } from "@/types/public/properties";
 import { handleWhatsAppContent } from "@/utils/utils";
@@ -101,6 +102,7 @@ export function AgentCard({
               alt={company.name}
               width={70}
               height={70}
+              loader={firebaseImageLoader}
             ></Image>
           </p>
         )}

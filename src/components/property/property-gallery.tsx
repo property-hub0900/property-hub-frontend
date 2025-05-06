@@ -112,6 +112,7 @@ export function PropertyGallery({
               onClick={() => openPopup(0)}
             >
               <Image
+                loader={firebaseImageLoader}
                 src={image.url || "/placeholder.svg"}
                 alt={`${title} - view ${0}`}
                 fill
