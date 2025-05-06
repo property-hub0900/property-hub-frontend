@@ -13,6 +13,7 @@ import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { PUBLIC_ROUTES } from "@/constants/paths";
 import { useMemo } from "react";
+import { firebaseImageLoader } from "@/lib/firebaseUtil";
 
 export default function PropertyCard({ data }: Readonly<{ data: IProperty }>) {
   const locale = useLocale();
@@ -56,6 +57,7 @@ export default function PropertyCard({ data }: Readonly<{ data: IProperty }>) {
             width={500}
             height={500}
             priority
+            loader={firebaseImageLoader}
           />
         </Link>
       </div>
