@@ -4,18 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { IProperty } from "@/types/public/properties";
-import {
-  Heart,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Phone,
-  Bath,
-  Camera,
-  BedDouble,
-  Ruler,
-  User,
-} from "lucide-react";
+import { Heart, Mail, MapPin, MessageCircle, Phone, Bath, Camera, BedDouble, Ruler, User } from 'lucide-react';
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -132,13 +121,13 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
                 <SwiperSlide key={index}>
                   <div className="relative h-full w-full select-none">
                     <Image
-                      src={image || "/placeholder.svg?height=80&width=80"}
+                      src={image || "/placeholder.svg?height=300&width=500"}
                       width={500}
                       height={300}
                       alt={`${propertyType} property`}
-                      className="object-cover h-full"
+                      className="object-cover h-full w-full"
                       priority
-                      objectFit="cover"
+                      unoptimized={false}
                     />
                   </div>
                 </SwiperSlide>
@@ -273,7 +262,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
                 <Image
                   width={24}
                   height={24}
-                  src={postedByStaff.profilePhoto}
+                  src={postedByStaff.profilePhoto || "/placeholder.svg"}
                   alt="Profile"
                   className="rounded-full"
                 />
@@ -292,7 +281,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
             <Image
               width={24}
               height={24}
-              src={postedByStaff.profilePhoto}
+              src={postedByStaff.profilePhoto || "/placeholder.svg"}
               alt="Profile"
               className="rounded-full"
             />
