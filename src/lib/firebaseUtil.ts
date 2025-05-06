@@ -18,3 +18,23 @@ export const uploadImageToFirebase = async (file: File): Promise<string> => {
     throw error;
   }
 };
+
+export function firebaseImageLoader({
+  src,
+  width,
+  quality,
+}: {
+  src: string;
+  width: number;
+  quality?: number;
+}) {
+  // For Firebase Storage URLs, return the original URL
+  if (src.includes("firebasestorage.googleapis.com")) {
+    return src;
+  }
+
+  // For other images, let Next.js handle them normally
+  return `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${
+    quality || 75
+  }`;
+}

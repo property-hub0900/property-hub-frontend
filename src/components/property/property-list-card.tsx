@@ -25,6 +25,7 @@ import { USER_ROLES } from "@/constants/rbac";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { propertyServices } from "@/services/public/properties";
 import { leadsGenerationService } from "@/services/public/leads-generation";
+import { firebaseImageLoader } from "@/lib/firebaseUtil";
 
 export const PropertyListCard = ({ data }: { data: IProperty }) => {
   const t = useTranslations();
@@ -121,6 +122,7 @@ export const PropertyListCard = ({ data }: { data: IProperty }) => {
                 <SwiperSlide key={index}>
                   <div className="relative h-full w-full select-none">
                     <Image
+                      loader={firebaseImageLoader}
                       src={image || "/placeholder.svg?height=300&width=500"}
                       width={500}
                       height={300}
