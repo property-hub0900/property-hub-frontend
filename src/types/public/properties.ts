@@ -46,6 +46,8 @@ export interface IProperty {
   company: IPropertyCompany;
   PropertyAmenities: IPropertyAmenities[];
   is_favorite: boolean;
+  rentalPeriod?: string;
+  availableFrom?: string;
 }
 
 export interface IPostedByStaff {
@@ -116,6 +118,7 @@ export interface IPropertyFilters {
   pageSize?: string;
   sortBy?: string;
   address?: string;
+  rentalPeriod?: string;
 }
 
 export interface PaginatedResponse<T> {

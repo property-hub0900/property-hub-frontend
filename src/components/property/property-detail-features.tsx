@@ -1,9 +1,10 @@
 import { IProperty } from "@/types/public/properties";
-import { formatNumber } from "@/utils/utils";
+import { formatDate, formatNumber } from "@/utils/utils";
 import {
   Bath,
   BedDouble,
   Building2,
+  Calendar,
   ChartColumnStacked,
   Expand,
   IdCard,
@@ -89,6 +90,17 @@ export function PropertyDetailFeatures({ property }: PropertyDetailsProps) {
           </div>
           <div className="font-medium">{property.referenceNo}</div>
         </div>
+        {property.purpose === "For Rent" && property.availableFrom && (
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex gap-2 items-center text-muted-foreground">
+              <Calendar className="size-5" />
+              {t("form.availableFrom.label")}
+            </div>
+            <div className="font-medium">
+              {formatDate(property.availableFrom)}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
