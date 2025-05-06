@@ -55,6 +55,7 @@ export default function PropertyCard({ data }: Readonly<{ data: IProperty }>) {
             className="w-full h-full object-cover"
             width={500}
             height={500}
+            priority
           />
         </Link>
       </div>

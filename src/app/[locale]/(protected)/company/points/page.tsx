@@ -16,6 +16,7 @@ import { companyService } from "@/services/protected/company"
 import { toast } from "sonner"
 
 export default function PointsPage() {
+    const t = useTranslations();
     // State for sorting and search
     const [pointsHistorySorting, setPointsHistorySorting] = useState<SortingState>([])
     const [archivedSorting, setArchivedSorting] = useState<SortingState>([])
@@ -99,32 +100,32 @@ export default function PointsPage() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 top-0 z-10 pb-4 border-b">
-                <h1 className="text-xl sm:text-2xl font-bold">Points</h1>
+                <h1 className="text-xl sm:text-2xl font-bold">{t("title.points")}</h1>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
                 {/* Available Points Card */}
                 <Card className="lg:col-span-2">
                     <CardHeader className="pb-2">
-                        <CardTitle>Available Points</CardTitle>
+                        <CardTitle>{t("title.availablePoints")}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-sm text-muted-foreground mb-2">Users earn points based on their subscription plan.</p>
+                        <p className="text-sm text-muted-foreground mb-2">{t("text.availablePointsDescription")}</p>
                     </CardContent>
                 </Card>
 
                 {/* Points Expiry Card */}
                 <Card className="flex justify-around items-center p-1">
                     <div className="flex-col sm:flex-row justify-between items-start sm:items-center mt-2">
-                        <p className="text-sm text-muted-foreground">Remaining Points</p>
+                        <p className="text-sm text-muted-foreground">{t("text.remainingPoints")}</p>
                         <h3 className="text-primary">{groupByThreeDigits(user?.company?.sharedPoints || 0)}</h3>
                     </div>
                     <div className="lg:col-span-1">
                         <CardHeader className="pb-2">
-                            <CardTitle>Points Expiry</CardTitle>
+                            <CardTitle>{t("title.pointsExpiry")}</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-sm text-muted-foreground">on {formatDate(user?.company?.subscriptionEndDate)}</p>
+                            <p className="text-sm text-muted-foreground">{t("text.onDate", { date: formatDate(user?.company?.subscriptionEndDate) })}</p>
                         </CardContent>
                     </div>
                 </Card>
@@ -134,7 +135,7 @@ export default function PointsPage() {
             <Card>
                 <CardHeader className="pb-2">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full">
-                        <CardTitle>Points History</CardTitle>
+                        <CardTitle>{t("title.pointsHistory")}</CardTitle>
                         <div className="relative w-full sm:w-64 mt-2 sm:mt-0">
                             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                             <Input
@@ -148,7 +149,7 @@ export default function PointsPage() {
                 </CardHeader>
                 <CardContent>
                     <DataTable
-                        columns={pointsHistoryColumns}
+                        columns={pointsHistoryColumns()}
                         data={sortedPointsHistory}
                         sorting={pointsHistorySorting}
                         onSortingChange={setPointsHistorySorting}
@@ -161,7 +162,7 @@ export default function PointsPage() {
             <Card>
                 <CardHeader className="pb-2">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full">
-                        <CardTitle>Archived Properties History</CardTitle>
+                        <CardTitle>{t("title.archivedProperties")}</CardTitle>
                         <div className="relative w-full sm:w-64 mt-2 sm:mt-0">
                             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                             <Input
@@ -175,7 +176,7 @@ export default function PointsPage() {
                 </CardHeader>
                 <CardContent>
                     <DataTable
-                        columns={archivedPropertiesColumns}
+                        columns={archivedPropertiesColumns()}
                         data={sortedArchivedProperties}
                         sorting={archivedSorting}
                         onSortingChange={setArchivedSorting}

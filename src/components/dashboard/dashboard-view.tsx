@@ -7,6 +7,7 @@ import { useRBAC } from "@/lib/hooks/useRBAC"
 import { AlertCircle, CheckCircle, ChevronDown, FileText, Users, Wallet } from 'lucide-react'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import { MetricCard } from "./metric-card"
+import { useTranslations } from "next-intl"
 
 interface LeadChannel {
     name: string
@@ -36,8 +37,8 @@ interface CustomTooltipProps {
 }
 
 export function DashboardView({ metrics, chartData, hasData, timeframe, setTimeframe }: Readonly<DashboardViewProps>) {
-
-    const timeframeOptions = ["monthly", "yearly"]
+    const t = useTranslations()
+    const timeframeOptions = [(t("form.selectTimeframe.options.monthly")), t("form.selectTimeframe.options.yearly")]
 
     const { hasPermission } = useRBAC();
 
@@ -80,19 +81,19 @@ export function DashboardView({ metrics, chartData, hasData, timeframe, setTimef
                 {showPointsSpent && (
                     <MetricCard
                         value={formatNumber(metrics.pointsSpent)}
-                        label="Points Spent"
+                        label={t("title.pointsSpent")}
                         icon={<Wallet className="h-5 w-5 text-primary" />}
                     />
                 )}
                 <MetricCard
                     value={formatNumber(metrics.publishedListings)}
-                    label="Published Listings"
+                    label={t("title.publishedListings")}
                     icon={<FileText className="h-5 w-5 text-primary" />}
                 />
-                <MetricCard value={formatNumber(metrics.leads)} label="Leads" icon={<Users className="h-5 w-5 text-primary" />} />
+                <MetricCard value={formatNumber(metrics.leads)} label={t("title.leads")} icon={<Users className="h-5 w-5 text-primary" />} />
                 <MetricCard
                     value={formatNumber(metrics.propertyViewImpressions)}
-                    label="Property Views"
+                    label={t("title.propertyViews")}
                     icon={<CheckCircle className="h-5 w-5 text-primary" />}
                 />
             </div>
@@ -102,7 +103,7 @@ export function DashboardView({ metrics, chartData, hasData, timeframe, setTimef
             <div className=" rounded-lg p-3 sm:p-4 md:p-6 mb-6">
                 {/* Chart Header - Responsive layout */}
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4 md:mb-6">
-                    <h4>Total Leads</h4>
+                    <h4>{t("title.totalLeads")}</h4>
 
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-0 w-full sm:w-auto">
                         {/* Legend dots with responsive layout */}
@@ -131,7 +132,7 @@ export function DashboardView({ metrics, chartData, hasData, timeframe, setTimef
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-[100px]">
                                 {timeframeOptions.map((option) => (
-                                    <DropdownMenuItem key={option} className="text-xs capitalize" onClick={() => setTimeframe(option)}>
+                                    <DropdownMenuItem key={option} className="text-xs capitalize" onClick={() => setTimeframe(`${option}`.toLowerCase())}>
                                         {option}
                                     </DropdownMenuItem>
                                 ))}

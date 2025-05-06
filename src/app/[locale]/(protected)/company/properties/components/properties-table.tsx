@@ -108,7 +108,7 @@ export const PropertiesTable = ({ data }: { data: IProperty[] }) => {
             <div className="flex flex-col md:flex-row gap-2">
               <div className="relative">
                 <Input
-                  className="md:w-40"
+                  className="md:w-40 pl-9 pr-3 rtl:pl-3 rtl:pr-9"
                   name="referenceNo"
                   onChange={handleChange}
                   placeholder={t("form.referenceNo.label")}
@@ -120,6 +120,7 @@ export const PropertiesTable = ({ data }: { data: IProperty[] }) => {
                   name="title"
                   onChange={handleChange}
                   placeholder={`${t("button.search")} ${t("form.title.label")}`}
+                  className="pl-9 pr-3 rtl:pl-3 rtl:pr-9"
                 />
                 <Search className="size-[20px] absolute right-2 top-1/2 -translate-y-1/2 z-10 text-muted-foreground/50" />
               </div>

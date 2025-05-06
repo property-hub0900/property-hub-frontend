@@ -34,6 +34,7 @@ export default function PropertiesPage() {
     pageSize: searchParams.get("pageSize") || "10",
     sortBy: searchParams.get("sortBy") || undefined,
     address: searchParams.get("address") || undefined,
+    rentalPeriod: searchParams.get("rentalPeriod") || undefined,
   };
 
   const [filters, setFilters] = useState<IPropertyFilters>(searchFilters);
@@ -63,6 +64,7 @@ export default function PropertiesPage() {
               height={300}
               alt="#"
               className="w-full h-auto"
+              priority
             />
           </div>
         </div>

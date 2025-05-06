@@ -38,7 +38,7 @@ export default function CustomerRegisterPage() {
       firstName: "",
       lastName: "",
       email: "",
-      phone: "",
+      phoneNumber: "",
       password: "",
       confirmPassword: "",
     },
@@ -136,7 +136,7 @@ export default function CustomerRegisterPage() {
 
             <FormField
               control={form.control}
-              name="phone"
+              name="phoneNumber"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("form.phoneNumber.label")}</FormLabel>

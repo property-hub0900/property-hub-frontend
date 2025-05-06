@@ -1,5 +1,22 @@
 {
   "title": {
+    "leadsInsights": "Leads Insights",
+    "whatsappData": "WhatsApp Data",
+    "whatsappLeads": "WhatsApp Leads",
+    "callData": "Call Data",
+    "callsPerHour": "Calls per hour",
+    "propertiesInsights": "Properties Insights",
+    "propertyViews": "Property Views",
+    "pointsSpent": "Points Spent",
+    "publishedListings": "Published Listings",
+    "totalLeads": "Total Leads",
+    "leads": "Leads",
+    "points": "Points",
+    "availablePoints": "Available Points",
+    "pointsExpiry": "Points Expiry",
+    "pointsHistory": "Points History",
+    "archivedProperties": "Archived Properties",
+    "archivedPropertiesHistory": "Archived Properties History",
     "agentsInsights": "Agents Insights",
     "agentDetails": "Agent Details",
     "companySettings": "Company Settings",
@@ -57,6 +74,8 @@
     "resources": "Resources"
   },
   "button": {
+    "viewPerAgent": "View Per Agent",
+    "processing": "Processing...",
     "confirm": "Confirm",
     "next": "Next",
     "login": "Login",
@@ -119,9 +138,29 @@
     "forRent": "For Rent",
     "approve": "Approve",
     "feature": "Feature",
-    "featured": "Featured"
+    "featured": "Featured",
+    "propertiesInsights": "Properties Insights",
+    "agentsInsights": "Agents Insights",
+    "leadsInsights": "Leads Insights",
+    "insights": "Insights",
+    "refund": "Refund",
+    "refunded": "Refunded"
   },
   "text": {
+    "totalLead": "Total Leads",
+    "totalWhatsappLeadsPerDay": "Total WhatsApp leads per day",
+    "totalCalls": "Total Calls",
+    "todaysCalls": "Today's Calls",
+    "callsPerHour": "Calls per hour",
+    "newLead": "New Lead",
+    "newLeads": "New Leads",
+    "noPropertiesFound": "No properties found",
+    "properties": "properties",
+    "of": "of",
+    "propertiesDetails": "Properties Details",
+    "availablePointsDescription": "Users earn points based on their subscription plan.",
+    "remainingPoints": "Remaining Points",
+    "onDate": "on {date}",
     "registerCompanyText": "Enter your details to register",
     "loginCompanyText": "Enter your email & password to continue as a Agent",
     "loginCustomerText": "Enter your email & password to continue as a Customer",
@@ -161,6 +200,12 @@
     "headOffice": "Head Office"
   },
   "table": {
+    "whatsappLeads": "WhatsApp Leads",
+    "callLeads": "Call Leads",
+    "visitLeads": "Visit Leads",
+    "emailLeads": "Email Leads",
+    "totalLeads": "Total Leads",
+    "agent": "Agent",
     "notFound": "No Record found...",
     "page": "Page",
     "of": "of",
@@ -188,9 +233,34 @@
     "renewalPoints": "Renewal Points",
     "date": "Date",
     "topUpPoints": "Top-Up Points",
-    "paymentType": "Payment Type"
+    "paymentType": "Payment Type",
+    "fullName": "Full Name",
+    "joinedDate": "Joined Date",
+    "actions": "Actions",
+    "propertyId": "Property ID",
+    "actionType": "Action Type",
+    "pointsReceived": "Points Received",
+    "pointsRefundable": "Points Refundable",
+    "archivedDate": "Archived Date",
+    "archivedAfterPublish": "Archived After Publish",
+    "publish": "Publish",
+    "feature": "Feature",
+    "archive": "Archive",
+    "delete": "Delete"
+  },
+  "refund": {
+    "title": "Refund Request",
+    "description": "Are you sure you want to refund {points} points for \"{propertyTitle}\"?"
+  },
+
+  "messages": {
+    "refundSuccess": "Points refunded successfully"
   },
   "form": {
+    "search": {
+      "placeholder": "Search Title"
+    },
+
     "agent": {
       "label": "Agent"
     },
@@ -222,7 +292,8 @@
       "label": "Search Agent"
     },
     "selectAgent": {
-      "label": "Select Agent"
+      "label": "Select Agent",
+      "placeholder": "Select Agent"
     },
     "allAgents": {
       "label": "All Agents"
@@ -595,7 +666,8 @@
       "label": "Select timeframe",
       "options": {
         "weekly": "Weekly",
-        "monthly": "Monthly"
+        "monthly": "Monthly",
+        "yearly": "Yearly"
       }
     },
     "featuredStatus": {
@@ -607,6 +679,19 @@
     },
     "publisher": {
       "label": "Publisher"
+    },
+    "rentalPeriod": {
+      "label": "Rental Period",
+      "placeholder": "",
+      "options": {
+        "Yearly": "Yearly",
+        "Monthly": "Monthly",
+        "Weekly": "Weekly",
+        "Daily": "Daily"
+      }
+    },
+    "availableFrom": {
+      "label": "Available From"
     }
   },
   "seo": {

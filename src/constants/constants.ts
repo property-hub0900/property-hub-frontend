@@ -60,3 +60,11 @@ export const PROPERTY_SORT_BY = {
 export type TPropertySortBy = keyof typeof PROPERTY_SORT_BY;
 
 export const COLOR_DASHBOARD = "rgba(74, 160, 217, 1)";
+
+export const PROPERTY_RENTAL_PERIOD = [
+  "Yearly",
+  "Monthly",
+  "Weekly",
+  "Daily",
+] as const;
+export type TPropertyRentalPeriod = (typeof PROPERTY_RENTAL_PERIOD)[number];

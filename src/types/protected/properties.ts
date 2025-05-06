@@ -38,6 +38,8 @@ export interface IProperty {
   postedBy: string;
   companyId: string;
   createdAt: string;
+  rentalPeriod: string;
+  availableFrom: Date;
   PropertyImages: IPropertyImage[];
   postedByStaff: IPostedByStaff;
 }

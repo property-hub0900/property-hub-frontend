@@ -12,12 +12,12 @@ import { Loader } from "../loader"
 import { DatePickerLight } from "../ui/date-picker-light"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import moment from "moment"
+import { useTranslations } from "next-intl"
 
 const CustomTooltip = ({ active, payload, label }: any) => {
+    const t = useTranslations()
     if (active && payload?.length) {
-        // Filter to only show tooltip for the "value" dataKey
         const valuePayload = payload.find((entry: any) => entry.dataKey === "value")
-
         if (valuePayload) {
             return (
                 <div className="bg-white p-4 border border-gray-200 shadow-sm rounded-md text-xs">
@@ -25,7 +25,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                     <div className="flex items-center text-gray-700">
                         <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: valuePayload.color }}></div>
                         <span>
-                            {valuePayload.value} New Lead{valuePayload.value > 1 ? "s" : ""} on {valuePayload.payload.day}
+                            {valuePayload.value} {valuePayload.value > 1 ? t("text.newLeads") : t("text.newLead")} {t("text.onDate", { date: valuePayload.payload.day })}
                         </span>
                     </div>
                 </div>
@@ -35,35 +35,31 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return null
 }
 
-
 export function LeadsInsightsView({
     onBack,
     setActiveView,
 }: { onBack: () => void; setActiveView: (view: string) => void }) {
-    const [timeframe, setTimeframe] = useState("monthly");
-    const [date, setDate] = useState(new Date().toISOString());
+    const t = useTranslations()
+    const [timeframe, setTimeframe] = useState("monthly")
+    const [date, setDate] = useState(new Date().toISOString())
 
     const { data: leadsInsightsData, isLoading: isLeadsInsightsLoading } = useQuery<any>({
         queryKey: ["leads-insights", timeframe],
         queryFn: () => companyService.getLeadsInsights(timeframe),
-    });
+    })
 
     const { data: callsData } = useQuery<any>({
         queryKey: ["calls-data", date],
         queryFn: () => companyService.getCallsData(moment(date).format("YYYY-MM-DD")),
-    });
+    })
 
-    console.log({ callsData });
+    console.log({ callsData })
 
     const whatsappPercentage = leadsInsightsData?.totalLeads
         ? (leadsInsightsData.leadsByType.whatsapp / leadsInsightsData.totalLeads) * 100
         : 0
 
-
     const circleDashoffset = 251.2 - (251.2 * whatsappPercentage) / 100
-
-
-
 
     return (
         <div>
@@ -72,18 +68,17 @@ export function LeadsInsightsView({
                 <Button variant="ghost" className="p-0 mr-2" onClick={onBack}>
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
-                <h3 className="text-lg font-medium">Leads Insights</h3>
+                <h3 className="text-lg font-medium">{t("title.leadsInsights")}</h3>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* WhatsApp Data Section */}
                 <div className="border border-gray-100 rounded-lg p-6">
-                    <h2 className="text-base font-medium mb-6">WhatsApp Data</h2>
-
+                    <h2 className="text-base font-medium mb-6">{t("title.whatsappData")}</h2>
                     <div className="flex justify-center">
                         <div className="relative w-40 h-40">
                             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                                <div className="text-xs text-gray-500">Total Leads</div>
+                                <div className="text-xs text-gray-500">{t("text.totalLead")}</div>
                                 <h4>{groupByThreeDigits(leadsInsightsData?.leadsByType?.whatsapp || 0)}</h4>
                             </div>
                             <svg className="w-full h-full" viewBox="0 0 100 100">
@@ -103,10 +98,9 @@ export function LeadsInsightsView({
                             </svg>
                         </div>
                     </div>
-
                     <div className="mt-4 text-center">
                         <Button variant="link" className="text-primary text-sm p-0" onClick={() => setActiveView("agents")}>
-                            View Per Agent <ArrowRight className="h-3 w-3 ml-1 inline" />
+                            {t("button.viewPerAgent")} <ArrowRight className="h-3 w-3 ml-1 inline" />
                         </Button>
                     </div>
                 </div>
@@ -114,21 +108,20 @@ export function LeadsInsightsView({
                 {/* WhatsApp Leads Chart */}
                 <div className="border border-gray-100 rounded-lg p-6 lg:col-span-2">
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-base font-medium">WhatsApp Leads</h2>
+                        <h2 className="text-base font-medium">{t("title.whatsappLeads")}</h2>
                         <div className="relative inline-block">
                             <Select value={timeframe} onValueChange={(value) => setTimeframe(value)}>
                                 <SelectTrigger className="cursor-pointer">
-                                    <SelectValue placeholder="Select a timeframe" />
+                                    <SelectValue placeholder={t("form.selectTimeframe.label")} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="weekly">Weekly</SelectItem>
-                                    <SelectItem value="monthly">Monthly</SelectItem>
-                                    <SelectItem value="yearly">Yearly</SelectItem>
+                                    <SelectItem value="weekly">{t("form.selectTimeframe.options.weekly")}</SelectItem>
+                                    <SelectItem value="monthly">{t("form.selectTimeframe.options.monthly")}</SelectItem>
+                                    <SelectItem value="yearly">{t("form.selectTimeframe.options.yearly")}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                     </div>
-
                     {leadsInsightsData?.whatsappData?.chartData && (
                         <>
                             <div className="flex justify-between text-xs text-gray-500 mb-1">
@@ -139,7 +132,6 @@ export function LeadsInsightsView({
                                     </div>
                                 ))}
                             </div>
-
                             <div className="h-[180px] relative">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <AreaChart
@@ -156,7 +148,6 @@ export function LeadsInsightsView({
                                         <XAxis dataKey="day" hide />
                                         <YAxis hide domain={[0, "auto"]} />
                                         <Tooltip content={<CustomTooltip />} wrapperStyle={{ zIndex: 10 }} />
-                                        {/* Top line with no fill */}
                                         <Area
                                             type="monotone"
                                             dataKey="topLine"
@@ -165,8 +156,6 @@ export function LeadsInsightsView({
                                             fillOpacity={0}
                                             fill="transparent"
                                         />
-
-                                        {/* Bottom area with gradient fill */}
                                         <Area
                                             type="monotone"
                                             dataKey="value"
@@ -175,50 +164,44 @@ export function LeadsInsightsView({
                                             fillOpacity={1}
                                             fill="url(#colorWhatsapp)"
                                         />
-
                                     </AreaChart>
                                 </ResponsiveContainer>
                             </div>
                         </>
                     )}
-
-                    <div className="text-center text-xs text-gray-500 mt-2">Total WhatsApp leads per day</div>
+                    <div className="text-center text-xs text-gray-500 mt-2">{t("text.totalWhatsappLeadsPerDay")}</div>
                 </div>
 
                 {/* Call Data Section */}
                 <div className="border border-gray-100 rounded-lg p-6">
                     <div className="flex justify-between items-center mb-2">
-                        <h2 className="text-base font-medium">Call Data</h2>
-
+                        <h2 className="text-base font-medium">{t("title.callData")}</h2>
                         <DatePickerLight date={new Date(date)} setDate={(value) => setDate(value.toISOString())} />
                     </div>
                     <div className="text-center">
                         <div className="mt-6">
-                            <div className="text-xs text-gray-500">Total Calls</div>
+                            <div className="text-xs text-gray-500">{t("text.totalCalls")}</div>
                             <div className="text-4xl font-bold text-primary">
                                 {groupByThreeDigits(callsData?.data?.totalCalls || 0)}
                             </div>
                         </div>
-
                         <div className="mt-6">
-                            <div className="text-xs text-gray-500">Today's Calls</div>
+                            <div className="text-xs text-gray-500">{t("text.todaysCalls")}</div>
                             <div className="text-4xl font-bold text-primary">
                                 {groupByThreeDigits(callsData?.data?.todaysCalls || 0)}
                             </div>
                         </div>
                     </div>
-
                     <div className="mt-6 text-center">
                         <Button variant="link" className="text-primary text-sm p-0" onClick={() => setActiveView("agents")}>
-                            View Per Agent <ArrowRight className="h-3 w-3 ml-1 inline" />
+                            {t("button.viewPerAgent")} <ArrowRight className="h-3 w-3 ml-1 inline" />
                         </Button>
                     </div>
                 </div>
 
                 {/* Calls per hour Chart */}
                 <div className="border border-gray-100 rounded-lg p-6 lg:col-span-2">
-                    <h2 className="text-base font-medium mb-4">Calls per hour</h2>
-
+                    <h2 className="text-base font-medium mb-4">{t("title.callsPerHour")}</h2>
                     {leadsInsightsData?.callsPerHourData && (
                         <div className="h-[180px]">
                             <ResponsiveContainer width="100%" height="100%">
@@ -231,8 +214,7 @@ export function LeadsInsightsView({
                             </ResponsiveContainer>
                         </div>
                     )}
-
-                    <div className="text-center text-xs text-gray-500 mt-2">Calls per hour</div>
+                    <div className="text-center text-xs text-gray-500 mt-2">{t("text.callsPerHour")}</div>
                 </div>
             </div>
         </div>

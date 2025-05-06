@@ -59,7 +59,7 @@ export const useAuthCustomerRegisterSchema = (t: (key: string) => string) =>
         t("form.email.errors.invalid")
       ),
 
-      phone: commonValidations
+      phoneNumber: commonValidations
         .stringRequired(t("form.phoneNumber.errors.required"))
         .min(5, { message: t("form.phoneNumber.errors.invalid") })
         .regex(/^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/, {

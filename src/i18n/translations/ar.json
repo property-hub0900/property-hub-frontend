@@ -1,38 +1,336 @@
 {
   "title": {
-    "registerCompanyTitle": "مرحبًا بك في العقارات"
+    "leadsInsights": "رؤى العملاء المحتملين",
+    "whatsappData": "بيانات واتساب",
+    "whatsappLeads": "عملاء واتساب المحتملين",
+    "callData": "بيانات المكالمات",
+    "callsPerHour": "المكالمات في الساعة",
+    "propertiesInsights": "رؤى العقارات",
+    "propertyViews": "مشاهدات العقار",
+    "pointsSpent": "النقاط المستهلكة",
+    "publishedListings": "القوائم المنشورة",
+    "totalLeads": "إجمالي العملاء المحتملين",
+    "points": "النقاط",
+    "availablePoints": "النقاط المتاحة",
+    "pointsExpiry": "انتهاء صلاحية النقاط",
+    "pointsHistory": "سجل النقاط",
+    "archivedProperties": "العقارات المؤرشفة",
+    "archivedPropertiesHistory": "سجل العقارات المؤرشفة",
+    "agentsInsights": "رؤى الوكلاء",
+    "agentDetails": "تفاصيل الوكيل",
+    "companySettings": "إعدادات الشركة",
+    "personalDetails": "التفاصيل الشخصية",
+    "companyDetails": "تفاصيل الشركة",
+    "businessAddress": "عنوان العمل",
+    "loginCompanyTitle": "مرحبًا بك في PropertyExplorer",
+    "registerCompanyTitle": "مرحبًا بك في Property",
+    "loginCustomerTitle": "مرحبًا بك في PropertyExplorer",
+    "registerCustomerTitle": "مرحبًا بك في PropertyExplorer",
+    "forgotPasswordTitle": "هل نسيت كلمة المرور؟",
+    "createNewPassword": "إنشاء كلمة مرور جديدة",
+    "accessManagement": "إدارة الوصول",
+    "companyAgents": "وكلاء الشركة",
+    "newAgent": "وكيل جديد",
+    "inviteUser": "دعوة مستخدم",
+    "editUser": "تعديل المستخدم",
+    "editAgent": "تعديل الوكيل",
+    "deleteAgent": "حذف الوكيل",
+    "deletePhoto": "حذف الصورة",
+    "permissionsAccess": "الأذونات والوصول",
+    "permissions": "الأذونات",
+    "addNewProperty": "إضافة عقار جديد",
+    "editProperty": "تعديل العقار",
+    "userDetails": "تفاصيل المستخدم",
+    "access": "الوصول",
+    "landingHeroTitle": "عقارات فاخرة حصرية في قطر",
+    "landingHeroSubTitle": "عزز عملك مع أفضل المواقع!",
+    "discoverTheLatestProperties": "اكتشف أحدث العقارات",
+    "lookingToAdvertiseAProperty": "هل تتطلع للإعلان عن عقار؟ اتصل بنا.",
+    "investIn": "استثمر في",
+    "qatarBloomingRealEstateMarket": "سوق <highlight>العقارات</highlight> المزدهر في قطر",
+    "amenities": "المرافق",
+    "propertyDetails": "تفاصيل العقار",
+    "furnishing": "التأثيث",
+    "keywordSearch": "البحث بالكلمات الرئيسية",
+    "moreAvailableInSameArea": "المزيد المتاح في نفس المنطقة",
+    "myProfile": "ملفي الشخصي",
+    "changePassword": "تغيير كلمة المرور",
+    "properties": "العقارات",
+    "filters": "الفلاتر",
+    "areYouSure": "هل أنت متأكد؟",
+    "contactUsTitle": "ابحث عن منزل أحلامك في قطر!",
+    "loginAdminTitle": "مرحبًا بك في PropertyExplorer",
+    "companies": "الشركات",
+    "customerListing": "قائمة العملاء",
+    "pointsDetails": "تفاصيل النقاط",
+    "subscriptionDetails": "تفاصيل الاشتراك",
+    "paymentReceipt": "إيصال الدفع",
+    "dashboard": "لوحة التحكم",
+    "inactiveCompanies": "الشركات غير النشطة",
+    "notifications": "الإشعارات",
+    "allNotifications": "جميع الإشعارات",
+    "company": "الشركة",
+    "resources": "الموارد"
   },
   "button": {
-    "next": "التالي"
+    "processing": "جارٍ المعالجة...",
+    "confirm": "تأكيد",
+    "next": "التالي",
+    "login": "تسجيل الدخول",
+    "submit": "إرسال",
+    "registerNow": "سجل الآن",
+    "loginAsAgent": "تسجيل الدخول كوكيل →",
+    "loginAsCustomer": "تسجيل الدخول كعميل →",
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "registerAsAgent": "التسجيل كوكيل",
+    "requestForApproval": "طلب الموافقة",
+    "addNewAgent": "إضافة وكيل جديد",
+    "cancel": "إلغاء",
+    "invite": "دعوة",
+    "inviting": "جارٍ الدعوة...",
+    "update": "تحديث",
+    "updating": "جارٍ التحديث...",
+    "delete": "حذف",
+    "deleting": "جارٍ الحذف...",
+    "saveDraft": "حفظ المسودة",
+    "publish": "نشر",
+    "close": "إغلاق",
+    "uploadPhoto": "تحميل الصورة",
+    "uploadLogo": "تحميل الشعار",
+    "save": "حفظ",
+    "saving": "جارٍ الحفظ...",
+    "buy": "شراء",
+    "rent": "إيجار",
+    "search": "بحث",
+    "exploreAll": "استكشاف الكل",
+    "whatsapp": "واتساب",
+    "letsTalk": "لنتحدث",
+    "contactUs": "اتصل بنا",
+    "exploreProperties": "استكشاف العقارات",
+    "previous": "السابق",
+    "amenities": "المرافق",
+    "call": "اتصال",
+    "whatsApp": "واتساب",
+    "email": "البريد الإلكتروني",
+    "loginRegister": "تسجيل الدخول / التسجيل",
+    "bed": "سرير",
+    "bath": "حمام",
+    "bedsAndBaths": "الأسرة والحمامات",
+    "moreFilters": "مزيد من الفلاتر",
+    "showResults": "إظهار النتائج",
+    "reset": "إعادة تعيين",
+    "find": "بحث",
+    "logout": "تسجيل الخروج",
+    "goBack": "العودة",
+    "addPoints": "إضافة نقاط",
+    "renewSubscription": "تجديد الاشتراك",
+    "markAllAsRead": "تحديد الكل كمقروء",
+    "viewAllNotifications": "عرض جميع الإشعارات",
+    "done": "تم",
+    "bulkUpload": "تحميل جماعي",
+    "aboutUs": "معلومات عنا",
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsAndConditions": "الشروط والأحكام",
+    "findCompany": "البحث عن شركة",
+    "forSale": "للبيع",
+    "forRent": "للإيجار",
+    "approve": "الموافقة",
+    "feature": "مميز",
+    "featured": "مميز",
+    "propertiesInsights": "رؤى العقارات",
+    "agentsInsights": "رؤى الوكلاء",
+    "leadsInsights": "رؤى العملاء المحتملين",
+    "insights": "رؤى",
+    "refund": "استرداد",
+    "refunded": "تم الاسترداد"
   },
   "text": {
-    "registerCompanyText": "أدخل بياناتك للتسجيل"
+    "noPropertiesFound": "لم يتم العثور على عقارات",
+    "properties": "عقارات",
+    "of": "من",
+    "propertiesDetails": "تفاصيل العقارات",
+    "availablePointsDescription": "يكسب المستخدمون نقاطًا بناءً على خطة اشتراكهم.",
+    "remainingPoints": "النقاط المتبقية",
+    "onDate": "في {date}",
+    "registerCompanyText": "أدخل تفاصيلك للتسجيل",
+    "loginCompanyText": "أدخل بريدك الإلكتروني وكلمة المرور للمتابعة كوكيل",
+    "loginCustomerText": "أدخل بريدك الإلكتروني وكلمة المرور للمتابعة كعميل",
+    "noAccount": "ليس لديك حساب؟",
+    "noAgentAccount": "ليس لديك حساب وكيل؟",
+    "orContinueWith": "أو المتابعة باستخدام",
+    "rememberMe": "تذكرني",
+    "forgotPasswordText": "أدخل عنوان بريدك الإلكتروني لإعادة تعيين كلمة المرور",
+    "enterNewPassword": "أدخل كلمة المرور الجديدة",
+    "loadingStaff": "جارٍ تحميل أعضاء الفريق...",
+    "deleteAgentConfirmation": "هل أنت متأكد أنك تريد حذف هذا الوكيل؟ لا يمكن التراجع عن هذا الإجراء.",
+    "deletePhotoConfirmation": "هل أنت متأكد أنك تريد حذف هذه الصورة؟",
+    "loadStaffFailed": "فشل تحميل أعضاء الفريق",
+    "staffDeleted": "تم حذف عضو الفريق بنجاح",
+    "deleteFailed": "فشل حذف عضو الفريق",
+    "hidePriceFromListing": "إخفاء السعر من القائمة",
+    "wantToFeatureProperty": "هل تريد تمييز هذا العقار؟",
+    "monthly": "شهريًا",
+    "sqm": "متر مربع",
+    "featured": "مميز",
+    "listedDaysAgo": "تم إدراجه منذ <highlight></highlight> أيام",
+    "any": "أي",
+    "min": "الحد الأدنى",
+    "max": "الحد الأقصى",
+    "minArea": "الحد الأدنى للمساحة",
+    "maxArea": "الحد الأقصى للمساحة",
+    "failedToFetch": "فشل في الجلب. يرجى المحاولة لاحقًا.",
+    "error": "خطأ",
+    "notRecordFound": "لم يتم العثور على سجل.",
+    "noPropertyFound": "لم يتم العثور على عقار.",
+    "noPropertyFoundDesc": "لا توجد عقارات متاحة بناءً على معاييرك.",
+    "areYouSureText": "هل أنت متأكد أنك تريد حذف هذا؟ لا يمكن التراجع عن هذا الإجراء.",
+    "contactUsSubText": "هل لديك أسئلة حول شراء أو بيع أو تأجير عقار؟ تبحث عن مشورة خبير أو ترغب في جدولة معاينة؟ املأ النموذج أدناه وسيتواصل معك فريقنا قريبًا.",
+    "loginAdminText": "أدخل بريدك الإلكتروني وكلمة المرور للمتابعة",
+    "noNotifications": "لا توجد إشعارات",
+    "footerTagline": "يمكن لخبرائنا تقديم رؤى قيمة ومساعدتك في تحديد العقارات.",
+    "headOffice": "المكتب الرئيسي"
   },
   "table": {
-    "notFound": "لم يتم العثور على سجل"
+    "whatsappLeads": "عملاء واتساب",
+    "callLeads": "عملاء المكالمات",
+    "visitLeads": "عملاء الزيارات",
+    "emailLeads": "عملاء البريد الإلكتروني",
+    "totalLeads": "إجمالي العملاء المحتملين",
+    "agent": "الوكيل",
+    "notFound": "لم يتم العثور على سجل...",
+    "page": "الصفحة",
+    "of": "من",
+    "refID": "الرقم المرجعي",
+    "title": "العنوان",
+    "publisher": "الناشر",
+    "type": "النوع",
+    "price": "السعر",
+    "createdAt": "تاريخ الإنشاء",
+    "status": "الحالة",
+    "upgradeProperty": "ترقية العقار",
+    "action": "الإجراء",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "businessNumber": "رقم العمل",
+    "registrationDate": "تاريخ التسجيل",
+    "phoneNumber": "رقم الهاتف",
+    "companyName": "اسم الشركة",
+    "points": "النقاط",
+    "leads": "العملاء المحتملون",
+    "listingCount": "عدد القوائم",
+    "featured": "مميز",
+    "subscriptionDate": "تاريخ الاشتراك",
+    "subscriptionExpiryDate": "تاريخ انتهاء الاشتراك",
+    "renewalPoints": "نقاط التجديد",
+    "date": "التاريخ",
+    "topUpPoints": "نقاط التعبئة",
+    "paymentType": "نوع الدفع",
+    "fullName": "الاسم الكامل",
+    "joinedDate": "تاريخ الانضمام",
+    "actions": "الإجراءات",
+    "propertyId": "معرف العقار",
+    "actionType": "نوع الإجراء",
+    "pointsReceived": "النقاط المستلمة",
+    "pointsRefundable": "النقاط القابلة للاسترداد",
+    "archivedDate": "تاريخ الأرشفة",
+    "archivedAfterPublish": "تم الأرشفة بعد النشر",
+    "publish": "نشر",
+    "feature": "تمييز",
+    "archive": "أرشفة",
+    "delete": "حذف"
+  },
+  "refund": {
+    "title": "طلب استرداد",
+    "description": "هل أنت متأكد أنك تريد استرداد {points} نقطة لـ \"{propertyTitle}\"؟"
+  },
+  "messages": {
+    "refundSuccess": "تم استرداد النقاط بنجاح"
   },
   "form": {
+    "search": {
+      "placeholder": "البحث بالعنوان"
+    },
+    "agent": {
+      "label": "الوكيل"
+    },
+    "listings": {
+      "label": "القوائم"
+    },
+    "lastPosted": {
+      "label": "آخر نشر"
+    },
+    "avgPostingMonthly": {
+      "label": "متوسط النشر الشهري"
+    },
+    "totalLeads": {
+      "label": "إجمالي العملاء المحتملين"
+    },
+    "whatsappLeads": {
+      "label": "عملاء واتساب"
+    },
+    "emailLeads": {
+      "label": "عملاء البريد الإلكتروني"
+    },
+    "callLeads": {
+      "label": "عملاء المكالمات"
+    },
+    "weeklyPerformance": {
+      "label": "الأداء الأسبوعي"
+    },
+    "searchAgent": {
+      "label": "البحث عن وكيل"
+    },
+    "selectAgent": {
+      "label": "اختر الوكيل",
+      "placeholder": "اختر الوكيل"
+    },
+    "allAgents": {
+      "label": "جميع الوكلاء"
+    },
     "required": "هذا الحقل مطلوب",
+    "invalidNumber": "يرجى إدخال رقم صحيح",
+    "fullName": {
+      "label": "الاسم الكامل",
+      "placeholder": "أدخل اسمك الكامل",
+      "errors": {
+        "required": "الاسم الكامل مطلوب.",
+        "min": "يجب أن يكون الاسم الكامل على الأقل 2 أحرف.",
+        "max": "يجب أن يكون الاسم الكامل على الأكثر 50 حرفًا."
+      }
+    },
+    "bio": {
+      "label": "السيرة الذاتية",
+      "placeholder": "أدخل سيرتك الذاتية",
+      "errors": {
+        "required": "السيرة الذاتية مطلوبة.",
+        "min": "يجب أن تكون السيرة الذاتية على الأقل 2 أحرف.",
+        "max": "يجب أن تكون السيرة الذاتية على الأكثر 50 حرفًا."
+      }
+    },
     "firstName": {
       "label": "الاسم الأول",
-      "placeholder": "",
+      "placeholder": "الاسم الأول",
       "errors": {
-        "required": "الاسم الأول مطلوب."
+        "required": "الاسم الأول مطلوب.",
+        "min": "يجب أن يكون الاسم الأول على الأقل 2 أحرف.",
+        "max": "يجب أن يكون الاسم الأول على الأكثر 50 حرفًا."
       }
     },
     "lastName": {
-      "label": "اسم العائلة",
-      "placeholder": "",
+      "label": "الاسم الأخير",
+      "placeholder": "الاسم الأخير",
       "errors": {
-        "required": "اسم العائلة مطلوب."
+        "required": "الاسم الأخير مطلوب.",
+        "min": "يجب أن يكون الاسم الأخير على الأقل 2 أحرف.",
+        "max": "يجب أن يكون الاسم الأخير على الأكثر 50 حرفًا."
       }
     },
     "email": {
       "label": "البريد الإلكتروني",
-      "placeholder": "example@xyz.com",
+      "placeholder": "البريد الإلكتروني",
       "errors": {
         "required": "البريد الإلكتروني مطلوب.",
-        "invalid": "أدخل بريدًا إلكترونيًا صالحًا."
+        "invalid": "أدخل بريدًا إلكترونيًا صحيحًا."
       }
     },
     "personalEmail": {
@@ -40,15 +338,15 @@
       "placeholder": "example@xyz.com",
       "errors": {
         "required": "البريد الإلكتروني مطلوب.",
-        "invalid": "أدخل بريدًا إلكترونيًا صالحًا."
+        "invalid": "أدخل بريدًا إلكترونيًا صحيحًا."
       }
     },
     "companyEmail": {
-      "label": "البريد الإلكتروني للشركة",
+      "label": "بريد الشركة الإلكتروني",
       "placeholder": "company@example.com",
       "errors": {
-        "required": "البريد الإلكتروني للشركة مطلوب.",
-        "invalid": "أدخل بريدًا إلكترونيًا صالحًا."
+        "required": "بريد الشركة الإلكتروني مطلوب.",
+        "invalid": "أدخل بريدًا إلكترونيًا صحيحًا."
       }
     },
     "companyName": {
@@ -63,7 +361,11 @@
       "placeholder": "كلمة المرور",
       "errors": {
         "required": "كلمة المرور مطلوبة.",
-        "invalid": "يجب أن تكون كلمة المرور 8 أحرف على الأقل."
+        "invalid": "يجب أن تكون كلمة المرور على الأقل 8 أحرف.",
+        "min": "يجب أن تكون كلمة المرور على الأقل 8 أحرف.",
+        "uppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل.",
+        "lowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل.",
+        "number": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل."
       }
     },
     "confirmPassword": {
@@ -71,117 +373,397 @@
       "placeholder": "تأكيد كلمة المرور",
       "errors": {
         "required": "تأكيد كلمة المرور مطلوب.",
-        "invalid": "يجب أن تكون كلمة المرور 8 أحرف على الأقل.",
-        "mismatch": "كلمة المرور غير متطابقة."
+        "invalid": "يجب أن تكون كلمة المرور على الأقل 8 أحرف.",
+        "mismatch": "تأكيد كلمة المرور لا يتطابق مع كلمة المرور."
       }
     },
     "phoneNumber": {
       "label": "رقم الهاتف",
       "placeholder": "",
       "errors": {
-        "required": "رقم الهاتف المحمول مطلوب.",
-        "invalid": "أدخل رقم هاتف محمول صالح (مثل 03XXXXXXXXX)."
+        "required": "رقم الهاتف مطلوب.",
+        "invalid": "أدخل رقم هاتف صحيح (مثل 03XXXXXXXXX)."
       }
+    },
+    "featured": {
+      "label": "مميز",
+      "placeholder": ""
+    },
+    "title": {
+      "label": "العنوان",
+      "placeholder": ""
+    },
+    "propertyImages": {
+      "label": "صور العقار",
+      "placeholder": "",
+      "errors": {
+        "required": "صور العقار مطلوبة.",
+        "invalid": "يجب ألا يتجاوز حجم الصور 1 ميغابايت"
+      }
+    },
+    "propertyCategory": {
+      "label": "الفئة",
+      "placeholder": "الفئة",
+      "options": {
+        "Residential": "سكني",
+        "Commercial": "تجاري"
+      }
+    },
+    "propertyPurpose": {
+      "label": "الغرض",
+      "placeholder": "الغرض",
+      "options": {
+        "For Sale": "للبيع",
+        "For Rent": "للإيجار"
+      }
+    },
+    "propertyType": {
+      "label": "نوع العقار",
+      "placeholder": "نوع العقار",
+      "options": {
+        "Apartment": "شقة",
+        "Villa": "فيلا",
+        "Townhouse": "منزل مستقل",
+        "Penthouse": "بنتهاوس",
+        "Office": "مكتب",
+        "Shop": "متجر",
+        "Warehouse": "مستودع",
+        "Land": "أرض"
+      }
+    },
+    "bedrooms": {
+      "label": "غرف النوم",
+      "placeholder": "عدد غرف النوم"
+    },
+    "bathrooms": {
+      "label": "الحمامات",
+      "placeholder": "عدد الحمامات"
+    },
+    "propertySize": {
+      "label": "حجم العقار",
+      "placeholder": "حجم العقار بالمتر المربع"
+    },
+    "tenureOfProperty": {
+      "label": "مدة العقار",
+      "placeholder": ""
+    },
+    "ownershipStatus": {
+      "label": "حالة الملكية",
+      "placeholder": "اختر حالة الملكية",
+      "options": {
+        "FreeHold": "ملكية حرة",
+        "Non-FreeHold": "ملكية غير حرة"
+      }
+    },
+    "buildingFloors": {
+      "label": "طوابق المبنى",
+      "placeholder": ""
+    },
+    "floorNumber": {
+      "label": "رقم الطابق",
+      "placeholder": ""
+    },
+    "occupancy": {
+      "label": "الإشغال",
+      "placeholder": "الإشغال",
+      "options": {
+        "Vacant": "شاغر",
+        "Occupied": "مشغول",
+        "Will be vacated soon": "سيتم إخلاؤه قريبًا"
+      }
+    },
+    "furnishedType": {
+      "label": "نوع التأثيث",
+      "placeholder": "اختر نوع التأثيث",
+      "options": {
+        "Furnished": "مفروش",
+        "Semi-Furnished": "نصف مفروش",
+        "Unfurnished": "غير مفروش"
+      }
+    },
+    "views": {
+      "label": "الإطلالات",
+      "placeholder": "الإطلالات",
+      "options": {
+        "Sea View": "إطلالة على البحر",
+        "City View": "إطلالة على المدينة",
+        "Park View": "إطلالة على الحديقة",
+        "Other": "أخرى"
+      }
+    },
+    "price": {
+      "label": "السعر",
+      "placeholder": ""
+    },
+    "priceVisibilityFlag": {
+      "label": "علم رؤية السعر",
+      "placeholder": ""
+    },
+    "serviceCharges": {
+      "label": "رسوم الخدمة",
+      "placeholder": ""
+    },
+    "location": {
+      "label": "الموقع",
+      "placeholder": ""
+    },
+    "amenities": {
+      "label": "المرافق",
+      "placeholder": ""
+    },
+    "description": {
+      "label": "الوصف",
+      "placeholder": ""
+    },
+    "descriptionAr": {
+      "label": "الوصف بالعربية",
+      "placeholder": ""
+    },
+    "status": {
+      "label": "الحالة",
+      "placeholder": "اختر الحالة",
+      "options": {
+        "all": "الكل",
+        "active": "نشط",
+        "inactive": "غير نشط",
+        "reject": "رفض",
+        "rejected": "مرفوض",
+        "expired": "منتهي الصلاحية",
+        "approved": "معتمد",
+        "paid": "مدفوع",
+        "pending": "معلق",
+        "needApproval": "بحاجة للموافقة"
+      }
+    },
+    "role": {
+      "label": "الدور",
+      "placeholder": "اختر الدور",
+      "options": {
+        "agent": "وكيل",
+        "admin": "مدير"
+      }
+    },
+    "languages": {
+      "label": "اللغات المتحدث بها",
+      "placeholder": "اختر اللغات",
+      "options": {
+        "english": "الإنجليزية",
+        "arabic": "العربية",
+        "both": "الإنجليزية والعربية"
+      }
+    },
+    "permissions": {
+      "canPostListings": "يمكنه نشر القوائم",
+      "canPublishProperty": "يمكنه نشر العقار دون موافقة",
+      "canFeatureProperty": "يمكنه تمييز العقار"
+    },
+    "propertyStatuses": {
+      "label": "الحالة",
+      "placeholder": "الحالة",
+      "options": {
+        "draft": "مسودة",
+        "published": "منشور",
+        "pending": "معلق",
+        "closed": "مغلق",
+        "archived": "مؤرشف"
+      }
+    },
+    "referenceNo": {
+      "label": "الرقم المرجعي",
+      "placeholder": ""
+    },
+    "languagesSpoken": {
+      "label": "اللغات المتحدث بها",
+      "placeholder": "اختر اللغات",
+      "options": {
+        "english": "الإنجليزية",
+        "arabic": "العربية",
+        "both": "الإنجليزية والعربية"
+      }
+    },
+    "address": {
+      "label": "العنوان",
+      "placeholder": "العنوان"
+    },
+    "businessEmail": {
+      "label": "البريد الإلكتروني للعمل",
+      "placeholder": "البريد الإلكتروني للعمل"
+    },
+    "websiteUrl": {
+      "label": "رابط الموقع الإلكتروني",
+      "placeholder": "رابط الموقع الإلكتروني"
+    },
+    "streetAddress": {
+      "label": "عنوان الشارع",
+      "placeholder": "عنوان الشارع"
+    },
+    "city": {
+      "label": "المدينة",
+      "placeholder": "اختر المدينة"
+    },
+    "stateProvince": {
+      "label": "الولاية/المحافظة",
+      "placeholder": "اختر الولاية/المحافظة"
+    },
+    "postalCode": {
+      "label": "الرمز البريدي"
+    },
+    "businessNumber": {
+      "label": "رقم العمل"
+    },
+    "sortBy": {
+      "label": "ترتيب حسب",
+      "placeholder": "",
+      "options": {
+        "featured": "مميز",
+        "newest": "الأحدث",
+        "priceLow": "السعر (منخفض)",
+        "priceHigh": "السعر (مرتفع)",
+        "bedsLeast": "الأسرة (الأقل)",
+        "bedsMost": "الأسرة (الأكثر)"
+      }
+    },
+    "currentPassword": {
+      "label": "كلمة المرور الحالية",
+      "placeholder": "كلمة المرور الحالية",
+      "errors": {
+        "required": "كلمة المرور الحالية مطلوبة."
+      }
+    },
+    "locationPreference": {
+      "label": "تفضيل الموقع",
+      "placeholder": ""
+    },
+    "budget": {
+      "label": "الميزانية",
+      "placeholder": ""
+    },
+    "additionalInformation": {
+      "label": "معلومات إضافية",
+      "placeholder": ""
+    },
+    "contractExpiry": {
+      "label": "انتهاء العقد"
+    },
+    "points": {
+      "label": "النقاط"
+    },
+    "currentPoints": {
+      "label": "النقاط الحالية"
+    },
+    "selectTimeframe": {
+      "label": "اختر الإطار الزمني",
+      "options": {
+        "weekly": "أسبوعي",
+        "monthly": "شهري",
+        "yearly": "سنوي"
+      }
+    },
+    "featuredStatus": {
+      "label": "حالة التمييز",
+      "options": {
+        "featured": "مميز",
+        "standard": "قياسي"
+      }
+    },
+    "publisher": {
+      "label": "الناشر"
     }
   },
   "seo": {
     "title": "PropertyExplorer - ابحث عن عقار أحلامك",
-    "description": "اكتشف أفضل العقارات المعروضة للبيع والإيجار على PropertyExplorer.",
-    "ogTitle": "PropertyExplorer - بداية بحثك عن العقار هنا",
+    "description": "اكتشف أفضل العقارات للبيع والإيجار على PropertyExplorer.",
+    "ogTitle": "PropertyExplorer - يبدأ بحثك عن العقار هنا",
     "ogDescription": "استكشف مجموعة واسعة من العقارات على PropertyExplorer.",
     "twitterTitle": "PropertyExplorer",
     "twitterDescription": "ابحث عن عقار أحلامك على PropertyExplorer."
   },
-
-  "loginPage": {
-    "welcome": "مرحبًا بك في العقارات",
-    "welcomeCompany": "مرحبًا بك في أعمال العقارات",
-    "loginSubtitle": "أدخل بريدك الإلكتروني وكلمة المرور للمتابعة كعميل",
-    "loginSubtitleCompany": "أدخل بريدك الإلكتروني وكلمة المرور للمتابعة كشركة",
-    "email": "عنوان البريد الإلكتروني",
-    "password": "كلمة المرور",
-    "showPassword": "إظهار كلمة المرور",
-    "hidePassword": "إخفاء كلمة المرور",
-    "rememberMe": "تذكرني",
-    "forgotPassword": "هل نسيت كلمة المرور؟",
-    "login": "تسجيل الدخول",
-    "loggingIn": "جارٍ تسجيل الدخول...",
-    "loginSuccess": "تم تسجيل الدخول بنجاح",
-    "loginSuccessMessage": "تم تسجيل دخولك بنجاح. جارٍ إعادة التوجيه...",
-    "loginFailed": "بريد إلكتروني أو كلمة مرور غير صحيحة",
-    "loginError": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
-    "noAccount": "ليس لديك حساب؟",
-    "registerNow": "سجل الآن",
-    "loginAsCompany": "تسجيل الدخول كشركة →",
-    "loginAsCustomer": "تسجيل الدخول كعميل →",
-    "noCompanyAccount": "ليس لديك حساب شركة؟",
-    "registerCompanyNow": "سجل شركتك الآن",
-    "orContinueWith": "أو تابع باستخدام",
-    "continueWithGoogle": "تابع باستخدام Google",
-    "continueWithFacebook": "تابع باستخدام Facebook",
-    "googleLoginFailed": "فشل تسجيل الدخول عبر Google. يرجى المحاولة مرة أخرى.",
-    "facebookLoginFailed": "فشل تسجيل الدخول عبر Facebook. يرجى المحاولة مرة أخرى.",
-    "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صالح",
-    "invalidPassword": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل",
-    "termsAndConditions": "أقر وأوافق على الشروط والأحكام",
-    "redirecting": "جارٍ إعادة التوجيه...",
-    "errorOccurred": "حدث خطأ. يرجى المحاولة مرة أخرى.",
-    "tooManyAttempts": "عدد كبير جدًا من محاولات تسجيل الدخول. يرجى المحاولة لاحقًا."
-  },
-  "registerPage": {
-    "welcome": "مرحباً بك في Property",
-    "welcomeCompany": "تسجيل شركتك",
-    "registerSubtitle": "أدخل بياناتك للتسجيل",
-    "registerSubtitleCompany": "أدخل بيانات شركتك للتسجيل",
-    "fullName": "الاسم الكامل",
-    "fullNamePlaceholder": "ادخل اسمك الكامل",
-    "companyName": "اسم الشركة",
-    "email": "البريد الإلكتروني",
-    "emailPlaceholder": "ادخل بريدك الإلكتروني",
-    "phone": "رقم الهاتف",
-    "phonePlaceholder": "ادخل رقم هاتفك",
-    "password": "كلمة المرور",
-    "passwordPlaceholder": "ادخل كلمة المرور",
-    "confirmPassword": "تأكيد كلمة المرور",
-    "confirmPasswordPlaceholder": "ادخل تاكيد كلمة المرور",
-    "next": "التالي",
-    "back": "رجوع",
-    "alreadyHaveAccount": "لديك حساب بالفعل؟",
-    "loginHere": "سجل دخولك هنا",
-    "registerAsCompany": "← التسجيل كشركة",
-    "registerAsCustomer": "← التسجيل كعميل",
-    "termsAndConditions": "بالتسجيل، أنت توافق على الشروط والأحكام",
-    "privacyPolicy": "سياسة الخصوصية",
-    "and": "و",
-    "allRightsReserved": "جميع الحقوق محفوظة",
-    "passwordRequirements": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل",
-    "passwordMismatch": "كلمات المرور غير متطابقة",
-    "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
-    "registrationSuccess": "تم التسجيل بنجاح",
-    "registrationError": "فشل التسجيل. يرجى المحاولة مرة أخرى",
-    "submitting": "جاري التسجيل..."
-  },
+  "passwordResetSuccess": "تم إعادة تعيين كلمة المرور بنجاح",
+  "passwordResetFailed": "فشل إعادة تعيين كلمة المرور",
+  "passwordResetEmailSent": "تم إرسال بريد إلكتروني لإعادة تعيين كلمة المرور",
+  "welcome": "مرحبًا بك في Property",
+  "welcomeCompany": "مرحبًا بك في Property Business",
+  "loginSubtitle": "أدخل بريدك الإلكتروني وكلمة المرور للمتابعة كعميل",
+  "loginSubtitleCompany": "أدخل بريدك الإلكتروني وكلمة المرور للمتابعة كوكيل",
+  "POST": "نشر",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "showPassword": "إظهار كلمة المرور",
+  "hidePassword": "إخفاء كلمة المرور",
+  "rememberMe": "تذكرني",
+  "forgotPassword": "هل نسيت كلمة المرور؟",
+  "login": "تسجيل الدخول",
+  "loggingIn": "جارٍ تسجيل الدخول...",
+  "loginSuccess": "تم تسجيل الدخول بنجاح",
+  "loginSuccessMessage": "لقد قمت بتسجيل الدخول بنجاح. جارٍ إعادة التوجيه...",
+  "loginFailed": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+  "loginError": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+  "noAccount": "ليس لديك حساب؟",
+  "registerNow": "سجل الآن",
+  "loginAsAgent": "تسجيل الدخول كوكيل →",
+  "loginAsCustomer": "تسجيل الدخول كعميل →",
+  "noAgentAccount": "ليس لديك حساب وكيل؟",
+  "registerCompanyNow": "التسجيل كوكيل",
+  "orContinueWith": "أو المتابعة باستخدام",
+  "continueWithGoogle": "المتابعة باستخدام Google",
+  "continueWithFacebook": "المتابعة باستخدام Facebook",
+  "googleLoginFailed": "فشل تسجيل الدخول باستخدام Google. يرجى المحاولة مرة أخرى.",
+  "facebookLoginFailed": "فشل تسجيل الدخول باستخدام Facebook. يرجى المحاولة مرة أخرى.",
+  "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+  "invalidPassword": "يجب أن تكون كلمة المرور على الأقل 8 أحرف",
+  "termsAndConditions": "أقر وأوافق على الشروط والأحكام",
+  "redirecting": "جارٍ إعادة التوجيه...",
+  "errorOccurred": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+  "tooManyAttempts": "محاولات تسجيل دخول كثيرة جدًا. يرجى المحاولة لاحقًا.",
+  "registerSubtitle": "أدخل تفاصيلك للتسجيل",
+  "registerSubtitleCompany": "أدخل تفاصيل شركتك للتسجيل",
+  "fullName": "الاسم الكامل",
+  "fullNamePlaceholder": "أدخل اسمك الكامل",
+  "companyName": "اسم الشركة",
+  "emailPlaceholder": "أدخل عنوان بريدك الإلكتروني",
+  "phone": "رقم الهاتف",
+  "phonePlaceholder": "أدخل رقم هاتفك",
+  "passwordPlaceholder": "أدخل كلمة المرور",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "confirmPasswordPlaceholder": "تأكيد كلمة المرور",
+  "next": "التالي",
+  "back": "السابق",
+  "alreadyHaveAccount": "لديك حساب بالفعل؟",
+  "loginHere": "تسجيل الدخول هنا",
+  "registerAsCompany": "التسجيل كشركة →",
+  "registerAsCustomer": "التسجيل كعميل →",
+  "privacyPolicy": "سياسة الخصوصية",
+  "and": "و",
+  "allRightsReserved": "جميع الحقوق محفوظة",
+  "passwordRequirements": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل",
+  "passwordMismatch": "كلمات المرور غير متطابقة",
+  "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
+  "registrationSuccess": "تم التسجيل بنجاح",
+  "registrationError": "فشل التسجيل. يرجى المحاولة مرة أخرى",
+  "submitting": "جارٍ الإرسال...",
   "verificationPage": {
     "verifyAccount": "تحقق من حسابك",
-    "enterOtpSent": "أدخل رمز التحقق المرسل إلى بريدك الإلكتروني",
+    "enterOtpSent": "أدخل رمز OTP المرسل إلى بريدك الإلكتروني",
     "codeSentTo": "تم إرسال رمز التحقق إلى",
-    "invalidOtpLength": "يجب أن يتكون رمز التحقق من 6 أرقام",
+    "invalidOtpLength": "يجب أن يكون OTP مكونًا من 6 أرقام",
     "emailRequired": "البريد الإلكتروني مطلوب",
-    "verificationFailed": "فشل التحقق. الرجاء المحاولة مرة أخرى.",
+    "verificationFailed": "فشل التحقق. يرجى المحاولة مرة أخرى.",
     "verifying": "جارٍ التحقق...",
     "verify": "تحقق",
     "didntReceiveCode": "لم تستلم الرمز؟",
     "resendCode": "إعادة إرسال الرمز",
-    "resendIn": "إعادة الإرسال خلال",
+    "otpResent": "تم إعادة إرسال OTP بنجاح",
+    "resendIn": "إعادة الإرسال في",
     "resending": "جارٍ إعادة الإرسال...",
-    "resendFailed": "فشل في إعادة إرسال رمز التحقق. الرجاء المحاولة مرة أخرى.",
-    "otpDisclaimer": "لأسباب أمنية، لا تشارك رمز التحقق مع أي شخص."
+    "resendFailed": "فشل إعادة إرسال OTP. يرجى المحاولة مرة أخرى.",
+    "otpDisclaimer": "لأسباب أمنية، لا تشارك رمز OTP مع أي شخص.",
+    "verified": "تم التحقق"
   },
   "common": {
     "required": "هذا الحقل مطلوب",
-    "loading": "جاري التحميل...",
+    "loading": "جارٍ التحميل...",
     "error": "حدث خطأ",
-    "success": "تم بنجاح",
+    "success": "نجاح",
     "continue": "متابعة",
     "cancel": "إلغاء",
     "save": "حفظ",
@@ -191,136 +773,189 @@
     "submit": "إرسال",
     "tryAgain": "حاول مرة أخرى"
   },
-  "landingPage": {
-    "hero": {
-      "title": "ابحث عن منزل أحلامك القادم",
-      "subtitle": "هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها."
-    },
-    "search": {
-      "propertyType": "نوع العقار",
-      "allProperties": "جميع العقارات",
-      "house": "منزل",
-      "apartment": "شقة",
-      "villa": "فيلا",
-      "placeholder": "البحث حسب الموقع أو معرف العقار....",
-      "button": "بحث",
-      "rent": "إيجار",
-      "buy": "شراء"
-    },
-    "latestProjects": {
-      "title": "اكتشف أحدث المشاريع",
-      "exploreAll": "استكشاف الكل"
-    },
-    "property": {
-      "imageAlt": "صورة العقار",
-      "newYork": "نيويورك",
-      "sqft": "قدم مربع",
-      "viewDetails": "عرض التفاصيل",
-      "contactNow": "اتصل الآن"
-    },
-    "cta": {
-      "title": "هل تبحث عن الإعلان عن عقار؟ اتصل بنا.",
-      "button": "دعنا نتحدث"
-    },
-    "appraisal": {
-      "ourValue": "قيمتنا",
-      "title": "فتح التقييم العقاري",
-      "services": "الخدمات",
-      "description": "يمكن لخبرائنا تقديم رؤى قيمة ومساعدتك في تحديد العقارات.",
-      "button": "ابدأ مجانًا",
-      "imageAlt1": "واجهة منزل حديث",
-      "imageAlt2": "داخلية عقار فاخر"
-    },
-    "footer": {
-      "tagline": "يمكن لخبرائنا تقديم رؤى قيمة ومساعدتك في تحديد العقارات.",
-      "product": "المنتج",
-      "features": "الميزات",
-      "pricing": "التسعير",
-      "listings": "القوائم",
-      "customers": "العملاء",
-      "brand": "العلامة التجارية",
-      "company": "الشركة",
-      "aboutUs": "من نحن",
-      "blog": "المدونة",
-      "careers": "الوظائف",
-      "contact": "اتصل بنا",
-      "resources": "الموارد",
-      "community": "المجتمع",
-      "help": "مركز المساعدة",
-      "faq": "الأسئلة الشائعة",
-      "dpa": "حماية البيانات",
-      "terms": "شروط الخدمة",
-      "allRightsReserved": "جميع الحقوق محفوظة.",
-      "termsAndConditions": "الشروط والأحكام"
+  "subscriptionRenewal": "تجديد الاشتراك",
+  "reviewAndUpdatePayment": "يرجى إدخال تفاصيل الدفع الخاصة بك.",
+  "subscriptionPlan": "خطة الاشتراك",
+  "remainingDays": "الأيام المتبقية",
+  "autoRenewalMessage": "يرجى ملاحظة أنه إذا قمت بتجديد اشتراكك قبل تاريخ الانتهاء، سيتم إضافة الحصة الجديدة من النقاط فقط بعد انتهاء الاشتراك الحالي.",
+  "paymentDetails": "تفاصيل الدفع",
+  "card": "البطاقة",
+  "bankTransfer": "التحويل البنكي",
+  "cardDetails": "تفاصيل البطاقة",
+  "country": "البلد",
+  "select": "اختر",
+  "bankTransferInfo": "معلومات التحويل البنكي",
+  "bankTransferInstructions": "يرجى استخدام التفاصيل التالية لإجراء التحويل البنكي الخاص بك:",
+  "bankName": "اسم البنك",
+  "accountName": "اسم الحساب",
+  "accountNumber": "رقم الحساب",
+  "reference": "المرجع",
+  "yourAccountEmail": "بريدك الإلكتروني لحسابك",
+  "cancel": "إلغاء",
+  "payNow": "ادفع الآن",
+  "countries": {
+    "us": "الولايات المتحدة",
+    "ca": "كندا",
+    "uk": "المملكة المتحدة",
+    "au": "أستراليا",
+    "ae": "الإمارات العربية المتحدة",
+    "qatar": "قطر",
+    "uae": "الإمارات العربية المتحدة",
+    "saudiArabia": "المملكة العربية السعودية",
+    "kuwait": "الكويت",
+    "bahrain": "البحرين"
+  },
+  "transactionHistory": "سجل المعاملات",
+  "transactionId": "معرف المعاملة",
+  "date": "التاريخ",
+  "amount": "المبلغ",
+  "status": "الحالة",
+  "paymentMethod": "طريقة الدفع",
+  "price": "السعر",
+  "invoice": "الفاتورة",
+  "view": "عرض",
+  "statusSuccessful": "ناجح",
+  "statusPending": "معلق",
+  "statusFailed": "فشل",
+  "subscription": "الاشتراك",
+  "pointsAddedToAccount": "يتم إضافة النقاط الأولية إلى حسابك عند التسجيل بنجاح.",
+  "renewSubscription": "تجديد الاشتراك",
+  "remainingPoints": "النقاط المتبقية",
+  "pointsExpires": "انتهاء صلاحية النقاط",
+  "contractExpires": "انتهاء العقد",
+  "onDate": "في {date}",
+  "subscriptionRecordsHistory": "سجل سجلات الاشتراك",
+  "filters": "الفلاتر",
+  "previous": "السابق",
+  "subscriptionDate": "تاريخ الاشتراك",
+  "points": "النقاط",
+  "method": "الطريقة",
+  "subscriptionRenewedSuccessfully": "تم تجديد الاشتراك بنجاح",
+  "expiry": "الانتهاء",
+  "type": "النوع",
+  "subscriptionExpiryDate": "تاريخ انتهاء الاشتراك",
+  "statusActive": "نشط",
+  "statusExpired": "منتهي الصلاحية",
+  "toast": {
+    "paymentSuccess": "تمت معالجة الدفع بنجاح",
+    "paymentFailed": "فشل الدفع. يرجى المحاولة مرة أخرى.",
+    "profileUpdated": "تم تحديث الملف الشخصي بنجاح",
+    "companyUpdated": "تم تحديث تفاصيل الشركة بنجاح",
+    "updateFailed": "فشل التحديث"
+  },
+  "errors": {
+    "invalidCard": "تفاصيل البطاقة غير صحيحة",
+    "paymentFailed": "فشل الدفع. يرجى المحاولة مرة أخرى.",
+    "connectionError": "خطأ في الاتصال. يرجى التحقق من اتصالك بالإنترنت."
+  },
+  "cardNumber": "رقم البطاقة",
+  "expiration": "تاريخ الانتهاء",
+  "cvc": "CVC",
+  "processing": "جارٍ المعالجة...",
+  "securePaymentNotice": "دفعك آمن ومشفر.",
+  "topUpSubscription": {
+    "purchaseTopUp": "شراء التعبئة",
+    "developmentMode": "وضع التطوير",
+    "confirmPurchase": "هل أنت متأكد؟",
+    "confirmPurchaseDescription": "هل أنت متأكد أنك تريد المتابعة في شراء",
+    "title": "تعبئة الاشتراك",
+    "history": "سجل التعبئة",
+    "addNew": "تعبئة الاشتراك",
+    "back": "السابق",
+    "selectStatus": "تصفية حسب الحالة",
+    "allStatuses": "جميع الحالات",
+    "statusPaid": "مدفوع",
+    "statusPending": "معلق",
+    "statusCancelled": "ملغى",
+    "topUpPoints": "نقاط التعبئة",
+    "selectPointsHelp": "اختر عدد النقاط التي تريد شراءها",
+    "points": "النقاط",
+    "paymentMethods": "طرق الدفع",
+    "submit": "إرسال",
+    "type": "النوع",
+    "total": "المبلغ الإجمالي",
+    "card": "البطاقة",
+    "contactSalesTeam": "اتصل بفريق المبيعات",
+    "email": "البريد الإلكتروني",
+    "phoneNumber": "رقم الهاتف",
+    "message": "الرسالة",
+    "cardNumber": "رقم البطاقة",
+    "expiration": "تاريخ الانتهاء",
+    "cvc": "CVC",
+    "country": "البلد",
+    "selectCountry": "اختر البلد",
+    "sofortInstructions": "سيتم إعادة توجيهك إلى Sofort/Klarna لإكمال الدفع بعد النقر على 'ادفع الآن'.",
+    "cancel": "إلغاء",
+    "processing": "جارٍ المعالجة...",
+    "payNow": "ادفع الآن",
+    "paymentSuccessful": "تم الدفع بنجاح! تمت إضافة نقاطك.",
+    "paymentFailed": "فشل الدفع. يرجى المحاولة مرة أخرى.",
+    "purchaseTopUpSuccess": "نجاح شراء التعبئة",
+    "purchaseTopUpSuccessSalesTeam": "نجاح شراء التعبئة (فريق المبيعات)",
+    "purchaseTopUpFailed": "فشل شراء التعبئة",
+    "columns": {
+      "date": "التاريخ",
+      "points": "النقاط",
+      "expires": "تنتهي في",
+      "paymentMethod": "طريقة الدفع",
+      "subscriptionExpiryDate": "انتهاء الاشتراك",
+      "price": "السعر",
+      "type": "النوع",
+      "status": "الحالة"
     }
   },
-  "header": {
-    "buy": "شراء",
-    "rent": "إيجار",
-    "explore": "استكشاف العقارات",
-    "properties": "العقارات",
-    "propertiesDescription": "تصفح مجموعتنا الحصرية من العقارات الفاخرة.",
-    "agents": "الوكلاء",
-    "agentsDescription": "تواصل مع وكلاء العقارات المحترفين لدينا.",
-    "language": "اللغة",
+  "tabs": {
+    "personalDetails": "التفاصيل الشخصية",
+    "companyDetails": "تفاصيل الشركة"
+  },
+  "footer": {
+    "description": "Property Explorer هو شريكك الموثوق في العثور على العقار المثالي لاحتياجاتك.",
+    "quickLinks": "روابط سريعة",
+    "propertyTypes": "أنواع العقارات",
+    "contact": "اتصل بنا",
+    "address": "123 Real Estate Ave, New York, NY 10001",
+    "allRightsReserved": "جميع الحقوق محفوظة.",
+    "termsAndConditions": "الشروط والأحكام"
+  },
+  "sidebar": {
+    "dashboard": "لوحة التحكم",
+    "propertyData": "بيانات العقار",
+    "accessManagement": "إدارة الوصول",
+    "subscriptionPlans": "خطط الاشتراك",
+    "topUp": "التعبئة",
+    "settings": "الإعدادات",
+    "home": "الرئيسية",
+    "searchProperties": "البحث عن عقارات",
+    "savedProperties": "العقارات المحفوظة",
+    "notifications": "الإشعارات",
+    "myInquiries": "استفساراتي",
+    "helpCenter": "مركز المساعدة",
     "contactUs": "اتصل بنا",
-    "loginRegister": "تسجيل الدخول/التسجيل"
+    "myProperties": "عقاراتي",
+    "points": "النقاط",
+    "myProfile": "ملفي الشخصي",
+    "savedSearches": "البحث المحفوظ",
+    "customersData": "بيانات العملاء",
+    "companiesData": "بيانات الشركات",
+    "renewalRequests": "طلبات التجديد",
+    "topUpRequests": "طلبات التعبئة",
+    "topUpPoints": "نقاط التعبئة"
   },
-  "customerDashboard": {
-    "header": {
-      "title": "باحث العقارات",
-      "navigation": {
-        "home": "الرئيسية",
-        "buy": "شراء",
-        "rent": "إيجار",
-        "sell": "بيع",
-        "agents": "وكلاء"
-      }
-    },
-    "userMenu": {
-      "myAccount": "حسابي",
-      "profile": "الملف الشخصي",
-      "savedProperties": "العقارات المحفوظة",
-      "savedSearches": "عمليات البحث المحفوظة",
-      "messages": "الرسائل",
-      "settings": "الإعدادات",
-      "logout": "تسجيل الخروج"
-    },
-    "sidebar": {
-      "viewProfile": "عرض الملف الشخصي",
-      "dashboard": "لوحة التحكم",
-      "savedProperties": "العقارات المحفوظة",
-      "savedSearches": "عمليات البحث المحفوظة",
-      "messages": "الرسائل",
-      "myProperties": "عقاراتي",
-      "settings": "الإعدادات"
-    },
-    "dashboard": {
-      "title": "لوحة التحكم الخاصة بي",
-      "tabs": {
-        "savedProperties": "العقارات المحفوظة",
-        "savedSearches": "عمليات البحث المحفوظة"
-      }
-    },
-    "savedProperties": {
-      "title": "العقارات المحفوظة الخاصة بك",
-      "propertiesCount": "عقار",
-      "property": {
-        "beds": "غرف نوم",
-        "baths": "حمامات",
-        "sqft": "قدم مربع",
-        "viewDetails": "عرض التفاصيل",
-        "contactAgent": "التواصل مع الوكيل"
-      }
-    },
-    "savedSearches": {
-      "title": "عمليات البحث المحفوظة الخاصة بك",
-      "searchesCount": "عملية بحث",
-      "search": {
-        "matches": "نتيجة مطابقة",
-        "editSearch": "تعديل البحث",
-        "viewResults": "عرض النتائج"
-      }
-    }
-  }
+  "userMenu": {
+    "logout": "تسجيل الخروج",
+    "dashboard": "لوحة التحكم",
+    "myProperties": "عقاراتي"
+  },
+  "aria": {
+    "hidePassword": "إخفاء كلمة المرور",
+    "showPassword": "إظهار كلمة المرور"
+  },
+  "attachScreenshot": "إرفاق لقطة شاشة",
+  "bankReceiptSlip": "إيصال البنك",
+  "browseFile": "تصفح الملف",
+  "uploading": "جارٍ التحميل...",
+  "uploadSuccess": "تم التحميل بنجاح",
+  "uploadError": "خطأ في التحميل",
+  "receiptPreview": "معاينة الإيصال",
+  "search": "بحث.."
 }

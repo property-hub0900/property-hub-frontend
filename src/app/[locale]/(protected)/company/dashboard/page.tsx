@@ -16,6 +16,7 @@ import { companyService } from "@/services/protected/company";
 import type { MetricsData } from "@/types/common";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -37,15 +38,16 @@ const emptyMetricsData: MetricsData = {
 
 // Define insight view options
 const insightViews = [
-    { id: "properties", label: "Properties Insights" },
-    { id: "agents", label: "Agents Insights" },
-    { id: "leads", label: "Leads Insights" },
+    { id: "properties", label: "Properties Insights", translationKey: "propertiesInsights" },
+    { id: "agents", label: "Agents Insights", translationKey: "agentsInsights" },
+    { id: "leads", label: "Leads Insights", translationKey: "leadsInsights" },
 ];
 
 export default function DashboardPage() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const t = useTranslations();
 
     // Get view from URL or default to dashboard
     const validViews: ViewType[] = ["dashboard", "properties", "agents", "leads"];
@@ -99,7 +101,7 @@ export default function DashboardPage() {
                 {activeView === "dashboard" ? (
                     <>
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-10">
-                            <h3 className="text-xl sm:text-2xl font-bold">Dashboard</h3>
+                            <h3 className="text-xl sm:text-2xl font-bold">{t("title.dashboard")}</h3>
 
                             {/* Desktop view buttons */}
                             <div className="hidden sm:flex gap-2">
@@ -110,7 +112,7 @@ export default function DashboardPage() {
                                         onClick={() => handleViewChange(view.id as ViewType)}
                                         size="sm"
                                     >
-                                        {view.label}
+                                        {t(`button.${view.translationKey}`)}
                                     </Button>
                                 ))}
                             </div>
@@ -120,7 +122,7 @@ export default function DashboardPage() {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <Button variant="outline" className="w-full justify-between border-primary">
-                                            Insights
+                                            {t("button.insights")}
                                             <ChevronDown className="h-4 w-4 ml-2 opacity-70" />
                                         </Button>
                                     </DropdownMenuTrigger>
@@ -130,7 +132,7 @@ export default function DashboardPage() {
                                                 key={view.id}
                                                 onClick={() => handleViewChange(view.id as ViewType)}
                                             >
-                                                {view.label}
+                                                {t(`button.${view.translationKey}`)}
                                             </DropdownMenuItem>
                                         ))}
                                     </DropdownMenuContent>
