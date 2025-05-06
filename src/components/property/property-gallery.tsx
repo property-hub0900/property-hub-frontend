@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/utils";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { USER_ROLES } from "@/constants/rbac";
+import { firebaseImageLoader } from "@/lib/firebaseUtil";
 
 interface PropertyGalleryProps {
   propertyId: number;
@@ -73,6 +74,7 @@ export function PropertyGallery({
           onClick={() => openPopup(0)}
         >
           <Image
+            loader={firebaseImageLoader}
             src={primaryImage?.url || "/placeholder.svg?height=80&width=80"}
             alt={title}
             className="object-cover rounded-xl md:rounded-r-none "
