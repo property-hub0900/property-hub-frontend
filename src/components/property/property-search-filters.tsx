@@ -253,7 +253,6 @@ export const PropertySearchFilters = () => {
     (filters.priceMin && filters.priceMin != "") ||
     (filters.priceMax && filters.priceMax != "");
 
-  console.log("isPriceSelected", isPriceSelected);
 
   return (
     <form onSubmit={handleSearch} className="">
@@ -322,10 +321,9 @@ export const PropertySearchFilters = () => {
               >
                 {filters.bedrooms || filters.bathrooms
                   ? `${filters.bedrooms === "8" ? "8+" : filters.bedrooms} ${t(
-                      "button.bed"
-                    )}, ${
-                      filters.bathrooms === "8" ? "8+" : filters.bathrooms
-                    } ${t("button.bath")}`
+                    "button.bed"
+                  )}, ${filters.bathrooms === "8" ? "8+" : filters.bathrooms
+                  } ${t("button.bath")}`
                   : `${t("button.bedsAndBaths")}`}{" "}
                 <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
@@ -401,9 +399,8 @@ export const PropertySearchFilters = () => {
                 className="font-normal"
               >
                 {filters.priceMin || filters.priceMax
-                  ? `${filters.priceMin || "0"} - ${
-                      filters.priceMax || `${t("text.any")}`
-                    }`
+                  ? `${filters.priceMin || "0"} - ${filters.priceMax || `${t("text.any")}`
+                  }`
                   : `${t("form.price.label")}`}{" "}
                 <ChevronDown className="ms-2 h-4 w-4" />
               </Button>

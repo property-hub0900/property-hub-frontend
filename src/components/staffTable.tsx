@@ -12,6 +12,7 @@ import { StatusIndicator } from "./ui/status-indicator";
 import { useMemo, useState } from "react";
 import type { SortingState } from "@tanstack/react-table";
 import { sortTableData } from "@/utils/utils";
+import { useTranslations } from "next-intl";
 
 export function StaffTable({
   staff,
@@ -27,10 +28,12 @@ export function StaffTable({
   const { hasPermission } = useRBAC();
   const [sorting, setSorting] = useState<SortingState>([]);
 
+  const t = useTranslations();
+
   let columns = [
     {
       accessorKey: "fullName",
-      header: "Full Name",
+      header: t("table.fullName"),
       cell: ({ row }: { row: any }) => {
         const firstName = row.original.firstName || "";
         const lastName = row.original.lastName || "";
@@ -40,7 +43,7 @@ export function StaffTable({
     },
     {
       accessorKey: "role",
-      header: "Type",
+      header: t("table.type"),
       cell: ({ row }: { row: any }) => (
         <span className="capitalize">
           {row.original.role === "manager" ? "Admin" : row.original.role}
@@ -50,7 +53,7 @@ export function StaffTable({
     },
     {
       accessorKey: "joinedDate",
-      header: "Joined Date",
+      header: t("table.joinedDate"),
       cell: ({ row }: { row: any }) => {
         const date = row.original.createdAt;
         return date ? moment(date).format("YYYY-MM-DD") : "N/A";
@@ -59,7 +62,7 @@ export function StaffTable({
     },
     {
       accessorKey: "status",
-      header: "Status",
+      header: t("table.status"),
       cell: ({ row }: { row: any }) => {
         return (
           <StatusIndicator
@@ -75,7 +78,7 @@ export function StaffTable({
     },
     {
       id: "actions",
-      header: "Actions",
+      header: t("table.actions"),
       cell: ({ row }: { row: any }) => (
         <div className="flex space-x-2">
           {hasPermission(PERMISSIONS.EDIT_USER) && (

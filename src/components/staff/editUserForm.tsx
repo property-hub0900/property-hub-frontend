@@ -1,61 +1,52 @@
 /* eslint-disable no-unused-vars */
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { UserAvatar } from "@/components/ui/user-avatar";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type * as z from "zod";
-import { staffFormSchema } from "@/schema/protected/company";
-import type { StaffMember } from "@/services/protected/company";
-import { useTranslations } from "next-intl";
-import { Separator } from "../ui/separator";
-import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
-import { uploadImageToFirebase } from "@/lib/firebaseUtil";
-import { DeleteDialog } from "../delete-dailog";
-import { mapManagerToAdmin } from "@/utils/utils";
-import { USER_ROLES } from "@/constants/rbac";
+import type React from "react"
+
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
+import { UserAvatar } from "@/components/ui/user-avatar"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import type * as z from "zod"
+import { staffFormSchema } from "@/schema/protected/company"
+import type { StaffMember } from "@/services/protected/company"
+import { useTranslations } from "next-intl"
+import { Separator } from "../ui/separator"
+import { toast } from "sonner"
+import { Trash2 } from "lucide-react"
+import { uploadImageToFirebase } from "@/lib/firebaseUtil"
+import { DeleteDialog } from "../delete-dailog"
+import { mapManagerToAdmin } from "@/utils/utils"
+import { USER_ROLES } from "@/constants/rbac"
 
 interface EditUserFormProps {
-  selectedStaff: StaffMember | null;
-  onSubmit: (data: z.infer<typeof staffFormSchema>) => void;
-  onCancel: () => void;
-  isSubmitting: boolean;
+  selectedStaff: StaffMember | null
+  onSubmit: (data: z.infer<typeof staffFormSchema>) => void
+  onCancel: () => void
+  isSubmitting: boolean
 }
 
-export function EditUserForm({
-  selectedStaff,
-  onSubmit,
-  onCancel,
-  isSubmitting,
-}: EditUserFormProps) {
-  const [showPermissionsSection, setShowPermissionsSection] = useState(true);
-  const [isUploading, setIsUploading] = useState(false);
-  const [profileImage, setProfileImage] = useState<string | null>(
-    selectedStaff?.profilePhoto || null
-  );
-  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const t = useTranslations();
+export function EditUserForm({ selectedStaff, onSubmit, onCancel, isSubmitting }: EditUserFormProps) {
+  const [showPermissionsSection, setShowPermissionsSection] = useState(true)
+  const [isUploading, setIsUploading] = useState(false)
+  const [profileImage, setProfileImage] = useState<string | null>(selectedStaff?.profilePhoto || null)
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const t = useTranslations()
+  const [dir, setDir] = useState<"ltr" | "rtl">("ltr")
+
+  // Detect document direction
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      const documentDir = document.documentElement.dir || document.dir || "ltr"
+      setDir(documentDir as "ltr" | "rtl")
+    }
+  }, [])
 
   const form = useForm<z.infer<typeof staffFormSchema>>({
     resolver: zodResolver(staffFormSchema),
@@ -73,7 +64,7 @@ export function EditUserForm({
       biography: selectedStaff?.biography || "",
       profilePhoto: selectedStaff?.profilePhoto || null,
     },
-  });
+  })
 
   // Update form when selectedStaff changes
   useEffect(() => {
@@ -88,103 +79,90 @@ export function EditUserForm({
         phoneNumber: selectedStaff.phoneNumber || "",
         languagesSpoken: selectedStaff.languagesSpoken || "English & Arabic",
         // Map active boolean to status string if needed
-        status:
-          selectedStaff.status ||
-          (selectedStaff.active ? "active" : "inactive"),
+        status: selectedStaff.status || (selectedStaff.active ? "active" : "inactive"),
         // Get permissions from the staffPermissions array if available
-        canAddProperty:
-          selectedStaff.canAddProperty ??
-          selectedStaff.staffPermissions?.[0]?.canAddProperty ??
-          true,
+        canAddProperty: selectedStaff.canAddProperty ?? selectedStaff.staffPermissions?.[0]?.canAddProperty ?? true,
         canPublishProperty:
-          selectedStaff.canPublishProperty ??
-          selectedStaff.staffPermissions?.[0]?.canPublishProperty ??
-          true,
+          selectedStaff.canPublishProperty ?? selectedStaff.staffPermissions?.[0]?.canPublishProperty ?? true,
         canFeatureProperty:
-          selectedStaff.canFeatureProperty ??
-          selectedStaff.staffPermissions?.[0]?.canFeatureProperty ??
-          false,
+          selectedStaff.canFeatureProperty ?? selectedStaff.staffPermissions?.[0]?.canFeatureProperty ?? false,
         // Use biography field if bio is not available
         biography: selectedStaff.biography || selectedStaff.biography || "",
         profilePhoto: selectedStaff.profilePhoto || null,
-      });
-      setProfileImage(selectedStaff.profilePhoto || null);
+      })
+      setProfileImage(selectedStaff.profilePhoto || null)
     }
-  }, [selectedStaff, form]);
+  }, [selectedStaff, form])
 
   // Watch role to determine if permissions section should be shown
-  const role = form.watch("role");
+  const role = form.watch("role")
   useEffect(() => {
     if (selectedStaff?.isOwner) {
-      setShowPermissionsSection(false);
+      setShowPermissionsSection(false)
     } else {
-      setShowPermissionsSection(role !== mapManagerToAdmin(USER_ROLES.MANAGER));
+      setShowPermissionsSection(role !== mapManagerToAdmin(USER_ROLES.MANAGER))
     }
-  }, [role, selectedStaff]);
+  }, [role, selectedStaff])
 
   const handleFormSubmit = async (data: z.infer<typeof staffFormSchema>) => {
     try {
       // If there's a new image file to upload
       if (profileImageFile) {
-        setIsUploading(true);
+        setIsUploading(true)
         try {
-          const downloadURL = await uploadImageToFirebase(profileImageFile);
-          data.profilePhoto = downloadURL;
+          const downloadURL = await uploadImageToFirebase(profileImageFile)
+          data.profilePhoto = downloadURL
         } catch (error) {
-          console.error("Failed to upload profile image:", error);
-          toast.error("Failed to upload profile image");
-          setIsUploading(false);
-          return;
+          console.error("Failed to upload profile image:", error)
+          toast.error("Failed to upload profile image")
+          setIsUploading(false)
+          return
         } finally {
-          setIsUploading(false);
+          setIsUploading(false)
         }
       } else if (profileImage === null) {
         // If image was removed
-        data.profilePhoto = null;
+        data.profilePhoto = null
       }
 
       // Call the original onSubmit function with updated data
-      onSubmit(data);
+      onSubmit(data)
 
       // Reset the file state after successful submission
-      setProfileImageFile(null);
+      setProfileImageFile(null)
     } catch (error) {
-      console.error("Failed to process form:", error);
-      toast.error("An error occurred while processing your request");
+      console.error("Failed to process form:", error)
+      toast.error("An error occurred while processing your request")
     }
-  };
+  }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (file) {
       // Store the file for later upload
-      setProfileImageFile(file);
+      setProfileImageFile(file)
 
       // Create a temporary local URL for preview
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
+      const imageUrl = URL.createObjectURL(file)
+      setProfileImage(imageUrl)
     }
-  };
+  }
 
   const handleRemoveImage = () => {
-    setProfileImage(null);
-    setProfileImageFile(null);
-    form.setValue("profilePhoto", null, { shouldDirty: true });
-    setIsDeleteDialogOpen(false);
-  };
+    setProfileImage(null)
+    setProfileImageFile(null)
+    form.setValue("profilePhoto", null, { shouldDirty: true })
+    setIsDeleteDialogOpen(false)
+  }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">
-            {t("title.editUser") || "Edit User"}
-          </h3>
+          <h3 className="text-lg font-semibold">{t("title.editUser") || "Edit User"}</h3>
 
           <div className="bg-white p-6 rounded-md border border-gray-200">
-            <h4 className="text-base font-medium mb-4">
-              {t("title.userDetails") || "User Details"}
-            </h4>
+            <h4 className="text-base font-medium mb-4">{t("title.userDetails") || "User Details"}</h4>
 
             <div className="flex items-center gap-4 mb-6">
               <div className="relative">
@@ -197,21 +175,20 @@ export function EditUserForm({
               </div>
               <div>
                 <p className="font-medium">
-                  {selectedStaff
-                    ? `${selectedStaff.firstName || ""} ${selectedStaff.lastName || ""
-                    }`
-                    : ""}
+                  {selectedStaff ? `${selectedStaff.firstName || ""} ${selectedStaff.lastName || ""}` : ""}
                 </p>
-                <p className="text-sm text-gray-500">
-                  {selectedStaff?.email || selectedStaff?.user?.email || ""}
-                </p>
+                <p className="text-sm text-gray-500">{selectedStaff?.email || selectedStaff?.user?.email || ""}</p>
               </div>
               <div className="ml-auto flex gap-2">
                 <div className="relative">
-                  <Button type="button" variant="outline" size="sm" className="relative text-muted-foreground" disabled={isUploading}>
-                    + {isUploading
-                      ? "Uploading..."
-                      : t("button.uploadPhoto") || "Upload Photo"}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="relative text-muted-foreground"
+                    disabled={isUploading}
+                  >
+                    + {isUploading ? "Uploading..." : t("button.uploadPhoto") || "Upload Photo"}
                     <input
                       type="file"
                       accept="image/*"
@@ -248,12 +225,7 @@ export function EditUserForm({
                       <span className="text-xs text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder={
-                          t("form.firstName.placeholder") || "Enter first name"
-                        }
-                        {...field}
-                      />
+                      <Input placeholder={t("form.firstName.placeholder") || "Enter first name"} {...field} dir={dir} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -270,18 +242,12 @@ export function EditUserForm({
                       <span className="text-xs text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder={
-                          t("form.lastName.placeholder") || "Enter last name"
-                        }
-                        {...field}
-                      />
+                      <Input placeholder={t("form.lastName.placeholder") || "Enter last name"} {...field} dir={dir} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
 
               <FormField
                 control={form.control}
@@ -294,11 +260,10 @@ export function EditUserForm({
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={
-                          t("form.email.placeholder") || "email@example.com"
-                        }
+                        placeholder={t("form.email.placeholder") || "email@example.com"}
                         type="email"
                         {...field}
+                        dir={dir}
                       />
                     </FormControl>
                     <FormMessage />
@@ -317,12 +282,7 @@ export function EditUserForm({
                       <span className="text-xs text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder={
-                          t("form.phoneNumber.placeholder") || "+974 5000 1234"
-                        }
-                        {...field}
-                      />
+                      <Input placeholder={t("form.phoneNumber.placeholder") || "+974 5000 1234"} {...field} dir={dir} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -340,21 +300,13 @@ export function EditUserForm({
                     </FormLabel>
                     <Select onValueChange={field.onChange} value={mapManagerToAdmin(field.value)}>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder={
-                              t("form.role.placeholder") || "Select role"
-                            }
-                          />
+                        <SelectTrigger dir={dir}>
+                          <SelectValue placeholder={t("form.role.placeholder") || "Select role"} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="agent">
-                          {t("form.role.options.agent") || "Agent"}
-                        </SelectItem>
-                        <SelectItem value="admin">
-                          {t("form.role.options.admin") || "Admin"}
-                        </SelectItem>
+                        <SelectItem value="agent">{t("form.role.options.agent") || "Agent"}</SelectItem>
+                        <SelectItem value="admin">{t("form.role.options.admin") || "Admin"}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -373,21 +325,13 @@ export function EditUserForm({
                     </FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder={
-                              t("form.status.placeholder") || "Select status"
-                            }
-                          />
+                        <SelectTrigger dir={dir}>
+                          <SelectValue placeholder={t("form.status.placeholder") || "Select status"} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="active">
-                          {t("form.status.options.active") || "Active"}
-                        </SelectItem>
-                        <SelectItem value="inactive">
-                          {t("form.status.options.inactive") || "Inactive"}
-                        </SelectItem>
+                        <SelectItem value="active">{t("form.status.options.active") || "Active"}</SelectItem>
+                        <SelectItem value="inactive">{t("form.status.options.inactive") || "Inactive"}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -404,30 +348,17 @@ export function EditUserForm({
                       {t("form.languages.label") || "Languages Spoken"}
                       <span className="text-xs text-red-500">*</span>
                     </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value as string}
-                    >
+                    <Select onValueChange={field.onChange} value={field.value as string}>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder={
-                              t("form.languages.placeholder") ||
-                              "Select languages"
-                            }
-                          />
+                        <SelectTrigger dir={dir}>
+                          <SelectValue placeholder={t("form.languages.placeholder") || "Select languages"} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="English">
-                          {t("form.languages.options.english") || "English"}
-                        </SelectItem>
-                        <SelectItem value="Arabic">
-                          {t("form.languages.options.arabic") || "Arabic"}
-                        </SelectItem>
+                        <SelectItem value="English">{t("form.languages.options.english") || "English"}</SelectItem>
+                        <SelectItem value="Arabic">{t("form.languages.options.arabic") || "Arabic"}</SelectItem>
                         <SelectItem value="English & Arabic">
-                          {t("form.languages.options.both") ||
-                            "English & Arabic"}
+                          {t("form.languages.options.both") || "English & Arabic"}
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -451,6 +382,7 @@ export function EditUserForm({
                             "With over 5 years of experience in Q star's real estate market..."
                           }
                           {...field}
+                          dir={dir}
                         />
                       </FormControl>
                       <FormMessage />
@@ -465,35 +397,24 @@ export function EditUserForm({
         {showPermissionsSection && (
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold">
-                {t("title.permissionsAccess") || "Permissions & Access"}
-              </h3>
+              <h3 className="text-lg font-semibold">{t("title.permissionsAccess") || "Permissions & Access"}</h3>
             </div>
             <Separator className="my-4" />
             <div className="flex justify-between items-center">
-              <p className="text-xs text-righ">
-                {t("title.access") || "Access"}
-              </p>
-              <span className="text-xs text-right">
-                {t("title.permissions") || "Permissions"}
-              </span>
+              <p className="text-xs text-righ">{t("title.access") || "Access"}</p>
+              <span className="text-xs text-right">{t("title.permissions") || "Permissions"}</span>
             </div>
             <div className="space-y-6 text-xs">
               <FormField
                 control={form.control}
                 name="canAddProperty"
                 render={({ field }) => (
-                  <div className="flex justify-between items-center">
+                  <div className={`flex justify-between items-center ${dir === "rtl" ? "flex-row-reverse" : ""}`}>
                     <label htmlFor="edit-canAddProperty" className="text-xm">
-                      {t("form.permissions.canPostListings") ||
-                        "Can Post Listings"}
+                      {t("form.permissions.canPostListings") || "Can Post Listings"}
                     </label>
                     <FormControl>
-                      <Switch
-                        id="edit-canAddProperty"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <Switch id="edit-canAddProperty" checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
                   </div>
                 )}
@@ -503,20 +424,12 @@ export function EditUserForm({
                 control={form.control}
                 name="canPublishProperty"
                 render={({ field }) => (
-                  <div className="flex justify-between items-center">
-                    <label
-                      htmlFor="edit-canPublishProperty"
-                      className="text-xm"
-                    >
-                      {t("form.permissions.canPublishProperty") ||
-                        "Can Publish Property"}
+                  <div className={`flex justify-between items-center ${dir === "rtl" ? "flex-row-reverse" : ""}`}>
+                    <label htmlFor="edit-canPublishProperty" className="text-xm">
+                      {t("form.permissions.canPublishProperty") || "Can Publish Property"}
                     </label>
                     <FormControl>
-                      <Switch
-                        id="edit-canPublishProperty"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <Switch id="edit-canPublishProperty" checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
                   </div>
                 )}
@@ -526,20 +439,12 @@ export function EditUserForm({
                 control={form.control}
                 name="canFeatureProperty"
                 render={({ field }) => (
-                  <div className="flex justify-between items-center">
-                    <label
-                      htmlFor="edit-canFeatureProperty"
-                      className="text-xm"
-                    >
-                      {t("form.permissions.canFeatureProperty") ||
-                        "Can Feature Property"}
+                  <div className={`flex justify-between items-center ${dir === "rtl" ? "flex-row-reverse" : ""}`}>
+                    <label htmlFor="edit-canFeatureProperty" className="text-xm">
+                      {t("form.permissions.canFeatureProperty") || "Can Feature Property"}
                     </label>
                     <FormControl>
-                      <Switch
-                        id="edit-canFeatureProperty"
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <Switch id="edit-canFeatureProperty" checked={field.value} onCheckedChange={field.onChange} />
                     </FormControl>
                   </div>
                 )}
@@ -549,24 +454,20 @@ export function EditUserForm({
         )}
 
         <div className="flex justify-end space-x-4 mt-6">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            disabled={isSubmitting || isUploading}
-          >
+          <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting || isUploading}>
             {t("button.cancel") || "Cancel"}
           </Button>
           <Button type="submit" className="bg-primary" disabled={isSubmitting || isUploading}>
-            {isSubmitting || isUploading
-              ? t("button.updating") || "Updating..."
-              : t("button.save") || "Save"}
+            {isSubmitting || isUploading ? t("button.updating") || "Updating..." : t("button.save") || "Save"}
           </Button>
         </div>
 
         <DeleteDialog
           title={t("title.deletePhoto") || "Delete Photo"}
-          deleteConfirmation={t("text.deletePhotoConfirmation") || "Are you sure you want to delete this photo? This action cannot be undone."}
+          deleteConfirmation={
+            t("text.deletePhotoConfirmation") ||
+            "Are you sure you want to delete this photo? This action cannot be undone."
+          }
           isOpen={isDeleteDialogOpen}
           onOpenChange={setIsDeleteDialogOpen}
           onDelete={handleRemoveImage}
@@ -574,5 +475,5 @@ export function EditUserForm({
         />
       </form>
     </Form>
-  );
+  )
 }

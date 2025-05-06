@@ -51,6 +51,14 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
   const [isInitialized, setIsInitialized] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
   const t = useTranslations()
+  const [dir, setDir] = useState("ltr")
+
+  // Detect document direction
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      setDir(document.documentElement.dir || document.dir || "ltr")
+    }
+  }, [])
 
   // Lock body scroll when sidebar is open on mobile
   useEffect(() => {
@@ -255,7 +263,12 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
         )}
       >
         {/* Logo and close button row */}
-        <div className={cn("relative flex h-0 md:h-16 items-center px-4 ease-in-out duration-400", open ? "justify-between" : "justify-center")}>
+        <div
+          className={cn(
+            "relative flex h-0 md:h-16 items-center px-4 ease-in-out duration-400",
+            open ? "justify-between" : "justify-center",
+          )}
+        >
           <Link href={"/"} className="flex items-center gap-2">
             {open ? (
               <div className="hidden md:block ease-in-out duration-400">
@@ -280,10 +293,21 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
           size="icon"
           onClick={handleToggle}
           className={cn(
-            "absolute -right-4 top-12 hidden md:flex h-8 w-8 items-center justify-center rounded-full border bg-white shadow-sm z-50",
+            "absolute top-12 hidden md:flex h-8 w-8 items-center justify-center rounded-full border bg-white shadow-sm z-50",
+            dir === "rtl" ? (open ? "left-[-16px]" : "left-[-16px]") : open ? "right-[-16px]" : "right-[-16px]",
           )}
         >
-          {open ? <ChevronLeft className="h-2 w-2" /> : <ChevronRight className="h-2 w-2" />}
+          {open ? (
+            dir === "rtl" ? (
+              <ChevronRight className="h-2 w-2" />
+            ) : (
+              <ChevronLeft className="h-2 w-2" />
+            )
+          ) : dir === "rtl" ? (
+            <ChevronLeft className="h-2 w-2" />
+          ) : (
+            <ChevronRight className="h-2 w-2" />
+          )}
         </Button>
 
         {/* Navigation */}
@@ -370,9 +394,9 @@ export function DashboardSidebar({ userType = "company" }: SidebarProps) {
               className="w-full justify-start text-red-500 hover:bg-red-50 hover:text-red-600"
             >
               <LogOut className="mr-2 h-5 w-5" />
-              <span
-                className={cn("transition-opacity duration-300", isClosing ? "opacity-0" : "opacity-100")}
-              >{t("userMenu.logout")}</span>
+              <span className={cn("transition-opacity duration-300", isClosing ? "opacity-0" : "opacity-100")}>
+                {t("userMenu.logout")}
+              </span>
             </Button>
           ) : (
             <TooltipProvider delayDuration={0}>

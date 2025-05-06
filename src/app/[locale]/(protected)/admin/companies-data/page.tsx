@@ -7,7 +7,6 @@ import CompaniesDataTable from "./components/table";
 import { useTranslations } from "next-intl";
 
 export default function Page() {
-  const t = useTranslations();
 
   const {
     data: dataList,

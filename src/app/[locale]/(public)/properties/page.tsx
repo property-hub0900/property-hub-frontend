@@ -63,6 +63,7 @@ export default function PropertiesPage() {
               height={300}
               alt="#"
               className="w-full h-auto"
+              priority
             />
           </div>
         </div>

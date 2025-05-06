@@ -206,7 +206,7 @@ export function AgentsInsightsView({ onBack }: { onBack: () => void }) {
                     <div className="flex gap-2">
                         <div className="relative">
                             <Input
-                                className="w-56"
+                                className="md:w-40 pl-9 pr-3 rtl:pl-3 rtl:pr-9"
                                 name="name"
                                 onChange={(e) => handleFilterChange("name", e.target.value)}
                                 placeholder={t("form.searchAgent.label") || "Search Agent"}

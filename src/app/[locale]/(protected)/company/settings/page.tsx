@@ -21,7 +21,6 @@ export default function SettingsPage() {
   const [userData, setUserData] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("personal-details");
   const t = useTranslations();
-  const { user } = useAuthStore();
   const { hasPermission } = useRBAC()
 
   // Refs to access form methods from child components

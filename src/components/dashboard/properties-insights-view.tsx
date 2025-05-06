@@ -10,6 +10,7 @@ import { companyService } from "@/services/protected/company"
 import { Loader } from "../loader"
 import { DataTable } from "@/components/dataTable/data-table"
 import type { ColumnDef } from "@tanstack/react-table"
+import { useTranslations } from "next-intl"
 
 type PropertyInsight = {
     visitLeads: number
@@ -25,6 +26,7 @@ type PropertyInsight = {
 }
 
 export function PropertiesInsightsView({ onBack }: { onBack: () => void }) {
+    const t = useTranslations()
     const [sorting, setSorting] = useState([])
     const [searchQuery, setSearchQuery] = useState("")
     const [selectedAgent, setSelectedAgent] = useState("all")
@@ -34,55 +36,55 @@ export function PropertiesInsightsView({ onBack }: { onBack: () => void }) {
         queryFn: () => companyService.getPropertyInsights(),
     })
 
-    // Define columns for the DataTable
+    // Define columns with translated headers
     const columns: ColumnDef<PropertyInsight>[] = [
         {
             accessorKey: "refId",
-            header: "Ref. ID",
+            header: t("table.refID"),
             enableSorting: true,
         },
         {
             accessorKey: "propertyTitle",
-            header: "Property Title",
+            header: t("table.title"),
             enableSorting: true,
         },
         {
             accessorKey: "propertyType",
-            header: "Property Type",
+            header: t("table.type"),
             enableSorting: true,
         },
         {
             accessorKey: "agent",
-            header: "Agent",
+            header: t("table.agent"),
             enableSorting: true,
         },
         {
             accessorKey: "totalLeads",
-            header: "Total Leads",
+            header: t("table.totalLeads"),
             enableSorting: true,
             cell: ({ row }) => <div className="text-center">{row.original.totalLeads}</div>,
         },
         {
             accessorKey: "whatsappLeads",
-            header: "WhatsApp Leads",
+            header: t("table.whatsappLeads"),
             enableSorting: true,
             cell: ({ row }) => <div className="text-center">{row.original.whatsappLeads}</div>,
         },
         {
             accessorKey: "emailLeads",
-            header: "Email Leads",
+            header: t("table.emailLeads"),
             enableSorting: true,
             cell: ({ row }) => <div className="text-center">{row.original.emailLeads}</div>,
         },
         {
             accessorKey: "callLeads",
-            header: "Call Leads",
+            header: t("table.callLeads"),
             enableSorting: true,
             cell: ({ row }) => <div className="text-center">{row.original.callLeads}</div>,
         },
         {
             accessorKey: "visitLeads",
-            header: "View Leads",
+            header: t("table.visitLeads"),
             enableSorting: true,
             cell: ({ row }) => <div className="text-center">{row.original.visitLeads}</div>,
         },
@@ -111,17 +113,17 @@ export function PropertiesInsightsView({ onBack }: { onBack: () => void }) {
                 <Button variant="ghost" className="p-0 mr-2" onClick={onBack}>
                     <ArrowLeft className="h-4 w-4" />
                 </Button>
-                <h3 className="text-lg font-medium">Properties Insights</h3>
+                <h3 className="text-lg font-medium">{t("title.propertiesInsights")}</h3>
             </div>
 
             <div className="border border-gray-100 rounded-lg p-6">
                 <div className="flex justify-between mb-6">
-                    <h2 className="text-base font-semibold mb-6">Properties Details</h2>
+                    <h2 className="text-base font-semibold mb-6">{t("text.propertiesDetails")}</h2>
                     <div className="flex items-center gap-2">
                         <div className="relative w-64">
                             <Input
                                 type="text"
-                                placeholder="Search Title"
+                                placeholder={t("form.search.placeholder")}
                                 className="pl-3 pr-10 py-2 border border-gray-200 rounded-md"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -147,10 +149,10 @@ export function PropertiesInsightsView({ onBack }: { onBack: () => void }) {
                         <div className="w-48">
                             <Select value={selectedAgent} onValueChange={setSelectedAgent}>
                                 <SelectTrigger className="border-gray-200">
-                                    <SelectValue placeholder="Select Agent" />
+                                    <SelectValue placeholder={t("form.selectAgent.placeholder")} />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Agents</SelectItem>
+                                    <SelectItem value="all">{t("form.allAgents.label")}</SelectItem>
                                     {uniqueAgents.map((agent) => (
                                         <SelectItem key={agent as string} value={agent as string}>
                                             {agent as string}
@@ -175,8 +177,8 @@ export function PropertiesInsightsView({ onBack }: { onBack: () => void }) {
                 <div className="flex items-center justify-between mt-4 text-sm">
                     <div className="text-gray-500">
                         {filteredData.length > 0
-                            ? `${filteredData.length} of ${propertyInsightsData?.total || 0} properties`
-                            : "No properties found"}
+                            ? `${filteredData.length} ${t("text.of")} ${propertyInsightsData?.total || 0} ${t("text.properties")}`
+                            : t("text.noPropertiesFound")}
                     </div>
                 </div>
             </div>
