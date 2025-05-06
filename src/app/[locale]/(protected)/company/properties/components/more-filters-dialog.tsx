@@ -1,5 +1,6 @@
 "use client";
 
+import { RoleGate } from "@/components/rbac/role-gate";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,19 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-
-import { Separator } from "@/components/ui/separator";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SlidersHorizontal } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useEffect, useState, useMemo } from "react";
-import { useForm } from "react-hook-form";
-
-import {
-  propertyDataFIltersSchema,
-  TPropertyDataFIltersSchema,
-} from "@/schema/protected/properties";
-import { IPropertyDataFilters } from "@/types/protected/properties";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -31,15 +20,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { PROPERTY_STATUSES, PROPERTY_TYPES } from "@/constants/constants";
-import { useQuery } from "@tanstack/react-query";
-import { staffList } from "@/services/protected/properties";
-import { IOption } from "@/types/common";
-import { RoleGate } from "@/components/rbac/role-gate";
 import { USER_ROLES, UserRole } from "@/constants/rbac";
 import { useRBAC } from "@/lib/hooks/useRBAC";
-import { adminServices } from "@/services/protected/admin";
-import { Input } from "@/components/ui/input";
+import {
+  propertyDataFIltersSchema,
+  TPropertyDataFIltersSchema,
+} from "@/schema/protected/properties";
+import { staffList } from "@/services/protected/properties";
+import { IOption } from "@/types/common";
+import { IPropertyDataFilters } from "@/types/protected/properties";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
+import { SlidersHorizontal } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 
 const initFilters = {
   title: "",
@@ -73,12 +70,6 @@ export const MoreFiltersDialog = ({
     queryFn: staffList,
     enabled: staffAllowedRoles.includes(currentRole),
   });
-
-  // const { data: companiesListData } = useQuery({
-  //   queryKey: ["adminCompanyList"],
-  //   queryFn: adminServices.getAdminCompanyList,
-  //   enabled: currentRole === USER_ROLES.ADMIN,
-  // });
 
   useEffect(() => {
     if (staffListData?.results && staffListData?.results.length > 0) {
@@ -137,40 +128,6 @@ export const MoreFiltersDialog = ({
                     </FormItem>
                   )}
                 />
-                {/* <FormField
-                  control={form.control}
-                  name="companyName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value?.toString()}
-                      >
-                        <SelectTrigger className="capitalize">
-                          <SelectValue
-                            placeholder={t("form.companyName.label")}
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value={"companyName"}>
-                            {t("form.companyName.label")}
-                          </SelectItem>
-                          <>
-                            {companiesListData?.results.map((item) => (
-                              <SelectItem
-                                key={`companyName-${item.value}`}
-                                value={item.value.toString()}
-                              >
-                                {item.label}
-                              </SelectItem>
-                            ))}
-                          </>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
               </RoleGate>
 
               <RoleGate allowedRoles={staffAllowedRoles}>

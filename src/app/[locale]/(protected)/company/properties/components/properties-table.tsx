@@ -99,9 +99,6 @@ export const PropertiesTable = ({ data }: { data: IProperty[] }) => {
     setSorting(updaterOrValue);
   };
 
-  //console.log("filters", filters);
-  // console.log("filteredData", filteredData);
-
   return (
     <>
       <div className="bg-white rounded-md shadow">
@@ -136,9 +133,7 @@ export const PropertiesTable = ({ data }: { data: IProperty[] }) => {
           <div className="relative">
             <div className="py-5">
               <DataTable
-                columns={propertiesTableColumns}
-                //data={filteredData}
-                //data={getSortedData(filteredData, sorting)}
+                columns={propertiesTableColumns()}
                 data={filteredAndSortedData || []}
                 sorting={sorting}
                 onSortingChange={handleSortingChange}

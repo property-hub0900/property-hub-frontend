@@ -4,15 +4,8 @@ import { DataTable } from "@/components/dataTable/data-table";
 import type { SortingState } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useTranslations } from "next-intl";
-import { Columns } from "./columns";
+import { columns } from "./columns";
 import { ICompanyAdmin } from "@/types/protected/admin";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
@@ -88,7 +81,7 @@ export default function CompaniesDataTable({
           </div>
 
           <DataTable
-            columns={Columns}
+            columns={columns()}
             data={filteredAndSortedData || []}
             sorting={sorting}
             onSortingChange={handleSortingChange}

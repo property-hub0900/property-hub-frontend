@@ -26,12 +26,12 @@ export const HeaderNavLinks = () => {
       >
         {t("button.exploreProperties")}
       </Link>
-      <Link
+      {/* <Link
         href={PUBLIC_ROUTES.findCompany}
         className="transition-colors text-sm font-medium hover:text-primary"
       >
         {t("button.findCompany")}
-      </Link>
+      </Link> */}
     </>
   );
 };

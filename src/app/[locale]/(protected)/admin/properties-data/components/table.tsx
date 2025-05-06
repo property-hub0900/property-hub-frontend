@@ -1,10 +1,7 @@
 "use client";
 
 import { DataTable } from "@/components/dataTable/data-table";
-import type {
-  IProperty,
-  IPropertyDataFilters,
-} from "@/types/protected/properties";
+import type { IPropertyDataFilters } from "@/types/protected/properties";
 import type { SortingState } from "@tanstack/react-table";
 import React, { useMemo, useState } from "react";
 import { propertiesTableColumns } from "./columns";
@@ -60,10 +57,6 @@ export const PropertiesTable = ({ data }: { data: IAdminProperty[] }) => {
           .includes(filters?.referenceNo.toLowerCase())
       )
         return false;
-
-      // if (filters?.companyName && filters?.companyName != `companyName`) {
-      //   if (`${item.company.companyId}` !== filters?.companyName) return false;
-      // }
 
       if (filters?.companyName && filters?.companyName != `companyName`) {
         if (
@@ -148,7 +141,7 @@ export const PropertiesTable = ({ data }: { data: IAdminProperty[] }) => {
           <div className="relative">
             <div className="py-5">
               <DataTable
-                columns={propertiesTableColumns}
+                columns={propertiesTableColumns()}
                 data={filteredAndSortedData || []}
                 sorting={sorting}
                 onSortingChange={handleSortingChange}

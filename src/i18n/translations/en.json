@@ -114,7 +114,12 @@
     "aboutUs": "About Us",
     "privacyPolicy": "Privacy Policy",
     "termsAndConditions": "Terms & Conditions",
-    "findCompany": "Find Company"
+    "findCompany": "Find Company",
+    "forSale": "For Sale",
+    "forRent": "For Rent",
+    "approve": "Approve",
+    "feature": "Feature",
+    "featured": "Featured"
   },
   "text": {
     "registerCompanyText": "Enter your details to register",
@@ -152,12 +157,38 @@
     "contactUsSubText": "Have questions about buying, selling, or renting a property? Looking for expert advice or want to schedule a viewing? Fill out the form below and our team will get back to you shortly.",
     "loginAdminText": "Enter your email & password to continue",
     "noNotifications": "No notifications",
-    "footerTagline": "Our experts can provide valuable insights and assist you in identifying properties."
+    "footerTagline": "Our experts can provide valuable insights and assist you in identifying properties.",
+    "headOffice": "Head Office"
   },
   "table": {
     "notFound": "No Record found...",
     "page": "Page",
-    "of": "of"
+    "of": "of",
+    "refID": "Ref ID",
+    "title": "Title",
+    "publisher": "Publisher",
+    "type": "Type",
+    "price": "Price",
+    "createdAt": "Created At",
+    "status": "Status",
+    "upgradeProperty": "Upgrade Property",
+    "action": "Action",
+    "name": "Name",
+    "email": "Email",
+    "businessNumber": "Business Number",
+    "registrationDate": "Registration Date",
+    "phoneNumber": "Phone Number",
+    "companyName": "Company Name",
+    "points": "Points",
+    "leads": "Leads",
+    "listingCount": "Listing Count",
+    "featured": "Featured",
+    "subscriptionDate": "Subscription Date",
+    "subscriptionExpiryDate": "Subscription Expiry Date",
+    "renewalPoints": "Renewal Points",
+    "date": "Date",
+    "topUpPoints": "Top-Up Points",
+    "paymentType": "Payment Type"
   },
   "form": {
     "agent": {

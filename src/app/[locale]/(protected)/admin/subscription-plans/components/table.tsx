@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { DataTable } from "@/components/dataTable/data-table";
 import type { SortingState } from "@tanstack/react-table";
 
-import { Columns } from "./columns";
+import { columns } from "./columns";
 
 import { useTranslations } from "next-intl";
 import {
@@ -127,7 +127,7 @@ export default function SubscriptionPlansTable({
           </div>
 
           <DataTable
-            columns={Columns}
+            columns={columns()}
             data={filteredAndSortedData || []}
             sorting={sorting}
             onSortingChange={handleSortingChange}

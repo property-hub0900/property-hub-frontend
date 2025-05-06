@@ -30,10 +30,10 @@ export default function Footer() {
                 label: t("button.exploreAll"),
                 href: `${PUBLIC_ROUTES.properties}`,
               },
-              {
-                label: t("button.findCompany"),
-                href: `${PUBLIC_ROUTES.findCompany}`,
-              },
+              // {
+              //   label: t("button.findCompany"),
+              //   href: `${PUBLIC_ROUTES.findCompany}`,
+              // },
             ]}
           />
           <FooterLinks

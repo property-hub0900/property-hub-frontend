@@ -24,95 +24,73 @@ import { useState } from "react";
 import { PERMISSIONS } from "@/constants/rbac";
 import { useRBAC } from "@/lib/hooks/useRBAC";
 
-export const propertiesTableColumns: ColumnDef<IAdminProperty>[] = [
-  {
-    accessorKey: "referenceNo",
-    header: "Ref ID",
-    enableSorting: true,
-    cell: ({ row }) => {
-      const { propertyId, referenceNo } = row.original;
-      return (
-        <>
-          <Link
-            className="text-primary"
-            href={`${ADMIN_PATHS.propertiesData}/${propertyId}`}
-          >
-            {referenceNo}
-          </Link>
-        </>
-      );
+export const propertiesTableColumns = (): ColumnDef<IAdminProperty>[] => {
+  const t = useTranslations("table");
+  return [
+    {
+      accessorKey: "referenceNo",
+      header: () => t("refID"),
+      enableSorting: true,
+      cell: ({ row }) => {
+        const { propertyId, referenceNo } = row.original;
+        return (
+          <>
+            <Link
+              className="text-primary"
+              href={`${ADMIN_PATHS.propertiesData}/${propertyId}`}
+            >
+              {referenceNo}
+            </Link>
+          </>
+        );
+      },
     },
-  },
-  {
-    accessorKey: "title",
-    header: "Title",
-    enableSorting: true,
-  },
-  // {
-  //   accessorKey: "postedByStaff.firstName",
-  //   header: "Publisher",
-  //   enableSorting: true,
-  //   cell: ({ row }) => {
-  //     const rowData = row.original;
-  //     return (
-  //       <>
-  //         {rowData.postedByStaff.firstName} {rowData.postedByStaff.lastName}
-  //       </>
-  //     );
-  //   },
-  // },
-
-  {
-    accessorKey: "company.companyName",
-    header: "Company",
-    enableSorting: true,
-  },
-
-  {
-    accessorKey: "propertyType",
-    header: "Type",
-    enableSorting: true,
-    // header: ({ column }) => (
-    //   <DataTableColumnHeader column={column} title="Email" />
-    // ),
-  },
-  {
-    accessorKey: "price",
-    header: "Price",
-    enableSorting: true,
-    cell: ({ row }) => {
-      const { price } = row.original;
-      return <>{formatAmountToQAR(Number(price))}</>;
+    {
+      accessorKey: "title",
+      header: () => t("title"),
+      enableSorting: true,
     },
-  },
-  // {
-  //   accessorKey: "createdAt",
-  //   header: "Created At",
-  //   enableSorting: true,
-  //   cell: ({ row }) => {
-  //     const rowData = row.original;
-  //     const { createdAt } = rowData;
-  //     return <div className="capitalize">{formatDateAndTime(createdAt)}</div>;
-  //   },
-  // },
-  {
-    accessorKey: "status",
-    header: "Status",
-    enableSorting: true,
-    cell: ({ row }) => <StatusCell row={row} />,
-  },
-  {
-    accessorKey: "featured",
-    header: "Featured",
-    enableSorting: true,
-    cell: ({ row }) => <FeaturedCell row={row} />,
-  },
-  {
-    accessorKey: "company.companyId",
-    header: "Action",
-    cell: ({ row }) => <ActionCell row={row} />,
-  },
-];
+
+    {
+      accessorKey: "company.companyName",
+      header: () => t("companyName"),
+      enableSorting: true,
+    },
+
+    {
+      accessorKey: "propertyType",
+      header: () => t("type"),
+      enableSorting: true,
+    },
+    {
+      accessorKey: "price",
+      header: () => t("price"),
+      enableSorting: true,
+      cell: ({ row }) => {
+        const { price } = row.original;
+        return <>{formatAmountToQAR(Number(price))}</>;
+      },
+    },
+
+    {
+      accessorKey: "status",
+      header: () => t("status"),
+      enableSorting: true,
+      cell: ({ row }) => <StatusCell row={row} />,
+    },
+    {
+      accessorKey: "featured",
+      header: () => t("featured"),
+      enableSorting: true,
+      cell: ({ row }) => <FeaturedCell row={row} />,
+    },
+    {
+      accessorKey: "company.companyId",
+      header: () => t("action"),
+      cell: ({ row }) => <ActionCell row={row} />,
+    },
+  ];
+};
 
 const StatusCell = ({ row }) => {
   const rowData = row.original;
@@ -129,6 +107,8 @@ const FeaturedCell = ({ row }) => {
   const { hasPermission } = useRBAC();
   const rowData = row.original;
   const { propertyId, featured, status } = rowData;
+
+  const t = useTranslations();
 
   const queryClient = useQueryClient();
 
@@ -157,7 +137,7 @@ const FeaturedCell = ({ row }) => {
       {featured ? (
         <Button className="w-28" disabled variant={"outline"} size={"sm"}>
           <Image width={20} height={20} src="/star.svg" alt="Featured" />
-          Featured
+          {t("button.featured")}
         </Button>
       ) : (
         <>
@@ -170,7 +150,7 @@ const FeaturedCell = ({ row }) => {
                 onClick={handleUpgradeFeatured}
                 size={"sm"}
               >
-                Feature
+                {t("button.feature")}
               </Button>
             )}
         </>

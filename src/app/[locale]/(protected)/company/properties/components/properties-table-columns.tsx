@@ -1,115 +1,117 @@
 "use client";
 
+import { DeleteDialog } from "@/components/delete-dailog";
 import { Loader } from "@/components/loader";
 import { Button } from "@/components/ui/button";
+import { PROPERTY_STATUSES } from "@/constants/constants";
 import { COMPANY_PATHS } from "@/constants/paths";
-import {
-  formatAmountToQAR,
-  formatDateAndTime,
-  getErrorMessage,
-} from "@/utils/utils";
+import { PERMISSIONS } from "@/constants/rbac";
+import { useRBAC } from "@/lib/hooks/useRBAC";
 import {
   deletePropertyById,
   updatePropertyById,
 } from "@/services/protected/properties";
 import { IProperty } from "@/types/protected/properties";
+import {
+  formatAmountToQAR,
+  formatDateAndTime,
+  getErrorMessage,
+} from "@/utils/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
-import { Archive, Edit, Edit2, Trash2 } from "lucide-react";
+import { Archive, Edit, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
-import { toast } from "sonner";
-import { PROPERTY_STATUSES } from "@/constants/constants";
-import { useRBAC } from "@/lib/hooks/useRBAC";
-import { PERMISSIONS } from "@/constants/rbac";
-import { DeleteDialog } from "@/components/delete-dailog";
-import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { toast } from "sonner";
 
-export const propertiesTableColumns: ColumnDef<IProperty>[] = [
-  {
-    accessorKey: "referenceNo",
-    header: "Ref ID",
-    enableSorting: true,
-    cell: ({ row }) => {
-      const rowData = row.original;
-      const { propertyId } = rowData;
-      return (
-        <Link
-          className="text-primary"
-          href={`${COMPANY_PATHS.properties}/${propertyId}`}
-        >
-          {rowData.referenceNo}
-        </Link>
-      );
+export const propertiesTableColumns = (): ColumnDef<IProperty>[] => {
+  const t = useTranslations("table");
+  return [
+    {
+      accessorKey: "referenceNo",
+      header: () => t("refID"),
+      enableSorting: true,
+      cell: ({ row }) => {
+        const rowData = row.original;
+        const { propertyId } = rowData;
+        return (
+          <Link
+            className="text-primary"
+            href={`${COMPANY_PATHS.properties}/${propertyId}`}
+          >
+            {rowData.referenceNo}
+          </Link>
+        );
+      },
     },
-  },
-  {
-    accessorKey: "title",
-    header: "Title",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "postedByStaff.firstName",
-    header: "Publisher",
-    enableSorting: true,
-    cell: ({ row }) => {
-      const rowData = row.original;
-      return (
-        <>
-          {rowData?.postedByStaff?.firstName} {rowData?.postedByStaff?.lastName}
-        </>
-      );
+    {
+      accessorKey: "title",
+      header: () => t("title"),
+      enableSorting: true,
     },
-  },
+    {
+      accessorKey: "postedByStaff.firstName",
+      header: () => t("publisher"),
+      enableSorting: true,
+      cell: ({ row }) => {
+        const rowData = row.original;
+        return (
+          <>
+            {rowData?.postedByStaff?.firstName}{" "}
+            {rowData?.postedByStaff?.lastName}
+          </>
+        );
+      },
+    },
 
-  {
-    accessorKey: "propertyType",
-    header: "Type",
-    enableSorting: true,
-    // header: ({ column }) => (
-    //   <DataTableColumnHeader column={column} title="Email" />
-    // ),
-  },
-  {
-    accessorKey: "price",
-    header: "Price",
-    enableSorting: true,
-    cell: ({ row }) => {
-      const { price } = row.original;
-      return <>{formatAmountToQAR(price)}</>;
+    {
+      accessorKey: "propertyType",
+      header: () => t("type"),
+      enableSorting: true,
     },
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Created At",
-    enableSorting: true,
-    cell: ({ row }) => {
-      const rowData = row.original;
-      const { createdAt } = rowData;
-      return <div className="capitalize">{formatDateAndTime(createdAt)}</div>;
+    {
+      accessorKey: "price",
+      header: () => t("price"),
+      enableSorting: true,
+      cell: ({ row }) => {
+        const { price } = row.original;
+        return <>{formatAmountToQAR(price)}</>;
+      },
     },
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    enableSorting: true,
-    cell: ({ row }) => <StatusCell row={row} />,
-  },
-  {
-    accessorKey: "featured",
-    header: "Upgrade Property",
-    enableSorting: true,
-    cell: ({ row }) => <FeaturedCell row={row} />,
-  },
-  {
-    accessorKey: "propertyId",
-    header: "Action",
-    cell: ({ row }) => <ActionCell row={row} />,
-  },
-];
+    {
+      accessorKey: "createdAt",
+      header: () => t("createdAt"),
+      enableSorting: true,
+      cell: ({ row }) => {
+        const rowData = row.original;
+        const { createdAt } = rowData;
+        return <div className="capitalize">{formatDateAndTime(createdAt)}</div>;
+      },
+    },
+    {
+      accessorKey: "status",
+      header: () => t("status"),
+      enableSorting: true,
+      cell: ({ row }) => <StatusCell row={row} />,
+    },
+    {
+      accessorKey: "featured",
+      header: () => t("upgradeProperty"),
+      enableSorting: true,
+      cell: ({ row }) => <FeaturedCell row={row} />,
+    },
+    {
+      accessorKey: "propertyId",
+      header: () => t("action"),
+      cell: ({ row }) => <ActionCell row={row} />,
+    },
+  ];
+};
 
 const StatusCell = ({ row }) => {
+  const t = useTranslations();
   const { hasPermission } = useRBAC();
 
   const rowData = row.original;
@@ -146,7 +148,7 @@ const StatusCell = ({ row }) => {
           onClick={handleApproveStatus}
           size={"sm"}
         >
-          Approve
+          {t("button.approve")}
         </Button>
       ) : (
         <div className="capitalize">{status}</div>
@@ -156,6 +158,8 @@ const StatusCell = ({ row }) => {
 };
 
 const FeaturedCell = ({ row }) => {
+  const t = useTranslations();
+
   const { hasPermission } = useRBAC();
   const rowData = row.original;
   const { propertyId, featured, status } = rowData;
@@ -187,7 +191,8 @@ const FeaturedCell = ({ row }) => {
       {featured ? (
         <Button className="w-28" disabled variant={"outline"} size={"sm"}>
           <Image width={20} height={20} src="/star.svg" alt="Featured" />
-          Featured
+
+          {t("button.featured")}
         </Button>
       ) : (
         <>
@@ -200,7 +205,7 @@ const FeaturedCell = ({ row }) => {
                 onClick={handleUpgradeFeatured}
                 size={"sm"}
               >
-                Feature
+                {t("button.feature")}
               </Button>
             )}
         </>

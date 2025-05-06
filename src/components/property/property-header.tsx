@@ -21,9 +21,6 @@ export function PropertyHeader({
 
   const formattedPrice = formatAmountToQAR(price);
 
-  console.log("hidePrice", hidePrice);
-  console.log("hidePrice TyopeOF", typeof hidePrice);
-
   return (
     <div className="">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-2 gap-3">

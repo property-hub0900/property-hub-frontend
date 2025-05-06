@@ -53,7 +53,7 @@ export const adminServices = {
   getAdminSubscriptionsPlansApproved: async (): Promise<
     IListResponse<IAdminSubscription>
   > => {
-    return apiClient.get(`/admin/subscriptions?status=approved`);
+    return apiClient.get(`/admin/subscriptions?status=approved,processing`);
   },
   getAdminSubscriptionsRenewalRequestsPending: async (): Promise<
     IListResponse<IAdminSubscription>

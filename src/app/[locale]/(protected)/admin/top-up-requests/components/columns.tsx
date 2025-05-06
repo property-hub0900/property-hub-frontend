@@ -9,61 +9,68 @@ import { AddPointsDialogue } from "./add-points-dialogue";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-export const Columns: ColumnDef<IAdminPoints>[] = [
-  {
-    accessorKey: "company.companyName",
-    header: "Company Name",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "phoneNumber",
-    header: "Phone Number",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "points",
-    header: "Top-Up Points",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Date",
-    enableSorting: true,
-    cell: ({ row }) => {
-      const { createdAt } = row.original;
-      return <div className="capitalize">{formatDate(createdAt)}</div>;
+export const columns = (): ColumnDef<IAdminPoints>[] => {
+  const t = useTranslations("table");
+  return [
+    {
+      accessorKey: "company.companyName",
+      header: () => t("companyName"),
+      enableSorting: true,
     },
-  },
-  {
-    accessorKey: "paymentMethod",
-    header: "Payment Type",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    enableSorting: true,
-    cell: ({ row }) => {
-      const { status } = row.original;
-      return (
-        <>
-          <StatusIndicator status={status} label={status} variant={"subtle"} />
-        </>
-      );
+    {
+      accessorKey: "email",
+      header: () => t("email"),
+      enableSorting: true,
     },
-  },
-  {
-    accessorKey: "transactionId",
-    header: "Action",
-    enableSorting: false,
-    cell: ({ row }) => <ActionCell data={row.original} />,
-  },
-];
+    {
+      accessorKey: "phoneNumber",
+      header: () => t("phoneNumber"),
+      enableSorting: true,
+    },
+    {
+      accessorKey: "points",
+      header: () => t("topUpPoints"),
+      enableSorting: true,
+    },
+    {
+      accessorKey: "createdAt",
+      header: () => t("date"),
+      enableSorting: true,
+      cell: ({ row }) => {
+        const { createdAt } = row.original;
+        return <div className="capitalize">{formatDate(createdAt)}</div>;
+      },
+    },
+    {
+      accessorKey: "paymentMethod",
+      header: () => t("paymentType"),
+      enableSorting: true,
+    },
+    {
+      accessorKey: "status",
+      header: () => t("status"),
+      enableSorting: true,
+      cell: ({ row }) => {
+        const { status } = row.original;
+        return (
+          <>
+            <StatusIndicator
+              status={status}
+              label={status}
+              variant={"subtle"}
+            />
+          </>
+        );
+      },
+    },
+    {
+      accessorKey: "transactionId",
+      header: () => t("action"),
+      enableSorting: false,
+      cell: ({ row }) => <ActionCell data={row.original} />,
+    },
+  ];
+};
 
 const ActionCell = ({ data }: { data: IAdminPoints }) => {
   const t = useTranslations();

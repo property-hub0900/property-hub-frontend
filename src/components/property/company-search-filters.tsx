@@ -1,11 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useCallback, useRef } from "react";
-import PlacesAutocomplete from "@/components/placesAutoComplete";
 import { ICompanyFilters } from "@/types/public/properties";
 import { useTranslations } from "next-intl";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { Input } from "../ui/input";
 
 export const CompanySearchFilters = () => {

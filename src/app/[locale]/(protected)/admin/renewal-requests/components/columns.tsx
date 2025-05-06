@@ -3,72 +3,51 @@
 import { formatDate } from "@/utils/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { IAdminSubscription } from "@/types/protected/admin";
-import { StatusIndicator } from "@/components/ui/status-indicator";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { RenewSubscriptionDialogue } from "./renew-subscription-dialogue";
 
-export const Columns: ColumnDef<IAdminSubscription>[] = [
-  {
-    accessorKey: "company.companyName",
-    header: "Company Name",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "company.companyEmail",
-    header: "Email",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "company.companyPhone",
-    header: "Phone Number",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "points",
-    header: "Renewal Points",
-    enableSorting: true,
-  },
-  {
-    accessorKey: "startDate",
-    header: "Date",
-    enableSorting: true,
-    cell: ({ row }) => {
-      const { startDate } = row.original;
-      return <div className="capitalize">{formatDate(startDate)}</div>;
+export const columns = (): ColumnDef<IAdminSubscription>[] => {
+  const t = useTranslations("table");
+  return [
+    {
+      accessorKey: "company.companyName",
+      header: () => t("companyName"),
+      enableSorting: true,
     },
-  },
-
-  // {
-  //   accessorKey: "status",
-  //   header: "Status",
-  //   enableSorting: false,
-  //   cell: ({ row }) => {
-  //     const { startDate, endDate } = row.original;
-  //     const isActive =
-  //       new Date(startDate) <= new Date() && new Date(endDate) >= new Date();
-
-  //     const isActiveStatus = isActive ? "active" : "expired";
-
-  //     return (
-  //       <>
-  //         <StatusIndicator
-  //           status={isActiveStatus}
-  //           label={isActiveStatus}
-  //           variant={"subtle"}
-  //         />
-  //       </>
-  //     );
-  //   },
-  // },
-  {
-    accessorKey: "subscriptionId",
-    header: "Action",
-    enableSorting: false,
-    cell: ({ row }) => <ActionCell data={row.original} />,
-  },
-];
+    {
+      accessorKey: "company.companyEmail",
+      header: () => t("email"),
+      enableSorting: true,
+    },
+    {
+      accessorKey: "company.companyPhone",
+      header: () => t("phoneNumber"),
+      enableSorting: true,
+    },
+    {
+      accessorKey: "points",
+      header: () => t("renewalPoints"),
+      enableSorting: true,
+    },
+    {
+      accessorKey: "startDate",
+      header: () => t("date"),
+      enableSorting: true,
+      cell: ({ row }) => {
+        const { startDate } = row.original;
+        return <div className="capitalize">{formatDate(startDate)}</div>;
+      },
+    },
+    {
+      accessorKey: "subscriptionId",
+      header: () => t("action"),
+      enableSorting: false,
+      cell: ({ row }) => <ActionCell data={row.original} />,
+    },
+  ];
+};
 
 const ActionCell = ({ data }: { data: IAdminSubscription }) => {
   const t = useTranslations();

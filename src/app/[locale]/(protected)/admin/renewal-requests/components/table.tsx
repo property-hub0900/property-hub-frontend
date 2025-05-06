@@ -4,16 +4,8 @@ import { useMemo, useState } from "react";
 import { DataTable } from "@/components/dataTable/data-table";
 import type { SortingState } from "@tanstack/react-table";
 
-import { Columns } from "./columns";
-
+import { columns } from "./columns";
 import { useTranslations } from "next-intl";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
 import { IAdminSubscription } from "@/types/protected/admin";
 import { sortTableData } from "@/utils/utils";
 import { Input } from "@/components/ui/input";
@@ -102,32 +94,11 @@ export default function RenewalRequestsTable({
                 />
                 <Search className="size-[20px] absolute right-2 top-1/2 -translate-y-1/2 z-10 text-muted-foreground/50" />
               </div>
-              {/* <div className="relative">
-                <Select
-                  onValueChange={(val) => handleChange("status", val)}
-                  defaultValue={filters.status}
-                >
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder={t("form.status.label")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={"Status"}>
-                      {t("form.status.label")}
-                    </SelectItem>
-                    <SelectItem value={"active"}>
-                      {t("form.status.options.active")}
-                    </SelectItem>
-                    <SelectItem value={"expired"}>
-                      {t("form.status.options.expired")}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div> */}
             </div>
           </div>
 
           <DataTable
-            columns={Columns}
+            columns={columns()}
             data={filteredAndSortedData || []}
             sorting={sorting}
             onSortingChange={handleSortingChange}
